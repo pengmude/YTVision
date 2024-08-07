@@ -151,6 +151,9 @@ namespace YTVisionPro
                 case "创建流程":
                     创建流程ToolStripMenuItem_Click(null, null);
                     break;
+                case "全局光源":
+                    全局光源ToolStripMenuItem_Click(null, null);
+                    break;
                 case "全局相机":
                     全局相机ToolStripMenuItem_Click(null, null);
                     break;
@@ -216,6 +219,10 @@ namespace YTVisionPro
             //mVarSetForm.ShowDialog();
         }
 
+        private void 全局光源ToolStripMenuItem_Click(object value1, object value2)
+        {
+            MessageBox.Show("全局光源");
+        }
         private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
         {
             MessageBox.Show("保存方案");

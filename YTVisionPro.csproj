@@ -341,6 +341,7 @@
   <ItemGroup>
     <Content Include="Icon\保存项目.png" />
     <Content Include="Icon\停止执行.png" />
+    <None Include="Icon\光源.png" />
     <Content Include="Icon\单次执行.png" />
     <Content Include="Icon\打开项目.png" />
     <Content Include="Icon\新建方案.png" />
