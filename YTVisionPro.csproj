@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{60ADDFFF-D34C-48AA-B84D-03EAB7518169}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>YTVisionPro</RootNamespace>
+    <AssemblyName>YTVisionPro</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MvCameraControl.Net, Version=3.4.0.1, Culture=neutral, PublicKeyToken=52fddfb3f94be800, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MVDAlgorithmSDK\ReferencedAssemblies\Algorithms\MvCameraControl.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>packages\DockPanelSuite.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>packages\DockPanelSuite.ThemeVS2015.3.1.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Forms\ImageViewer\FrmImageViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImageViewer\FrmImageViewer.Designer.cs">
+      <DependentUpon>FrmImageViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ImageViewer\FrmSingleImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ImageViewer\FrmSingleImage.Designer.cs">
+      <DependentUpon>FrmSingleImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ImageViewer\YTPictrueBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ImageViewer\YTPictrueBox.Designer.cs">
+      <DependentUpon>YTPictrueBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MessageBox\YTMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MessageBox\YTMessageBox.Designer.cs">
+      <DependentUpon>YTMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormLightSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormLightSettings.Designer.cs">
+      <DependentUpon>FormLightSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormNewProcessWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
+      <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\LightSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\LightSettings.Designer.cs">
+      <DependentUpon>LightSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\Node.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\Node.Designer.cs">
+      <DependentUpon>Node.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\NodeEditPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\NodeEditPanel.Designer.cs">
+      <DependentUpon>NodeEditPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\NodePreviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\NodePreviewControl.Designer.cs">
+      <DependentUpon>NodePreviewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form2.Designer.cs">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FrmResultView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmResultView.Designer.cs">
+      <DependentUpon>FrmResultView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form3.Designer.cs">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\测试窗口\Form4.Designer.cs">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Hardware\Camera\CameraHik.cs" />
+    <Compile Include="Hardware\Camera\ICamera.cs" />
+    <Compile Include="Hardware\IDevice.cs" />
+    <Compile Include="Hardware\Light\ILight.cs" />
+    <Compile Include="Hardware\Light\LightPPX.cs" />
+    <Compile Include="Forms\Logger\FrmLogger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Logger\FrmLogger.Designer.cs">
+      <DependentUpon>FrmLogger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Logger\LogDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Logger\LogDetail.Designer.cs">
+      <DependentUpon>LogDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Logger\LoggerClass.cs" />
+    <Compile Include="Forms\Logger\LogHelper.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Logger\LogHelper.Designer.cs">
+      <DependentUpon>LogHelper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Hardware\PLC\IPlc.cs" />
+    <Compile Include="Hardware\PLC\PlcPanasonic.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\IModuleParam.cs" />
+    <Compile Include="Modules\IModuleResult.cs" />
+    <Compile Include="Modules\LightSource\MLightPPX.cs" />
+    <Compile Include="Modules\LightSource\ModuleLightParam.cs" />
+    <Compile Include="Process.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Solution.cs" />
+    <Compile Include="YTUtils.cs" />
+    <EmbeddedResource Include="Forms\ImageViewer\FrmImageViewer.resx">
+      <DependentUpon>FrmImageViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImageViewer\FrmSingleImage.resx">
+      <DependentUpon>FrmSingleImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ImageViewer\YTPictrueBox.resx">
+      <DependentUpon>YTPictrueBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MessageBox\YTMessageBox.resx">
+      <DependentUpon>YTMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\FormLightSettings.resx">
+      <DependentUpon>FormLightSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
+      <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\LightSettings.resx">
+      <DependentUpon>LightSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\Node.resx">
+      <DependentUpon>Node.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\NodeEditPanel.resx">
+      <DependentUpon>NodeEditPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\NodePreviewControl.resx">
+      <DependentUpon>NodePreviewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\测试窗口\Form2.resx">
+      <DependentUpon>Form2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmResultView.resx">
+      <DependentUpon>FrmResultView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\测试窗口\Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\测试窗口\Form3.resx">
+      <DependentUpon>Form3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\测试窗口\Form4.resx">
+      <DependentUpon>Form4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Logger\FrmLogger.resx">
+      <DependentUpon>FrmLogger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Logger\LogDetail.resx">
+      <DependentUpon>LogDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Logger\LogHelper.resx">
+      <DependentUpon>LogHelper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon\PLC.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Icon\添加流程.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Modules\AI\" />
+    <Folder Include="Modules\Camera\" />
+    <Folder Include="Modules\Normal\" />
+    <Folder Include="Modules\PLC\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon\保存项目.png" />
+    <Content Include="Icon\停止执行.png" />
+    <Content Include="Icon\单次执行.png" />
+    <Content Include="Icon\打开项目.png" />
+    <Content Include="Icon\新建方案.png" />
+    <Content Include="Icon\方案设置.png" />
+    <Content Include="Icon\点检模式.png" />
+    <Content Include="Icon\用户登录.png" />
+    <Content Include="Icon\相机.png" />
+    <Content Include="Modules\readme.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
