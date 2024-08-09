@@ -1,4 +1,6 @@
-﻿namespace YTVisionPro.Forms.ProcessNew
+﻿using YTVisionPro.Node;
+
+namespace YTVisionPro.Forms.ProcessNew
 {
     partial class FormNewProcessWizard
     {
@@ -34,11 +36,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.nodeComboBox3 = new YTVisionPro.Forms.ProcessNew.NodeComboBox();
-            this.nodeComboBox2 = new YTVisionPro.Forms.ProcessNew.NodeComboBox();
-            this.nodeComboBox1 = new YTVisionPro.Forms.ProcessNew.NodeComboBox();
-            this.nodeComboBox4 = new YTVisionPro.Forms.ProcessNew.NodeComboBox();
-            this.nodeComboBox5 = new YTVisionPro.Forms.ProcessNew.NodeComboBox();
+            this.nodeComboBox3 = new YTVisionPro.Node.NodeComboBox();
+            this.nodeComboBox2 = new YTVisionPro.Node.NodeComboBox();
+            this.nodeComboBox1 = new YTVisionPro.Node.NodeComboBox();
+            this.nodeComboBox4 = new YTVisionPro.Node.NodeComboBox();
+            this.nodeComboBox5 = new YTVisionPro.Node.NodeComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();

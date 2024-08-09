@@ -40,18 +40,18 @@ namespace YTVisionPro
         /// </summary>
         public TimeSpan RunTime { get; private set; }
 
-        /// <summary>
-        /// 流程所属方案
-        /// </summary>
-        public Solution Solution { get; set; }
+        ///// <summary>
+        ///// 流程所属方案
+        ///// </summary>
+        //public Solution Solution { get; set; }
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="solution"></param>
-        public Process(Solution solution)
+        public Process(/*Solution solution*/)
         {
-            Solution = solution;
+            //Solution = solution;
             _id = _countInstance++;
         }
 

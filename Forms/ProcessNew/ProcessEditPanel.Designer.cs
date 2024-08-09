@@ -1,6 +1,6 @@
 ﻿namespace YTVisionPro.Forms.ProcessNew
 {
-    partial class NodeEditPanel
+    partial class ProcessEditPanel
     {
         /// <summary> 
         /// 必需的设计器变量。

@@ -47,9 +47,9 @@
             this.label10 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox7 = new System.Windows.Forms.TextBox();
-            this.nodePreviewControl1 = new YTVisionPro.Forms.ProcessNew.NodeComboBox();
+            this.nodePreviewControl1 = new YTVisionPro.Node.NodeComboBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.nodeEditPanel1 = new YTVisionPro.Forms.ProcessNew.NodeEditPanel();
+            this.nodeEditPanel1 = new YTVisionPro.Forms.ProcessNew.ProcessEditPanel();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -339,10 +339,10 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Label label10;
-        private ProcessNew.NodeComboBox nodePreviewControl1;
+        private Node.NodeComboBox nodePreviewControl1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Panel panel1;
-        private ProcessNew.NodeEditPanel nodeEditPanel1;
+        private ProcessNew.ProcessEditPanel nodeEditPanel1;
     }
 }

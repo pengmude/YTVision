@@ -5,13 +5,6 @@ namespace YTVisionPro.Forms.ProcessNew
 {
     public partial class FormNewProcessWizard : Form
     {
-        private static int _processCount = 0;
-
-        /// <summary>
-        /// 流程数量
-        /// </summary>
-        public int ProcessCount { get { return _processCount; } }
-
         public FormNewProcessWizard()
         {
             InitializeComponent();
@@ -52,15 +45,15 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void button2_Click(object sender, System.EventArgs e)
         {
-            _processCount++;
+            Solution.ProcessCount++;
             TabPage tabPage = new TabPage();
-            tabPage.Name = $"process{_processCount}";
+            tabPage.Name = $"process{Solution.ProcessCount}";
             tabPage.Padding = new Padding(3);
             tabPage.Size = new System.Drawing.Size(465, 643);
-            tabPage.Text = $"流程{_processCount}";
+            tabPage.Text = $"流程{Solution.ProcessCount}";
             tabPage.UseVisualStyleBackColor = true;
 
-            NodeEditPanel nodeEditPanel = new NodeEditPanel();
+            ProcessEditPanel nodeEditPanel = new ProcessEditPanel();
             nodeEditPanel.Dock = DockStyle.Fill;
             tabPage.Controls.Add(nodeEditPanel);
             tabControl1.Controls.Add(tabPage);

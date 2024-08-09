@@ -2,20 +2,20 @@
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 
-namespace YTVisionPro.Forms.ProcessNew
+namespace YTVisionPro.Node.Light
 {
-    public partial class FormLightSettings : Form
+    public partial class FormLightSettings : ParamSetFormBase
     {
         /// <summary>
-        /// 光源运行参数
+        /// 参数改变事件，设置完参数后触发，给节点订阅
         /// </summary>
-        public RunParamsLight RunParams = new RunParamsLight();
+        public override event EventHandler<INodeParam> NodeParamChanged;
 
         public FormLightSettings(LightBrand lightBrand)
         {
             InitializeComponent();
 
-            // 初始化光源列表,只显示一种品牌的光源
+            // 初始化光源列表,只显示添加的光源COM号且是对应传入的品牌的
             foreach (var dev in Solution.Instance.LightDevices)
             {
                 if (dev is ILight light && lightBrand == light.Brand)
@@ -23,7 +23,8 @@ namespace YTVisionPro.Forms.ProcessNew
                     comboBox1.Items.Add(light.PortName);
                 }
             }
-            comboBox1.SelectedIndex = 0;
+            if(comboBox1.Items.Count > 0)
+                comboBox1.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -67,8 +68,16 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            RunParams.Brightness = trackBar1.Value;
-            RunParams.PortName = comboBox1.Text.Contains("COM") ? comboBox1.Text : string.Empty;
+            try
+            {
+                //把设置好的参数传给光源节点NodeLight去更新结果
+                NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
+                NodeParamChanged?.Invoke(this, nodeParamLight);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("保存失败,请检查参数是否有误！");
+            }
         }
     }
 }

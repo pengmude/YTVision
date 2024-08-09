@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.ProcessNew
+﻿namespace YTVisionPro.Node
 {
     partial class NodeComboBox
     {
@@ -55,7 +55,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(290, 261);
+            this.panel1.Size = new System.Drawing.Size(290, 150);
             this.panel1.TabIndex = 2;
             // 
             // panel2
@@ -64,7 +64,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 75);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(290, 186);
+            this.panel2.Size = new System.Drawing.Size(290, 75);
             this.panel2.TabIndex = 2;
             this.panel2.Visible = false;
             // 
@@ -75,7 +75,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.panel1);
             this.Name = "NodeComboBox";
-            this.Size = new System.Drawing.Size(290, 261);
+            this.Size = new System.Drawing.Size(290, 150);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

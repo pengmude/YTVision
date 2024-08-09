@@ -1,6 +1,6 @@
-﻿namespace YTVisionPro.Forms.ProcessNew
+﻿namespace YTVisionPro.Node
 {
-    partial class Node
+    partial class NodeBase
     {
         /// <summary> 
         /// 必需的设计器变量。

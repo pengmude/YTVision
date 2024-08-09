@@ -8,7 +8,7 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Forms.ProcessNew
+namespace YTVisionPro.Node
 {
     public partial class NodeComboBox : UserControl
     {

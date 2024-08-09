@@ -71,16 +71,6 @@ namespace YTVisionPro
         public bool IsSuccess;
 
     }
-
-    /// <summary>
-    /// 光源运行参数
-    /// </summary>
-    public struct RunParamsLight
-    {
-        public int Brightness;
-        public string PortName;
-    }
-
 }
 
 

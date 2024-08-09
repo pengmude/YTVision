@@ -80,6 +80,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MVDAlgorithmSDK\ReferencedAssemblies\Algorithms\MvCameraControl.Net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -125,10 +128,11 @@
     <Compile Include="Forms\MessageBox\YTMessageBox.Designer.cs">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProcessNew\FormLightSettings.cs">
+    <Compile Include="Node\IParamSetForm.cs" />
+    <Compile Include="Node\Light\FormLightSettings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\ProcessNew\FormLightSettings.Designer.cs">
+    <Compile Include="Node\Light\FormLightSettings.Designer.cs">
       <DependentUpon>FormLightSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.cs">
@@ -137,29 +141,34 @@
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\INode.cs" />
     <Compile Include="Forms\ProcessNew\LightSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\ProcessNew\LightSettings.Designer.cs">
       <DependentUpon>LightSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProcessNew\Node.cs">
+    <Compile Include="Node\Light\NodeLight.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\ProcessNew\Node.Designer.cs">
-      <DependentUpon>Node.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ProcessNew\NodeEditPanel.cs">
+    <Compile Include="Node\Light\NodeParamLight.cs" />
+    <Compile Include="Node\NodeBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\ProcessNew\NodeEditPanel.Designer.cs">
-      <DependentUpon>NodeEditPanel.cs</DependentUpon>
+    <Compile Include="Node\NodeBase.Designer.cs">
+      <DependentUpon>NodeBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProcessNew\NodePreviewControl.cs">
+    <Compile Include="Forms\ProcessNew\ProcessEditPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\ProcessNew\NodePreviewControl.Designer.cs">
-      <DependentUpon>NodePreviewControl.cs</DependentUpon>
+    <Compile Include="Forms\ProcessNew\ProcessEditPanel.Designer.cs">
+      <DependentUpon>ProcessEditPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\NodeComboBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\NodeComboBox.Designer.cs">
+      <DependentUpon>NodeComboBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\测试窗口\Form2.cs">
       <SubType>Form</SubType>
@@ -228,6 +237,9 @@
     <Compile Include="Modules\IModuleResult.cs" />
     <Compile Include="Modules\LightSource\MLightPPX.cs" />
     <Compile Include="Modules\LightSource\ModuleLightParam.cs" />
+    <Compile Include="Node\ParamSetFormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -250,7 +262,7 @@
     <EmbeddedResource Include="Forms\MessageBox\YTMessageBox.resx">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessNew\FormLightSettings.resx">
+    <EmbeddedResource Include="Node\Light\FormLightSettings.resx">
       <DependentUpon>FormLightSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
@@ -259,14 +271,14 @@
     <EmbeddedResource Include="Forms\ProcessNew\LightSettings.resx">
       <DependentUpon>LightSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessNew\Node.resx">
-      <DependentUpon>Node.cs</DependentUpon>
+    <EmbeddedResource Include="Node\NodeBase.resx">
+      <DependentUpon>NodeBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessNew\NodeEditPanel.resx">
-      <DependentUpon>NodeEditPanel.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\ProcessNew\ProcessEditPanel.resx">
+      <DependentUpon>ProcessEditPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessNew\NodePreviewControl.resx">
-      <DependentUpon>NodePreviewControl.cs</DependentUpon>
+    <EmbeddedResource Include="Node\NodeComboBox.resx">
+      <DependentUpon>NodeComboBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\测试窗口\Form2.resx">
       <DependentUpon>Form2.cs</DependentUpon>
@@ -333,10 +345,17 @@
     <None Include="Icon\添加流程.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Forms\CameraAdd\" />
+    <Folder Include="Forms\LightAdd\" />
+    <Folder Include="Forms\PLCAdd\" />
     <Folder Include="Modules\AI\" />
     <Folder Include="Modules\Camera\" />
     <Folder Include="Modules\Normal\" />
     <Folder Include="Modules\PLC\" />
+    <Folder Include="Node\AI\" />
+    <Folder Include="Node\Camera\" />
+    <Folder Include="Node\PLC\" />
+    <Folder Include="Node\Tool\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\保存项目.png" />

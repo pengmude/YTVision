@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
+using YTVisionPro.Node;
+using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
-    public partial class NodeEditPanel : UserControl
+    public partial class ProcessEditPanel : UserControl
     {
+        /// <summary>
+        /// 绑定的流程
+        /// </summary>
+        private Process _process { get; set; }
+
         /// <summary>
         /// 所有的节点控件
         /// </summary>
-        Stack<Node> stack = new Stack<Node>();
+        private Stack<NodeBase> _stack = new Stack<NodeBase>();
 
         /// <summary>
         /// 选中的节点
@@ -19,9 +26,10 @@ namespace YTVisionPro.Forms.ProcessNew
         public Button SelectedNode { get; set; } = null;
 
 
-        public NodeEditPanel()
+        public ProcessEditPanel()
         {
             InitializeComponent();
+            _process = new Process();
         }
 
         /// <summary>
@@ -61,11 +69,11 @@ namespace YTVisionPro.Forms.ProcessNew
                 {
                     lightBrand = LightBrand.RSEE;
                 }
-                Node newLabel = new Node(text, new FormLightSettings(lightBrand));
-                newLabel.Size = new Size(this.Size.Width - 5, 42);
-                newLabel.Dock = DockStyle.Top;
-                newLabel.NodeDeletedEvent += NewLabel_NodeDeletedEvent;
-                stack.Push(newLabel);
+                NodeBase node = new NodeBase(text, new FormLightSettings(lightBrand), _process);
+                node.Size = new Size(this.Size.Width - 5, 42);
+                node.Dock = DockStyle.Top;
+                node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                _stack.Push(node);
                 UpdateNode();
             }
         }
@@ -76,20 +84,18 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="sender"></param>
         /// <param name="e"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void NewLabel_NodeDeletedEvent(object sender, int e)
+        private void NewNode_NodeDeletedEvent(object sender, int e)
         {
             // 使用Stack<Node>来临时存储控件，因为不能在迭代Stack时修改它
-            Stack<Node> tmp = new Stack<Node>(stack);
-
+            Stack<NodeBase> tmp = new Stack<NodeBase>(_stack);
             // 清空原栈
-            stack.Clear();
-
-            foreach (Node node in tmp)
+            _stack.Clear();
+            foreach (NodeBase node in tmp)
             {
                 // 如果控件的Name与目标控件不同，再压入栈中
                 if (node.ID != e)
                 {
-                    stack.Push(node);
+                    _stack.Push(node);
                 }
             }
             UpdateNode();
@@ -101,7 +107,7 @@ namespace YTVisionPro.Forms.ProcessNew
         private void UpdateNode()
         {
             this.Controls.Clear();
-            foreach (var item in stack)
+            foreach (var item in _stack)
             {
                 this.Controls.Add(item);
             }

@@ -5,6 +5,7 @@ using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node;
 
 namespace YTVisionPro
 {
@@ -37,47 +38,45 @@ namespace YTVisionPro
 
         #region 公有字段、属性
 
-        #region 设备添加、删除、访问设备列表
-        public void AddDevice(IDevice device)
-        {
-            lock (_deviceLock)
-            {
-                _devices.Add(device);
-            }
-        }
+        /// <summary>
+        /// 方案添加的设备总数
+        /// </summary>
+        public static int DeviceCount = 0;
 
-        public void AddDeviceList(List<IDevice> devices)
-        {
-            lock (_deviceLock)
-            {
-                foreach (var dev in devices)
-                {
-                    _devices.Add(dev);
-                }
-            }
-        }
-        public void RemoveDevice(IDevice device)
-        {
-            lock (_deviceLock)
-            {
-                _devices.Remove(device);
-            }
-        }
+        /// <summary>
+        /// 方案已经添加的流程总数
+        /// </summary>
+        public static int ProcessCount = 0;
+
+        /// <summary>
+        /// 方案已经添加的节点总数
+        /// </summary>
+        public static int NodeCount = 0;
+
+        /// <summary>
+        /// 方案已经添加的节点总数
+        /// </summary>
+        public static List<NodeBase> Nodes = new List<NodeBase>();
+
         /// <summary>
         /// 所有设备
         /// </summary>
         public List<IDevice> Devices => _devices;
+
         /// <summary>
         /// 光源设备
         /// </summary>
         public List<ILight> LightDevices => _devices.OfType<ILight>().ToList();
 
+        /// <summary>
+        /// 相机设备
+        /// </summary>
         public List<ICamera> CameraDevices => _devices.OfType<ICamera>().ToList();
 
+        /// <summary>
+        /// Plc设备
+        /// </summary>
         public List<IPlc> PlcDevices => _devices.OfType<IPlc>().ToList();
-
-        #endregion
-
 
         /// <summary>
         /// 方案是否正在运行
@@ -113,6 +112,36 @@ namespace YTVisionPro
         #endregion
 
         #region 公有方法
+
+        #region 设备添加、删除、访问设备列表
+        public void AddDevice(IDevice device)
+        {
+            lock (_deviceLock)
+            {
+                _devices.Add(device);
+            }
+        }
+
+        public void AddDeviceList(List<IDevice> devices)
+        {
+            lock (_deviceLock)
+            {
+                foreach (var dev in devices)
+                {
+                    _devices.Add(dev);
+                }
+            }
+        }
+        public void RemoveDevice(IDevice device)
+        {
+            lock (_deviceLock)
+            {
+                _devices.Remove(device);
+            }
+        }
+
+        #endregion
+
 
         /// <summary>
         /// 添加流程

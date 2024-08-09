@@ -3,11 +3,32 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Forms.ProcessNew
+namespace YTVisionPro.Node
 {
-    public partial class Node : UserControl
+    public partial class NodeBase : UserControl, INode
     {
-        private static int _count = 0;
+
+        /// <summary>
+        /// 节点构造函数
+        /// </summary>
+        /// <param name="text">节点显示名称</param>
+        /// <param name="formSettings">节点参数设置界面</param>
+        /// <param name="process">节点所属流程</param>
+        public NodeBase(string text, Form formSettings, Process process)
+        {
+            InitializeComponent();
+            //获取节点Id
+            _id = ++Solution.NodeCount;
+            //节点的名称
+            label1.Text = $"{_id}{text}";
+            启用ToolStripMenuItem.Enabled = false;
+            //节点添加到方案中
+            Solution.Nodes.Add(this);
+            //节点对应的参数设置界面
+            _formSettings = formSettings;
+            //节点所属的流程
+            Process = process;
+        }
         private int _id = 0;
         private bool _active = true;
         private bool _selected = false;
@@ -27,31 +48,31 @@ namespace YTVisionPro.Forms.ProcessNew
         /// 是否选中
         /// </summary>
         public bool Selected { get { return _selected; } set => SetSelected(value); }
+
         /// <summary>
         /// 节点名称
         /// </summary>
         public string NodeName { get { return label1.Text; } set { label1.Text = value; } }
 
         /// <summary>
+        /// 节点所属的流程
+        /// </summary>
+        public Process Process { get; }
+
+        /// <summary>
+        /// 节点参数
+        /// </summary>
+        public INodeParam NodeParam { get; set; }
+
+        /// <summary>
+        /// 节点结果
+        /// </summary>
+        public INodeResult NodeResult { get; set; }
+
+        /// <summary>
         /// 删除节点事件
         /// </summary>
         public event EventHandler<int> NodeDeletedEvent;
-
-        /// <summary>
-        /// 所有流程创建的节点
-        /// </summary>
-        public static List<Node> Nodes = new List<Node>();
-
-
-        public Node(string text, Form formSettings)
-        {
-            InitializeComponent();
-            _id = ++_count;
-            label1.Text = $"{_id}{text}";
-            启用ToolStripMenuItem.Enabled = false;
-            Nodes.Add(this);
-            _formSettings = formSettings;
-        }
 
         /// <summary>
         /// 删除时触发删除事件，参数为待删除的节点ID
@@ -136,7 +157,7 @@ namespace YTVisionPro.Forms.ProcessNew
         private void label1_MouseClick(object sender, MouseEventArgs e)
         {
             //清空全部选中状态
-            foreach (var node in Nodes)
+            foreach (var node in Solution.Nodes)
             {
                 node.Selected = false;
             }
@@ -152,8 +173,7 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             if (Active)
             {
-                FormLightSettings formLightSettings = new FormLightSettings(Hardware.Light.LightBrand.PPX);
-                formLightSettings.ShowDialog();
+                _formSettings.ShowDialog();
             }
         }
     }
