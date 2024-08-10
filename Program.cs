@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using YTVisionPro.Forms.测试窗口;
 
 namespace YTVisionPro
 {
@@ -13,10 +14,10 @@ namespace YTVisionPro
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            //Application.Run(new FormMain());
             //Application.Run(new YTVisionPro.Forms.ImageViewer.FrmImgeView());
             //Application.Run(new FormSystemSettings());
-            //Application.Run(new Form4());
+            Application.Run(new Form3());
             //Application.Run(new FrmImgeView());
 
             //Application.Run(new FormNewProcessWizard());

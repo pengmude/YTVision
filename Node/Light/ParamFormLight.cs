@@ -4,17 +4,31 @@ using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Node.Light
 {
-    public partial class FormLightSettings : ParamSetFormBase
+    public partial class ParamFormLight : Form, INodeParamForm
     {
         /// <summary>
         /// 参数改变事件，设置完参数后触发，给节点订阅
         /// </summary>
-        public override event EventHandler<INodeParam> NodeParamChanged;
+        public event EventHandler<INodeParam> NodeParamChanged;
+        
+        public ParamFormLight()
+        {
+            InitializeComponent();
+        }
 
-        public FormLightSettings(LightBrand lightBrand)
+        public ParamFormLight(LightBrand lightBrand)
         {
             InitializeComponent();
 
+            InitLightComboBox(lightBrand);
+        }
+
+        /// <summary>
+        /// 初始化光源下拉框
+        /// </summary>
+        /// <param name="lightBrand"></param>
+        public void InitLightComboBox(LightBrand lightBrand)
+        {
             // 初始化光源列表,只显示添加的光源COM号且是对应传入的品牌的
             foreach (var dev in Solution.Instance.LightDevices)
             {
@@ -23,7 +37,7 @@ namespace YTVisionPro.Node.Light
                     comboBox1.Items.Add(light.PortName);
                 }
             }
-            if(comboBox1.Items.Count > 0)
+            if (comboBox1.Items.Count > 0)
                 comboBox1.SelectedIndex = 0;
         }
 
@@ -71,8 +85,8 @@ namespace YTVisionPro.Node.Light
             try
             {
                 //把设置好的参数传给光源节点NodeLight去更新结果
-                NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
-                NodeParamChanged?.Invoke(this, nodeParamLight);
+                //NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
+                //NodeParamChanged?.Invoke(this, nodeParamLight);
             }
             catch (Exception)
             {

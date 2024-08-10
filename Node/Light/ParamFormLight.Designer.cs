@@ -1,6 +1,6 @@
 ﻿namespace YTVisionPro.Node.Light
 {
-    partial class FormLightSettings
+    partial class ParamFormLight
     {
         /// <summary>
         /// Required designer variable.

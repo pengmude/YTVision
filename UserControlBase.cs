@@ -1,15 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro;
 
-namespace YTVisionPro.Node
+namespace 接口和泛型类设计Demo
 {
-    public abstract partial class NodeBase : UserControl
+    public partial class UserControlBase : UserControl
     {
-        public NodeBase()
+        public UserControlBase()
         {
             InitializeComponent();
-            启用ToolStripMenuItem.Enabled = false;
         }
 
         #region 节点界面的操作
@@ -131,7 +139,7 @@ namespace YTVisionPro.Node
         private void label1_MouseClick(object sender, MouseEventArgs e)
         {
             //清空全部选中状态
-            foreach (var node in Solution.Nodes)
+            foreach (var node in Solution.Instance.Nodes)
             {
                 node.Selected = false;
             }
@@ -145,12 +153,13 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void label1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ShowSettingsWindow();
+            if (Active && ParamForm is Form form)
+            {
+                form.ShowDialog();
+            }
         }
 
-        public abstract INodeParamForm ParamForm { get; set; }
-
-        protected abstract void ShowSettingsWindow();
+        public IParamForm ParamForm { private get; set; }
 
         #endregion 定义节点界面操作-结束
     }

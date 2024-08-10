@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
-using YTVisionPro.Node.Light;
+using YTVisionPro.Node.NodeDemo;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -69,7 +69,9 @@ namespace YTVisionPro.Forms.ProcessNew
                 {
                     lightBrand = LightBrand.RSEE;
                 }
-                NodeBase node = new NodeBase(text, new FormLightSettings(lightBrand), _process);
+
+
+                NodeDemo node = new NodeDemo(); // TODO:创建对应类型的节点
                 node.Size = new Size(this.Size.Width - 5, 42);
                 node.Dock = DockStyle.Top;
                 node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
@@ -86,7 +88,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <exception cref="NotImplementedException"></exception>
         private void NewNode_NodeDeletedEvent(object sender, int e)
         {
-            // 使用Stack<Node>来临时存储控件，因为不能在迭代Stack时修改它
+            //使用Stack<Node> 来临时存储控件，因为不能在迭代Stack时修改它
             Stack<NodeBase> tmp = new Stack<NodeBase>(_stack);
             // 清空原栈
             _stack.Clear();
@@ -107,10 +109,10 @@ namespace YTVisionPro.Forms.ProcessNew
         private void UpdateNode()
         {
             this.Controls.Clear();
-            foreach (var item in _stack)
-            {
-                this.Controls.Add(item);
-            }
+            //foreach (var item in _stack)  //TODO
+            //{
+            //    this.Controls.Add(item);
+            //}
         }
     }
 }

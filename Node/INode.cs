@@ -6,57 +6,84 @@ using System.Threading.Tasks;
 
 namespace YTVisionPro.Node
 {
-    public interface INode
+    /// <summary>
+    /// 泛型节点接口类
+    /// </summary>
+    /// <typeparam name="TParam">节点参数</typeparam>
+    /// <typeparam name="TResult">节点运行结果</typeparam>
+    public interface INode<TNodeParam, TNodeResult>
     {
         /// <summary>
-        /// 节点ID
+        /// 节点参数
         /// </summary>
-        int ID {  get; }
+        TNodeParam Param { get; set; }
 
         /// <summary>
-        /// 节点是否启用
+        /// 节点运行
         /// </summary>
-        bool Active { get; set; }
+        void Run();
 
         /// <summary>
-        /// 节点是否选中
+        /// 获取节点运行结果
         /// </summary>
-        bool Selected {  get; set; }
-
-        /// <summary>
-        /// 节点名称
-        /// </summary>
-        string NodeName {  get; set; }
-
-        /// <summary>
-        /// 节点所属的流程
-        /// </summary>
-        Process Process { get; }
-
-        /// <summary>
-        /// 节点的参数
-        /// </summary>
-        INodeParam NodeParam { get; set; }
-
-        /// <summary>
-        /// 节点的结果
-        /// </summary>
-        INodeResult NodeResult { get; set; }
+        /// <returns></returns>
+        TNodeResult Result { get; }
     }
 
     /// <summary>
-    /// 节点参数
+    /// 节点参数界面接口类
     /// </summary>
-    public interface INodeParam 
-    {
-        
-    }
+    public interface INodeParamForm { }
 
     /// <summary>
-    /// 节点结果
+    /// 节点参数接口类
     /// </summary>
-    public interface INodeResult
+    public interface INodeParam { }
+
+    /// <summary>
+    /// 节点运行结果接口类
+    /// </summary>
+    public interface INodeResult 
     {
+        /// <summary>
+        /// 节点运行是否成功
+        /// </summary>
         bool Success { get; set; }
+        /// <summary>
+        /// 节点运行时间ms，计算方法：
+        /// DateTime startTime = DateTime.Now;
+        /// DateTime endTime = DateTime.Now;
+        /// TimeSpan elapsed = endTime - startTime;
+        /// long elapsedMilliseconds = elapsed.TotalMilliseconds;
+        /// </summary>
+        long RunTime {  get; set; }
+        /// <summary>
+        /// 运行状态码
+        /// </summary>
+        NodeRunStatusCode RunStatusCode { get; set; }
+
+    }
+
+    /// <summary>
+    /// 节点运行状态码
+    /// </summary>
+    public enum NodeRunStatusCode
+    {
+        /// <summary>
+        /// 成功
+        /// </summary>
+        OK,
+        /// <summary>
+        /// 参数有误
+        /// </summary>
+        PARAM_ERROR,
+        /// <summary>
+        /// 超时
+        /// </summary>
+        TIMEOUT,
+        /// <summary>
+        /// 未知错误
+        /// </summary>
+        UNKNOW_ERROR
     }
 }
