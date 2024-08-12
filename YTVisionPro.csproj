@@ -147,12 +147,6 @@
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProcessNew\LightSettings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\ProcessNew\LightSettings.Designer.cs">
-      <DependentUpon>LightSettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ProcessNew\ProcessEditPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -237,11 +231,6 @@
     </Compile>
     <Compile Include="Hardware\PLC\IPlc.cs" />
     <Compile Include="Hardware\PLC\PlcPanasonic.cs" />
-    <Compile Include="Modules\IModule.cs" />
-    <Compile Include="Modules\IModuleParam.cs" />
-    <Compile Include="Modules\IModuleResult.cs" />
-    <Compile Include="Modules\LightSource\MLightPPX.cs" />
-    <Compile Include="Modules\LightSource\ModuleLightParam.cs" />
     <Compile Include="Node\NodeBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -279,9 +268,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessNew\LightSettings.resx">
-      <DependentUpon>LightSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\ProcessEditPanel.resx">
       <DependentUpon>ProcessEditPanel.cs</DependentUpon>
@@ -363,13 +349,8 @@
     <Folder Include="Forms\CameraAdd\" />
     <Folder Include="Forms\LightAdd\" />
     <Folder Include="Forms\PLCAdd\" />
-    <Folder Include="Modules\AI\" />
-    <Folder Include="Modules\Camera\" />
-    <Folder Include="Modules\Normal\" />
-    <Folder Include="Modules\PLC\" />
     <Folder Include="Node\AI\" />
     <Folder Include="Node\PLC\" />
-    <Folder Include="Node\test\" />
     <Folder Include="Node\Tool\" />
   </ItemGroup>
   <ItemGroup>
@@ -383,7 +364,7 @@
     <Content Include="Icon\点检模式.png" />
     <Content Include="Icon\用户登录.png" />
     <Content Include="Icon\相机.png" />
-    <Content Include="Modules\readme.txt" />
+    <Content Include="Node\readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

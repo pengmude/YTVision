@@ -9,8 +9,8 @@ namespace YTVisionPro.Node.Light
         /// <summary>
         /// 参数改变事件，设置完参数后触发，给节点订阅
         /// </summary>
-        public event EventHandler<INodeParam> NodeParamChanged;
-        
+        public event EventHandler<INodeParam> OnNodeParamChange;
+
         public ParamFormLight()
         {
             InitializeComponent();
@@ -86,7 +86,7 @@ namespace YTVisionPro.Node.Light
             {
                 //把设置好的参数传给光源节点NodeLight去更新结果
                 //NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
-                //NodeParamChanged?.Invoke(this, nodeParamLight);
+                //OnNodeParamChange?.Invoke(this, nodeParamLight);
             }
             catch (Exception)
             {

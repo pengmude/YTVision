@@ -28,9 +28,9 @@ namespace YTVisionPro.Forms.测试窗口
             //cameraNode.ShowSettingsWindow();
             //NodeBase<NodeParametersLight, NodeResultLight> nodeBase = new NodeBase<NodeParametersLight, NodeResultLight>(new ParameterSettingsForm());
 
-            NodeDemo nodeDemo = new NodeDemo();
-            nodeDemo.ParamForm = new NodeParamSetDemo();
-            Controls.Add(nodeDemo);
+            //NodeDemo nodeDemo = new NodeDemo();
+            //nodeDemo.ParamForm = new NodeParamSetDemo();
+            //Controls.Add(nodeDemo);
         }
     }
 }

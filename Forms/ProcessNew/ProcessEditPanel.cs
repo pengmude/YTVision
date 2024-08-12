@@ -60,6 +60,8 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 string text = (string)e.Data.GetData(DataFormats.Text);
 
+                #region TODO:根据text创建对应类型的节点，并且赋予节点对应类型的参数设置窗口（给ParamForm赋值）
+
                 LightBrand lightBrand = new LightBrand();
                 if (text.Contains("磐鑫"))
                 {
@@ -70,12 +72,18 @@ namespace YTVisionPro.Forms.ProcessNew
                     lightBrand = LightBrand.RSEE;
                 }
 
+                text = $"{Solution.NodeCount + 1}{text}";
 
-                NodeDemo node = new NodeDemo(); // TODO:创建对应类型的节点
+                NodeDemo node = new NodeDemo(text); 
                 node.Size = new Size(this.Size.Width - 5, 42);
                 node.Dock = DockStyle.Top;
                 node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                node.ParamForm = new NodeParamSetDemo();
+
+                #endregion
+
                 _stack.Push(node);
+                Solution.Nodes.Add(node);
                 UpdateNode();
             }
         }
@@ -109,10 +117,10 @@ namespace YTVisionPro.Forms.ProcessNew
         private void UpdateNode()
         {
             this.Controls.Clear();
-            //foreach (var item in _stack)  //TODO
-            //{
-            //    this.Controls.Add(item);
-            //}
+            foreach (var item in _stack)
+            {
+                this.Controls.Add(item);
+            }
         }
     }
 }

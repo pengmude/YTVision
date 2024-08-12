@@ -10,6 +10,7 @@ namespace YTVisionPro.Node
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
+            _id = ++Solution.NodeCount;
         }
 
         #region 节点界面的操作
@@ -49,13 +50,23 @@ namespace YTVisionPro.Node
         public event EventHandler<int> NodeDeletedEvent;
 
         /// <summary>
+        /// 设置节点文本
+        /// </summary>
+        /// <param name="text"></param>
+        protected void SetNodeText(string text)
+        {
+            label1.Text = text;
+        }
+
+        /// <summary>
         /// 删除时触发删除事件，参数为待删除的节点ID
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if(Selected)
+                NodeDeletedEvent.Invoke(this, ID);
         }
 
         /// <summary>
@@ -87,7 +98,7 @@ namespace YTVisionPro.Node
             _active = active;
             if (_active)
             {
-                label1.BackColor = SystemColors.GradientActiveCaption;
+                label1.BackColor = SystemColors.ActiveCaption;
                 禁用ToolStripMenuItem.Enabled = true;
                 启用ToolStripMenuItem.Enabled = false;
             }
@@ -112,7 +123,7 @@ namespace YTVisionPro.Node
                 if (_selected)
                     label1.BackColor = Color.CornflowerBlue;
                 else
-                    label1.BackColor = SystemColors.GradientActiveCaption;
+                    label1.BackColor = SystemColors.ActiveCaption; 
             }
             else
             {
@@ -145,12 +156,11 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void label1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ShowSettingsWindow();
+            if (Active && ParamForm is Form form)
+                form.ShowDialog();
         }
 
-        public virtual INodeParamForm ParamForm { get; set; }
-
-        protected virtual void ShowSettingsWindow() { }
+        public INodeParamForm ParamForm { get; set; }
 
         #endregion 定义节点界面操作-结束
     }

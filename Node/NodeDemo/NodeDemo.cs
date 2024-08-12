@@ -7,27 +7,53 @@ using System.Windows.Forms;
 
 namespace YTVisionPro.Node.NodeDemo
 {
-    public class NodeDemo : NodeBase, INode<NodeParamDemo, NodeResultDemo>
+    public class NodeDemo : NodeBase, INode<NodeParamSetDemo, NodeParamDemo, NodeResultDemo>
     {
-        public override INodeParamForm ParamForm { get; set; }
+        /// <summary>
+        /// 创建一个指定名称的节点
+        /// </summary>
+        /// <param name="nodeText"></param>
+        public NodeDemo(string nodeText)
+        {
+            SetNodeText(nodeText);
+        }
 
+        /// <summary>
+        /// 参数设置窗口
+        /// </summary>
+        NodeParamSetDemo INode<NodeParamSetDemo, NodeParamDemo, NodeResultDemo>.ParamForm
+        {
+            get => (NodeParamSetDemo)base.ParamForm;
+            set => base.ParamForm = value;
+        }
+
+        /// <summary>
+        /// 节点参数
+        /// </summary>
         public NodeParamDemo Param { get; set; }
+
+        /// <summary>
+        /// 节点结果
+        /// </summary>
         public NodeResultDemo Result { get; private set; }
 
+        /// <summary>
+        /// 节点运行
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
         public void Run()
         {
             Result = new NodeResultDemo();
-            throw new NotImplementedException();
         }
 
-        protected override void ShowSettingsWindow()
+        /// <summary>
+        /// 给节点设置文本
+        /// </summary>
+        /// <param name="text"></param>
+        void INode<NodeParamSetDemo, NodeParamDemo, NodeResultDemo>.SetNodeText(string text)
         {
-            if (base.Active)
-                ((NodeParamSetDemo)ParamForm).ShowDialog();
+            base.SetNodeText(text);
         }
-
-        //TODO: 目前 方案保存List<NodeBase>就能够兼容保存所有节点
-        // 节点运行时间、是否成功标志、运行状态码等必要结果，设在INodeResult接口类中必须实现
 
     }
 }
