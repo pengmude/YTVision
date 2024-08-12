@@ -14,6 +14,8 @@ namespace YTVisionPro
 {
     public partial class FormMain : Form
     {
+        Test_light_controller.Form1 form1 = new Test_light_controller.Form1();
+
         /// <summary>
         /// 图像显示栏
         /// </summary>
@@ -221,7 +223,7 @@ namespace YTVisionPro
 
         private void 全局光源ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("全局光源");
+            form1.ShowDialog();
         }
         private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
         {

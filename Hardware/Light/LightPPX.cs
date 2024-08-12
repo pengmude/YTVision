@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -103,26 +104,28 @@ namespace YTVisionPro.Hardware.Light
             return true;
         }
 
+        /// <summary>
+        /// 关闭连接
+        /// </summary>
         public void Disconnect()
         {
             _serialPort.Close();
         }
 
+        /// <summary>
+        /// 打开光源
+        /// </summary>
         public void TurnOn()
         {
-            SendCommand("ON");
+            SetValue(255);
         }
 
+        /// <summary>
+        /// 关闭光源
+        /// </summary>
         public void TurnOff()
         {
-            SendCommand("OFF");
-        }
-
-        public void SetValue(int value)
-        {
-            // 假设光源的亮度命令格式为 "BRIGHTNESS 128"
-            string command = $"BRIGHTNESS {value}";
-            SendCommand(command);
+            SetValue(0);
         }
 
         private void SendCommand(string command)
@@ -136,6 +139,100 @@ namespace YTVisionPro.Hardware.Light
             {
                 throw new InvalidOperationException("Serial port is not open.");
             }
+        }
+
+        /// <summary>
+        /// 设置光源亮度
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetValue(int value)
+        {
+            if (_serialPort.IsOpen && value != null)
+            {
+                byte[] buff = new byte[4];
+                buff[0] = 0x24;
+                buff[1] = Convert.ToByte(Sn);
+                buff[2] = Convert.ToByte(value);
+                buff[3] = (byte)(buff[0] ^ buff[1] ^ buff[2]);
+                try
+                {
+                    _serialPort.Write(buff, 0, 4);
+                }
+                catch
+                {
+                    MessageBox.Show("光源控制器线缆连接不正常或松动", "连接异常");
+                }
+                System.Threading.Thread.Sleep(10);
+                int j = _serialPort.BytesToRead;
+                try
+                {
+                    _serialPort.Read(buff, 0, j);
+                }
+                catch { }
+            }
+        }
+
+        /// <summary>
+        /// 读取光源亮度
+        /// </summary>
+        /// <returns></returns>
+        public byte ReadValue()
+        {
+            byte[] value = new byte[20];
+            byte[] Buffer = new byte[3]; //发送缓冲区
+            byte[] buf = new byte[20]; //接收缓冲区
+            Buffer[0] = 0X27;
+            Buffer[1] = 0XA5;
+            Buffer[2] = (byte)(Buffer[0] ^ Buffer[1]);
+            try
+            {
+                _serialPort.Write(Buffer, 0, 3); //发送
+            }
+            catch
+            {
+                MessageBox.Show("光源控制器线缆连接不正常或松动", "连接异常");
+            }
+            System.Threading.Thread.Sleep(20);
+            int j = _serialPort.BytesToRead;
+            try
+            {
+                _serialPort.Read(buf, 0, j); //接收
+            }
+            catch { }
+            if (4 == j && buf[0] == 0x27 && buf[3] == (buf[0] ^ buf[1] ^ buf[2]))
+            {
+                for (int i = 1; i < 3; i++)
+                    value[i] = buf[i];
+                return 1;
+            }
+            if (6 == j && buf[0] == 0x27 && buf[5] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3] ^ buf[4]))
+            {
+                for (int i = 1; i < 5; i++)
+                {
+                    value[i] = buf[i];
+                }
+                return value[int.Parse(Sn)];
+            }
+            if (10 == j && buf[0] == 0x27 && buf[9] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3] ^ buf[4]
+                ^ buf[5] ^ buf[6] ^ buf[7] ^ buf[8]))
+            {
+                for (int i = 1; i < 9; i++)
+                {
+                    value[i] = buf[i];
+                }
+                return 1;
+            }
+            if (18 == j && buf[0] == 0x27 && buf[17] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3]
+                ^ buf[4] ^ buf[5] ^ buf[6] ^ buf[7] ^ buf[8] ^ buf[9] ^ buf[10] ^ buf[11]
+                ^ buf[12] ^ buf[13] ^ buf[14] ^ buf[15] ^ buf[16]))
+            {
+                for (int i = 1; i < 17; i++)
+                {
+                    value[i] = buf[i];
+                }
+                return 1;
+            }
+            return 0;
         }
     }
 }

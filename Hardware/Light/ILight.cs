@@ -68,6 +68,13 @@ namespace YTVisionPro.Hardware.Light
         /// 设置光源亮度值（0-255）
         /// </summary>
         void SetValue(int value);
+
+        /// <summary>
+        /// 读取光源亮度
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        byte ReadValue();
     }
 
     public enum LightBrand

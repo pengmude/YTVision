@@ -85,8 +85,8 @@ namespace YTVisionPro.Node.Light
             try
             {
                 //把设置好的参数传给光源节点NodeLight去更新结果
-                //NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
-                //NodeParamChanged?.Invoke(this, nodeParamLight);
+                NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
+                NodeParamChanged?.Invoke(this, nodeParamLight);
             }
             catch (Exception)
             {

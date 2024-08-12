@@ -4,6 +4,7 @@ using YTVisionPro.Node;
 using YTVisionPro.Node.Camera;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.NodeDemo;
+using YTVisionPro.Node.NodeDemoLight;
 
 namespace YTVisionPro.Forms.测试窗口
 {
@@ -28,8 +29,8 @@ namespace YTVisionPro.Forms.测试窗口
             //cameraNode.ShowSettingsWindow();
             //NodeBase<NodeParametersLight, NodeResultLight> nodeBase = new NodeBase<NodeParametersLight, NodeResultLight>(new ParameterSettingsForm());
 
-            NodeDemo nodeDemo = new NodeDemo();
-            nodeDemo.ParamForm = new NodeParamSetDemo();
+            NodeDemoLight nodeDemo = new NodeDemoLight();
+            nodeDemo.ParamForm = new ParamFormLight();
             Controls.Add(nodeDemo);
         }
     }
