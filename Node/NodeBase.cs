@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace YTVisionPro.Node
 {
-    public abstract partial class NodeBase : UserControl
+    public partial class NodeBase : UserControl
     {
         public NodeBase()
         {
@@ -148,9 +148,12 @@ namespace YTVisionPro.Node
             ShowSettingsWindow();
         }
 
-        public abstract INodeParamForm ParamForm { get; set; }
+        public virtual INodeParamForm ParamForm { get; set; }
 
-        protected abstract void ShowSettingsWindow();
+        protected virtual void ShowSettingsWindow()
+        {
+
+        }
 
         #endregion 定义节点界面操作-结束
     }
