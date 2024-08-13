@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
+using YTVisionPro.Node.Light;
 using YTVisionPro.Node.NodeDemo;
+using YTVisionPro.Node.NodeDemoLight;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
