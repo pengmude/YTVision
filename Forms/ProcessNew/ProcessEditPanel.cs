@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
 using YTVisionPro.Node.Light;
+using YTVisionPro.Node.Light.PPX;
 using YTVisionPro.Node.NodeDemo;
-using YTVisionPro.Node.NodeDemoLight;
+using YTVisionPro.Node.NodeLight.PPX;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -32,6 +34,7 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             InitializeComponent();
             _process = new Process();
+            Solution.Instance.AddProcess(_process);
         }
 
         /// <summary>
@@ -70,7 +73,7 @@ namespace YTVisionPro.Forms.ProcessNew
                     lightBrand = LightBrand.PPX;
                     text = $"{Solution.NodeCount + 1}{text}";
 
-                    NodeDemoLight node = new NodeDemoLight(text);
+                    NodeLight node = new NodeLight(text);
                     node.Size = new Size(this.Size.Width - 5, 42);
                     node.Dock = DockStyle.Top;
                     node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
@@ -78,6 +81,7 @@ namespace YTVisionPro.Forms.ProcessNew
                     node.ParamForm.OnNodeParamChange += node.ParamForm_OnNodeParamChange;
                     _stack.Push(node);
                     Solution.Nodes.Add(node);
+                    _process.AddNode(node);
                     UpdateNode();
                 }
                 else if (text.Contains("锐视"))
@@ -85,13 +89,15 @@ namespace YTVisionPro.Forms.ProcessNew
                     lightBrand = LightBrand.RSEE;
                     text = $"{Solution.NodeCount + 1}{text}";
 
-                    NodeDemoLight node = new NodeDemoLight(text);
+                    NodeLight node = new NodeLight(text);
                     node.Size = new Size(this.Size.Width - 5, 42);
                     node.Dock = DockStyle.Top;
                     node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
                     node.ParamForm = new ParamFormLight(lightBrand);
+                    node.ParamForm.OnNodeParamChange += node.ParamForm_OnNodeParamChange;
                     _stack.Push(node);
                     Solution.Nodes.Add(node);
+                    _process.AddNode(node);
                     UpdateNode();
                 }
                 //text = $"{Solution.NodeCount + 1}{text}";
@@ -128,6 +134,10 @@ namespace YTVisionPro.Forms.ProcessNew
                 if (node.ID != e)
                 {
                     _stack.Push(node);
+                }
+                else
+                {
+                    _process.Nodes.Remove(node);
                 }
             }
             UpdateNode();

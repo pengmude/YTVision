@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Windows.Forms;
-using Test_light_controller;
+using YTVisionPro.Forms.LightAdd;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -43,8 +43,7 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 串口是否打开
         /// </summary>
-        private bool isOpen;
-        public bool IsOpen { get => isOpen; private set => isOpen = value; }
+        public bool IsOpen { get => _serialPort.IsOpen; }
 
         /// <summary>
         /// 光源是否打开
@@ -76,7 +75,7 @@ namespace YTVisionPro.Hardware.Light
         /// <returns></returns>
         public bool Connenct(string portName, int baudRate, int dataBits, StopBits stopBits, Parity parity)
         {
-            if(IsOpen) { return true; }
+            if(_serialPort.IsOpen) { return true; }
             try
             {
                 _serialPort.PortName = portName;
@@ -87,13 +86,11 @@ namespace YTVisionPro.Hardware.Light
                 _serialPort.Open();
                 SerialStructure serialStructure = this.SerialStructure;
                 serialStructure.SerialNumber = _serialPort.PortName;
-                IsOpen = true;
                 IsLight = true;
                 return true;
             }
             catch (Exception ex)
             {
-                IsOpen = false;
                 IsLight = false;
                 return false;
             }
@@ -105,7 +102,6 @@ namespace YTVisionPro.Hardware.Light
         public void Disconnect()
         {
             _serialPort.Close();
-            IsOpen = false;
             IsLight = false;
         }
 
@@ -133,7 +129,7 @@ namespace YTVisionPro.Hardware.Light
         public void SetValue(int value)
         {
             SerialStructure serialStructure = this.SerialStructure;
-            if (_serialPort.IsOpen && value != null)
+            if (_serialPort.IsOpen)
             {
                 byte[] buff = new byte[4];
                 buff[0] = 0x24;
@@ -164,7 +160,7 @@ namespace YTVisionPro.Hardware.Light
         /// <returns></returns>
         public byte ReadValue()
         {
-            if ( _serialPort.IsOpen == false) { return 0; }
+            if ( _serialPort.IsOpen) { return 0; }
 
             SerialStructure serialStructure = this.SerialStructure;
             byte[] value = new byte[20];

@@ -122,23 +122,23 @@
     <Compile Include="Forms\ImageViewer\YTPictrueBox.Designer.cs">
       <DependentUpon>YTPictrueBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LightAdd\Form1.cs">
+    <Compile Include="Forms\LightAdd\LightListView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\LightAdd\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\LightAdd\LightListView.Designer.cs">
+      <DependentUpon>LightListView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LightAdd\Form2.cs">
+    <Compile Include="Forms\LightAdd\LightSettingsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\LightAdd\Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <Compile Include="Forms\LightAdd\LightSettingsView.Designer.cs">
+      <DependentUpon>LightSettingsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\LightAdd\UserControl1.cs">
+    <Compile Include="Forms\LightAdd\LightItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\LightAdd\UserControl1.Designer.cs">
-      <DependentUpon>UserControl1.cs</DependentUpon>
+    <Compile Include="Forms\LightAdd\LightItem.Designer.cs">
+      <DependentUpon>LightItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MessageBox\YTMessageBox.cs">
       <SubType>Form</SubType>
@@ -153,15 +153,15 @@
       <DependentUpon>FormCameraTest.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\INode.cs" />
-    <Compile Include="Node\Light\NodeDemoLight.cs">
+    <Compile Include="Node\Light\PPX\NodeLight.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\Light\NodeParamLight.cs" />
-    <Compile Include="Node\Light\NodeResultLight.cs" />
-    <Compile Include="Node\Light\ParamFormLight.cs">
+    <Compile Include="Node\Light\PPX\NodeParamLight.cs" />
+    <Compile Include="Node\Light\PPX\NodeResultLight.cs" />
+    <Compile Include="Node\Light\PPX\ParamFormLight.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\Light\ParamFormLight.Designer.cs">
+    <Compile Include="Node\Light\PPX\ParamFormLight.Designer.cs">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.cs">
@@ -280,14 +280,14 @@
     <EmbeddedResource Include="Forms\ImageViewer\YTPictrueBox.resx">
       <DependentUpon>YTPictrueBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LightAdd\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\LightAdd\LightListView.resx">
+      <DependentUpon>LightListView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LightAdd\Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\LightAdd\LightSettingsView.resx">
+      <DependentUpon>LightSettingsView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\LightAdd\UserControl1.resx">
-      <DependentUpon>UserControl1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\LightAdd\LightItem.resx">
+      <DependentUpon>LightItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MessageBox\YTMessageBox.resx">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
@@ -295,7 +295,7 @@
     <EmbeddedResource Include="Node\Camera\FormCameraTest.resx">
       <DependentUpon>FormCameraTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\Light\ParamFormLight.resx">
+    <EmbeddedResource Include="Node\Light\PPX\ParamFormLight.resx">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">

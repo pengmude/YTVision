@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node;
 
 namespace YTVisionPro
 {
@@ -16,6 +18,7 @@ namespace YTVisionPro
         private List<IPlc> _plcList;
         private List<ICamera> _cameraList;
         private List<ILight> _light;
+        private List<NodeBase> _nodes = new List<NodeBase>();
 
         private static int _countInstance = 0;
 
@@ -33,6 +36,11 @@ namespace YTVisionPro
         /// 流程名称
         /// </summary>
         public string ProcessName { get; set; }
+
+        /// <summary>
+        /// 流程包含的节点
+        /// </summary>
+        public List<NodeBase> Nodes { get => _nodes;}
 
 
         /// <summary>
@@ -55,18 +63,23 @@ namespace YTVisionPro
             _id = _countInstance++;
         }
 
-        #region 在线自动运行特有的成员
-
-        //public 
-
-        #endregion
+        public void AddNode(NodeBase node)
+        {
+            _nodes.Add(node);
+        }
 
         /// <summary>
         /// 流程开始运行
         /// </summary>
         public void Run()
         {
-
+            foreach (var item in _nodes)
+            {
+                if(item is NodeBase node)
+                {
+                    node.Run();
+                }
+            }
         }
 
         /// <summary>

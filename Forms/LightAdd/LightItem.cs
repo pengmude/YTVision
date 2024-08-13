@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using YTVisionPro;
 using YTVisionPro.Hardware.Light;
 
-namespace Test_light_controller
+namespace YTVisionPro.Forms.LightAdd
 {
-    public partial class UserControl1 : UserControl
+    public partial class LightItem : UserControl
     {
         public bool isSerialPortOpen = false;
         public LightPPX light = new LightPPX();
@@ -19,7 +19,7 @@ namespace Test_light_controller
         public event EventHandler Serialportstatuschange;
         public event EventHandler NotificationSettings;
         public event EventHandler Delect;
-        public static Dictionary<string, UserControl1> openWith = new Dictionary<string, UserControl1>();
+        public static Dictionary<string, LightItem> openWith = new Dictionary<string, LightItem>();
 
         private string text;
         public string Text
@@ -32,12 +32,12 @@ namespace Test_light_controller
             }
         }
 
-        public UserControl1()
+        public LightItem()
         {
             InitializeComponent();
         }
 
-        public UserControl1(SerialStructure serialStructure)
+        public LightItem(SerialStructure serialStructure)
         {
             InitializeComponent();
             this.Dock = DockStyle.Top;
@@ -50,7 +50,7 @@ namespace Test_light_controller
             this.MouseDoubleClick += UserControl1_MouseDoubleClick;
             this.BackColor = Color.AliceBlue;
             this.label7.Text = serialStructure.SerialNumber.ToString();
-            Form1.ValueC += Form1_ValueC;
+            LightListView.ValueC += Form1_ValueC;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void Form1_ValueC(object sender, int e)
         {
-            Form1 form1 = (Form1)sender;
+            LightListView form1 = (LightListView)sender;
             if (form1.selectedUserControl == this)
             {
                 this.label6.Text = e.ToString();
@@ -79,7 +79,7 @@ namespace Test_light_controller
                 MessageBox.Show("请关闭串口再修改");
                 return;
             }
-            Form2 form2 = new Form2(this);
+            LightSettingsView form2 = new LightSettingsView(this);
             form2.Settings += Form2_Settings;
             //更新Form2UI
             NotificationSettings?.Invoke(this, e);
@@ -93,7 +93,7 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void Form2_Settings(object sender, SerialStructure e)
         {
-            Form1 parentForm = (Form1)this.FindForm();
+            LightListView parentForm = (LightListView)this.FindForm();
             foreach (var item in parentForm.UserControls)
             {
                 if (item.serialStructure.SerialNumber == e.SerialNumber && item.serialStructure.ChannelValue == e.ChannelValue)
@@ -148,8 +148,8 @@ namespace Test_light_controller
 
                 Click?.Invoke(this, isSerialPortOpen);
                 button1.Text = "关闭串口";
-                Form1 parentForm = (Form1)this.FindForm();
-                foreach (UserControl1 item in parentForm.UserControls)
+                LightListView parentForm = (LightListView)this.FindForm();
+                foreach (LightItem item in parentForm.UserControls)
                 {
                     if (item.serialStructure.SerialNumber == this.serialStructure.SerialNumber)
                     {
@@ -178,7 +178,7 @@ namespace Test_light_controller
         {
             try
             {
-                if (this.ParentForm is Form1 form1)
+                if (this.ParentForm is LightListView form1)
                 {
                     bool canClosePort = true;
 
@@ -186,8 +186,8 @@ namespace Test_light_controller
 
                     if (this.serialStructure.SerialNumber == openWith[sp].serialStructure.SerialNumber)
                     {
-                        Form1 parentForm = (Form1)this.FindForm();
-                        foreach (UserControl1 item in parentForm.UserControls)
+                        LightListView parentForm = (LightListView)this.FindForm();
+                        foreach (LightItem item in parentForm.UserControls)
                         {
                             if (item.serialStructure.SerialNumber == this.serialStructure.SerialNumber)
                             {
@@ -221,8 +221,8 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void UserControl1_Click(object sender, EventArgs e)
         {
-            Form1 parentForm = (Form1)this.FindForm();
-            foreach (UserControl1 item in parentForm.UserControls)
+            LightListView parentForm = (LightListView)this.FindForm();
+            foreach (LightItem item in parentForm.UserControls)
             {
 
                 if (item.serialStructure.SerialNumber == this.serialStructure.SerialNumber && item.serialStructure.ChannelValue != this.serialStructure.ChannelValue && item.light.IsOpen == true)

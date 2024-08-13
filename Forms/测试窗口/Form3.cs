@@ -4,7 +4,7 @@ using YTVisionPro.Node;
 using YTVisionPro.Node.Camera;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.NodeDemo;
-using YTVisionPro.Node.NodeDemoLight;
+using YTVisionPro.Node.NodeLight;
 
 namespace YTVisionPro.Forms.测试窗口
 {

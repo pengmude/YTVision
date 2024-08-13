@@ -1,6 +1,6 @@
-﻿namespace Test_light_controller
+﻿namespace YTVisionPro.Forms.LightAdd
 {
-    partial class Form2
+    partial class LightSettingsView
     {
         /// <summary>
         /// Required designer variable.

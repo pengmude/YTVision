@@ -4,30 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Test_light_controller;
+using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node.Light;
+using YTVisionPro.Node.Light.PPX;
 using YTVisionPro.Node.NodeDemo;
 
-namespace YTVisionPro.Node.NodeDemoLight
+namespace YTVisionPro.Node.NodeLight.PPX
 {
-    public class NodeDemoLight : NodeBase, INode<ParamFormLight, NodeParamLight, NodeResultLight>
+    public class NodeLight : NodeBase, INode<ParamFormLight, NodeParamLight, NodeResultLight>
     {
-        LightPPX lightPPX = new LightPPX();
-
+        LightPPX lightPPX;
 
         /// <summary>
         /// 创建一个指定名称的节点
         /// </summary>
         /// <param name="nodeText"></param>
-        public NodeDemoLight(string nodeText)
+        public NodeLight(string nodeText)
         {
             SetNodeText(nodeText);
-            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
         }
 
         public void ParamForm_OnNodeParamChange(object sender, INodeParam e)
         {
+            Param = (NodeParamLight)e;
+            
             foreach (var light in Solution.Instance.LightDevices)
             {
                 if (light.SerialStructure.SerialNumber == Param.SerialNumber && light.SerialStructure.ChannelValue == Param.ChannelValue)
@@ -36,9 +37,13 @@ namespace YTVisionPro.Node.NodeDemoLight
                     SerialStructure serialStructure = lightPPX.SerialStructure;
                     serialStructure.ChannelValue = (byte)Param.ChannelValue;
                     lightPPX.SerialStructure= serialStructure;
-                    break;
+                    Logger.LogHelper.AddLog(Logger.MsgLevel.Debug, "保存成功", true);
+                    return;
                 }
             }
+            MessageBox.Show("没有该光源");
+            Logger.LogHelper.AddLog(Logger.MsgLevel.Debug, "没有该光源", true);
+
         }
 
         /// <summary>
@@ -64,8 +69,15 @@ namespace YTVisionPro.Node.NodeDemoLight
         /// 节点运行
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public void Run()
+        public override void Run()
         {
+            DateTime startTime = DateTime.Now;
+
+            if (!Active)
+            {
+                return;
+            }
+
             if (lightPPX == null)
             {
                 Logger.LogHelper.AddLog(Logger.MsgLevel.Warn,"光源为空",true);
@@ -77,16 +89,26 @@ namespace YTVisionPro.Node.NodeDemoLight
             int ChannelValue = Param.ChannelValue;
             int Brightness = Param.Brightness;
 
-            if (Param.Open == true) // 打开操作
+            if (Param.Open) // 打开操作
             {
-                lightPPX.Connenct(SerialNumber, int.Parse(lightPPX.SerialStructure.brand), lightPPX.SerialStructure.DataBits, lightPPX.SerialStructure.StopBits, lightPPX.SerialStructure.Parity);
+                bool flag = lightPPX.Connenct(SerialNumber, lightPPX.SerialStructure.Baudrate, lightPPX.SerialStructure.DataBits, lightPPX.SerialStructure.StopBits, lightPPX.SerialStructure.Parity);
+                Result.Success = flag;
                 lightPPX.SetValue(Brightness);
+                lightPPX.Brightness = Brightness;
+                Result.RunStatusCode = flag ? NodeRunStatusCode.OK : NodeRunStatusCode.UNKNOW_ERROR;
             }
             else
             {
-                lightPPX.Disconnect();
+                lightPPX.Connenct(SerialNumber, lightPPX.SerialStructure.Baudrate, lightPPX.SerialStructure.DataBits, lightPPX.SerialStructure.StopBits, lightPPX.SerialStructure.Parity);
+                lightPPX.SetValue(0);
+                Result.Success = true;
+                Result.RunStatusCode = NodeRunStatusCode.OK;
             }
 
+            DateTime endTime = DateTime.Now;
+            TimeSpan elapsed = endTime - startTime;
+            long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
+            Result.RunTime = elapsedMi11iseconds;
         }
 
         /// <summary>

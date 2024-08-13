@@ -9,16 +9,16 @@ using YTVisionPro;
 using YTVisionPro.Hardware.Light;
 using Logger;
 
-namespace Test_light_controller
+namespace YTVisionPro.Forms.LightAdd
 {
-    public partial class Form1 : Form
+    public partial class LightListView : Form
     {
-        public List<UserControl1> UserControls = new List<UserControl1>();
-        public UserControl1 selectedUserControl;
+        public List<LightItem> UserControls = new List<LightItem>();
+        public LightItem selectedUserControl;
         public static event EventHandler<int> ValueC;
         public static int ID = 0;
 
-        public Form1()
+        public LightListView()
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterScreen;
@@ -68,7 +68,7 @@ namespace Test_light_controller
         private void button1_Click(object sender, EventArgs e)
         {
             //打开Form2窗口进行设置
-            Form2 form2 = new Form2();
+            LightSettingsView form2 = new LightSettingsView();
             form2.FormClosed += Form2_FormClosed;
             form2.ShowDialog();
         }
@@ -80,14 +80,14 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void Form2_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Form2 form2 = sender as Form2;
+            LightSettingsView form2 = sender as LightSettingsView;
             if (form2 != null && form2.IsCancelled)
             {
                 return;
             }
 
             //foreach循环判断添加的用户控件是否有重复
-            foreach (UserControl1 item in UserControls)
+            foreach (LightItem item in UserControls)
             {
                 if (form2.serialStructure.SerialNumber == item.serialStructure.SerialNumber && form2.serialStructure.ChannelValue == item.serialStructure.ChannelValue)
                 {
@@ -97,7 +97,7 @@ namespace Test_light_controller
             }
 
             //创建用户控件
-            UserControl1 myControl = new UserControl1(form2.serialStructure);
+            LightItem myControl = new LightItem(form2.serialStructure);
             myControl.Click += MyControl_Click; 
             myControl.Serialportstatuschange += MyControl_Serialportstatuschange;
             myControl.light.SerialStructure = form2.serialStructure;
@@ -107,7 +107,7 @@ namespace Test_light_controller
             myControl.light.DevName = "光源" + ID;
 
             //foreach循环，如果添加的用户控件在列表中有相同的串口号，则代表添加的用户控件的_serialPort与列表的某个相同
-            foreach (UserControl1 item in UserControls)
+            foreach (LightItem item in UserControls)
             {
                 if (item.serialStructure.SerialNumber == myControl.serialStructure.SerialNumber)
                 {
@@ -140,7 +140,7 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void MyControl_Delect(object sender, EventArgs e)
         {
-            UserControl1 userControl1 = (UserControl1)sender;
+            LightItem userControl1 = (LightItem)sender;
             //for循环遍历，删除特定的用户控件
             for (int i = 0; i < UserControls.Count; i++)
             {
@@ -161,7 +161,7 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void MyControl_Click(object sender, bool e)
         {
-            this.selectedUserControl = (UserControl1)sender;
+            this.selectedUserControl = (LightItem)sender;
             //更新UI显示
             this.label8.Text = selectedUserControl.serialStructure.Name;
             this.label4.Text = selectedUserControl.serialStructure.ChannelValue.ToString();
@@ -204,7 +204,7 @@ namespace Test_light_controller
         /// 改变控件颜色
         /// </summary>
         /// <param name="activeControl"></param>
-        public void SetActiveControl(UserControl1 activeControl)
+        public void SetActiveControl(LightItem activeControl)
         {
             foreach (var control in UserControls)
             {

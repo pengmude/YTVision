@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node.Light
+namespace YTVisionPro.Node.Light.PPX
 {
     public class NodeParamLight : INodeParam
     {

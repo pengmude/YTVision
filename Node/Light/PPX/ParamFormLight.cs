@@ -3,7 +3,7 @@ using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 
-namespace YTVisionPro.Node.Light
+namespace YTVisionPro.Node.Light.PPX
 {
     public partial class ParamFormLight : Form, INodeParamForm
     {

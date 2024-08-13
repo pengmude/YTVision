@@ -14,7 +14,7 @@ namespace YTVisionPro
 {
     public partial class FormMain : Form
     {
-        Test_light_controller.Form1 form1 = new Test_light_controller.Form1();
+        YTVisionPro.Forms.LightAdd.LightListView form1 = new YTVisionPro.Forms.LightAdd.LightListView();
 
         /// <summary>
         /// 图像显示栏
@@ -190,7 +190,8 @@ namespace YTVisionPro
 
         private void 开始运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("开始运行");
+            Solution.Instance.Run();
+            //MessageBox.Show("开始运行");
             //Project.Instance.OnceRun();
         }
 

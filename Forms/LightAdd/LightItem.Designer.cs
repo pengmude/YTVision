@@ -1,6 +1,6 @@
-﻿namespace Test_light_controller
+﻿namespace YTVisionPro.Forms.LightAdd
 {
-    partial class UserControl1
+    partial class LightItem
     {
         /// <summary> 
         /// 必需的设计器变量。

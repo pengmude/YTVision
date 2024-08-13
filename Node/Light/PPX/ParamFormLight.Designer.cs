@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Node.Light
+﻿namespace YTVisionPro.Node.Light.PPX
 {
     partial class ParamFormLight
     {

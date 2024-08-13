@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
 
-namespace Test_light_controller
+namespace YTVisionPro.Forms.LightAdd
 {
     public struct SerialStructure
     {
@@ -47,15 +47,15 @@ namespace Test_light_controller
         public string Name { get => name; set => name = value; }
     }
 
-    public partial class Form2 : Form
+    public partial class LightSettingsView : Form
     {
         public bool isSet = false;
         public SerialStructure serialStructure = new SerialStructure();
         public bool IsCancelled { get; private set; } = false;
-        UserControl1 userControl1 = new UserControl1();
+        LightItem userControl1 = new LightItem();
         public event EventHandler<SerialStructure> Settings;
 
-        public Form2()
+        public LightSettingsView()
         {
             InitializeComponent();
             this.ControlBox = false;
@@ -82,7 +82,7 @@ namespace Test_light_controller
             SearchAnAddSerialToComboBox();
         }
 
-        public Form2(UserControl1 userControl1)
+        public LightSettingsView(LightItem userControl1)
         {
             InitializeComponent();
             this.ControlBox = false;
@@ -117,7 +117,7 @@ namespace Test_light_controller
         /// <param name="e"></param>
         private void UserControl1_NotificationSettings(object sender, EventArgs e)
         {         
-            userControl1 = (UserControl1)sender;
+            userControl1 = (LightItem)sender;
             this.textBox2.Text = userControl1.serialStructure.Name;
             int i = 0;
             foreach (string item in comboBox2.Items)
