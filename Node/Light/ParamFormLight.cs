@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 
@@ -14,6 +15,7 @@ namespace YTVisionPro.Node.Light
         public ParamFormLight()
         {
             InitializeComponent();
+            Solution.Instance.Devices.Add(new LightPPX());
         }
 
         public ParamFormLight(LightBrand lightBrand)
@@ -32,13 +34,17 @@ namespace YTVisionPro.Node.Light
             // 初始化光源列表,只显示添加的光源COM号且是对应传入的品牌的
             foreach (var dev in Solution.Instance.LightDevices)
             {
-                if (dev is ILight light && lightBrand == light.Brand)
+                if (dev is ILight light)
                 {
-                    comboBox1.Items.Add(light.PortName);
+                    if (comboBox1.Items.Contains(light.SerialStructure.SerialNumber))
+                        continue;
+                    comboBox1.Items.Add(light.SerialStructure.SerialNumber);
                 }
             }
             if (comboBox1.Items.Count > 0)
                 comboBox1.SelectedIndex = 0;
+            comboBox3.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -63,6 +69,7 @@ namespace YTVisionPro.Node.Light
                 int value = int.Parse(textBox1.Text);
                 if (value < 0 || value > 255)
                 {
+                    LogHelper.AddLog(MsgLevel.Warn, "光源亮度有效值为0-255", true);
                     MessageBox.Show("有效值为0-255");
                     return;
                 }
@@ -85,11 +92,13 @@ namespace YTVisionPro.Node.Light
             try
             {
                 //把设置好的参数传给光源节点NodeLight去更新结果
-                //NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value);
-                //OnNodeParamChange?.Invoke(this, nodeParamLight);
+                bool open = comboBox3.Text == "打开"  ? true  : false;
+                NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value, open);
+                OnNodeParamChange?.Invoke(this, nodeParamLight);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
                 MessageBox.Show("保存失败,请检查参数是否有误！");
             }
         }

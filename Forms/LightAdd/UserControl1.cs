@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO.Ports;
+using System.Reflection;
 using System.Windows.Forms;
 using YTVisionPro;
 using YTVisionPro.Hardware.Light;
@@ -40,9 +43,9 @@ namespace Test_light_controller
             this.Dock = DockStyle.Top;
 
             this.label3.Text = serialStructure.ChannelValue.ToString();
-            this.label4.Text = serialStructure.name;
+            this.label4.Text = serialStructure.Name;
             this.serialStructure = serialStructure;
-            this.light.Sn = serialStructure.ChannelValue.ToString();
+            this.light.Id = serialStructure.ChannelValue.ToString();
             this.MouseDown += UserControl1_Click;
             this.MouseDoubleClick += UserControl1_MouseDoubleClick;
             this.BackColor = Color.AliceBlue;
@@ -100,9 +103,10 @@ namespace Test_light_controller
                 }
             }
             this.label3.Text = e.ChannelValue.ToString();
-            this.label4.Text = e.name;
+            this.label4.Text = e.Name;
             this.serialStructure = e;
-            this.light.Sn = e.ChannelValue.ToString();
+            this.light.SerialStructure = e;
+            this.light.Id = e.ChannelValue.ToString();
             this.label7.Text = e.SerialNumber.ToString();
 
             Click?.Invoke(this, isSerialPortOpen);   
@@ -137,7 +141,7 @@ namespace Test_light_controller
         {
             try
             {
-                light.Connenct(serialStructure.SerialNumber, serialStructure.Baudrate, serialStructure.dataBits, serialStructure.stopBits, serialStructure.parity);
+                light.Connenct(serialStructure.SerialNumber, serialStructure.Baudrate, serialStructure.DataBits, serialStructure.StopBits, serialStructure.Parity);
                 light.Brightness = light.ReadValue();
                 this.label6.Text = light.Brightness.ToString();
                 isSerialPortOpen = true;
@@ -151,10 +155,12 @@ namespace Test_light_controller
                     {
                         item.button1.Text = "关闭串口";
                         item.isSerialPortOpen = true;
-                        item.light.IsOpen = true;
+                        FieldInfo fieldInfo = typeof(LightPPX).GetField("isOpen", BindingFlags.NonPublic | BindingFlags.Instance);
+                        fieldInfo.SetValue(item.light, true);
                     }
                 }
-                light.IsOpen = true;
+                FieldInfo fieldInfo2 = typeof(LightPPX).GetField("isOpen", BindingFlags.NonPublic | BindingFlags.Instance);
+                fieldInfo2.SetValue(light, true);
                 if (openWith.ContainsKey(this.serialStructure.SerialNumber))
                     return;
                 openWith.Add(this.serialStructure.SerialNumber,this);
@@ -177,7 +183,7 @@ namespace Test_light_controller
                     bool canClosePort = true;
 
                     string sp = this.serialStructure.SerialNumber.ToString();
-                    // 如果没有其他控件使用该串口，则执行关闭操作
+
                     if (this.serialStructure.SerialNumber == openWith[sp].serialStructure.SerialNumber)
                     {
                         Form1 parentForm = (Form1)this.FindForm();
@@ -187,7 +193,8 @@ namespace Test_light_controller
                             {
                                 item.button1.Text = "打开串口";
                                 item.isSerialPortOpen = false;
-                                item.light.IsOpen = false;
+                                FieldInfo fieldInfo = typeof(LightPPX).GetField("isOpen", BindingFlags.NonPublic | BindingFlags.Instance);
+                                fieldInfo.SetValue(item.light, false);
                             }
                         }
 
@@ -195,7 +202,6 @@ namespace Test_light_controller
                         isSerialPortOpen = false;
                         Serialportstatuschange?.Invoke(this, EventArgs.Empty);
                         button1.Text = "打开串口";
-                        light.IsOpen = false;
 
                         // 从 openWith 中移除对应的串口记录
                         openWith.Remove(sp);
@@ -267,9 +273,10 @@ namespace Test_light_controller
             }
             Delect?.Invoke(this,EventArgs.Empty);
             Solution.Instance.RemoveDevice(this.light);
+            LogHelper.AddLog(MsgLevel.Info, "删除了光源：  "+this.light.DevName + "   串口号：" + this.light.SerialStructure.SerialNumber + "   通道数" + this.light.SerialStructure.SerialNumber, true);
             foreach (LightPPX item in Solution.Instance.Devices)
             {
-                Console.WriteLine("删除一个光源后，现在存在的光源：" + "光源名" + item.DevName + "串口号：" + item.PortName + "通道数" + item.ChannelValue);
+                Console.WriteLine("删除一个光源后，现在存在的光源：" + "光源名:" + item.DevName + "串口号：" + item.SerialStructure.SerialNumber + "通道数" + item.SerialStructure.SerialNumber);
             }
         }
 

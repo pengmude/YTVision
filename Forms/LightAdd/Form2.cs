@@ -11,31 +11,40 @@ namespace Test_light_controller
         /// <summary>
         /// 串口号
         /// </summary>
-        public string SerialNumber;
+        private string serialNumber;
+
         /// <summary>
         /// 波特率
         /// </summary>
-        public Int32 Baudrate;
+        private Int32 baudrate;
         /// <summary>
         /// 数据位
         /// </summary>
-        public int dataBits;
+        private int dataBits;
         /// <summary>
         /// 停止位
         /// </summary>
-        public StopBits stopBits;
+        private StopBits stopBits;
         /// <summary>
         /// 校验位
         /// </summary>
-        public Parity parity;
+        private Parity parity;
         /// <summary>
         /// 通道值
         /// </summary>
-        public byte ChannelValue;
+        private byte channelValue;
         //光源名
-        public string name;
+        private string name;
         //品牌
         public string brand;
+
+        public string SerialNumber { get => serialNumber; set => serialNumber = value; }
+        public int Baudrate { get => baudrate; set => baudrate = value; }
+        public int DataBits { get => dataBits; set => dataBits = value; }
+        public StopBits StopBits { get => stopBits; set => stopBits = value; }
+        public Parity Parity { get => parity; set => parity = value; }
+        public byte ChannelValue { get => channelValue; set => channelValue = value; }
+        public string Name { get => name; set => name = value; }
     }
 
     public partial class Form2 : Form
@@ -109,7 +118,7 @@ namespace Test_light_controller
         private void UserControl1_NotificationSettings(object sender, EventArgs e)
         {         
             userControl1 = (UserControl1)sender;
-            this.textBox2.Text = userControl1.serialStructure.name;
+            this.textBox2.Text = userControl1.serialStructure.Name;
             int i = 0;
             foreach (string item in comboBox2.Items)
             {
@@ -121,14 +130,14 @@ namespace Test_light_controller
                 i++;
             }
             this.comboBox3.Text = userControl1.serialStructure.Baudrate.ToString();
-            this.comboBox4.Text = userControl1.serialStructure.dataBits.ToString();
-            switch (userControl1.serialStructure.stopBits)
+            this.comboBox4.Text = userControl1.serialStructure.DataBits.ToString();
+            switch (userControl1.serialStructure.StopBits)
             {
                 case StopBits.One:
                     this.comboBox5.Text = "1";
                     break;
             }
-            switch (userControl1.serialStructure.parity)
+            switch (userControl1.serialStructure.Parity)
             {
                 case Parity.None:
                     this.comboBox6.Text = "N";
@@ -176,20 +185,20 @@ namespace Test_light_controller
                 if (this.textBox2.Text != null && this.textBox2.Text != "")
                 {
                     serialStructure.brand = this.comboBox1.Text;
-                    serialStructure.name = this.textBox2.Text;
+                    serialStructure.Name = this.textBox2.Text;
                     serialStructure.SerialNumber = this.comboBox2.Text;
                     serialStructure.Baudrate = int.Parse(this.comboBox3.Text);
-                    serialStructure.dataBits = int.Parse(this.comboBox4.Text);
+                    serialStructure.DataBits = int.Parse(this.comboBox4.Text);
                     switch (comboBox5.Text)
                     {
                         case "1":
-                            serialStructure.stopBits = StopBits.One;
+                            serialStructure.StopBits = StopBits.One;
                             break;
                     }
                     switch (comboBox6.Text)
                     {
                         case "N":
-                            serialStructure.parity = Parity.None;
+                            serialStructure.Parity = Parity.None;
                             break;
                     }
                     serialStructure.ChannelValue = byte.Parse(comboBox7.Text);
@@ -203,20 +212,20 @@ namespace Test_light_controller
                 if (this.textBox2.Text != null && this.textBox2.Text != "")
                 {
                     serialStructure.brand = this.comboBox1.Text;
-                    serialStructure.name = this.textBox2.Text;
+                    serialStructure.Name = this.textBox2.Text;
                     serialStructure.SerialNumber = this.comboBox2.Text;
                     serialStructure.Baudrate = int.Parse(this.comboBox3.Text);
-                    serialStructure.dataBits = int.Parse(this.comboBox4.Text);
+                    serialStructure.DataBits = int.Parse(this.comboBox4.Text);
                     switch (comboBox5.Text)
                     {
                         case "1":
-                            serialStructure.stopBits = StopBits.One;
+                            serialStructure.StopBits = StopBits.One;
                             break;
                     }
                     switch (comboBox6.Text)
                     {
                         case "N":
-                            serialStructure.parity = Parity.None;
+                            serialStructure.Parity = Parity.None;
                             break;
                     }
                     serialStructure.ChannelValue = byte.Parse(comboBox7.Text);                   

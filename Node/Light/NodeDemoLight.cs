@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Test_light_controller;
+using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.NodeDemo;
 
@@ -11,6 +13,9 @@ namespace YTVisionPro.Node.NodeDemoLight
 {
     public class NodeDemoLight : NodeBase, INode<ParamFormLight, NodeParamLight, NodeResultLight>
     {
+        LightPPX lightPPX = new LightPPX();
+
+
         /// <summary>
         /// 创建一个指定名称的节点
         /// </summary>
@@ -18,6 +23,22 @@ namespace YTVisionPro.Node.NodeDemoLight
         public NodeDemoLight(string nodeText)
         {
             SetNodeText(nodeText);
+            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
+        }
+
+        public void ParamForm_OnNodeParamChange(object sender, INodeParam e)
+        {
+            foreach (var light in Solution.Instance.LightDevices)
+            {
+                if (light.SerialStructure.SerialNumber == Param.SerialNumber && light.SerialStructure.ChannelValue == Param.ChannelValue)
+                {
+                    lightPPX = (LightPPX)light;
+                    SerialStructure serialStructure = lightPPX.SerialStructure;
+                    serialStructure.ChannelValue = (byte)Param.ChannelValue;
+                    lightPPX.SerialStructure= serialStructure;
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -45,7 +66,27 @@ namespace YTVisionPro.Node.NodeDemoLight
         /// <exception cref="NotImplementedException"></exception>
         public void Run()
         {
+            if (lightPPX == null)
+            {
+                Logger.LogHelper.AddLog(Logger.MsgLevel.Warn,"光源为空",true);
+                return;
+            }
+
             Result = new NodeResultLight();
+            string SerialNumber = Param.SerialNumber;
+            int ChannelValue = Param.ChannelValue;
+            int Brightness = Param.Brightness;
+
+            if (Param.Open == true) // 打开操作
+            {
+                lightPPX.Connenct(SerialNumber, int.Parse(lightPPX.SerialStructure.brand), lightPPX.SerialStructure.DataBits, lightPPX.SerialStructure.StopBits, lightPPX.SerialStructure.Parity);
+                lightPPX.SetValue(Brightness);
+            }
+            else
+            {
+                lightPPX.Disconnect();
+            }
+
         }
 
         /// <summary>

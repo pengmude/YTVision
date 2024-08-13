@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Windows.Forms;
+using Test_light_controller;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -11,7 +12,8 @@ namespace YTVisionPro.Hardware.Light
     /// </summary>
     public class LightPPX : ILight
     {
-        public static int DevNameId = 0;
+        public SerialStructure SerialStructure { get; set; }
+
 
         /// <summary>
         /// 设备ID
@@ -39,50 +41,28 @@ namespace YTVisionPro.Hardware.Light
         public LightBrand Brand { get; } = LightBrand.PPX;
 
         /// <summary>
+        /// 串口是否打开
+        /// </summary>
+        private bool isOpen;
+        public bool IsOpen { get => isOpen; private set => isOpen = value; }
+
+        /// <summary>
         /// 光源是否打开
         /// </summary>
-        public bool IsOpen { get; set; }
+        public bool IsLight { get; private set; }
 
         /// <summary>
         /// 光源亮度值
         /// </summary>
         public int Brightness { get; set; }
 
-        /// <summary>
-        /// 光源连接的COM号
-        /// </summary>
-        public string PortName { get; set; }
-
         private SerialPort _serialPort;
 
-        /// <summary>
-        /// 光源序列号
-        /// </summary>
-        public string Sn { get; set; }
-        public byte ChannelValue { get; set; }
 
         public LightPPX()
         {
             _serialPort = new SerialPort();
-            DevNameId++;
-            DevName = "光源"+DevNameId;
-        }
-
-        public LightPPX(string userName)
-        {
-            _serialPort = new SerialPort();
-            UserDefinedName = userName;
-            DevNameId++;
-            DevName = "光源" + DevNameId;
-        }
-
-        public LightPPX(string userName, string port)
-        {
-            _serialPort = new SerialPort();
-            UserDefinedName = userName;
-            PortName = port;
-            DevNameId++;
-            DevName = "光源" + DevNameId;
+            DevName = "光源"+0;
         }
 
         /// <summary>
@@ -96,6 +76,7 @@ namespace YTVisionPro.Hardware.Light
         /// <returns></returns>
         public bool Connenct(string portName, int baudRate, int dataBits, StopBits stopBits, Parity parity)
         {
+            if(IsOpen) { return true; }
             try
             {
                 _serialPort.PortName = portName;
@@ -104,13 +85,18 @@ namespace YTVisionPro.Hardware.Light
                 _serialPort.StopBits = stopBits;
                 _serialPort.Parity = parity;
                 _serialPort.Open();
-                PortName = _serialPort.PortName;
+                SerialStructure serialStructure = this.SerialStructure;
+                serialStructure.SerialNumber = _serialPort.PortName;
+                IsOpen = true;
+                IsLight = true;
+                return true;
             }
             catch (Exception ex)
             {
+                IsOpen = false;
+                IsLight = false;
                 return false;
             }
-            return true;
         }
 
         /// <summary>
@@ -119,6 +105,8 @@ namespace YTVisionPro.Hardware.Light
         public void Disconnect()
         {
             _serialPort.Close();
+            IsOpen = false;
+            IsLight = false;
         }
 
         /// <summary>
@@ -134,20 +122,8 @@ namespace YTVisionPro.Hardware.Light
         /// </summary>
         public void TurnOff()
         {
+            IsLight = false;
             SetValue(0);
-        }
-
-        private void SendCommand(string command)
-        {
-            if (_serialPort.IsOpen)
-            {
-                _serialPort.Write(command + Environment.NewLine);
-                Console.WriteLine($"Sent command: {command}");
-            }
-            else
-            {
-                throw new InvalidOperationException("Serial port is not open.");
-            }
         }
 
         /// <summary>
@@ -156,11 +132,12 @@ namespace YTVisionPro.Hardware.Light
         /// <param name="value"></param>
         public void SetValue(int value)
         {
+            SerialStructure serialStructure = this.SerialStructure;
             if (_serialPort.IsOpen && value != null)
             {
                 byte[] buff = new byte[4];
                 buff[0] = 0x24;
-                buff[1] = Convert.ToByte(Sn);
+                buff[1] = Convert.ToByte(serialStructure.ChannelValue);
                 buff[2] = Convert.ToByte(value);
                 buff[3] = (byte)(buff[0] ^ buff[1] ^ buff[2]);
                 try
@@ -187,6 +164,9 @@ namespace YTVisionPro.Hardware.Light
         /// <returns></returns>
         public byte ReadValue()
         {
+            if ( _serialPort.IsOpen == false) { return 0; }
+
+            SerialStructure serialStructure = this.SerialStructure;
             byte[] value = new byte[20];
             byte[] Buffer = new byte[3]; //发送缓冲区
             byte[] buf = new byte[20]; //接收缓冲区
@@ -220,7 +200,7 @@ namespace YTVisionPro.Hardware.Light
                 {
                     value[i] = buf[i];
                 }
-                return value[int.Parse(Sn)];
+                return value[int.Parse(serialStructure.ChannelValue.ToString())];
             }
             if (10 == j && buf[0] == 0x27 && buf[9] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3] ^ buf[4]
                 ^ buf[5] ^ buf[6] ^ buf[7] ^ buf[8]))

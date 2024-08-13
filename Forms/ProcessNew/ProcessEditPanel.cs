@@ -68,25 +68,45 @@ namespace YTVisionPro.Forms.ProcessNew
                 if (text.Contains("磐鑫"))
                 {
                     lightBrand = LightBrand.PPX;
+                    text = $"{Solution.NodeCount + 1}{text}";
+
+                    NodeDemoLight node = new NodeDemoLight(text);
+                    node.Size = new Size(this.Size.Width - 5, 42);
+                    node.Dock = DockStyle.Top;
+                    node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                    node.ParamForm = new ParamFormLight(lightBrand);
+                    node.ParamForm.OnNodeParamChange += node.ParamForm_OnNodeParamChange;
+                    _stack.Push(node);
+                    Solution.Nodes.Add(node);
+                    UpdateNode();
                 }
                 else if (text.Contains("锐视"))
                 {
                     lightBrand = LightBrand.RSEE;
+                    text = $"{Solution.NodeCount + 1}{text}";
+
+                    NodeDemoLight node = new NodeDemoLight(text);
+                    node.Size = new Size(this.Size.Width - 5, 42);
+                    node.Dock = DockStyle.Top;
+                    node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                    node.ParamForm = new ParamFormLight(lightBrand);
+                    _stack.Push(node);
+                    Solution.Nodes.Add(node);
+                    UpdateNode();
                 }
+                //text = $"{Solution.NodeCount + 1}{text}";
 
-                text = $"{Solution.NodeCount + 1}{text}";
-
-                NodeDemo node = new NodeDemo(text); 
-                node.Size = new Size(this.Size.Width - 5, 42);
-                node.Dock = DockStyle.Top;
-                node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                node.ParamForm = new NodeParamSetDemo();
+                //NodeDemo node = new NodeDemo(text); 
+                //node.Size = new Size(this.Size.Width - 5, 42);
+                //node.Dock = DockStyle.Top;
+                //node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                //node.ParamForm = new NodeParamSetDemo();
 
                 #endregion
 
-                _stack.Push(node);
-                Solution.Nodes.Add(node);
-                UpdateNode();
+                //_stack.Push(node);
+                //Solution.Nodes.Add(node);
+                //UpdateNode();
             }
         }
 

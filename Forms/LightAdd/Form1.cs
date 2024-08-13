@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using YTVisionPro.Hardware;
 using YTVisionPro;
 using YTVisionPro.Hardware.Light;
+using Logger;
 
 namespace Test_light_controller
 {
@@ -15,6 +16,7 @@ namespace Test_light_controller
         public List<UserControl1> UserControls = new List<UserControl1>();
         public UserControl1 selectedUserControl;
         public static event EventHandler<int> ValueC;
+        public static int ID = 0;
 
         public Form1()
         {
@@ -98,10 +100,11 @@ namespace Test_light_controller
             UserControl1 myControl = new UserControl1(form2.serialStructure);
             myControl.Click += MyControl_Click; 
             myControl.Serialportstatuschange += MyControl_Serialportstatuschange;
-            myControl.light.PortName = form2.serialStructure.SerialNumber;
-            myControl.light.UserDefinedName = form2.serialStructure.name;
-            myControl.light.ChannelValue = form2.serialStructure.ChannelValue;
+            myControl.light.SerialStructure = form2.serialStructure;
+            myControl.light.UserDefinedName = form2.serialStructure.Name;
             myControl.Delect += MyControl_Delect;
+            ID++;
+            myControl.light.DevName = "光源" + ID;
 
             //foreach循环，如果添加的用户控件在列表中有相同的串口号，则代表添加的用户控件的_serialPort与列表的某个相同
             foreach (UserControl1 item in UserControls)
@@ -122,7 +125,8 @@ namespace Test_light_controller
             //添加的用户控件也添加到列表中
             UserControls.Add(myControl);
             Solution.Instance.AddDevice(myControl.light);
-            Console.WriteLine("添加一个光源后，现在存在的光源：" +"光源名"+myControl.light.DevName + "串口号：" + myControl.light.PortName + "通道数" + myControl.light.ChannelValue);
+            LogHelper.AddLog(MsgLevel.Info, "添加了光源：  " + myControl.light.DevName + "   串口号：" + myControl.light.SerialStructure.SerialNumber + "   通道数" + myControl.light.SerialStructure.ChannelValue, true);
+            Console.WriteLine("添加一个光源后，现在存在的光源：" +"光源名:"+myControl.light.DevName + "串口号：" + myControl.light.SerialStructure.SerialNumber + "通道数" + myControl.light.SerialStructure.ChannelValue);
 
             this.panel1.Controls.Add(myControl);
             //设置添加的用户控件的位置
@@ -159,7 +163,7 @@ namespace Test_light_controller
         {
             this.selectedUserControl = (UserControl1)sender;
             //更新UI显示
-            this.label8.Text = selectedUserControl.serialStructure.name;
+            this.label8.Text = selectedUserControl.serialStructure.Name;
             this.label4.Text = selectedUserControl.serialStructure.ChannelValue.ToString();
             //如果e为false表示该用户控件没有打开串口，不需要把isSerialPortOpen设置为true
             if (e == false)
@@ -175,7 +179,7 @@ namespace Test_light_controller
             }
             UpdateMainFormUI();  //更新UI界面
             SetActiveControl(this.selectedUserControl); //改变控件颜色
-            this.label8.Text = selectedUserControl.serialStructure.name;
+            this.label8.Text = selectedUserControl.serialStructure.Name;
         }
 
         /// <summary>
@@ -234,7 +238,7 @@ namespace Test_light_controller
                     this.numericUpDown1.Value = 0;
                     this.trackBar1.Value = 0;
                 }
-                this.label4.Text = selectedUserControl.light.Sn;
+                this.label4.Text = selectedUserControl.light.Id;
             }
         }
 
