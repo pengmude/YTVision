@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Windows.Forms;
+using YTVisionPro.Forms.LightAdd;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -10,6 +12,9 @@ namespace YTVisionPro.Hardware.Light
     /// </summary>
     public class LightPPX : ILight
     {
+        public SerialStructure SerialStructure { get; set; }
+
+
         /// <summary>
         /// 设备ID
         /// </summary>
@@ -36,43 +41,27 @@ namespace YTVisionPro.Hardware.Light
         public LightBrand Brand { get; } = LightBrand.PPX;
 
         /// <summary>
+        /// 串口是否打开
+        /// </summary>
+        public bool IsOpen { get => _serialPort.IsOpen; }
+
+        /// <summary>
         /// 光源是否打开
         /// </summary>
-        public bool IsOpen { get; set; }
+        public bool IsLight { get; private set; }
 
         /// <summary>
         /// 光源亮度值
         /// </summary>
         public int Brightness { get; set; }
 
-        /// <summary>
-        /// 光源连接的COM号
-        /// </summary>
-        public string PortName { get; set; }
-
         private SerialPort _serialPort;
 
-        /// <summary>
-        /// 光源序列号
-        /// </summary>
-        public string Sn { get; set; }
 
         public LightPPX()
         {
             _serialPort = new SerialPort();
-        }
-
-        public LightPPX(string userName)
-        {
-            _serialPort = new SerialPort();
-            UserDefinedName = userName;
-        }
-
-        public LightPPX(string userName, string port)
-        {
-            _serialPort = new SerialPort();
-            UserDefinedName = userName;
-            PortName = port;
+            DevName = "光源"+0;
         }
 
         /// <summary>
@@ -86,6 +75,7 @@ namespace YTVisionPro.Hardware.Light
         /// <returns></returns>
         public bool Connenct(string portName, int baudRate, int dataBits, StopBits stopBits, Parity parity)
         {
+            if(_serialPort.IsOpen) { return true; }
             try
             {
                 _serialPort.PortName = portName;
@@ -94,48 +84,140 @@ namespace YTVisionPro.Hardware.Light
                 _serialPort.StopBits = stopBits;
                 _serialPort.Parity = parity;
                 _serialPort.Open();
-                PortName = _serialPort.PortName;
+                SerialStructure serialStructure = this.SerialStructure;
+                serialStructure.SerialNumber = _serialPort.PortName;
+                IsLight = true;
+                return true;
             }
             catch (Exception ex)
             {
+                IsLight = false;
                 return false;
             }
-            return true;
         }
 
+        /// <summary>
+        /// 关闭连接
+        /// </summary>
         public void Disconnect()
         {
             _serialPort.Close();
+            IsLight = false;
         }
 
+        /// <summary>
+        /// 打开光源
+        /// </summary>
         public void TurnOn()
         {
-            SendCommand("ON");
+            SetValue(255);
         }
 
+        /// <summary>
+        /// 关闭光源
+        /// </summary>
         public void TurnOff()
         {
-            SendCommand("OFF");
+            IsLight = false;
+            SetValue(0);
         }
 
+        /// <summary>
+        /// 设置光源亮度
+        /// </summary>
+        /// <param name="value"></param>
         public void SetValue(int value)
         {
-            // 假设光源的亮度命令格式为 "BRIGHTNESS 128"
-            string command = $"BRIGHTNESS {value}";
-            SendCommand(command);
-        }
-
-        private void SendCommand(string command)
-        {
+            SerialStructure serialStructure = this.SerialStructure;
             if (_serialPort.IsOpen)
             {
-                _serialPort.Write(command + Environment.NewLine);
-                Console.WriteLine($"Sent command: {command}");
+                byte[] buff = new byte[4];
+                buff[0] = 0x24;
+                buff[1] = Convert.ToByte(serialStructure.ChannelValue);
+                buff[2] = Convert.ToByte(value);
+                buff[3] = (byte)(buff[0] ^ buff[1] ^ buff[2]);
+                try
+                {
+                    _serialPort.Write(buff, 0, 4);
+                }
+                catch
+                {
+                    MessageBox.Show("光源控制器线缆连接不正常或松动", "连接异常");
+                }
+                System.Threading.Thread.Sleep(10);
+                int j = _serialPort.BytesToRead;
+                try
+                {
+                    _serialPort.Read(buff, 0, j);
+                }
+                catch { }
             }
-            else
+        }
+
+        /// <summary>
+        /// 读取光源亮度
+        /// </summary>
+        /// <returns></returns>
+        public byte ReadValue()
+        {
+            if ( _serialPort.IsOpen) { return 0; }
+
+            SerialStructure serialStructure = this.SerialStructure;
+            byte[] value = new byte[20];
+            byte[] Buffer = new byte[3]; //发送缓冲区
+            byte[] buf = new byte[20]; //接收缓冲区
+            Buffer[0] = 0X27;
+            Buffer[1] = 0XA5;
+            Buffer[2] = (byte)(Buffer[0] ^ Buffer[1]);
+            try
             {
-                throw new InvalidOperationException("Serial port is not open.");
+                _serialPort.Write(Buffer, 0, 3); //发送
             }
+            catch
+            {
+                MessageBox.Show("光源控制器线缆连接不正常或松动", "连接异常");
+            }
+            System.Threading.Thread.Sleep(20);
+            int j = _serialPort.BytesToRead;
+            try
+            {
+                _serialPort.Read(buf, 0, j); //接收
+            }
+            catch { }
+            if (4 == j && buf[0] == 0x27 && buf[3] == (buf[0] ^ buf[1] ^ buf[2]))
+            {
+                for (int i = 1; i < 3; i++)
+                    value[i] = buf[i];
+                return 1;
+            }
+            if (6 == j && buf[0] == 0x27 && buf[5] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3] ^ buf[4]))
+            {
+                for (int i = 1; i < 5; i++)
+                {
+                    value[i] = buf[i];
+                }
+                return value[int.Parse(serialStructure.ChannelValue.ToString())];
+            }
+            if (10 == j && buf[0] == 0x27 && buf[9] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3] ^ buf[4]
+                ^ buf[5] ^ buf[6] ^ buf[7] ^ buf[8]))
+            {
+                for (int i = 1; i < 9; i++)
+                {
+                    value[i] = buf[i];
+                }
+                return 1;
+            }
+            if (18 == j && buf[0] == 0x27 && buf[17] == (buf[0] ^ buf[1] ^ buf[2] ^ buf[3]
+                ^ buf[4] ^ buf[5] ^ buf[6] ^ buf[7] ^ buf[8] ^ buf[9] ^ buf[10] ^ buf[11]
+                ^ buf[12] ^ buf[13] ^ buf[14] ^ buf[15] ^ buf[16]))
+            {
+                for (int i = 1; i < 17; i++)
+                {
+                    value[i] = buf[i];
+                }
+                return 1;
+            }
+            return 0;
         }
     }
 }

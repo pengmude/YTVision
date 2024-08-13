@@ -5,7 +5,7 @@
         /// <summary>
         /// 设备ID
         /// </summary>
-        string Id { get; set; }
+        string Id { get; }
         /// <summary>
         /// 硬件硬件名称
         /// </summary>

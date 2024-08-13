@@ -14,6 +14,8 @@ namespace YTVisionPro
 {
     public partial class FormMain : Form
     {
+        YTVisionPro.Forms.LightAdd.LightListView form1 = new YTVisionPro.Forms.LightAdd.LightListView();
+
         /// <summary>
         /// 图像显示栏
         /// </summary>
@@ -56,12 +58,12 @@ namespace YTVisionPro
             InitializeComponent();
 
             #region 测试代码
-            var lights = new List<IDevice>() { new LightPPX("光源1", "COM1"), new LightPPX("光源2", "COM2"), new LightPPX("光源3", "COM3") };
-            var camers = new List<IDevice>() { new CameraHik("相机1"), new CameraHik("相机2"), new CameraHik("相机3") };
-            var plcs = new List<IDevice>() { new PlcPanasonic("PLC1"), new PlcPanasonic("PLC2"), new PlcPanasonic("PLC3") };
-            Solution.Instance.AddDeviceList(lights);
-            Solution.Instance.AddDeviceList(camers);
-            Solution.Instance.AddDeviceList(plcs);
+            //var lights = new List<IDevice>() { new LightPPX("光源1", "COM1"), new LightPPX("光源2", "COM2"), new LightPPX("光源3", "COM3") };
+            //var camers = new List<IDevice>() { new CameraHik("相机1"), new CameraHik("相机2"), new CameraHik("相机3") };
+            //var plcs = new List<IDevice>() { new PlcPanasonic("PLC1"), new PlcPanasonic("PLC2"), new PlcPanasonic("PLC3") };
+            //Solution.Instance.AddDeviceList(lights);
+            //Solution.Instance.AddDeviceList(camers);
+            //Solution.Instance.AddDeviceList(plcs);
             #endregion
         }
         /// <summary>
@@ -188,7 +190,8 @@ namespace YTVisionPro
 
         private void 开始运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("开始运行");
+            Solution.Instance.Run();
+            //MessageBox.Show("开始运行");
             //Project.Instance.OnceRun();
         }
 
@@ -221,7 +224,7 @@ namespace YTVisionPro
 
         private void 全局光源ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("全局光源");
+            form1.ShowDialog();
         }
         private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
         {

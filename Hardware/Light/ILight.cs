@@ -1,9 +1,12 @@
 ﻿using System.IO.Ports;
+using YTVisionPro.Forms.LightAdd;
 
 namespace YTVisionPro.Hardware.Light
 {
     public interface ILight : IDevice
     {
+        SerialStructure SerialStructure { get; set; }
+
         /// <summary>
         /// 设备ID
         /// </summary>
@@ -26,18 +29,10 @@ namespace YTVisionPro.Hardware.Light
 
         LightBrand Brand { get; }
 
-
-        /// <summary>
-        /// 光源是否打开
-        /// </summary>
-        bool IsOpen { get; set; }
-
         /// <summary>
         /// 光源亮度值
         /// </summary>
         int Brightness { get; set; }
-
-        string PortName { get; set; }
 
         /// <summary>
         /// 通过串口去连接光源
@@ -68,6 +63,13 @@ namespace YTVisionPro.Hardware.Light
         /// 设置光源亮度值（0-255）
         /// </summary>
         void SetValue(int value);
+
+        /// <summary>
+        /// 读取光源亮度
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        byte ReadValue();
     }
 
     public enum LightBrand

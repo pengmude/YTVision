@@ -21,12 +21,12 @@ namespace YTVisionPro
         /// </summary>
         private void AddDev()
         {
-            var lights = new List<IDevice>() { new LightPPX("光源1"), new LightPPX("光源2"), new LightPPX("光源3") };
-            var camers = new List<IDevice>() { new CameraHik("相机1"), new CameraHik("相机2"), new CameraHik("相机3") };
-            var plcs = new List<IDevice>() { new PlcPanasonic("PLC1"), new PlcPanasonic("PLC2"), new PlcPanasonic("PLC3") };
-            Solution.Instance.AddDeviceList(lights);
-            Solution.Instance.AddDeviceList(camers);
-            Solution.Instance.AddDeviceList(plcs);
+            //var lights = new List<IDevice>() { new LightPPX("光源1"), new LightPPX("光源2"), new LightPPX("光源3") };
+            //var camers = new List<IDevice>() { new CameraHik("相机1"), new CameraHik("相机2"), new CameraHik("相机3") };
+            //var plcs = new List<IDevice>() { new PlcPanasonic("PLC1"), new PlcPanasonic("PLC2"), new PlcPanasonic("PLC3") };
+            //Solution.Instance.AddDeviceList(lights);
+            //Solution.Instance.AddDeviceList(camers);
+            //Solution.Instance.AddDeviceList(plcs);
         }
 
         private void button1_Click(object sender, EventArgs e)

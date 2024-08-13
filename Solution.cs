@@ -166,7 +166,10 @@ namespace YTVisionPro
         /// </summary>
         public void Run()
         {
-
+            foreach (var process in _allProcesses)
+            {
+                process.Run();
+            }
         }
 
         /// <summary>

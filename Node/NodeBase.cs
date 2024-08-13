@@ -162,6 +162,8 @@ namespace YTVisionPro.Node
 
         public INodeParamForm ParamForm { get; set; }
 
+        public virtual void Run() { }
+
         #endregion 定义节点界面操作-结束
     }
 }
