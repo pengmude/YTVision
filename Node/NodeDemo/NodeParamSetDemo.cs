@@ -17,6 +17,6 @@ namespace YTVisionPro.Node.NodeDemo
             InitializeComponent();
         }
 
-        public event EventHandler<INodeParam> NodeParamChanged;
+        public event EventHandler<INodeParam> OnNodeParamChange;
     }
 }

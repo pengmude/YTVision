@@ -11,8 +11,9 @@ namespace YTVisionPro.Node
     /// </summary>
     /// <typeparam name="TParam">节点参数</typeparam>
     /// <typeparam name="TResult">节点运行结果</typeparam>
-    public interface INode<TNodeParam, TNodeResult>
+    public interface INode<TNodeParamForm, TNodeParam, TNodeResult>
     {
+        TNodeParamForm ParamForm { get; set; }
         /// <summary>
         /// 节点参数
         /// </summary>
@@ -28,17 +29,20 @@ namespace YTVisionPro.Node
         /// </summary>
         /// <returns></returns>
         TNodeResult Result { get; }
+
+        /// <summary>
+        /// 设置节点文本
+        /// </summary>
+        /// <param name="text"></param>
+        void SetNodeText(string text);
     }
 
     /// <summary>
     /// 节点参数界面接口类
     /// </summary>
-    public interface INodeParamForm 
+    public interface INodeParamForm
     {
-        /// <summary>
-        /// 参数改变事件，设置完参数后触发，给节点订阅
-        /// </summary>
-        event EventHandler<INodeParam> NodeParamChanged;
+        event EventHandler<INodeParam> OnNodeParamChange;
     }
 
     /// <summary>

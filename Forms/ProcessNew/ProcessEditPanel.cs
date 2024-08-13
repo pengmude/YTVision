@@ -62,27 +62,31 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 string text = (string)e.Data.GetData(DataFormats.Text);
 
-                if (text == "磐鑫光源" || text == "锐视光源")
+                #region TODO:根据text创建对应类型的节点，并且赋予节点对应类型的参数设置窗口（给ParamForm赋值）
+
+                LightBrand lightBrand = new LightBrand();
+                if (text.Contains("磐鑫"))
                 {
-                    LightBrand lightBrand = new LightBrand();
-                    if (text.Contains("磐鑫"))
-                    {
-                        lightBrand = LightBrand.PPX;
-                    }
-                    else if (text.Contains("锐视"))
-                    {
-                        lightBrand = LightBrand.RSEE;
-                    }
+                    lightBrand = LightBrand.PPX;
+                }
+                else if (text.Contains("锐视"))
+                {
+                    lightBrand = LightBrand.RSEE;
+                }
 
+                text = $"{Solution.NodeCount + 1}{text}";
 
-                    NodeDemoLight node = new NodeDemoLight(); // TODO:创建对应类型的节点
-                    node.ParamForm = new ParamFormLight(); //对于每一个结点只有一个ParamFormLight，它是全局变量，关闭后不会刷新
-                    node.Size = new Size(this.Size.Width - 5, 42);
-                    node.Dock = DockStyle.Top;
-                    node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                    _stack.Push(node);
-                    UpdateNode();
-                }              
+                NodeDemo node = new NodeDemo(text); 
+                node.Size = new Size(this.Size.Width - 5, 42);
+                node.Dock = DockStyle.Top;
+                node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                node.ParamForm = new NodeParamSetDemo();
+
+                #endregion
+
+                _stack.Push(node);
+                Solution.Nodes.Add(node);
+                UpdateNode();
             }
         }
 
@@ -115,7 +119,7 @@ namespace YTVisionPro.Forms.ProcessNew
         private void UpdateNode()
         {
             this.Controls.Clear();
-            foreach (var item in _stack)  //TODO
+            foreach (var item in _stack)
             {
                 this.Controls.Add(item);
             }
