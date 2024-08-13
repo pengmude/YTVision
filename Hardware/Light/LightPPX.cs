@@ -11,6 +11,8 @@ namespace YTVisionPro.Hardware.Light
     /// </summary>
     public class LightPPX : ILight
     {
+        public static int DevNameId = 0;
+
         /// <summary>
         /// 设备ID
         /// </summary>
@@ -57,16 +59,21 @@ namespace YTVisionPro.Hardware.Light
         /// 光源序列号
         /// </summary>
         public string Sn { get; set; }
+        public byte ChannelValue { get; set; }
 
         public LightPPX()
         {
             _serialPort = new SerialPort();
+            DevNameId++;
+            DevName = "光源"+DevNameId;
         }
 
         public LightPPX(string userName)
         {
             _serialPort = new SerialPort();
             UserDefinedName = userName;
+            DevNameId++;
+            DevName = "光源" + DevNameId;
         }
 
         public LightPPX(string userName, string port)
@@ -74,6 +81,8 @@ namespace YTVisionPro.Hardware.Light
             _serialPort = new SerialPort();
             UserDefinedName = userName;
             PortName = port;
+            DevNameId++;
+            DevName = "光源" + DevNameId;
         }
 
         /// <summary>

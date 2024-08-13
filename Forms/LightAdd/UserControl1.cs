@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using YTVisionPro;
 using YTVisionPro.Hardware.Light;
 
 namespace Test_light_controller
@@ -265,6 +266,11 @@ namespace Test_light_controller
                 return;
             }
             Delect?.Invoke(this,EventArgs.Empty);
+            Solution.Instance.RemoveDevice(this.light);
+            foreach (LightPPX item in Solution.Instance.Devices)
+            {
+                Console.WriteLine("删除一个光源后，现在存在的光源：" + "光源名" + item.DevName + "串口号：" + item.PortName + "通道数" + item.ChannelValue);
+            }
         }
 
         /// <summary>

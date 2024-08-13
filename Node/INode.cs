@@ -33,7 +33,13 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 节点参数界面接口类
     /// </summary>
-    public interface INodeParamForm { }
+    public interface INodeParamForm 
+    {
+        /// <summary>
+        /// 参数改变事件，设置完参数后触发，给节点订阅
+        /// </summary>
+        event EventHandler<INodeParam> NodeParamChanged;
+    }
 
     /// <summary>
     /// 节点参数接口类

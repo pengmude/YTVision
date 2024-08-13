@@ -17,8 +17,9 @@ namespace YTVisionPro.Node.NodeDemoLight
 
         public void Run()
         {
+            string SerialNumber = Param.SerialNumber;
+            
             Result = new NodeResultLight();
-            throw new NotImplementedException();
         }
 
         protected override void ShowSettingsWindow()

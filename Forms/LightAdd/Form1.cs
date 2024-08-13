@@ -4,6 +4,8 @@ using System.Drawing;
 using System.IO.Ports;
 using System.Reflection;
 using System.Windows.Forms;
+using YTVisionPro.Hardware;
+using YTVisionPro;
 using YTVisionPro.Hardware.Light;
 
 namespace Test_light_controller
@@ -94,9 +96,11 @@ namespace Test_light_controller
 
             //创建用户控件
             UserControl1 myControl = new UserControl1(form2.serialStructure);
-            myControl.Click += MyControl_Click;
+            myControl.Click += MyControl_Click; 
             myControl.Serialportstatuschange += MyControl_Serialportstatuschange;
             myControl.light.PortName = form2.serialStructure.SerialNumber;
+            myControl.light.UserDefinedName = form2.serialStructure.name;
+            myControl.light.ChannelValue = form2.serialStructure.ChannelValue;
             myControl.Delect += MyControl_Delect;
 
             //foreach循环，如果添加的用户控件在列表中有相同的串口号，则代表添加的用户控件的_serialPort与列表的某个相同
@@ -117,6 +121,8 @@ namespace Test_light_controller
             }
             //添加的用户控件也添加到列表中
             UserControls.Add(myControl);
+            Solution.Instance.AddDevice(myControl.light);
+            Console.WriteLine("添加一个光源后，现在存在的光源：" +"光源名"+myControl.light.DevName + "串口号：" + myControl.light.PortName + "通道数" + myControl.light.ChannelValue);
 
             this.panel1.Controls.Add(myControl);
             //设置添加的用户控件的位置

@@ -39,6 +39,8 @@ namespace YTVisionPro.Hardware.Light
 
         string PortName { get; set; }
 
+        byte ChannelValue { get; set; }
+
         /// <summary>
         /// 通过串口去连接光源
         /// </summary>

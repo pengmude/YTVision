@@ -6,11 +6,9 @@ namespace YTVisionPro.Node.Light
 {
     public partial class ParamFormLight : Form, INodeParamForm
     {
-        /// <summary>
-        /// 参数改变事件，设置完参数后触发，给节点订阅
-        /// </summary>
+
         public event EventHandler<INodeParam> NodeParamChanged;
-        
+
         public ParamFormLight()
         {
             InitializeComponent();

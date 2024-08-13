@@ -8,6 +8,11 @@ namespace YTVisionPro.Node.Light
 {
     public class NodeParamLight : INodeParam
     {
+        public NodeParamLight()
+        {
+            
+        }
+
         public NodeParamLight(string SerialNumber, int ChannelValue, int Brightness)
         {
             this.SerialNumber = SerialNumber;
@@ -15,8 +20,8 @@ namespace YTVisionPro.Node.Light
             this.Brightness = Brightness;
         }
 
-        public string SerialNumber { get; } //串口号
-        public int ChannelValue { get; } //通道数
-        public int Brightness { get; } //光源值
+        public string SerialNumber { get; set; } //串口号
+        public int ChannelValue { get; set; } //通道数
+        public int Brightness { get; set; } //光源值
     }
 }
