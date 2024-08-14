@@ -169,8 +169,8 @@ namespace YTVisionPro.Forms.LightAdd
                 string portName = (string)keyCom.GetValue(sValue);
                 comboBox2.Items.Add(portName);
             }
-
-            this.comboBox2.SelectedIndex = 0;
+            if (comboBox2.Items.Count > 0)
+                this.comboBox2.SelectedIndex = 0;
         }
 
         /// <summary>
