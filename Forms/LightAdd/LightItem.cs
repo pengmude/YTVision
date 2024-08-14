@@ -45,7 +45,6 @@ namespace YTVisionPro.Forms.LightAdd
             this.label3.Text = serialStructure.ChannelValue.ToString();
             this.label4.Text = serialStructure.Name;
             this.serialStructure = serialStructure;
-            this.light.Id = serialStructure.ChannelValue.ToString();
             this.MouseDown += UserControl1_Click;
             this.MouseDoubleClick += UserControl1_MouseDoubleClick;
             this.BackColor = Color.AliceBlue;
@@ -106,7 +105,7 @@ namespace YTVisionPro.Forms.LightAdd
             this.label4.Text = e.Name;
             this.serialStructure = e;
             this.light.SerialStructure = e;
-            this.light.Id = e.ChannelValue.ToString();
+            //this.light.ID = e.ChannelValue.ToString();
             this.label7.Text = e.SerialNumber.ToString();
 
             Click?.Invoke(this, isSerialPortOpen);   

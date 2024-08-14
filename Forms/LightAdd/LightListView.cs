@@ -16,7 +16,7 @@ namespace YTVisionPro.Forms.LightAdd
         public List<LightItem> UserControls = new List<LightItem>();
         public LightItem selectedUserControl;
         public static event EventHandler<int> ValueC;
-        public static int ID = 0;
+        //public static int ID = 0;
 
         public LightListView()
         {
@@ -103,8 +103,8 @@ namespace YTVisionPro.Forms.LightAdd
             myControl.light.SerialStructure = form2.serialStructure;
             myControl.light.UserDefinedName = form2.serialStructure.Name;
             myControl.Delect += MyControl_Delect;
-            ID++;
-            myControl.light.DevName = "光源" + ID;
+            //ID++;
+            //myControl.light.DevName = "光源" + ID;
 
             //foreach循环，如果添加的用户控件在列表中有相同的串口号，则代表添加的用户控件的_serialPort与列表的某个相同
             foreach (LightItem item in UserControls)
@@ -238,7 +238,7 @@ namespace YTVisionPro.Forms.LightAdd
                     this.numericUpDown1.Value = 0;
                     this.trackBar1.Value = 0;
                 }
-                this.label4.Text = selectedUserControl.light.Id;
+                this.label4.Text = selectedUserControl.light.ID.ToString();
             }
         }
 
