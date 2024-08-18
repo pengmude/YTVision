@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,48 +13,17 @@ using YTVisionPro.Node.NodeDemo;
 
 namespace YTVisionPro.Node.NodeLight.PPX
 {
-    public class NodeLight : NodeBase, INode<ParamFormLight, NodeParamLight, NodeResultLight>
+    public class NodeLight : NodeBase
     {
-        /// <summary>
-        /// 参数设置窗口
-        /// </summary>
-        ParamFormLight INode<ParamFormLight, NodeParamLight, NodeResultLight>.ParamForm
-        {
-            get => (ParamFormLight)base.ParamForm;
-            set => base.ParamForm = value;
-        }
-
-        /// <summary>
-        /// 节点参数
-        /// </summary>
-        public NodeParamLight Param { get; set; }
-
-        /// <summary>
-        /// 节点结果
-        /// </summary>
-        public NodeResultLight Result { get; private set; }
-
         /// <summary>
         /// 创建一个指定名称的节点
         /// </summary>
         /// <param name="nodeText"></param>
-        public NodeLight(string nodeText, INodeParamForm nodeParamForm)
+        public NodeLight(string nodeText, LightBrand brand) : base(new ParamFormLight(brand))
         {
             SetNodeText(nodeText);
-            ParamForm = nodeParamForm;
-            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
+            Result = new NodeResultLight();
         }
-
-        /// <summary>
-        /// 光源参数改变事件处理
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void ParamForm_OnNodeParamChange(object sender, INodeParam e)
-        {
-            Param = (NodeParamLight)e;
-        }
-
 
         /// <summary>
         /// 节点运行
@@ -63,53 +33,61 @@ namespace YTVisionPro.Node.NodeLight.PPX
             DateTime startTime = DateTime.Now;
 
             if (!Active)
+            {
+                SetRunStatus(startTime, true);
                 return;
+            }
+            if(Params == null)
+            {
+                LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
+                SetRunStatus(startTime, false);
+                throw new Exception($"节点({NodeName})运行参数未设置或保存！");
+            }
 
-            Result = new NodeResultLight();
+            var param = (NodeParamLight)Params;
+
 
             // 打开操作
-            if (Param.Open) 
+            if (param.Open) 
             {
                 try
                 {
-                    Param.Light.TurnOn();
-                    Result.Success = true;
-                    Result.RunStatusCode = NodeRunStatusCode.OK;
+                    param.Light.TurnOn(); 
+                    SetRunStatus(startTime, true);
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);
                 }
                 catch (Exception)
                 {
-                    Result.Success = false;
-                    Result.RunStatusCode = NodeRunStatusCode.UNKNOW_ERROR;
+                    LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行失败！", true);
+                    SetRunStatus(startTime, false);
+                    throw new Exception($"节点({NodeName})运行失败！");
                 }
             }
             else
             {
                 try
                 {
-                    Param.Light.TurnOff();
-                    Result.Success = true;
-                    Result.RunStatusCode = NodeRunStatusCode.OK;
+                    param.Light.TurnOff();
+                    SetRunStatus(startTime, true);
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);
                 }
                 catch (Exception)
                 {
-                    Result.Success = false;
-                    Result.RunStatusCode = NodeRunStatusCode.UNKNOW_ERROR;
+                    LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行失败！", true);
+                    SetRunStatus(startTime, false);
+                    throw new Exception($"节点({NodeName})运行失败！");
                 }
             }
+        }
 
+        private void SetRunStatus(DateTime startTime, bool isOk)
+        {
             DateTime endTime = DateTime.Now;
             TimeSpan elapsed = endTime - startTime;
             long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
             Result.RunTime = elapsedMi11iseconds;
-        }
-
-        /// <summary>
-        /// 给节点设置文本
-        /// </summary>
-        /// <param name="text"></param>
-        void INode<ParamFormLight, NodeParamLight, NodeResultLight>.SetNodeText(string text)
-        {
-            base.SetNodeText(text);
+            Result.Success = isOk;
+            Result.RunStatusCode = isOk ? NodeRunStatusCode.OK : NodeRunStatusCode.UNKNOW_ERROR;
         }
     }
 }

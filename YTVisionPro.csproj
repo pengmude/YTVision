@@ -482,6 +482,8 @@
     <Content Include="Icon\打开项目.png" />
     <Content Include="Icon\新建方案.png" />
     <Content Include="Icon\方案设置.png" />
+    <None Include="Icon\流程删除.png" />
+    <None Include="Icon\流程添加.png" />
     <Content Include="Icon\点检模式.png" />
     <Content Include="Icon\用户登录.png" />
     <Content Include="Icon\相机.png" />

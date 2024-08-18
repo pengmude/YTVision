@@ -6,19 +6,62 @@ namespace YTVisionPro.Node
 {
     public partial class NodeBase : UserControl
     {
-        public NodeBase()
-        {
-            InitializeComponent();
-            启用ToolStripMenuItem.Enabled = false;
-            _id = ++Solution.NodeCount;
-        }
-
         #region 节点界面的操作
 
         private int _id = 0;
         private bool _active = true;
         private bool _selected = false;
 
+        /// <summary>
+        /// 因为是控件类，提供无参构造函数让设计器可以显示出来
+        /// </summary>
+        public NodeBase() 
+        {
+            InitializeComponent();
+            启用ToolStripMenuItem.Enabled = false;
+            _id = ++Solution.NodeCount;
+        }
+
+        /// <summary>
+        /// 实际只使用这个有参构造函数创建控件
+        /// </summary>
+        /// <param name="paramForm"></param>
+        public NodeBase(INodeParamForm paramForm)
+        {
+            InitializeComponent();
+            启用ToolStripMenuItem.Enabled = false;
+            _id = ++Solution.NodeCount;
+            ParamForm = paramForm;
+            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
+        }
+
+        /// <summary>
+        /// 节点参数改变时更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
+        {
+            Params = e;
+        }
+
+        /// <summary>
+        /// 节点参数设置界面
+        /// </summary>
+        public INodeParamForm ParamForm { protected get; set; }
+        /// <summary>
+        /// 节点运行参数
+        /// </summary>
+        public INodeParam Params;
+        /// <summary>
+        /// 节点运行结果
+        /// </summary>
+        public INodeResult Result { get; protected set; }
+        /// <summary>
+        /// 节点运行，虚函数需要重写
+        /// </summary>
+        public virtual void Run() { }
         /// <summary>
         /// 节点id
         /// </summary>
@@ -38,11 +81,6 @@ namespace YTVisionPro.Node
         /// 节点名称
         /// </summary>
         public string NodeName { get { return label1.Text; } set { label1.Text = value; } }
-
-        /// <summary>
-        /// 节点所属的流程
-        /// </summary>
-        public Process Process { get; }
 
         /// <summary>
         /// 删除节点事件
@@ -159,10 +197,6 @@ namespace YTVisionPro.Node
             if (Active && ParamForm is Form form)
                 form.ShowDialog();
         }
-
-        public INodeParamForm ParamForm { get; set; }
-
-        public virtual void Run() { }
 
         #endregion 定义节点界面操作-结束
     }

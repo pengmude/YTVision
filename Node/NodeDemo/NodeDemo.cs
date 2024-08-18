@@ -4,56 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Node.Light.PPX;
 
 namespace YTVisionPro.Node.NodeDemo
 {
-    public class NodeDemo : NodeBase, INode<NodeParamSetDemo, NodeParamDemo, NodeResultDemo>
+    public class NodeDemo : NodeBase
     {
         /// <summary>
         /// 创建一个指定名称的节点
         /// </summary>
         /// <param name="nodeText"></param>
-        public NodeDemo(string nodeText)
+        public NodeDemo(string nodeText) : base(new NodeParamSetDemo())
         {
             SetNodeText(nodeText);
+            Result = new NodeResultLight();
         }
-
-        /// <summary>
-        /// 参数设置窗口
-        /// </summary>
-        NodeParamSetDemo INode<NodeParamSetDemo, NodeParamDemo, NodeResultDemo>.ParamForm
-        {
-            get => (NodeParamSetDemo)base.ParamForm;
-            set => base.ParamForm = value;
-        }
-
-        /// <summary>
-        /// 节点参数
-        /// </summary>
-        public NodeParamDemo Param { get; set; }
-
-        /// <summary>
-        /// 节点结果
-        /// </summary>
-        public NodeResultDemo Result { get; private set; }
-
         /// <summary>
         /// 节点运行
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
         public void Run()
         {
-            Result = new NodeResultDemo();
+            // 写执行的节点操作
         }
-
-        /// <summary>
-        /// 给节点设置文本
-        /// </summary>
-        /// <param name="text"></param>
-        void INode<NodeParamSetDemo, NodeParamDemo, NodeResultDemo>.SetNodeText(string text)
-        {
-            base.SetNodeText(text);
-        }
-
     }
 }

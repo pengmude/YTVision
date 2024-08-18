@@ -53,7 +53,7 @@ namespace YTVisionPro.Forms.ProcessNew
             tabPage.Text = $"流程{Solution.ProcessCount}";
             tabPage.UseVisualStyleBackColor = true;
 
-            ProcessEditPanel nodeEditPanel = new ProcessEditPanel();
+            ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text);
             nodeEditPanel.Dock = DockStyle.Fill;
             tabPage.Controls.Add(nodeEditPanel);
             tabControl1.Controls.Add(tabPage);

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
@@ -29,11 +31,10 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         public Button SelectedNode { get; set; } = null;
 
-
-        public ProcessEditPanel()
+        public ProcessEditPanel(string processName = "")
         {
             InitializeComponent();
-            _process = new Process();
+            _process = new Process(processName);
             Solution.Instance.AddProcess(_process);
         }
 
@@ -72,12 +73,9 @@ namespace YTVisionPro.Forms.ProcessNew
                 {
                     lightBrand = LightBrand.PPX;
                     text = $"{Solution.NodeCount + 1}{text}";
-
-                    // 创建节点参数界面
-                    ParamFormLight form = new ParamFormLight(lightBrand);
-
+                    
                     // 创建光源节点
-                    NodeLight node = new NodeLight(text, form);
+                    NodeLight node = new NodeLight(text, lightBrand);
                     node.Size = new Size(this.Size.Width - 5, 42);
                     node.Dock = DockStyle.Top;
                     node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
@@ -91,10 +89,7 @@ namespace YTVisionPro.Forms.ProcessNew
                     lightBrand = LightBrand.RSEE;
                     text = $"{Solution.NodeCount + 1}{text}";
 
-                    // 创建节点参数界面
-                    ParamFormLight form = new ParamFormLight(lightBrand);
-
-                    NodeLight node = new NodeLight(text, form);
+                    NodeLight node = new NodeLight(text, lightBrand);
                     node.Size = new Size(this.Size.Width - 5, 42);
                     node.Dock = DockStyle.Top;
                     node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
@@ -103,19 +98,11 @@ namespace YTVisionPro.Forms.ProcessNew
                     _process.AddNode(node);
                     UpdateNode();
                 }
-                //text = $"{Solution.NodeCount + 1}{text}";
-
-                //NodeDemo node = new NodeDemo(text); 
-                //node.Size = new Size(this.Size.Width - 5, 42);
-                //node.Dock = DockStyle.Top;
-                //node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                //node.ParamForm = new NodeParamSetDemo();
 
                 #endregion
 
-                //_stack.Push(node);
-                //Solution.Nodes.Add(node);
-                //UpdateNode();
+                //更新节点数量到界面
+                label1.Text = $"节点数:{_stack.Count}";
             }
         }
 
@@ -140,10 +127,14 @@ namespace YTVisionPro.Forms.ProcessNew
                 }
                 else
                 {
+                    Solution.Nodes.Remove(node);
                     _process.Nodes.Remove(node);
                 }
             }
             UpdateNode();
+
+            //更新节点数量到界面
+            label1.Text = $"节点数:{_stack.Count}";
         }
 
         /// <summary>
@@ -151,11 +142,63 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         private void UpdateNode()
         {
-            this.Controls.Clear();
+            this.panel1.Controls.Clear();
             foreach (var item in _stack)
             {
-                this.Controls.Add(item);
+                this.panel1.Controls.Add(item);
             }
+        }
+
+        /// <summary>
+        /// 点击运行流程
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //运行流程
+            try
+            {
+                _process.Run();
+
+                SetRunStatus(_process.RunTime, true);
+
+            }
+            catch (Exception)
+            {
+                SetRunStatus(_process.RunTime, false);
+            }
+        }
+
+        /// <summary>
+        /// 设置界面的运行状态
+        /// </summary>
+        /// <param name="ok"></param>
+        private void SetRunStatus(long time, bool ok)
+        {
+            if (ok)
+            {
+                uiLedBulb1.Color = Color.LawnGreen;
+            }
+            else
+            {
+                uiLedBulb1.Color = Color.Red;
+            }
+            label2.Text = $"耗时:{time}ms";
+        }
+
+        /// <summary>
+        /// 设置流程状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="value"></param>
+        private void uiSwitch1_ValueChanged(object sender, bool value)
+        {
+            _process.Enable = value;
+            if (value)
+                LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}启用", true);
+            else
+                LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}禁用用", true);
         }
     }
 }

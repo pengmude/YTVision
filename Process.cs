@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Logger;
+using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using YTVisionPro.Hardware.Camera;
@@ -42,24 +43,27 @@ namespace YTVisionPro
         /// </summary>
         public List<NodeBase> Nodes { get => _nodes;}
 
-
         /// <summary>
         /// 流程运行时间
         /// </summary>
-        public TimeSpan RunTime { get; private set; }
+        public long RunTime { get; private set; } = 0;
 
+        /// <summary>
+        /// 流程运行是否成功
+        /// </summary>
+        public bool Success { get; private set; }
         ///// <summary>
-        ///// 流程所属方案
+        ///// 流程是否启用
         ///// </summary>
-        //public Solution Solution { get; set; }
+        public bool Enable { get; set; } = true;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="solution"></param>
-        public Process(/*Solution solution*/)
+        public Process(string processName)
         {
-            //Solution = solution;
+            ProcessName = processName;
             _id = _countInstance++;
         }
 
@@ -73,13 +77,27 @@ namespace YTVisionPro
         /// </summary>
         public void Run()
         {
-            foreach (var item in _nodes)
+            LogHelper.AddLog(MsgLevel.Info, $"-----------  {ProcessName}开始运行  -----------");
+            RunTime = 0;
+            if (Enable)
             {
-                if(item is NodeBase node)
+                foreach (var node in _nodes)
                 {
-                    node.Run();
+                    try
+                    {
+                        node.Run();
+                        Success = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Success = false;
+                        RunTime += node.Result.RunTime;
+                        LogHelper.AddLog(MsgLevel.Info, $"-----------  {ProcessName}运行结束，耗时{RunTime}，状态：失败  -----------");
+                        throw ex;
+                    }
                 }
             }
+            LogHelper.AddLog(MsgLevel.Info, $"-----------  {ProcessName}运行结束，耗时{RunTime}，状态：成功  -----------");
         }
 
         /// <summary>
