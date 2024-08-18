@@ -16,6 +16,9 @@ namespace YTVisionPro.Forms.CameraAdd
     {
         private static int cnt = 1;
         public CameraParamsControl CameraParamsControl;
+        /// <summary>
+        /// TODO:静态保存上一个节点会出现bug，每个在点击时都会选中
+        /// </summary>
         private static SingleCamera preSingleCamera;
         public static event EventHandler SingleCameraSelectedChanged;
 

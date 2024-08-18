@@ -57,8 +57,11 @@ namespace Logger
                 return;
             while (queueLogs.Count > 0)
             {
-                if (!CheckIfLoaded())
+                if (CheckIfLoaded())
+                {
+                    _timer.Stop();
                     return;
+                }
                 var item = queueLogs.Dequeue();
                 FrmLogger.AddLog(item.Info, item.Level, item.IsDisplay, item.FilePath, item.MemberName, item.LineNumber);
             };

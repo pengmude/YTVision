@@ -73,12 +73,14 @@ namespace YTVisionPro.Forms.ProcessNew
                     lightBrand = LightBrand.PPX;
                     text = $"{Solution.NodeCount + 1}{text}";
 
-                    NodeLight node = new NodeLight(text);
+                    // 创建节点参数界面
+                    ParamFormLight form = new ParamFormLight(lightBrand);
+
+                    // 创建光源节点
+                    NodeLight node = new NodeLight(text, form);
                     node.Size = new Size(this.Size.Width - 5, 42);
                     node.Dock = DockStyle.Top;
                     node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                    node.ParamForm = new ParamFormLight(lightBrand);
-                    node.ParamForm.OnNodeParamChange += node.ParamForm_OnNodeParamChange;
                     _stack.Push(node);
                     Solution.Nodes.Add(node);
                     _process.AddNode(node);
@@ -89,12 +91,13 @@ namespace YTVisionPro.Forms.ProcessNew
                     lightBrand = LightBrand.RSEE;
                     text = $"{Solution.NodeCount + 1}{text}";
 
-                    NodeLight node = new NodeLight(text);
+                    // 创建节点参数界面
+                    ParamFormLight form = new ParamFormLight(lightBrand);
+
+                    NodeLight node = new NodeLight(text, form);
                     node.Size = new Size(this.Size.Width - 5, 42);
                     node.Dock = DockStyle.Top;
                     node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                    node.ParamForm = new ParamFormLight(lightBrand);
-                    node.ParamForm.OnNodeParamChange += node.ParamForm_OnNodeParamChange;
                     _stack.Push(node);
                     Solution.Nodes.Add(node);
                     _process.AddNode(node);

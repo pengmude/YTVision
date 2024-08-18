@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using MvCamCtrl.NET;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Logger;
+using Sunny.UI;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -103,19 +105,26 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="value"></param>
         private void uiSwitch1_ValueChanged(object sender, bool value)
         {
-            if(value)
+            if (value)
             {
-                _curCamera.Open();
-                _curCamera.SetTriggerMode(false);
-                _curCamera.SetExposureTime(int.Parse(this.textBox1.Text));
-                _curCamera.SetGain(int.Parse(this.textBox2.Text));
-                _curCamera.CameraGrabEvent += _curCamera_CameraGrabEvent;
-                _curCamera.StartGrabbing();
-
-
-                //CamParams camParams = new CamParams();
-                //camParams.OpenStatus = true;
-                //_curCamera.camParams = camParams;
+                try
+                {
+                    _curCamera.Open();
+                    _curCamera.SetTriggerMode(false);
+                    _curCamera.SetExposureTime(int.Parse(this.textBox1.Text));
+                    _curCamera.SetGain(int.Parse(this.textBox2.Text));
+                    _curCamera.CameraGrabEvent += _curCamera_CameraGrabEvent;
+                    _curCamera.StartGrabbing();
+                }
+                catch (Exception ex)
+                {
+                    _curCamera.Close();
+                    this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
+                    uiSwitch1.Active = false;
+                    this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
+                    LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
+                    return;
+                }
             }
             else
             {

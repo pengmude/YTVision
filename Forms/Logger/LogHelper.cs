@@ -149,9 +149,9 @@ namespace Logger
             MsgLevel level,
             string logInfo,
             bool isDisplay = false,
-            /*[CallerFilePath]*/ string filePath = "",
-            /*[CallerMemberName]*/ string memberName = "",
-            /*[CallerLineNumber]*/ int lineNumber = 0
+            [CallerFilePath] string filePath = "",
+            [CallerMemberName] string memberName = "",
+            [CallerLineNumber] int lineNumber = 0
             )
         {
             SingleLog singleLog = new SingleLog();

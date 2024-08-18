@@ -14,38 +14,6 @@ namespace YTVisionPro.Node.NodeLight.PPX
 {
     public class NodeLight : NodeBase, INode<ParamFormLight, NodeParamLight, NodeResultLight>
     {
-        LightPPX lightPPX;
-
-        /// <summary>
-        /// 创建一个指定名称的节点
-        /// </summary>
-        /// <param name="nodeText"></param>
-        public NodeLight(string nodeText)
-        {
-            SetNodeText(nodeText);
-        }
-
-        public void ParamForm_OnNodeParamChange(object sender, INodeParam e)
-        {
-            Param = (NodeParamLight)e;
-            
-            foreach (var light in Solution.Instance.LightDevices)
-            {
-                if (light.SerialStructure.SerialNumber == Param.SerialNumber && light.SerialStructure.ChannelValue == Param.ChannelValue)
-                {
-                    lightPPX = (LightPPX)light;
-                    SerialStructure serialStructure = lightPPX.SerialStructure;
-                    serialStructure.ChannelValue = (byte)Param.ChannelValue;
-                    lightPPX.SerialStructure= serialStructure;
-                    Logger.LogHelper.AddLog(Logger.MsgLevel.Debug, "保存成功", true);
-                    return;
-                }
-            }
-            MessageBox.Show("没有该光源");
-            Logger.LogHelper.AddLog(Logger.MsgLevel.Debug, "没有该光源", true);
-
-        }
-
         /// <summary>
         /// 参数设置窗口
         /// </summary>
@@ -66,43 +34,67 @@ namespace YTVisionPro.Node.NodeLight.PPX
         public NodeResultLight Result { get; private set; }
 
         /// <summary>
+        /// 创建一个指定名称的节点
+        /// </summary>
+        /// <param name="nodeText"></param>
+        public NodeLight(string nodeText, INodeParamForm nodeParamForm)
+        {
+            SetNodeText(nodeText);
+            ParamForm = nodeParamForm;
+            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
+        }
+
+        /// <summary>
+        /// 光源参数改变事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ParamForm_OnNodeParamChange(object sender, INodeParam e)
+        {
+            Param = (NodeParamLight)e;
+        }
+
+
+        /// <summary>
         /// 节点运行
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         public override void Run()
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
-            {
                 return;
-            }
-
-            if (lightPPX == null)
-            {
-                Logger.LogHelper.AddLog(Logger.MsgLevel.Warn,"光源为空",true);
-                return;
-            }
 
             Result = new NodeResultLight();
-            string SerialNumber = Param.SerialNumber;
-            int ChannelValue = Param.ChannelValue;
-            int Brightness = Param.Brightness;
 
-            if (Param.Open) // 打开操作
+            // 打开操作
+            if (Param.Open) 
             {
-                bool flag = lightPPX.Connenct(SerialNumber, lightPPX.SerialStructure.Baudrate, lightPPX.SerialStructure.DataBits, lightPPX.SerialStructure.StopBits, lightPPX.SerialStructure.Parity);
-                Result.Success = flag;
-                lightPPX.SetValue(Brightness);
-                lightPPX.Brightness = Brightness;
-                Result.RunStatusCode = flag ? NodeRunStatusCode.OK : NodeRunStatusCode.UNKNOW_ERROR;
+                try
+                {
+                    Param.Light.TurnOn();
+                    Result.Success = true;
+                    Result.RunStatusCode = NodeRunStatusCode.OK;
+                }
+                catch (Exception)
+                {
+                    Result.Success = false;
+                    Result.RunStatusCode = NodeRunStatusCode.UNKNOW_ERROR;
+                }
             }
             else
             {
-                lightPPX.Connenct(SerialNumber, lightPPX.SerialStructure.Baudrate, lightPPX.SerialStructure.DataBits, lightPPX.SerialStructure.StopBits, lightPPX.SerialStructure.Parity);
-                lightPPX.SetValue(0);
-                Result.Success = true;
-                Result.RunStatusCode = NodeRunStatusCode.OK;
+                try
+                {
+                    Param.Light.TurnOff();
+                    Result.Success = true;
+                    Result.RunStatusCode = NodeRunStatusCode.OK;
+                }
+                catch (Exception)
+                {
+                    Result.Success = false;
+                    Result.RunStatusCode = NodeRunStatusCode.UNKNOW_ERROR;
+                }
             }
 
             DateTime endTime = DateTime.Now;
@@ -119,9 +111,5 @@ namespace YTVisionPro.Node.NodeLight.PPX
         {
             base.SetNodeText(text);
         }
-
-        //TODO: 目前 方案保存List<NodeBase>就能够兼容保存所有节点
-        // 节点运行时间、是否成功标志、运行状态码等必要结果，设在INodeResult接口类中必须实现
-
     }
 }

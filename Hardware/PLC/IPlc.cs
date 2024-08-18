@@ -1,88 +1,97 @@
-﻿using System;
+﻿using HslCommunication;
+using System;
+using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web;
 
 namespace YTVisionPro.Hardware.PLC
 {
     public interface IPlc : IDevice
     {
         /// <summary>
-        /// PLC是否打开
+        /// PLC参数
         /// </summary>
-        bool IsOpen { get; set; }
+        PLCParms PLCParms { get; set; }
 
         /// <summary>
-        /// 设备ID
+        /// PLC连接
         /// </summary>
-        string Id { get; set; }
-
-        /// <summary>
-        /// 硬件硬件名称
-        /// </summary>
-        string DevName { get; set; }
-
-        /// <summary>
-        /// 用户自定义设备名
-        /// </summary>
-        string UserDefinedName { get; set; }
-
-        DevType DevType { get; }
-        /// <summary>
-        /// Plc连接方式
-        /// </summary>
-        PlcConType _plcConType { get; set; }
-
-        /// <summary>
-        /// 串口连接
-        /// </summary>
-        /// <param name="portName"></param>
-        /// <param name="baudRate"></param>
-        /// <param name="dataBits"></param>
-        /// <param name="stopBits"></param>
-        /// <param name="parity"></param>
         /// <returns></returns>
-        bool Connenct(string portName, int baudRate, int dataBits, StopBits stopBits, Parity parity);
+        bool Connect();
 
         /// <summary>
-        /// 网口连接
+        /// PLC是否连接
         /// </summary>
-        /// <param name="iPAddress"></param>
-        /// <param name="port"></param>
         /// <returns></returns>
-        bool Connect(IPAddress iPAddress, UInt16 port);
+        bool IsOpen();
 
         /// <summary>
         /// 断开连接
         /// </summary>
-        /// <returns></returns>
         void Disconnect();
 
-        // TODO:读写PLC的操作
+        /// <summary>
+        /// 释放Plc资源
+        /// </summary>
+        void Release();
 
     }
 
     /// <summary>
-    /// Plc连接方式
+    /// PLC参数
+    /// </summary>
+    public struct PLCParms
+    {
+        public string UserDefinedName; //PLC用户自定义名称
+        public PlcConType PlcConType; //PLC通信方式
+        public SerialParms SerialParms; //串口连接参数
+        public EthernetParms EthernetParms; //网口连接参数
+    }
+
+    /// <summary>
+    /// 串口连接参数
+    /// </summary>
+    public struct SerialParms
+    {
+        public string PortName; // 串口号
+        public int BaudRate;  // 波特率
+        public int DataBits;  // 数据位
+        public StopBits StopBits;  // 停止位
+        public Parity Parity; // 校验位
+        public SerialParms(string portName, int baudRate, int dataBits, StopBits stopBits, Parity parity)
+        {
+            PortName = portName;
+            BaudRate = baudRate;
+            DataBits = dataBits;
+            StopBits = stopBits;
+            Parity = parity;
+        }
+    }
+
+    /// <summary>
+    /// 网口连接参数
+    /// </summary>
+    public struct EthernetParms
+    {
+        public string IP; //IP地址
+        public int Port;  //端口号
+        public EthernetParms(string ip, int port)
+        {
+            IP = ip;
+            Port = port;
+        }
+    }
+
+    /// <summary>
+    /// PLC通信方式
     /// </summary>
     public enum PlcConType
     {
         COM,
         ETHERNET
-    }
-
-    public struct Signal
-    {
-        /// <summary>
-        /// 准备信号
-        /// </summary>
-        public string Prepare { get; set; }
-
-        /// <summary>
-        /// 拍照信号
-        /// </summary>
-        public string Shot { get; set; }
-
-        //public int  { get; set;}
-
     }
 }

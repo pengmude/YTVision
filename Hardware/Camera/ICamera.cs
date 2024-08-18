@@ -1,49 +1,62 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace YTVisionPro.Hardware.Camera
 {
-
-    //图像委托事件，用于传出参数
-    public delegate void GetImageDelegate(Image Image);
-
     /// <summary>
     /// 相机基类
     /// </summary>
     public interface ICamera : IDevice
     {
         /// <summary>
+        /// 相机取流得到的一帧图像
+        /// </summary>
+        Bitmap Bitmap { get; }
+        /// <summary>
         /// 相机是否打开
         /// </summary>
         bool IsOpen { get; set; }
-        /// <summary>
-        /// 设备ID
-        /// </summary>
-        string Id { get; set; }
 
         /// <summary>
-        /// 硬件硬件名称
+        /// 设备类型
         /// </summary>
-        string DevName { get; set; }
-
-        /// <summary>
-        /// 用户自定义设备名
-        /// </summary>
-        string UserDefinedName { get; set; }
-
         DevType DevType { get; }
 
         /// <summary>
-        /// 根据相机序列号开启相机
+        /// 开启相机
         /// </summary>
-        /// <param name="CamerName"></param>
         /// <returns></returns>
         bool Open();
 
         /// <summary>
-        /// 关闭相机
+        /// 开始取流
         /// </summary>
         /// <returns></returns>
-        void Close();
+        bool StartGrabbing();
+
+        /// <summary>
+        /// 停止取流
+        /// </summary>
+        /// <returns></returns>
+        bool StopGrabbing();
+
+        /// <summary>
+        /// 设置相机模式
+        /// </summary>
+        /// <param name="isTrigger"></param>
+        void SetTriggerMode(bool isTrigger);
+
+        /// <summary>
+        /// 设置软硬触发
+        /// </summary>
+        /// <param name="triggerSource"></param>
+        /// <returns></returns>
+        bool SetTriggerSource(TriggerSource triggerSource);
 
         /// <summary>
         /// 软触发一次
@@ -52,18 +65,9 @@ namespace YTVisionPro.Hardware.Camera
         bool GrabOne();
 
         /// <summary>
-        /// 启动为硬触发
+        ///  设置增益
         /// </summary>
-        /// <returns></returns>
-        bool GrapEncoder();
-
-        /// <summary>
-        /// 重连相机
-        /// </summary>
-        /// <param name="CamerName"></param>
-        /// <returns></returns>
-        bool Reconnect();
-
+        /// <param name="gainValue"></param>
         void SetGain(int gainValue);
 
         /// <summary>
@@ -73,5 +77,24 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         void SetExposureTime(int time);
 
+        /// <summary>
+        /// 关闭相机
+        /// </summary>
+        /// <returns></returns>
+        bool Close();
     }
+
+    /// <summary>
+    /// 触发源
+    /// </summary>
+    public enum TriggerSource 
+    {
+        SOFT,
+        LINE0,
+        LINE1,
+        LINE2,
+        LINE3,
+    }
+
+
 }

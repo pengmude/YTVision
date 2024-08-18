@@ -12,10 +12,14 @@ namespace YTVisionPro.Node.Light.PPX
         /// </summary>
         public event EventHandler<INodeParam> OnNodeParamChange;
 
+        /// <summary>
+        /// 设置的光源名称
+        /// </summary>
+        //private string SelectedLightName = null;
+
         public ParamFormLight()
         {
             InitializeComponent();
-            Solution.Instance.Devices.Add(new LightPPX());
         }
 
         public ParamFormLight(LightBrand lightBrand)
@@ -31,19 +35,17 @@ namespace YTVisionPro.Node.Light.PPX
         /// <param name="lightBrand"></param>
         public void InitLightComboBox(LightBrand lightBrand)
         {
+            comboBox1.Items.Clear();
             // 初始化光源列表,只显示添加的光源COM号且是对应传入的品牌的
             foreach (var dev in Solution.Instance.LightDevices)
             {
-                if (dev is ILight light)
+                if (dev is ILight light && light.Brand == lightBrand)
                 {
-                    if (comboBox1.Items.Contains(light.SerialStructure.SerialNumber))
-                        continue;
-                    comboBox1.Items.Add(light.SerialStructure.SerialNumber);
+                    comboBox1.Items.Add(light.UserDefinedName);
                 }
             }
             if (comboBox1.Items.Count > 0)
                 comboBox1.SelectedIndex = 0;
-            comboBox3.SelectedIndex = 0;
             comboBox2.SelectedIndex = 0;
         }
 
@@ -91,9 +93,19 @@ namespace YTVisionPro.Node.Light.PPX
         {
             try
             {
+                //查找当前选择的光源
+                ILight light = null;
+                foreach (var lightTmp in Solution.Instance.LightDevices)
+                {
+                    if(lightTmp.UserDefinedName == comboBox1.Text)
+                    {
+                        light = lightTmp;
+                        break;
+                    }
+                }
                 //把设置好的参数传给光源节点NodeLight去更新结果
-                bool open = comboBox3.Text == "打开"  ? true  : false;
-                NodeParamLight nodeParamLight = new NodeParamLight(comboBox1.Text, int.Parse(comboBox2.Text), trackBar1.Value, open);
+                bool open = comboBox2.Text == "打开"  ? true  : false;
+                NodeParamLight nodeParamLight = new NodeParamLight(light, trackBar1.Value, open);
                 OnNodeParamChange?.Invoke(this, nodeParamLight);
             }
             catch (Exception ex)

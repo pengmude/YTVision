@@ -3,28 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Node.Light.PPX
 {
     public class NodeParamLight : INodeParam
     {
-        public NodeParamLight()
+        public NodeParamLight(ILight light, int brightness, bool open)
         {
-            
-        }
-
-        public NodeParamLight(string SerialNumber, int ChannelValue, int Brightness, bool open)
-        {
-            this.SerialNumber = SerialNumber;
-            this.ChannelValue = ChannelValue;
-            this.Brightness = Brightness;
+            this.Light = light;
+            this.Brightness = brightness;
             this.Open = open;
         }
-
-        public string SerialNumber { get; set; } //串口号
-        public int ChannelValue { get; set; } //通道数
+        public ILight Light { get; set; }
         public int Brightness { get; set; } //光源值
-
         public bool Open { get; set; } //打开或关闭
     }
 }

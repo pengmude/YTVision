@@ -5,11 +5,11 @@
         /// <summary>
         /// 设备ID
         /// </summary>
-        string Id { get; }
+        int ID { get; }
         /// <summary>
         /// 硬件硬件名称
         /// </summary>
-        string DevName { get; set; }
+        string DevName { get;}
         /// <summary>
         /// 用户自定义设备名
         /// </summary>

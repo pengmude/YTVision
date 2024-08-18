@@ -14,7 +14,18 @@ namespace YTVisionPro
 {
     public partial class FormMain : Form
     {
-        YTVisionPro.Forms.LightAdd.LightListView form1 = new YTVisionPro.Forms.LightAdd.LightListView();
+        /// <summary>
+        /// 光源添加窗口
+        /// </summary>
+        Forms.LightAdd.FrmLightListView FrmLightAdd = new Forms.LightAdd.FrmLightListView();
+        /// <summary>
+        /// 相机添加窗口
+        /// </summary>
+        Forms.CameraAdd.FrmCameraListView FrmCameraAdd = new Forms.CameraAdd.FrmCameraListView();
+        /// <summary>
+        /// PLC添加窗口
+        /// </summary>
+        Forms.PLCAdd.FrmPLCListView FrmPLCAdd= new Forms.PLCAdd.FrmPLCListView();
 
         /// <summary>
         /// 图像显示栏
@@ -185,14 +196,11 @@ namespace YTVisionPro
         private void 停止运行ToolStripMenuItem_Click(object value1, object value2)
         {
             MessageBox.Show("停止运行");
-            //Project.Instance.StopRun();
         }
 
         private void 开始运行ToolStripMenuItem_Click(object value1, object value2)
         {
             Solution.Instance.Run();
-            //MessageBox.Show("开始运行");
-            //Project.Instance.OnceRun();
         }
 
         private void 用户登录ToolStripMenuItem_Click(object value1, object value2)
@@ -203,45 +211,25 @@ namespace YTVisionPro
         private void 全局变量ToolStripMenuItem_Click(object value1, object value2)
         {
             MessageBox.Show("全局变量");
-            //CameraSet mCameraFormSet = new CameraSet();
-            //CameraSet.mCamerasList = Project.Instance.mCamerasList;
-            //mCameraFormSet.ShowDialog();
         }
 
         private void 全局通信ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("全局通信");
-            //NetSet mCommunicationSet = new NetSet(Project.Instance.mEComList);
-            //mCommunicationSet.ShowDialog();
+            FrmPLCAdd.ShowDialog();
         }
 
         private void 全局相机ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("全局相机");
-            //VarSet mVarSetForm = new VarSet(Project.Instance.mSysVar);
-            //mVarSetForm.ShowDialog();
+            FrmCameraAdd.ShowDialog();
         }
 
         private void 全局光源ToolStripMenuItem_Click(object value1, object value2)
         {
-            form1.ShowDialog();
+            FrmLightAdd.ShowDialog();
         }
         private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
         {
             MessageBox.Show("保存方案");
-            //mSaveFile.FileName = Project.Instance.Name + ".RV";
-            //if (mSaveFile.ShowDialog() == DialogResult.OK)
-            //{
-            //    try
-            //    {
-            //        Project.Instance.SaveData(mSaveFile.FileName, Project.Instance);
-            //        Project.Instance.mSavePath = mSaveFile.FileName;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show(ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            //    }
-            //}
         }
 
         private void 打开方案ToolStripMenuItem_Click(object value1, object value2)
