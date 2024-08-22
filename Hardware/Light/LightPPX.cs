@@ -10,7 +10,7 @@ namespace YTVisionPro.Hardware.Light
     /// 2024-7-30
     /// by pengmude
     /// </summary>
-    public class LightPPX : ILight
+    internal class LightPPX : ILight
     {
         /// <summary>
         /// 光源设置参数
@@ -152,7 +152,7 @@ namespace YTVisionPro.Hardware.Light
             {
                 if (!IsComOpen)
                     Connenct();
-                SetValue(LightParam.Value);
+                SetValue(Brightness);
                 IsOpen = true;
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.LightAdd
 {
-    public partial class FrmLightNew : Form
+    internal partial class FrmLightNew : Form
     {
         /// <summary>
         /// 光源添加事件
@@ -60,7 +60,7 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.textBox2.Text))
+            if (!string.IsNullOrWhiteSpace(this.textBox2.Text))
             {
                 LightParam lightParam = new LightParam();
                 try
@@ -68,6 +68,7 @@ namespace YTVisionPro.Forms.LightAdd
                     lightParam.Brand = this.comboBox1.Text == "磐鑫" ? LightBrand.PPX : this.comboBox1.Text == "锐视" ? LightBrand.RSEE : LightBrand.UNKNOW;
                     lightParam.Channel = byte.Parse(comboBox7.Text);
                     lightParam.LightName = this.textBox2.Text;
+                    lightParam.Value = 255;
 
                     lightParam.Port = this.comboBox2.Text;
                     lightParam.BaudRate = int.Parse(this.comboBox3.Text);
@@ -103,7 +104,7 @@ namespace YTVisionPro.Forms.LightAdd
             }
             else
             {
-                MessageBox.Show("请添加光源名称！");
+                MessageBox.Show("无效的光源名称！");
             }
         }
     }

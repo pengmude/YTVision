@@ -16,7 +16,7 @@ namespace YTVisionPro.Forms.PLCAdd
     /// <summary>
     /// PLC网口参数显示界面
     /// </summary>
-    public partial class EthernetParamsControl : UserControl
+    internal partial class EthernetParamsControl : UserControl
     {
         private string _plcName;
         public EthernetParamsControl()

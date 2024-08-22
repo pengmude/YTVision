@@ -7,9 +7,8 @@ using System.Windows.Forms;
 
 namespace Logger
 {
-    public partial class LogHelper : UserControl
+    internal partial class LogHelper : UserControl
     {
-        bool IsLogFocus = true;
         static readonly string LogDictory = Environment.CurrentDirectory + @"\Logs\";
         static event EventHandler<LevelAndInfo> LogAddEvent;
 
@@ -55,6 +54,11 @@ namespace Logger
         public LogHelper()
         {
             InitializeComponent();
+            Load += LogHelper_Load;
+        }
+
+        private void LogHelper_Load(object sender, EventArgs e)
+        {
             LogAddEvent += LogHelper_LogAddEvent;
         }
 
@@ -92,11 +96,6 @@ namespace Logger
                 }
                 Application.DoEvents();
             });
-        }
-
-        ~LogHelper()
-        {
-            IsLogFocus = false;
         }
 
         private void listBox1_DrawItem(object sender, DrawItemEventArgs e)
@@ -171,43 +170,6 @@ namespace Logger
             }
         }
 
-        /// <summary>
-        /// 添加一条带异常信息的日志
-        /// </summary>
-        /// <param name="level">日志等级</param>
-        /// <param name="logInfo">日志内容</param>
-        /// <param name="ex">日志打印异常原因</param>
-        /// <param name="isDisplay">日志写入文件的同时是否显示在窗口，true需要界面带日志控件，false仅仅写入日志文件</param>
-        /// <param name="filePath">打印出日志的代码文件名</param>
-        /// <param name="memberName">日志在哪个函数打印</param>
-        /// <param name="lineNumber">日志在代码文件的哪一行</param>
-        private void AddLog(
-            MsgLevel level,
-            string logInfo,
-            Exception ex,
-            bool isDisplay = false,
-            [CallerFilePath] string filePath = "",
-            [CallerMemberName] string memberName = "",
-            [CallerLineNumber] int lineNumber = 0)
-        {
-            SingleLog singleLog = new SingleLog();
-            singleLog.MakeLog(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), $"{level}", logInfo, filePath, memberName, $"{lineNumber}", "    ", ex.Message);
-            // 写入本地文件Log
-            WriteLog(singleLog);
-            if (isDisplay)
-            {
-                // 显示到界面的Log
-                string logToShow = singleLog.LogTime + singleLog.Separator + singleLog.LogLevel + singleLog.Separator + singleLog.LogInfo + singleLog.Separator + singleLog.Ex;
-
-                LevelAndInfo levelAndInfo = new LevelAndInfo
-                {
-                    Level = level,
-                    Info = logToShow
-                };
-                LogAddEvent?.Invoke(null, levelAndInfo);
-            }
-        }
-
         private void ControlListBox(string logToShow, ListBox myListBox)
         {
             myListBox.Items.Add(logToShow);
@@ -229,37 +191,6 @@ namespace Logger
             StreamWriter mySW = new StreamWriter(runningLogFileName, true);
             mySW.WriteLine(msg);
             mySW.Close();
-        }
-
-        object myObject = new object();
-
-        private void Logger_Load(object sender, EventArgs e)
-        {
-            Task startIsLogFocus = new Task(() =>
-            {
-                while (IsLogFocus)
-                {
-                    if (LoggerClass.logQueue.Count > 0)
-                    {
-                        lock (myObject)
-                        {
-                            if (LoggerClass.logQueue.Count > 0)
-                            {
-                                LogInfo log = LoggerClass.logQueue.Dequeue();
-                                if (log.ex != null)
-                                {
-                                    AddLog(log.logLevel, log.message, log.ex);
-                                }
-                                else
-                                {
-                                    AddLog(log.logLevel, log.message);
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            startIsLogFocus.Start();
         }
 
         private void btnClear_Click(object sender, EventArgs e)

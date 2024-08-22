@@ -11,7 +11,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace YTVisionPro.Forms.ImageViewer
 {
-    public partial class FrmSingleImage : DockContent
+    internal partial class FrmSingleImage : DockContent
     {
         public FrmSingleImage()
         {

@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.ytPictrueBox1 = new Tets_ResizePictrueBox.YTPictrueBox();
+            this.ytPictrueBox1 = new YTVisionPro.Forms.ImageViewer.YTPictrueBox();
             this.SuspendLayout();
             // 
             // ytPictrueBox1
             // 
             this.ytPictrueBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ytPictrueBox1.DisplayImageType = Tets_ResizePictrueBox.DisplayImageType.RENDERIMG;
+            this.ytPictrueBox1.DisplayImageType = YTVisionPro.Forms.ImageViewer.DisplayImageType.RENDERIMG;
             this.ytPictrueBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ytPictrueBox1.Location = new System.Drawing.Point(0, 0);
             this.ytPictrueBox1.Name = "ytPictrueBox1";
@@ -60,6 +60,6 @@
 
         #endregion
 
-        private Tets_ResizePictrueBox.YTPictrueBox ytPictrueBox1;
+        private YTVisionPro.Forms.ImageViewer.YTPictrueBox ytPictrueBox1;
     }
 }

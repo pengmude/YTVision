@@ -74,14 +74,19 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HslCommunication">
+    <Reference Include="Basler.Pylon, Version=1.2.0.0, Culture=neutral, PublicKeyToken=e389355f398382ab, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\Basler.Pylon.dll</HintPath>
+    </Reference>
+    <Reference Include="HslCommunication, Version=10.2.2.0, Culture=neutral, PublicKeyToken=cdb2261fa039ed67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\HslCommunication.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="MvCameraControl.Net, Version=3.4.0.1, Culture=neutral, PublicKeyToken=52fddfb3f94be800, processorArchitecture=AMD64">
+    <Reference Include="MvCameraControl.Net, Version=3.4.0.1, Culture=neutral, PublicKeyToken=52fddfb3f94be800, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\MVDAlgorithmSDK\ReferencedAssemblies\Algorithms\MvCameraControl.Net.dll</HintPath>
+      <HintPath>dll\MvCameraControl.Net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -114,11 +119,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Forms\CameraAdd\CameraParamsControl.cs">
+    <Compile Include="Forms\CameraAdd\CameraParamsShowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\CameraAdd\CameraParamsControl.Designer.cs">
-      <DependentUpon>CameraParamsControl.cs</DependentUpon>
+    <Compile Include="Forms\CameraAdd\CameraParamsShowControl.Designer.cs">
+      <DependentUpon>CameraParamsShowControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CameraAdd\FrmCameraInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CameraAdd\FrmCameraInfo.Designer.cs">
+      <DependentUpon>FrmCameraInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\CameraAdd\FrmCameraListView.cs">
       <SubType>Form</SubType>
@@ -131,6 +142,12 @@
     </Compile>
     <Compile Include="Forms\CameraAdd\SingleCamera.Designer.cs">
       <DependentUpon>SingleCamera.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Helper\ContactUsFormForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Helper\ContactUsFormForm.Designer.cs">
+      <DependentUpon>ContactUsFormForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ImageViewer\FrmImageViewer.cs">
       <SubType>Form</SubType>
@@ -174,10 +191,10 @@
     <Compile Include="Forms\LightAdd\SingleLight.Designer.cs">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\MessageBox\YTMessageBox.cs">
+    <Compile Include="Forms\YTMessageBox\YTMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\MessageBox\YTMessageBox.Designer.cs">
+    <Compile Include="Forms\YTMessageBox\YTMessageBox.Designer.cs">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PLCAdd\EthernetParamsControl.cs">
@@ -210,14 +227,25 @@
     <Compile Include="Forms\PLCAdd\SinglePLC.Designer.cs">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </Compile>
+    <Compile Include="Hardware\Camera\CameraBasler.cs" />
     <Compile Include="Hardware\Camera\CameraHik.cs" />
-    <Compile Include="Hardware\Camera\CameraManager.cs" />
     <Compile Include="Hardware\Camera\ICamera.cs" />
     <Compile Include="Node\Camera\FormCameraTest.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Node\Camera\FormCameraTest.Designer.cs">
       <DependentUpon>FormCameraTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Camera\HiK\NodeCamera.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Camera\HiK\NodeParamCamera.cs" />
+    <Compile Include="Node\Camera\HiK\NodeResultCamera.cs" />
+    <Compile Include="Node\Camera\HiK\ParamFormCamera.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Camera\HiK\ParamFormCamera.Designer.cs">
+      <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\Light\PPX\NodeLight.cs">
@@ -242,16 +270,6 @@
     </Compile>
     <Compile Include="Forms\ProcessNew\ProcessEditPanel.Designer.cs">
       <DependentUpon>ProcessEditPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Node\NodeDemo\NodeParamDemo.cs" />
-    <Compile Include="Node\NodeDemo\NodeParamSetDemo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\NodeDemo\NodeParamSetDemo.Designer.cs">
-      <DependentUpon>NodeParamSetDemo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Node\NodeDemo\NodeDemo.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Node\NodeComboBox.cs">
       <SubType>UserControl</SubType>
@@ -325,7 +343,12 @@
     <Compile Include="Node\NodeBase.Designer.cs">
       <DependentUpon>NodeBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\NodeDemo\NodeResultDemo.cs" />
+    <Compile Include="Node\NodeSubscription.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\NodeSubscription.Designer.cs">
+      <DependentUpon>NodeSubscription.cs</DependentUpon>
+    </Compile>
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -336,14 +359,21 @@
     </Compile>
     <Compile Include="Solution.cs" />
     <Compile Include="YTUtils.cs" />
-    <EmbeddedResource Include="Forms\CameraAdd\CameraParamsControl.resx">
-      <DependentUpon>CameraParamsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\CameraAdd\CameraParamsShowControl.resx">
+      <DependentUpon>CameraParamsShowControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CameraAdd\FrmCameraInfo.resx">
+      <DependentUpon>FrmCameraInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraAdd\FrmCameraListView.resx">
       <DependentUpon>FrmCameraListView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraAdd\SingleCamera.resx">
       <DependentUpon>SingleCamera.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Helper\ContactUsFormForm.resx">
+      <DependentUpon>ContactUsFormForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ImageViewer\FrmImageViewer.resx">
       <DependentUpon>FrmImageViewer.cs</DependentUpon>
@@ -366,7 +396,7 @@
     <EmbeddedResource Include="Forms\LightAdd\SingleLight.resx">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\MessageBox\YTMessageBox.resx">
+    <EmbeddedResource Include="Forms\YTMessageBox\YTMessageBox.resx">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PLCAdd\EthernetParamsControl.resx">
@@ -387,6 +417,9 @@
     <EmbeddedResource Include="Node\Camera\FormCameraTest.resx">
       <DependentUpon>FormCameraTest.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\Camera\HiK\ParamFormCamera.resx">
+      <DependentUpon>ParamFormCamera.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\Light\PPX\ParamFormLight.resx">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
@@ -395,9 +428,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\ProcessEditPanel.resx">
       <DependentUpon>ProcessEditPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\NodeDemo\NodeParamSetDemo.resx">
-      <DependentUpon>NodeParamSetDemo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\NodeComboBox.resx">
       <DependentUpon>NodeComboBox.cs</DependentUpon>
@@ -431,6 +461,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\NodeBase.resx">
       <DependentUpon>NodeBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\NodeSubscription.resx">
+      <DependentUpon>NodeSubscription.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -475,6 +508,9 @@
     <Folder Include="Node\Tool\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="dll\Basler.Pylon.dll" />
+    <Content Include="dll\HslCommunication.dll" />
+    <Content Include="dll\MvCameraControl.Net.dll" />
     <Content Include="Icon\保存项目.png" />
     <Content Include="Icon\停止执行.png" />
     <None Include="Icon\光源.png" />

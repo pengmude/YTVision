@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Logger
 {
-    public partial class LogDetail : Form
+    internal partial class LogDetail : Form
     {
         string logMsg = string.Empty;
         public LogDetail(string inputMsg)

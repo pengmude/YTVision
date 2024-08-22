@@ -7,14 +7,13 @@ using System.Linq;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
-using YTVisionPro.Node.Light;
-using YTVisionPro.Node.Light.PPX;
-using YTVisionPro.Node.NodeDemo;
+using YTVisionPro.Node.Camera.HiK;
 using YTVisionPro.Node.NodeLight.PPX;
+using static YTVisionPro.Node.NodeComboBox;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
-    public partial class ProcessEditPanel : UserControl
+    internal partial class ProcessEditPanel : UserControl
     {
         /// <summary>
         /// 绑定的流程
@@ -45,7 +44,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void NodeEditPanel_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.Text))
+            if (e.Data.GetDataPresent(DragDataFormat))
             {
                 e.Effect = DragDropEffects.Move;
             }
@@ -62,42 +61,42 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void NodeEditPanel_DragDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.Text))
+            if (e.Data.GetDataPresent(DragDataFormat))
             {
-                string text = (string)e.Data.GetData(DataFormats.Text);
 
                 #region TODO:根据text创建对应类型的节点，并且赋予节点对应类型的参数设置窗口（给ParamForm赋值）
 
-                LightBrand lightBrand = new LightBrand();
-                if (text.Contains("磐鑫"))
-                {
-                    lightBrand = LightBrand.PPX;
-                    text = $"{Solution.NodeCount + 1}{text}";
-                    
-                    // 创建光源节点
-                    NodeLight node = new NodeLight(text, lightBrand);
-                    node.Size = new Size(this.Size.Width - 5, 42);
-                    node.Dock = DockStyle.Top;
-                    node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                    _stack.Push(node);
-                    Solution.Nodes.Add(node);
-                    _process.AddNode(node);
-                    UpdateNode();
-                }
-                else if (text.Contains("锐视"))
-                {
-                    lightBrand = LightBrand.RSEE;
-                    text = $"{Solution.NodeCount + 1}{text}";
+                DragData data = (DragData)e.Data.GetData(DragDataFormat);
 
-                    NodeLight node = new NodeLight(text, lightBrand);
-                    node.Size = new Size(this.Size.Width - 5, 42);
-                    node.Dock = DockStyle.Top;
-                    node.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                    _stack.Push(node);
-                    Solution.Nodes.Add(node);
-                    _process.AddNode(node);
-                    UpdateNode();
+                NodeBase node = null;
+                switch (data.NodeType)
+                {
+                    case NodeType.LightPPX:
+                        node = new NodeLight($"{Solution.NodeCount + 1}{data.Text}", _process, LightBrand.PPX);
+                        break;
+                    case NodeType.LightRsee:
+                        node = new NodeLight($"{Solution.NodeCount + 1}{data.Text}", _process, LightBrand.RSEE);
+                        break;
+                    case NodeType.Camera:
+                        node = new NodeCamera($"{Solution.NodeCount + 1}{data.Text}", _process);
+                        break;
+                    case NodeType.PLCRead:
+                        break;
+                    case NodeType.PLCWrite:
+                        break;
+                    case NodeType.AIHT:
+                        break;
+                    default:
+                        break;
                 }
+
+                node.Size = new Size(this.Size.Width - 5, 42);
+                node.Dock = DockStyle.Top;
+                NodeBase.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+                _stack.Push(node);
+                Solution.Nodes.Add(node);
+                _process.AddNode(node);
+                UpdateNode();
 
                 #endregion
 
@@ -128,9 +127,10 @@ namespace YTVisionPro.Forms.ProcessNew
                 else
                 {
                     Solution.Nodes.Remove(node);
-                    _process.Nodes.Remove(node);
+                    //_process.Nodes.Remove(node);
                 }
             }
+
             UpdateNode();
 
             //更新节点数量到界面

@@ -34,13 +34,12 @@ namespace YTVisionPro.Forms.ProcessNew
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.nodeComboBox5 = new YTVisionPro.Node.NodeComboBox();
-            this.nodeComboBox4 = new YTVisionPro.Node.NodeComboBox();
             this.nodeComboBox3 = new YTVisionPro.Node.NodeComboBox();
             this.nodeComboBox2 = new YTVisionPro.Node.NodeComboBox();
             this.nodeComboBox1 = new YTVisionPro.Node.NodeComboBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.buttonRemove = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.buttonAdd = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -66,7 +65,6 @@ namespace YTVisionPro.Forms.ProcessNew
             // 
             this.panel1.AutoScroll = true;
             this.panel1.Controls.Add(this.nodeComboBox5);
-            this.panel1.Controls.Add(this.nodeComboBox4);
             this.panel1.Controls.Add(this.nodeComboBox3);
             this.panel1.Controls.Add(this.nodeComboBox2);
             this.panel1.Controls.Add(this.nodeComboBox1);
@@ -81,20 +79,10 @@ namespace YTVisionPro.Forms.ProcessNew
             this.nodeComboBox5.AutoSize = true;
             this.nodeComboBox5.Dock = System.Windows.Forms.DockStyle.Top;
             this.nodeComboBox5.Expanded = true;
-            this.nodeComboBox5.Location = new System.Drawing.Point(0, 300);
+            this.nodeComboBox5.Location = new System.Drawing.Point(0, 225);
             this.nodeComboBox5.Name = "nodeComboBox5";
             this.nodeComboBox5.Size = new System.Drawing.Size(372, 75);
             this.nodeComboBox5.TabIndex = 4;
-            // 
-            // nodeComboBox4
-            // 
-            this.nodeComboBox4.AutoSize = true;
-            this.nodeComboBox4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nodeComboBox4.Expanded = true;
-            this.nodeComboBox4.Location = new System.Drawing.Point(0, 225);
-            this.nodeComboBox4.Name = "nodeComboBox4";
-            this.nodeComboBox4.Size = new System.Drawing.Size(372, 75);
-            this.nodeComboBox4.TabIndex = 3;
             // 
             // nodeComboBox3
             // 
@@ -146,16 +134,6 @@ namespace YTVisionPro.Forms.ProcessNew
             this.tableLayoutPanel2.Size = new System.Drawing.Size(879, 766);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
-            // tabControl1
-            // 
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.Name = "tabControl1";
-            this.tableLayoutPanel2.SetRowSpan(this.tabControl1, 5);
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(609, 760);
-            this.tabControl1.TabIndex = 1;
-            // 
             // buttonRemove
             // 
             this.buttonRemove.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -169,6 +147,16 @@ namespace YTVisionPro.Forms.ProcessNew
             this.buttonRemove.Text = "删除流程";
             this.buttonRemove.UseVisualStyleBackColor = true;
             this.buttonRemove.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tableLayoutPanel2.SetRowSpan(this.tabControl1, 5);
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(609, 760);
+            this.tabControl1.TabIndex = 1;
             // 
             // buttonAdd
             // 
@@ -217,6 +205,5 @@ namespace YTVisionPro.Forms.ProcessNew
         private NodeComboBox nodeComboBox3;
         private NodeComboBox nodeComboBox2;
         private NodeComboBox nodeComboBox5;
-        private NodeComboBox nodeComboBox4;
     }
 }

@@ -11,7 +11,7 @@ using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Forms.LightAdd
 {
-    public partial class LightParamsShowControl : UserControl
+    internal partial class LightParamsShowControl : UserControl
     {
         public LightParamsShowControl(LightParam parms)
         {

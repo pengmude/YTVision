@@ -12,7 +12,7 @@ using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro
 {
-    public partial class FormMain : Form
+    internal partial class FormMain : Form
     {
         /// <summary>
         /// 光源添加窗口

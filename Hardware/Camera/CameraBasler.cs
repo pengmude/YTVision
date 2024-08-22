@@ -10,30 +10,33 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basler.Pylon;
 using Logger;
+using Sunny.UI.Win32;
 
 namespace YTVisionPro.Hardware.Camera
 {
-    public class CameraBasler : ICamera
+    internal class CameraBasler : ICamera
     {
+        private int _devId;
+
         /// <summary>
         /// 单个Basler相机对象
         /// </summary>
-        private  Basler.Pylon.Camera _camera;
+        private Basler.Pylon.Camera _camera;
 
         /// <summary>
         /// 抓取图片事件
         /// </summary>
-        public event EventHandler<Bitmap> CameraGrabEvent;
+        public event EventHandler<Bitmap> PublishImageEvent;
 
         /// <summary>
         /// 相机是否打开
         /// </summary>
-        public bool IsOpen { get; set; }
+        public bool IsOpen => _camera.IsOpen;
 
         /// <summary>
         /// 品牌名称
         /// </summary>
-        public CameraBrand Brand { get; set ; } = CameraBrand.Camera;
+        public CameraBrand Brand { get; set; } = CameraBrand.Basler;
 
         /// <summary>
         /// 设备类型
@@ -43,17 +46,22 @@ namespace YTVisionPro.Hardware.Camera
         /// <summary>
         /// 设备ID
         /// </summary>
-        public int Id { get; set; }
+        public int ID { get => _devId; }
+
+        /// <summary>
+        /// 设备信息
+        /// </summary>
+        public ICameraInfo DevInfo { get; set; }
 
         /// <summary>
         /// 设备名称
         /// </summary>
-        public string DevName { get; set ; }
+        public string DevName => DevInfo[CameraInfoKey.ModelName];
 
         /// <summary>
         /// 用户定义名称
         /// </summary>
-        public string UserDefinedName { get ; set ; }
+        public string UserDefinedName { get; set; }
 
         /// <summary>
         /// 取流标记
@@ -61,23 +69,13 @@ namespace YTVisionPro.Hardware.Camera
         private bool OnGrabbing = false;
 
         /// <summary>
-        /// 图片传输事件
-        /// </summary>
-        public event EventHandler<Bitmap> sendImage;
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public CameraBasler()
-        {
-
-        }
-        /// <summary>
         /// 重载构造函数
         /// </summary>
         public CameraBasler(ICameraInfo info)
         {
+            DevInfo = info;
             _camera = new Basler.Pylon.Camera(info);
+            _devId = ++Solution.DeviceCount;
         }
 
         /// <summary>
@@ -86,11 +84,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public static List<ICameraInfo> FindCamera()
         {
-            List<ICameraInfo> CameraInfoLists = new List<ICameraInfo>();
-            // 枚举相机
-            CameraInfoLists = CameraFinder.Enumerate();
-
-            return CameraInfoLists;
+            return CameraFinder.Enumerate();
         }
 
         /// <summary>
@@ -107,7 +101,6 @@ namespace YTVisionPro.Hardware.Camera
 
                 // 相机取流事件绑定
                 _camera.StreamGrabber.ImageGrabbed += OnImageGrabbed;
-                IsOpen = true;
             }
             catch (Exception ex)
             {
@@ -130,7 +123,7 @@ namespace YTVisionPro.Hardware.Camera
             else
             {
                 _camera.Parameters[PLCamera.TriggerMode].SetValue(PLCamera.TriggerMode.Off);
-                
+
             }
         }
 
@@ -138,37 +131,56 @@ namespace YTVisionPro.Hardware.Camera
         /// 设置触发源
         /// </summary>
         /// <param name="triggerSource"></param>
-        public bool SetTriggerSource(TriggerSource triggerSource)
+        public void SetTriggerSource(TriggerSource triggerSource)
         {
-            try
+            switch (triggerSource)
             {
-                switch (triggerSource)
-                {
 
-                    case TriggerSource.SOFT:
-                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Software);
-                        break;
-                    case TriggerSource.LINE1:
-                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line1);
-                        break;
-                    case TriggerSource.LINE2:
-                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line2);
-                        break;
-                    case TriggerSource.LINE3:
-                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line3);
-                        break;
-                    case TriggerSource.LINE4:
-                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line4);
-                        break;
-                }
-                return true;
+                case TriggerSource.SOFT:
+                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Software);
+                    break;
+                case TriggerSource.LINE1:
+                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line1);
+                    break;
+                case TriggerSource.LINE2:
+                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line2);
+                    break;
+                case TriggerSource.LINE3:
+                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line3);
+                    break;
+                case TriggerSource.LINE4:
+                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line4);
+                    break;
             }
-            catch (Exception ex)
+        }
+
+        /// <summary>
+        /// 设置硬件触发时的触发沿
+        /// </summary>
+        /// <param name="triggerEdge"></param>
+        /// <returns></returns>
+        public void SetTriggerEdge(TriggerEdge triggerEdge)
+        {
+            switch (triggerEdge)
             {
-                MessageBox.Show(ex.Message);
-                return false;
+                case TriggerEdge.Rising:
+                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.RisingEdge);
+                    break;
+                case TriggerEdge.Falling:
+                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.FallingEdge);
+                    break;
+                case TriggerEdge.Any:
+                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.AnyEdge);
+                    break;
+                case TriggerEdge.Hight:
+                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.LevelHigh);
+                    break;
+                case TriggerEdge.Low:
+                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.LevelLow);
+                    break;
+                default:
+                    break;
             }
-
         }
 
         /// <summary>
@@ -234,7 +246,7 @@ namespace YTVisionPro.Hardware.Camera
                 bitmap.UnlockBits(bitmapData);
 
                 // 发布图片给调用方
-                CameraGrabEvent?.Invoke(this, bitmap);
+                PublishImageEvent?.Invoke(this, bitmap);
             }
         }
 
@@ -242,114 +254,61 @@ namespace YTVisionPro.Hardware.Camera
         /// 软触发一次
         /// </summary>
         /// <returns></returns>
-        public bool GrabOne()
+        public void GrabOne()
         {
-            try
-            {
-                _camera.ExecuteSoftwareTrigger();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}");
-                return false;
-            }
+            _camera.ExecuteSoftwareTrigger();
         }
 
         /// <summary>
         /// 开始取流
         /// </summary>
-        public bool StartGrabbing()
+        public void StartGrabbing()
         {
-            try
-            {
-                // 抓取每一帧图片处理之后继续抓取下一帧，抓取图片循环方式由相机内部自动管理
-                _camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
-                OnGrabbing = true;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
-
+            // 抓取每一帧图片处理之后继续抓取下一帧，抓取图片循环方式由相机内部自动管理
+            _camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
         }
 
         /// <summary>
         /// 关闭取流
         /// </summary>
-        public bool StopGrabbing()
+        public void StopGrabbing()
         {
-            try
-            {
-                _camera.StreamGrabber.Stop();
-                OnGrabbing = false;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
+            _camera.StreamGrabber.Stop();
         }
 
         /// <summary>
         /// 设置曝光
         /// </summary>
         /// <param name="exposureTime"></param>
-        public void SetExposureTime(string time)
+        public void SetExposureTime(float time)
         {
-            try
-            {
-                _camera.Parameters[PLCamera.ExposureTimeAbs].SetValue(int.Parse(time));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
+            _camera.Parameters[PLCamera.ExposureTimeAbs].SetValue(time);
         }
 
         /// <summary>
         /// 设置增益
         /// </summary>
         /// <param name="gain"></param>
-        public void SetGain(string gainValue)
+        public void SetGain(float gainValue)
         {
-            try
-            {
-                _camera.Parameters[PLCamera.GainRaw].SetValue(int.Parse(gainValue));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
+            _camera.Parameters[PLCamera.GainRaw].SetValue((long)gainValue);
         }
 
         /// <summary>
         /// 关闭相机
         /// </summary>
         /// <returns></returns>
-        public bool Close()
+        public void Close()
         {
-            try
-            {
-                if (OnGrabbing)
-                {
-                    StopGrabbing();
-                }
-                _camera.Close();
-                IsOpen = false;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
+            _camera.Close();
+        }
 
+        /// <summary>
+        /// 释放相机资源
+        /// </summary>
+        public void Dispose()
+        {
+            _camera?.Dispose();
         }
 
         /// <summary>

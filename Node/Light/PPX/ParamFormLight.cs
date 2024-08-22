@@ -6,7 +6,7 @@ using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Node.Light.PPX
 {
-    public partial class ParamFormLight : Form, INodeParamForm
+    internal partial class ParamFormLight : Form, INodeParamForm
     {
         /// <summary>
         /// 参数改变事件，设置完参数后触发，给节点订阅

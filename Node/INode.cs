@@ -11,7 +11,7 @@ namespace YTVisionPro.Node
     /// </summary>
     /// <typeparam name="TParam">节点参数</typeparam>
     /// <typeparam name="TResult">节点运行结果</typeparam>
-    public interface INode<TNodeParamForm, TNodeParam, TNodeResult>
+    internal interface INode<TNodeParamForm, TNodeParam, TNodeResult>
     {
         TNodeParamForm ParamForm { get; set; }
         /// <summary>
@@ -40,7 +40,7 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 节点参数界面接口类
     /// </summary>
-    public interface INodeParamForm
+    internal interface INodeParamForm
     {
         event EventHandler<INodeParam> OnNodeParamChange;
     }
@@ -48,12 +48,12 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 节点参数接口类
     /// </summary>
-    public interface INodeParam { }
+    internal interface INodeParam { }
 
     /// <summary>
     /// 节点运行结果接口类
     /// </summary>
-    public interface INodeResult 
+    internal interface INodeResult 
     {
         /// <summary>
         /// 节点运行是否成功
@@ -77,7 +77,7 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 节点运行状态码
     /// </summary>
-    public enum NodeRunStatusCode
+    internal enum NodeRunStatusCode
     {
         /// <summary>
         /// 成功
@@ -95,5 +95,36 @@ namespace YTVisionPro.Node
         /// 未知错误
         /// </summary>
         UNKNOW_ERROR
+    }
+
+    /// <summary>
+    /// 节点类型
+    /// </summary>
+    internal enum NodeType
+    {
+        /// <summary>
+        /// 磐鑫光源节点
+        /// </summary>
+        LightPPX,
+        /// <summary>
+        /// 锐视光源节点
+        /// </summary>
+        LightRsee,
+        /// <summary>
+        /// 相机节点
+        /// </summary>
+        Camera,
+        /// <summary>
+        /// 读取PLC寄存器节点
+        /// </summary>
+        PLCRead,
+        /// <summary>
+        /// 写入PLC寄存器节点
+        /// </summary>
+        PLCWrite,
+        /// <summary>
+        /// 汇图AI节点
+        /// </summary>
+        AIHT
     }
 }

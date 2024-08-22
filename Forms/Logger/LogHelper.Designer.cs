@@ -279,7 +279,6 @@ namespace Logger
             this.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Name = "LogHelper";
             this.Size = new System.Drawing.Size(676, 347);
-            this.Load += new System.EventHandler(this.Logger_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.pageAll.ResumeLayout(false);

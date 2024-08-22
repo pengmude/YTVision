@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YTVisionPro.Node.Light.PPX
 {
-    public class NodeResultLight : INodeResult
+    internal class NodeResultLight : INodeResult
     {
         /// <summary>
         /// 是否成功

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace YTVisionPro.Node
 {
-    public partial class NodeComboBox : UserControl
+    internal partial class NodeComboBox : UserControl
     {
         private bool _expanded = false;
         private static int _count = 0;
@@ -71,7 +71,7 @@ namespace YTVisionPro.Node
         /// 添加一项
         /// </summary>
         /// <param name="itemName"></param>
-        public void AddItem(string itemName)
+        public void AddItem(string itemName, NodeType nodeType)
         {
             Label label = new Label();
             label.BackColor = SystemColors.ButtonHighlight;
@@ -84,6 +84,7 @@ namespace YTVisionPro.Node
             label.MouseLeave += label1_MouseLeave;
             label.MouseDown += label1_MouseDown;
             label.MouseMove += label1_MouseMove;
+            label.Tag = nodeType;
             panel2.Controls.Add(label);
         }
 
@@ -121,7 +122,8 @@ namespace YTVisionPro.Node
             var label = (Label)sender;
             if (e.Button == MouseButtons.Left)
             {
-                DoDragDrop(label.Text, DragDropEffects.Move);
+                DataObject dragData = new DataObject(DragDataFormat, new DragData(label.Text, (NodeType)label.Tag));
+                DoDragDrop(dragData, DragDropEffects.Move);
             }
         }
 
@@ -132,10 +134,32 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void label1_MouseMove(object sender, MouseEventArgs e)
         {
+            var label = (Label)sender;
             if (e.Button == MouseButtons.Left && (e.Clicks > 0))
             {
-                DoDragDrop(this.Text, DragDropEffects.Move);
+                DataObject dragData = new DataObject(DragDataFormat, new DragData(label.Text, (NodeType)label.Tag));
+                DoDragDrop(dragData, DragDropEffects.Move);
             }
         }
+
+        /// <summary>
+        /// 拖拽的数据
+        /// </summary>
+        internal struct DragData
+        {
+            public string Text;
+            public NodeType NodeType;
+            public DragData(string text, NodeType type)
+            {
+                Text = text;
+                NodeType = type;
+            }
+        }
+
+        /// <summary>
+        /// 自定义的拖拽数据格式
+        /// </summary>
+        internal const string DragDataFormat = /*"CustomDragData"*/"DragData";
+
     }
 }

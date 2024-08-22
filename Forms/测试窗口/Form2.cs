@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Forms;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
@@ -8,7 +9,7 @@ using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro
 {
-    public partial class Form2 : Form
+    internal partial class Form2 : Form
     {
         public Form2()
         {
@@ -41,5 +42,29 @@ namespace YTVisionPro
         {
 
         }
+
+
+
+        /// <summary>
+        /// 不用异常
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button3_Click(object sender, EventArgs e)
+        {
+        }
+        /// <summary>
+        /// 使用异常
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button4_Click(object sender, EventArgs e)
+        {
+        }
+
+
+
     }
+
+
 }

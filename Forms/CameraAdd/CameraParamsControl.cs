@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Logger;
 using Sunny.UI;
+using MvCameraControl;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -30,7 +31,7 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <summary>
         /// 相机设备信息列表
         /// </summary>
-        List<MyCamera.MV_CC_DEVICE_INFO> _deviceInfoList;
+        List<IDeviceInfo> _deviceInfoList;
 
         public CameraParamsControl()
         {
@@ -48,21 +49,32 @@ namespace YTVisionPro.Forms.CameraAdd
             //获取相机名称 
             for (int i = 0; i < _deviceInfoList.Count; i++)
             {
-                MyCamera.MV_CC_DEVICE_INFO device = _deviceInfoList[i];
-                //网口相机
-                if (device.nTLayerType == MyCamera.MV_GIGE_DEVICE)
+                IDeviceInfo deviceInfo = _deviceInfoList[i];
+
+                if (deviceInfo.UserDefinedName != "")
                 {
-                    MyCamera.MV_GIGE_DEVICE_INFO gigeInfo = (MyCamera.MV_GIGE_DEVICE_INFO)MyCamera.ByteToStruct(device.SpecialInfo.stGigEInfo, typeof(MyCamera.MV_GIGE_DEVICE_INFO));
-                    string camName = gigeInfo.chModelName + "(" + gigeInfo.chSerialNumber + ")";
-                    Cameralist.Add(camName);
+                    Cameralist.Add(deviceInfo.TLayerType.ToString() + ": " + deviceInfo.UserDefinedName + " (" + deviceInfo.SerialNumber + ")");
                 }
-                //usb接口相机
-                else if (device.nTLayerType == MyCamera.MV_USB_DEVICE)
+                else
                 {
-                    MyCamera.MV_USB3_DEVICE_INFO usbInfo = (MyCamera.MV_USB3_DEVICE_INFO)MyCamera.ByteToStruct(device.SpecialInfo.stUsb3VInfo, typeof(MyCamera.MV_USB3_DEVICE_INFO));
-                    string camName = usbInfo.chModelName + "(" + usbInfo.chSerialNumber + ")";
-                    Cameralist.Add(camName);
+                    Cameralist.Add(deviceInfo.TLayerType.ToString() + ": " + deviceInfo.ManufacturerName + " " + deviceInfo.ModelName + " (" + deviceInfo.SerialNumber + ")");
                 }
+
+
+                ////网口相机
+                //if (device.nTLayerType == MyCamera.MV_GIGE_DEVICE)
+                //{
+                //    MyCamera.MV_GIGE_DEVICE_INFO gigeInfo = (MyCamera.MV_GIGE_DEVICE_INFO)MyCamera.ByteToStruct(device.SpecialInfo.stGigEInfo, typeof(MyCamera.MV_GIGE_DEVICE_INFO));
+                //    string camName = gigeInfo.chModelName + "(" + gigeInfo.chSerialNumber + ")";
+                //    Cameralist.Add(camName);
+                //}
+                ////usb接口相机
+                //else if (device.nTLayerType == MyCamera.MV_USB_DEVICE)
+                //{
+                //    MyCamera.MV_USB3_DEVICE_INFO usbInfo = (MyCamera.MV_USB3_DEVICE_INFO)MyCamera.ByteToStruct(device.SpecialInfo.stUsb3VInfo, typeof(MyCamera.MV_USB3_DEVICE_INFO));
+                //    string camName = usbInfo.chModelName + "(" + usbInfo.chSerialNumber + ")";
+                //    Cameralist.Add(camName);
+                //}
             }
 
             this.comboBox1.Items.Clear();

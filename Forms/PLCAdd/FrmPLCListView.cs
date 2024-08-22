@@ -12,7 +12,7 @@ using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
 {
-    public partial class FrmPLCListView : Form
+    internal partial class FrmPLCListView : Form
     {
         FrmPLCNew _frmAdd = new FrmPLCNew();
 

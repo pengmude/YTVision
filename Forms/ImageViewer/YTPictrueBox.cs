@@ -3,9 +3,9 @@ using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Tets_ResizePictrueBox
+namespace YTVisionPro.Forms.ImageViewer
 {
-    public partial class YTPictrueBox : UserControl
+    internal partial class YTPictrueBox : UserControl
     {
         Point _srcDragLoc = new Point();                        // 图像拖动前鼠标按下的位置
         bool _isMove = false;                                       // 是否拖拽移动
@@ -308,7 +308,7 @@ namespace Tets_ResizePictrueBox
                 try
                 {
                     pictureBox1.Image.Save(saveFileDialog1.FileName);
-                    YTMessageBox yTMessageBox = new YTMessageBox("保存图像成功！");
+                    YTMessageBox.YTMessageBox yTMessageBox = new YTMessageBox.YTMessageBox("保存图像成功！");
                     yTMessageBox.Show();
                 }
                 catch (Exception ex)

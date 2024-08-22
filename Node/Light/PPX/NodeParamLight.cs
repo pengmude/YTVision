@@ -7,7 +7,7 @@ using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Node.Light.PPX
 {
-    public class NodeParamLight : INodeParam
+    internal class NodeParamLight : INodeParam
     {
         public NodeParamLight(ILight light, int brightness, bool open)
         {

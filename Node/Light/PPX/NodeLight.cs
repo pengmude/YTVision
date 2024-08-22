@@ -9,17 +9,16 @@ using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.Light.PPX;
-using YTVisionPro.Node.NodeDemo;
 
 namespace YTVisionPro.Node.NodeLight.PPX
 {
-    public class NodeLight : NodeBase
+    internal class NodeLight : NodeBase
     {
         /// <summary>
         /// 创建一个指定名称的节点
         /// </summary>
         /// <param name="nodeText"></param>
-        public NodeLight(string nodeText, LightBrand brand) : base(new ParamFormLight(brand))
+        public NodeLight(string nodeText, Process process, LightBrand brand) : base(process, new ParamFormLight(brand))
         {
             SetNodeText(nodeText);
             Result = new NodeResultLight();

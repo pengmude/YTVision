@@ -1,16 +1,18 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace YTVisionPro.Node
 {
-    public partial class NodeBase : UserControl
+    internal partial class NodeBase : UserControl
     {
         #region 节点界面的操作
 
         private int _id = 0;
         private bool _active = true;
         private bool _selected = false;
+        private Process _process; // 节点所属流程
 
         /// <summary>
         /// 因为是控件类，提供无参构造函数让设计器可以显示出来
@@ -26,11 +28,12 @@ namespace YTVisionPro.Node
         /// 实际只使用这个有参构造函数创建控件
         /// </summary>
         /// <param name="paramForm"></param>
-        public NodeBase(INodeParamForm paramForm)
+        public NodeBase(Process process, INodeParamForm paramForm = null)
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
             _id = ++Solution.NodeCount;
+            _process = process;
             ParamForm = paramForm;
             ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
         }
@@ -44,6 +47,7 @@ namespace YTVisionPro.Node
         private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
         {
             Params = e;
+            MessageBox.Show("基类");
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 删除节点事件
         /// </summary>
-        public event EventHandler<int> NodeDeletedEvent;
+        public static event EventHandler<int> NodeDeletedEvent;
 
         /// <summary>
         /// 设置节点文本
@@ -103,8 +107,11 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(Selected)
+            if (Selected)
+            {
+                _process.Nodes.Remove(this);
                 NodeDeletedEvent.Invoke(this, ID);
+            }
         }
 
         /// <summary>

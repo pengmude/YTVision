@@ -8,29 +8,91 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Basler.Pylon;
+using YTVisionPro.Node.Light.PPX;
+using YTVisionPro.Node.NodeLight.PPX;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
-    public partial class FrmCameraListView : Form
+    internal partial class FrmCameraListView : Form
     {
+        /// <summary>
+        /// 设备信息弹窗
+        /// </summary>
+        FrmCameraInfo _infoWnd = new FrmCameraInfo();
+
         public FrmCameraListView()
         {
             InitializeComponent();
-            SingleCamera.SingleCameraSelectedChanged += SingleCamera_SingleCameraSelectedChanged;
+            FrmCameraInfo.AddCameraDevEvent += FrmCameraInfo_AddCameraDevEvent;
+            SingleCamera.SelectedChange += SingleCamera_SingleCameraSelectedChanged;
+            SingleCamera.SingleCameraRemoveEvent += SingleCamera_SingleCameraRemoveEvent;
         }
 
-        private void SingleCamera_SingleCameraSelectedChanged(object sender, EventArgs e)
+        /// <summary>
+        /// 移除一个相机
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SingleCamera_SingleCameraRemoveEvent(object sender, SingleCamera e)
         {
-            foreach (var control in flowLayoutPanel1.Controls)
+            // TODO: 移除设备需要判断当前是否有节点使用该设备
+            //foreach (var camera in Solution.Instance.CameraDevices)
+            //{
+            //    foreach (var node in Solution.Nodes)
+            //    {
+            //        if (node is NodeLight lightNode
+            //            && lightNode.Params is NodeParamLight paramLight
+            //            && camera.UserDefinedName == paramLight.Light.UserDefinedName)
+            //        {
+            //            MessageBox.Show("当前方案的节点正在使用该光源，无法删除光源！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //            return;
+            //        }
+            //    }
+            //}
+
+            //移除的是被选中的则要清除它参数显示控件
+            if (e.IsSelected)
+                panel1.Controls.Remove(e.CameraParamsShowControl);
+            //然后移除掉方案中的全局相机并释放相机内存
+            Solution.Instance.Devices.Remove(e.Camera);
+            e.Camera.Dispose();
+            //最后移除掉光源控件
+            flowLayoutPanel1.Controls.Remove(e);
+        }
+
+        /// <summary>
+        /// 处理相机设备添加事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FrmCameraInfo_AddCameraDevEvent(object sender, CameraParam e)
+        {
+            try
             {
-                if (control is SingleCamera cameraInfo)
-                {
-                    panel1.Controls.Clear();
-                    cameraInfo.CameraParamsControl.Dock = DockStyle.Fill;
-                    cameraInfo.CameraParamsControl.Show();
-                    panel1.Controls.Add(cameraInfo.CameraParamsControl);
-                }
+                SingleCamera singleCamera = new SingleCamera(e);
+                singleCamera.Anchor = AnchorStyles.Left;
+                singleCamera.Anchor = AnchorStyles.Right;
+                flowLayoutPanel1.Controls.Add(singleCamera);
+                singleCamera.CameraParamsShowControl.Dock = DockStyle.Fill;
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("添加失败！原因：" + ex.Message);
+            }
+        }
+        
+        /// <summary>
+        /// 处理选中事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SingleCamera_SingleCameraSelectedChanged(object sender, SingleCamera e)
+        {
+            panel1.Controls.Clear();
+            e.CameraParamsShowControl.Dock = DockStyle.Fill;
+            e.CameraParamsShowControl.Show();
+            panel1.Controls.Add(e.CameraParamsShowControl);
         }
 
         /// <summary>
@@ -40,13 +102,7 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            SingleCamera singleCamera = new SingleCamera();
-            singleCamera.Anchor = AnchorStyles.Left;
-            singleCamera.Anchor = AnchorStyles.Right;
-            flowLayoutPanel1.Controls.Add(singleCamera);
-            singleCamera.Show();
-            singleCamera.CameraParamsControl.Dock = DockStyle.Fill;
-            panel1.Controls.Add(singleCamera.CameraParamsControl);
+            _infoWnd.ShowDialog();
         }
 
         /// <summary>

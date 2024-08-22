@@ -4,7 +4,7 @@ using YTVisionPro.Forms.LightAdd;
 
 namespace YTVisionPro.Hardware.Light
 {
-    public interface ILight : IDevice
+    internal interface ILight : IDevice
     {
         LightParam LightParam { get; set; }
 

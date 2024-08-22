@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace YTVisionPro.Forms.测试窗口
 {
-    public partial class Form4 : Form
+    internal partial class Form4 : Form
     {
         Stack<Control> stack = new Stack<Control>();
         public Form4()
@@ -15,7 +15,7 @@ namespace YTVisionPro.Forms.测试窗口
 
         private void button1_Click(object sender, EventArgs e)
         {
-            nodePreviewControl1.AddItem(textBox7.Text);
+            nodePreviewControl1.AddItem(textBox7.Text, Node.NodeType.Camera);
         }
 
         private void panel1_DragEnter(object sender, DragEventArgs e)

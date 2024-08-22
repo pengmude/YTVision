@@ -25,7 +25,7 @@ namespace YTVisionPro.Forms.LightAdd
     /// <summary>
     /// 单个光源控件
     /// </summary>
-    public partial class SingleLight : UserControl
+    internal partial class SingleLight : UserControl
     {
         /// <summary>
         /// 光源对象
@@ -50,11 +50,11 @@ namespace YTVisionPro.Forms.LightAdd
         /// <summary>
         /// 移除当前实例
         /// </summary>
-        public static event EventHandler<SingleLight> SinglePLCRemoveEvent;
+        public static event EventHandler<SingleLight> SingleLightRemoveEvent;
         /// <summary>
         /// 光源参数显示控件
         /// </summary>
-        public LightParamsShowControl lightParamsShowControl;
+        public LightParamsShowControl LightParamsShowControl;
         /// <summary>
         /// 保存所有的当前类实例
         /// </summary>
@@ -72,7 +72,7 @@ namespace YTVisionPro.Forms.LightAdd
                 Light = new LightPPX(Parms);
                 Solution.Instance.AddDevice(Light);
                 //给光源绑定参数界面
-                lightParamsShowControl = new LightParamsShowControl(Parms);
+                LightParamsShowControl = new LightParamsShowControl(Parms);
                 // 保存所有的实例
                 SingleLights.Add(this);
             }
@@ -167,7 +167,7 @@ namespace YTVisionPro.Forms.LightAdd
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SingleLights.Remove(this);
-            SinglePLCRemoveEvent?.Invoke(this, this);
+            SingleLightRemoveEvent?.Invoke(this, this);
         }
     }
 }

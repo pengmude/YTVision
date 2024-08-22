@@ -7,7 +7,7 @@ namespace YTVisionPro.Forms.PLCAdd
     /// <summary>
     /// PLC串口参数显示控件
     /// </summary>
-    public partial class SerialParamsControl : UserControl
+    internal partial class SerialParamsControl : UserControl
     {
         public SerialParamsControl(PLCParms parms)
         {

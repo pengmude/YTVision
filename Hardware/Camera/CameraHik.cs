@@ -1,31 +1,30 @@
 ﻿using MvCamCtrl.NET;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sunny.UI.Win32;
-using Sunny.UI;
 using Logger;
-using Newtonsoft.Json.Linq;
+using MvCameraControl;
+using Sunny.UI.Win32;
 
 namespace YTVisionPro.Hardware.Camera
 {
     /// <summary>
     /// 海康相机类
     /// </summary>
-    public class CameraHik : ICamera
+    internal class CameraHik : ICamera
     {
-        [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
-        public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
+        /// <summary>
+        /// 保存已创建的海康相机对象，便于相机对象数量为0时，自动调用SDK反初始化
+        /// </summary>
+        private List<MvCameraControl.IDevice> _hikList = new List<MvCameraControl.IDevice>();
 
-        MyCamera.cbOutputExdelegate ImageCallback;
+        /// <summary>
+        /// SDK初始化标记
+        /// </summary>
+        private static int _initSDKFlag = MvError.MV_E_RESOURCE;
+
         /// <summary>
         /// 抓取图片事件
         /// </summary>
@@ -34,63 +33,17 @@ namespace YTVisionPro.Hardware.Camera
         /// <summary>
         /// 单个海康相机信息
         /// </summary>
-        public MyCamera.MV_CC_DEVICE_INFO DeviceInfo;
-
-        /// <summary>
-        /// 单个海康相机对象
-        /// </summary>
-        private MyCamera HKMyCamera = new MyCamera();
+        private MvCameraControl.IDevice device = null;
 
         /// <summary>
         /// 取流标记
         /// </summary>
-        public bool OnGrabbing = false;
-
-        // 类实例个数
-        private static int _newCount = 0;
-        // 设备id
-        private int _devId;
-
-        /// <summary>
-        /// 设备ID
-        /// </summary>
-        public int ID { get => _devId; }
-
-        public CameraHik() 
-        {
-            _devId = ++Solution.DeviceCount;
-            UserDefinedName = $"海康相机{++_newCount}";
-        }
-
-        /// <summary>
-        /// 相机曝光
-        /// </summary>
-        public int ExposureTime { get; set; }
-
-        /// <summary>
-        /// 相机增益
-        /// </summary>
-        public int Gain { get; set; }
-
-        /// <summary>
-        /// 相机名
-        /// </summary>
-        public string CameraName {  get; set; }
+        private bool OnGrabbing = false;
 
         /// <summary>
         /// 设备是否启用
         /// </summary>
-        public bool IsOpen { get; set; }
-
-        /// <summary>
-        /// 硬件硬件名称
-        /// </summary>
-        public string DevName { get => _getDevName(); }
-
-        /// <summary>
-        /// 用户自定义设备名
-        /// </summary>
-        public string UserDefinedName { get; set; }
+        public bool IsOpen => device.IsConnected;
 
         /// <summary>
         /// 设备类型
@@ -98,62 +51,108 @@ namespace YTVisionPro.Hardware.Camera
         public DevType DevType { get; } = DevType.CAMERA;
 
         /// <summary>
-        /// 相机取流得到的一帧图像
+        /// 相机ID
         /// </summary>
-        public Bitmap Bitmap { get; private set; }
-       
-        /// <summary>
-        /// 获取设备名
-        /// </summary>
-        /// <returns></returns>
-        private string _getDevName()
-        {
-            string camName = UserDefinedName;
-            //网口相机
-            if (DeviceInfo.nTLayerType == MyCamera.MV_GIGE_DEVICE)
-            {
-                MyCamera.MV_GIGE_DEVICE_INFO gigeInfo = (MyCamera.MV_GIGE_DEVICE_INFO)MyCamera.ByteToStruct(DeviceInfo.SpecialInfo.stGigEInfo, typeof(MyCamera.MV_GIGE_DEVICE_INFO));
-                camName = gigeInfo.chModelName + "(" + gigeInfo.chSerialNumber + ")";
+        public int ID { get; set; }
 
-            }
-            //usb接口相机
-            else if (DeviceInfo.nTLayerType == MyCamera.MV_USB_DEVICE)
+        /// <summary>
+        /// 相机品牌
+        /// </summary>
+        public CameraBrand Brand { get; set; } = CameraBrand.HiKVision;
+
+        /// <summary>
+        /// 设备信息
+        /// </summary>
+        public IDeviceInfo DevInfo { get; set; }
+
+        /// <summary>
+        /// 设备名称
+        /// </summary>
+        public string DevName => GetDevName(DevInfo);
+
+        /// <summary>
+        /// 根据设备信息获取设备名称
+        /// </summary>
+        /// <param name="cameraDevInfo"></param>
+        /// <returns></returns>
+        public static string GetDevName(IDeviceInfo cameraDevInfo)
+        {
+            string name = "";
+            if (cameraDevInfo.UserDefinedName != "")
             {
-                MyCamera.MV_USB3_DEVICE_INFO usbInfo = (MyCamera.MV_USB3_DEVICE_INFO)MyCamera.ByteToStruct(DeviceInfo.SpecialInfo.stUsb3VInfo, typeof(MyCamera.MV_USB3_DEVICE_INFO));
-                camName = usbInfo.chModelName + "(" + usbInfo.chSerialNumber + ")";
+                name = (cameraDevInfo.TLayerType.ToString() + ": " + cameraDevInfo.UserDefinedName + " (" + cameraDevInfo.SerialNumber + ")");
             }
-            return camName;
+            else
+            {
+                name = (cameraDevInfo.TLayerType.ToString() + ": " + cameraDevInfo.ManufacturerName + " " + cameraDevInfo.ModelName + " (" + cameraDevInfo.SerialNumber + ")");
+            }
+            return name;
+        }
+
+        /// <summary>
+        /// 用户定义名称
+        /// </summary>
+        public string UserDefinedName { get; set; }
+
+        /// <summary>
+        /// 使用相机信息构造相机对象
+        /// </summary>
+        /// <param name="DeviceInfo"></param>
+        public CameraHik(IDeviceInfo devInfo)
+        {
+            try
+            {
+                InitSDK();
+                device = DeviceFactory.CreateDevice(devInfo);
+                DevInfo = devInfo;
+                _hikList.Add(device); 
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Fatal, ex.Message, true);
+                return;
+            }
+            finally
+            {
+                if (device != null)
+                {
+                    Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 初始化SDK
+        /// </summary>
+        private static void InitSDK()
+        {
+            if(_initSDKFlag != MvError.MV_OK)
+                SDKSystem.Initialize();
+        }
+
+        /// <summary>
+        /// 反初始化SDK
+        /// </summary>
+        private static void Finalize()
+        {
+            SDKSystem.Finalize();
         }
 
         /// <summary>
         /// 查找相机
         /// </summary>
         /// <returns></returns>
-
-        public static List<MyCamera.MV_CC_DEVICE_INFO> FindCamera()
+        public static List<IDeviceInfo> FindCamera()
         {
-            int nRet;
-            MyCamera.MV_CC_DEVICE_INFO_LIST m_pDeviceList = new MyCamera.MV_CC_DEVICE_INFO_LIST();
-            List<MyCamera.MV_CC_DEVICE_INFO> mV_CC_DEVICE_INFOs = new List<MyCamera.MV_CC_DEVICE_INFO>();
             GC.Collect();
-            nRet = MyCamera.MV_CC_EnumDevices_NET(MyCamera.MV_GIGE_DEVICE | MyCamera.MV_USB_DEVICE, ref m_pDeviceList);
-
-            //获取相机名称 
-            for (int i = 0; i < m_pDeviceList.nDeviceNum; i++)
-            {
-                MyCamera.MV_CC_DEVICE_INFO device = (MyCamera.MV_CC_DEVICE_INFO)Marshal.PtrToStructure(m_pDeviceList.pDeviceInfo[i], typeof(MyCamera.MV_CC_DEVICE_INFO));
-                mV_CC_DEVICE_INFOs.Add(device);
-            }
-            if (0 != nRet)
+            int nRet;
+            List<IDeviceInfo> infoList = null;
+            nRet = DeviceEnumerator.EnumDevicesEx(DeviceTLayerType.MvGigEDevice | DeviceTLayerType.MvUsbDevice, "Hikrobot", out infoList);
+            if (MvError.MV_OK != nRet)
             {
                 LogHelper.AddLog(MsgLevel.Exception, "获取相机列表失败", true);
             }
-            if (m_pDeviceList.nDeviceNum == 0)
-            {
-                LogHelper.AddLog(MsgLevel.Info, "未找到USB或者网口相机", true);
-            }
-            LogHelper.AddLog(MsgLevel.Info, "相机枚举成功", true);
-            return mV_CC_DEVICE_INFOs;
+            return infoList;
         }
 
         /// <summary>
@@ -165,29 +164,20 @@ namespace YTVisionPro.Hardware.Camera
         {
             int nRet = 0;
             bool flag = false;
-            // ch:打开设备 | en:Open device
-            if (null == HKMyCamera)
-            {
-                HKMyCamera = new MyCamera();
-                if (null == HKMyCamera)
-                    throw new Exception("创建海康相机对象失败！");
-            }
             //循环执行10次，用于连接相机
             for (int i = 0; i < 10; i++)
             {
-                nRet = HKMyCamera.MV_CC_CreateDevice_NET(ref DeviceInfo);
-
-                if (MyCamera.MV_OK != nRet)
+                if (MvError.MV_OK != nRet)
                 {
                     Thread.Sleep(1);
                     continue;
                 }
 
-                nRet = HKMyCamera.MV_CC_OpenDevice_NET();
+                nRet = device.Open();
 
                 if (MyCamera.MV_OK != nRet)
                 {
-                    HKMyCamera.MV_CC_DestroyDevice_NET();
+                    device.Dispose();
                     Thread.Sleep(5);
                     continue;
                 }
@@ -198,120 +188,64 @@ namespace YTVisionPro.Hardware.Camera
                 }
             }
             if (!flag)
-                throw new Exception("打开相机失败！");
-
-            // ch:探测网络最佳包大小(只对GigE相机有效) 
-            if (DeviceInfo.nTLayerType == MyCamera.MV_GIGE_DEVICE)
             {
-                int nPacketSize = HKMyCamera.MV_CC_GetOptimalPacketSize_NET();
-
-                if (nPacketSize > 0)
-                {
-                    nRet = HKMyCamera.MV_CC_SetIntValueEx_NET("GevSCPSPacketSize", (uint)nPacketSize);
-
-                    if (nRet != MyCamera.MV_OK)
-                        throw new Exception("打开相机失败：设置网络最佳包大小失败！");
-                }
-                else
-                    throw new Exception("打开相机失败：探测网络最佳包大小为0！");
+                LogHelper.AddLog(MsgLevel.Fatal, "打开相机失败！", true);
+                MessageBox.Show("打开相机失败！");
+                return false;
             }
 
-            //注册图像回调函数
-            ImageCallback = new MyCamera.cbOutputExdelegate(Bit_Image);
-            nRet = HKMyCamera.MV_CC_RegisterImageCallBackEx_NET(ImageCallback, IntPtr.Zero);
+            //ch: 判断是否为gige设备 | en: Determine whether it is a GigE device
+            if (device is IGigEDevice)
+            {
+                //ch: 转换为gigE设备 | en: Convert to Gige device
+                IGigEDevice gigEDevice = device as IGigEDevice;
 
-            if (MyCamera.MV_OK != nRet)
-                throw new Exception("打开相机失败：注册图像回调函数失败！");
-            LogHelper.AddLog(MsgLevel.Info, $"打开相机{UserDefinedName}成功！", true);
-            IsOpen = true;
+                // ch:探测网络最佳包大小(只对GigE相机有效) | en:Detection network optimal package size(It only works for the GigE camera)
+                int optionPacketSize;
+                nRet = gigEDevice.GetOptimalPacketSize(out optionPacketSize);
+                if (nRet != MvError.MV_OK)
+                {
+                    Console.WriteLine("Warning: Get Packet Size failed!", nRet);
+                }
+                else
+                {
+                    nRet = device.Parameters.SetIntValue("GevSCPSPacketSize", (long)optionPacketSize);
+                    if (nRet != MvError.MV_OK)
+                    {
+                        Console.WriteLine("Warning: Set Packet Size failed!", nRet);
+                    }
+                }
+            }
+            // 连续模式
+            device.Parameters.SetEnumValueByString("AcquisitionMode", "Continuous");
+            // 关闭触发模式
+            device.Parameters.SetEnumValue("TriggerMode", 0);
+            // 设置适合缓存节点数量
+            device.StreamGrabber.SetImageNodeNum(5);
+            // 注册回调函数
+            device.StreamGrabber.FrameGrabedEvent += FrameGrabedEventHandler;
             return true;
         }
 
-        public void Bit_Image(IntPtr pData, ref MyCamera.MV_FRAME_OUT_INFO_EX pFrameInfo, IntPtr pUser)
+        /// <summary>
+        /// 取流回调函数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void FrameGrabedEventHandler(object sender, FrameGrabbedEventArgs e)
         {
-            int nRet;
-            IntPtr pImageBuf = IntPtr.Zero;
-            uint nChannelNum = 0;
-            PixelFormat m_bitmapPixelFormat = PixelFormat.Undefined;
-            MyCamera.MvGvspPixelType enType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Undefined;
-
-            if (IsColorPixelFormat(pFrameInfo.enPixelType))
-            {
-                enType = MyCamera.MvGvspPixelType.PixelType_Gvsp_RGB8_Packed;
-                m_bitmapPixelFormat = PixelFormat.Format24bppRgb;
-                nChannelNum = 3;
-            }
-            else if (IsMonoPixelFormat(pFrameInfo.enPixelType))
-            {
-                enType = MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8;
-                m_bitmapPixelFormat = PixelFormat.Format8bppIndexed;
-                nChannelNum = 1;
-            }
-            else
-            {
-                LogHelper.AddLog(MsgLevel.Warn, $"采集图像格式错误，不为彩色和黑白图像", true);
-                return;
-            }
-            if (IntPtr.Zero == pImageBuf)
-            {
-                pImageBuf = Marshal.AllocHGlobal((int)(pFrameInfo.nWidth * pFrameInfo.nHeight * nChannelNum));
-                if (IntPtr.Zero == pImageBuf)
-                {
-                    LogHelper.AddLog(MsgLevel.Exception, $"图像采集为空", true);
-                    return;
-                }
-            }
-
-            MyCamera.MV_PIXEL_CONVERT_PARAM stPixelConvertParam = new MyCamera.MV_PIXEL_CONVERT_PARAM();
-
-            stPixelConvertParam.pSrcData = pData;//源数据
-            stPixelConvertParam.nWidth = pFrameInfo.nWidth;//图像宽度
-            stPixelConvertParam.nHeight = pFrameInfo.nHeight;//图像高度
-            stPixelConvertParam.enSrcPixelType = pFrameInfo.enPixelType;//源数据的格式
-            stPixelConvertParam.nSrcDataLen = pFrameInfo.nFrameLen;
-
-            stPixelConvertParam.nDstBufferSize = (uint)(pFrameInfo.nWidth * pFrameInfo.nHeight * nChannelNum);
-            stPixelConvertParam.pDstBuffer = pImageBuf;//转换后的数据
-            stPixelConvertParam.enDstPixelType = enType;
-            nRet = HKMyCamera.MV_CC_ConvertPixelType_NET(ref stPixelConvertParam);//格式转换
-            if (MyCamera.MV_OK != nRet)
-            {
-                LogHelper.AddLog(MsgLevel.Exception, $"图像转换异常", true);
-                return;
-            }
-
-            Bitmap = new Bitmap((Int32)stPixelConvertParam.nWidth, (Int32)stPixelConvertParam.nHeight, m_bitmapPixelFormat);
-            BitmapData bitmapData = Bitmap.LockBits(new Rectangle(0, 0, stPixelConvertParam.nWidth, stPixelConvertParam.nHeight), ImageLockMode.ReadWrite, Bitmap.PixelFormat);
-            CopyMemory(bitmapData.Scan0, stPixelConvertParam.pDstBuffer, (UInt32)(bitmapData.Stride * Bitmap.Height));
-            Bitmap.UnlockBits(bitmapData);
-
-            //通过设置调色板从伪彩改为灰度
-            if (nChannelNum == 1)
-            {
-                var pal = Bitmap.Palette;
-                for (int j = 0; j < 256; j++)
-                    pal.Entries[j] = System.Drawing.Color.FromArgb(j, j, j);
-                Bitmap.Palette = pal;
-            }
-            //发布图片给调用方
-            CameraGrabEvent?.Invoke(this, Bitmap);
+            // 发布图片给调用方
+            CameraGrabEvent?.Invoke(this, e.FrameOut.Image.ToBitmap());
         }
 
         /// <summary>
         /// 开始取流
         /// </summary>
         /// <returns></returns>
-        public bool StartGrabbing()
+        public void StartGrabbing()
         {
-            // ch:开始采集 
-            int nRet = HKMyCamera.MV_CC_StartGrabbing_NET();
-            if (MyCamera.MV_OK != nRet)
-            {
-                throw new Exception($"相机{UserDefinedName}取流失败！");
-            }
-            LogHelper.AddLog(MsgLevel.Fatal, $"相机{UserDefinedName}取流成功！", true);
-            OnGrabbing = true;
-            return true;
+            device.StreamGrabber.StartGrabbing();
         }
 
         /// <summary>
@@ -320,19 +254,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="isTrigger"></param>
         public void SetTriggerMode(bool isTrigger)
         {
-            int ret;
-            if (isTrigger)
-            {
-                ret = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerMode", (uint)MyCamera.MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_ON);
-                if (ret != MyCamera.MV_OK)
-                    throw new Exception("打开海康相机触发模式失败！");
-            }
-            else
-            {
-                ret = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerMode", (uint)MyCamera.MV_CAM_TRIGGER_MODE.MV_TRIGGER_MODE_OFF);
-                if (ret != MyCamera.MV_OK)
-                    throw new Exception("关闭海康相机触发模式失败！");
-            }
+            device.Parameters.SetEnumValue("TriggerMode", isTrigger ? 1u : 0u);
         }
 
         /// <summary>
@@ -341,39 +263,58 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="trigBySoft"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public bool SetTriggerSource(TriggerSource triggerSource)
+        public void SetTriggerSource(TriggerSource triggerSource)
         {
-            int nRet = MyCamera.MV_E_UNKNOW;
-            try
+            // ch:触发源选择:0 - Line0; | en:Trigger source select:0 - Line0;
+            //           1 - Line1;
+            //           2 - Line2;
+            //           3 - Line3;
+            //           4 - Counter;
+            //           7 - Software;
+            switch (triggerSource)
             {
-
-                switch (triggerSource)
-                {
-                    case TriggerSource.SOFT:
-                        nRet = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_SOFTWARE);
-                        break;
-                    case TriggerSource.LINE0:
-                        nRet = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_LINE0);
-                        break;
-                    case TriggerSource.LINE1:
-                        nRet = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_LINE1);
-                        break;
-                    case TriggerSource.LINE2:
-                        nRet = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_LINE2);
-                        break;
-                    case TriggerSource.LINE3:
-                        nRet = HKMyCamera.MV_CC_SetEnumValue_NET("TriggerSource", (uint)MyCamera.MV_CAM_TRIGGER_SOURCE.MV_TRIGGER_SOURCE_LINE3);
-                        break;
-                    default:
-                        break;
-                }
-                if (MyCamera.MV_OK != nRet) 
-                    return false;
-                return true;
+                case TriggerSource.SOFT:
+                    device.Parameters.SetEnumValue("TriggerSource", 7);
+                    break;
+                case TriggerSource.LINE0:
+                    device.Parameters.SetEnumValue("TriggerSource", 0);
+                    break;
+                case TriggerSource.LINE1:
+                    device.Parameters.SetEnumValue("TriggerSource", 1);
+                    break;
+                case TriggerSource.LINE2:
+                    device.Parameters.SetEnumValue("TriggerSource", 2);
+                    break;
+                case TriggerSource.LINE3:
+                    device.Parameters.SetEnumValue("TriggerSource", 3);
+                    break;
+                default:
+                    break;
             }
-            catch (Exception)
+        }
+
+        /// <summary>
+        /// 设置硬触发触发沿
+        /// </summary>
+        public void SetTriggerEdge(TriggerEdge triggerEdge)
+        {
+            switch (triggerEdge)
             {
-                return false;
+                case TriggerEdge.Rising:
+                    device.Parameters.SetEnumValueByString("TriggerActivation", "RisingEdge");
+                    break;
+                case TriggerEdge.Falling:
+                    device.Parameters.SetEnumValueByString("TriggerActivation", "FallingEdge");
+                    break;
+                case TriggerEdge.Low:
+                    device.Parameters.SetEnumValueByString("TriggerActivation", "LevelLow");
+                    break;
+                case TriggerEdge.Hight:
+                    device.Parameters.SetEnumValueByString("TriggerActivation", "LevelHigh");
+                    break;
+                case TriggerEdge.Any:
+                    device.Parameters.SetEnumValueByString("TriggerActivation", "AnyEdge");
+                    break;
             }
         }
 
@@ -381,149 +322,63 @@ namespace YTVisionPro.Hardware.Camera
         /// 软触发一次
         /// </summary>
         /// <returns></returns>
-        public bool GrabOne()
+        public void GrabOne()
         {
-            int nRet;
-            //使用软触发命令
-            nRet = HKMyCamera.MV_CC_SetCommandValue_NET("TriggerSoftware");
-
-            if (MyCamera.MV_OK != nRet)
-                return false;
-            return true;
+            device.Parameters.SetCommandValue("TriggerSoftware");
         }
 
         /// <summary>
         /// 设置增益
         /// </summary>
         /// <param name="gainValue"></param>
-        public void SetGain(int gainValue)
+        public void SetGain(float gainValue)
         {
-            HKMyCamera.MV_CC_SetEnumValue_NET("GainAuto", 0);
-            int nRet = HKMyCamera.MV_CC_SetFloatValue_NET("Gain", gainValue);
-            if (nRet != MyCamera.MV_OK)
-                throw new Exception($"{UserDefinedName}增益设置失败");
-            else
-                LogHelper.AddLog(MsgLevel.Info, $"{UserDefinedName}增益设置成功", true); ;
+            device.Parameters.SetEnumValue("GainAuto", 0);
+            device.Parameters.SetFloatValue("Gain", gainValue);
         }
 
         /// <summary>
         /// 设置曝光 
         /// </summary>
         /// <param name="time"></param>
-        public void SetExposureTime(int time)
+        public void SetExposureTime(float time)
         {
-            HKMyCamera.MV_CC_SetEnumValue_NET("ExposureAuto", 0);
-            int nRet = HKMyCamera.MV_CC_SetFloatValue_NET("ExposureTime", time);
-            if (nRet != MyCamera.MV_OK)
-                throw new Exception($"{UserDefinedName}曝光设置失败");
-            else
-                LogHelper.AddLog(MsgLevel.Info, $"{UserDefinedName}曝光设置成功", true);
+            device.Parameters.SetEnumValue("ExposureAuto", 0); 
+            device.Parameters.SetFloatValue("ExposureTime", time);
         }
 
         /// <summary>
         /// 停止取流
         /// </summary>
         /// <returns></returns>
-        public bool StopGrabbing()
+        public void StopGrabbing()
         {
-            int nRet = HKMyCamera.MV_CC_StopGrabbing_NET();
-            if (MyCamera.MV_OK != nRet)
-                return false;
-            OnGrabbing = false;
-            return true;
+            device.StreamGrabber.StopGrabbing();
         }
 
         /// <summary>
         /// 关闭相机
         /// </summary>
         /// <returns></returns>
-        public bool Close()
+        public void Close()
         {
             //先停止取流
-            if (OnGrabbing)
-                StopGrabbing();
-            // 关闭设备
-            int nRet = HKMyCamera.MV_CC_CloseDevice_NET();
-            if (nRet != MyCamera.MV_OK)
-                return false;
-            IsOpen = false;
-            return true;
+            StopGrabbing();
+            device.Close();
         }
 
         /// <summary>
-        /// 销毁相机
+        /// 释放相机资源
         /// </summary>
-        /// <returns></returns>
-        public bool Destroy()
+        public void Dispose()
         {
-            int nRet = HKMyCamera.MV_CC_DestroyDevice_NET();
-            if (nRet != MyCamera.MV_OK)
+            _hikList.Remove(device);
+            device?.Dispose();
+            if (_hikList.Count == 0)
             {
-                return false;
-            }
-            return true;
-        }
-       
-        /// <summary>
-        /// 判断是否为彩色图像
-        /// </summary>
-        /// <param name="enType"></param>
-        /// <returns></returns>
-        private bool IsColorPixelFormat(MyCamera.MvGvspPixelType enType)
-        {
-            switch (enType)
-            {
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_RGB8_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BGR8_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_RGBA8_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BGRA8_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_YUV422_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_YUV422_YUYV_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGR8:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerRG8:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGB8:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerBG8:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGB10:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGB10_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerBG10:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerBG10_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerRG10:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerRG10_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGR10:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGR10_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGB12:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGB12_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerBG12:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerBG12_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerRG12:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerRG12_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGR12:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_BayerGR12_Packed:
-                    return true;
-                default:
-                    return false;
+                Finalize();
+                _initSDKFlag = MvError.MV_E_RESOURCE;
             }
         }
-
-        /// <summary>
-        /// 判断图像是否是黑白图像
-        /// </summary>
-        /// <param name="enType"></param>
-        /// <returns></returns>
-        private bool IsMonoPixelFormat(MyCamera.MvGvspPixelType enType)
-        {
-            switch (enType)
-            {
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono8:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono10:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono10_Packed:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono12:
-                case MyCamera.MvGvspPixelType.PixelType_Gvsp_Mono12_Packed:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
     }
 }

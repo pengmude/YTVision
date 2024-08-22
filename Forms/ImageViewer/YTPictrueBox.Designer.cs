@@ -1,4 +1,4 @@
-﻿namespace Tets_ResizePictrueBox
+﻿namespace YTVisionPro.Forms.ImageViewer
 {
     partial class YTPictrueBox
     {

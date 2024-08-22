@@ -10,8 +10,8 @@ using System.Windows.Forms;
 
 namespace YTVisionPro.Node.Camera
 {
-    //public partial class FormCameraTest : Form, IParamSetForm
-        public partial class FormCameraTest : Form
+    //internal partial class FormCameraTest : Form, IParamSetForm
+        internal partial class FormCameraTest : Form
     {
         public FormCameraTest()
         {

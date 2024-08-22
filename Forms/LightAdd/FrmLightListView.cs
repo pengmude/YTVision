@@ -9,7 +9,7 @@ using YTVisionPro.Node.NodeLight.PPX;
 
 namespace YTVisionPro.Forms.LightAdd
 {
-    public partial class FrmLightListView : Form
+    internal partial class FrmLightListView : Form
     {
         FrmLightNew frmLightNew = new FrmLightNew();
 
@@ -24,7 +24,7 @@ namespace YTVisionPro.Forms.LightAdd
             InitializeComponent();
             frmLightNew.LightAddEvent += FrmLightNew_LightAddEvent;
             SingleLight.SelectedChange += SingleLight_SelectedChange;
-            SingleLight.SinglePLCRemoveEvent += SingleLight_SinglePLCRemoveEvent;
+            SingleLight.SingleLightRemoveEvent += SingleLight_SinglePLCRemoveEvent;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace YTVisionPro.Forms.LightAdd
 
             //移除的是被选中的则要清除它参数显示控件
             if (e.IsSelected)
-                panel1.Controls.Remove(e.lightParamsShowControl);
+                panel1.Controls.Remove(e.LightParamsShowControl);
             //删除光源前先判断是否需要释放占用的串口
             //（当除了待删除的光源外，均没有使用和待删除光源的串口，则需要释放串口）
             int count = 0;
@@ -60,10 +60,10 @@ namespace YTVisionPro.Forms.LightAdd
                 if(light.LightParam.Port == e.Light.LightParam.Port)
                     count++;
             }
-            if(count == 1)
-                e.Light.Disconnect();
-            //然后移除掉方案中的全局光源
+            //然后移除掉方案中的全局光源并释放串口资源
             Solution.Instance.Devices.Remove(e.Light);
+            if (count == 1)
+                e.Light.Disconnect();
             //最后移除掉光源控件
             flowLayoutPanel1.Controls.Remove(e);
         }
@@ -80,8 +80,8 @@ namespace YTVisionPro.Forms.LightAdd
                 if (control == e)
                 {
                     panel1.Controls.Clear();
-                    e.lightParamsShowControl.Dock = DockStyle.Fill;
-                    panel1.Controls.Add(e.lightParamsShowControl);
+                    e.LightParamsShowControl.Dock = DockStyle.Fill;
+                    panel1.Controls.Add(e.LightParamsShowControl);
                 }
             }
         }

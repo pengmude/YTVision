@@ -2,7 +2,7 @@
 
 namespace YTVisionPro.Forms
 {
-    public partial class FrmResultView : DockContent
+    internal partial class FrmResultView : DockContent
     {
         public FrmResultView()
         {

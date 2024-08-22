@@ -6,7 +6,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Logger
 {
-    public partial class FrmLogger : DockContent
+    internal partial class FrmLogger : DockContent
     {
         /// <summary>
         /// 标记本类实例是否初始化完成

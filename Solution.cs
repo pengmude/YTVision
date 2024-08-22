@@ -9,7 +9,7 @@ using YTVisionPro.Node;
 
 namespace YTVisionPro
 {
-    public class Solution
+    internal class Solution
     {
         #region 使用 Lazy<T> 实现线程安全的单例模式
 
@@ -159,6 +159,36 @@ namespace YTVisionPro
         public void RemoveProcess(Process process)
         {
             _allProcesses.Remove(process);
+        }
+
+        /// <summary>
+        /// 根据流程名称删除流程
+        /// </summary>
+        /// <param name="process"></param>
+        public void RemoveProcess(string processName)
+        {
+            // 查找名称匹配的流程
+            Process processToRemove = _allProcesses.Find(p => p.ProcessName == processName);
+
+            if (processToRemove != null)
+            {
+                // 从列表中移除流程
+                _allProcesses.Remove(processToRemove);
+            }
+        }
+
+        /// <summary>
+        /// 获取所有流程名称
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetAllProcessName()
+        {
+            List<string> result = new List<string>();
+            foreach (var process in _allProcesses)
+            {
+                result.Add(process.ProcessName);
+            }
+            return result;
         }
 
         /// <summary>

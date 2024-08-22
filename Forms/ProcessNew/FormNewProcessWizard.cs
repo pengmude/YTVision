@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using YTVisionPro.Node;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
-    public partial class FormNewProcessWizard : Form
+    internal partial class FormNewProcessWizard : Form
     {
         public FormNewProcessWizard()
         {
@@ -17,25 +18,20 @@ namespace YTVisionPro.Forms.ProcessNew
         private void InitNodeComboBox()
         {
             nodeComboBox1.Text = "光源节点";
-            nodeComboBox1.AddItem("磐鑫光源");
-            nodeComboBox1.AddItem("锐视光源");
+            nodeComboBox1.AddItem("磐鑫光源", NodeType.LightPPX);
+            nodeComboBox1.AddItem("锐视光源", NodeType.LightRsee);
 
             nodeComboBox2.Text = "相机节点";
-            nodeComboBox2.AddItem("海康相机");
-            nodeComboBox2.AddItem("巴斯勒相机");
-            nodeComboBox2.AddItem("度申相机");
+            nodeComboBox2.AddItem("海康相机", NodeType.Camera);
+            nodeComboBox2.AddItem("巴斯勒相机", NodeType.Camera);
+            nodeComboBox2.AddItem("度申相机", NodeType.Camera);
 
             nodeComboBox3.Text = "PLC节点";
-            nodeComboBox3.AddItem("松下PLC");
-            nodeComboBox3.AddItem("汇川PLC");
-
-            nodeComboBox4.Text = "算子节点";
-            nodeComboBox4.AddItem("找圆算法");
-            nodeComboBox4.AddItem("找直线算法");
+            nodeComboBox3.AddItem("松下PLC读", NodeType.PLCRead);
+            nodeComboBox3.AddItem("松下PLC写", NodeType.PLCWrite);
 
             nodeComboBox5.Text = "AI节点";
-            nodeComboBox5.AddItem("汇图AI");
-            nodeComboBox5.AddItem("海康AI");
+            nodeComboBox5.AddItem("汇图AI", NodeType.AIHT);
         }
 
         /// <summary>
@@ -57,6 +53,13 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeEditPanel.Dock = DockStyle.Fill;
             tabPage.Controls.Add(nodeEditPanel);
             tabControl1.Controls.Add(tabPage);
+
+            string res = "";
+            foreach (var name in Solution.Instance.GetAllProcessName())
+            {
+                res += name + "\n";
+            }
+            MessageBox.Show($"方案中流程名称：\n{res}");
         }
 
         /// <summary>
@@ -87,6 +90,14 @@ namespace YTVisionPro.Forms.ProcessNew
             if (tabPageToDelete != null)
             {
                 tabControl1.Controls.Remove(tabPageToDelete);
+                Solution.Instance.RemoveProcess(tabPageToDelete.Text);
+
+                string res = "";
+                foreach (var name in Solution.Instance.GetAllProcessName())
+                {
+                    res += name + "\n";
+                }
+                MessageBox.Show($"方案中流程名称：\n{res}");
             }
         }
     }

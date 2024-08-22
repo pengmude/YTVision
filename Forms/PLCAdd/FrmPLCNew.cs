@@ -9,7 +9,7 @@ using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
 {
-    public partial class FrmPLCNew : Form
+    internal partial class FrmPLCNew : Form
     {
         /// <summary>
         /// PLC添加事件

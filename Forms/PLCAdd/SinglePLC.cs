@@ -12,7 +12,7 @@ namespace YTVisionPro.Forms.PLCAdd
     /// <summary>
     /// 单个PLC
     /// </summary>
-    public partial class SinglePLC : UserControl
+    internal partial class SinglePLC : UserControl
     {
         public IPlc Plc = null;
         /// <summary>

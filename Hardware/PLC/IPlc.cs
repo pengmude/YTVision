@@ -10,7 +10,7 @@ using System.Web;
 
 namespace YTVisionPro.Hardware.PLC
 {
-    public interface IPlc : IDevice
+    internal interface IPlc : IDevice
     {
         /// <summary>
         /// PLC参数

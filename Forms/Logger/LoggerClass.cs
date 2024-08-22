@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Logger
 {
-    public class LoggerClass
+    internal class LoggerClass
     {
         /// <summary>
         /// Log队列
@@ -45,7 +45,7 @@ namespace Logger
         }
     }
 
-    public class LogInfo
+    internal class LogInfo
     {
         public string message { get; set; }
         public MsgLevel logLevel { get; set; }

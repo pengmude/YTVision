@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace YTVisionPro
 {
-    public partial class Form1 : Form
+    internal partial class Form1 : Form
     {
         public Form1()
         {

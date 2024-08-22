@@ -14,7 +14,7 @@ namespace YTVisionPro
     /// 一个方案可以拥有多个流程
     /// 每个流程也可以单独执行
     /// </summary>
-    public class Process
+    internal class Process
     {
         private List<IPlc> _plcList;
         private List<ICamera> _cameraList;

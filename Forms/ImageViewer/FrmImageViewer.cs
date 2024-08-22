@@ -13,7 +13,7 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace YTVisionPro.Forms.ImageViewer
 {
-    public partial class FrmImageViewer : DockContent
+    internal partial class FrmImageViewer : DockContent
     {
         /// <summary>
         /// 所有的图像窗口
