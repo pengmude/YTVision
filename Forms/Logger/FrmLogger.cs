@@ -13,6 +13,10 @@ namespace Logger
         /// </summary>
         public static FrmLogger Instance { get; private set; }
         public bool IsLoaded { get; private set; }
+        /// <summary>
+        /// 图像窗口隐藏事件
+        /// </summary>
+        public event EventHandler HideChangedEvent;
 
         /// <summary>
         /// 通知主窗口本窗口是否还显示在DockContent中
@@ -105,8 +109,9 @@ namespace Logger
 
         private void FrmLogger_FormClosing(object sender, FormClosingEventArgs e)
         {
-            e.Cancel = true;
-            this.Hide();
+            e.Cancel = true;  // 取消关闭事件，防止窗口关闭
+            this.Hide(); // 隐藏窗口
+            HideChangedEvent?.Invoke(this, EventArgs.Empty);
         }
 
     }

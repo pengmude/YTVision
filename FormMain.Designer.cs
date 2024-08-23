@@ -36,35 +36,28 @@
             this.保存方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.另存方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.运行模式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.在线自动模式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.在线点检模式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.离线自动模式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.离线点检模式ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.视图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.默认布局ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.默认布局ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.保存布局ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.默认视图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.图像显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.检测结果ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.日志显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.运行日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.画布设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.系统设置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.帮助ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.使用教程ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.联系我们ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.关于YTVisionProToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.tsbt_SolSet = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_SolSettings = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolNew = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_OpenSol = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_SolOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolSave = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_CreateProcess = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_CameraSet = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_PlcSet = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_UserSet = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_ProcessManager = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_LightManager = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_CameraManager = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_PlcManager = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_UserLogin = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStart = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStop = new System.Windows.Forms.ToolStripButton();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
@@ -82,7 +75,6 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.文件ToolStripMenuItem,
-            this.运行模式ToolStripMenuItem,
             this.视图ToolStripMenuItem,
             this.设置ToolStripMenuItem,
             this.帮助ToolStripMenuItem});
@@ -101,7 +93,7 @@
             this.另存方案ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 新建方案ToolStripMenuItem
@@ -135,122 +127,78 @@
             this.退出ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.退出ToolStripMenuItem.Text = "退出";
             // 
-            // 运行模式ToolStripMenuItem
-            // 
-            this.运行模式ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.在线自动模式ToolStripMenuItem,
-            this.在线点检模式ToolStripMenuItem,
-            this.离线自动模式ToolStripMenuItem,
-            this.离线点检模式ToolStripMenuItem});
-            this.运行模式ToolStripMenuItem.Name = "运行模式ToolStripMenuItem";
-            this.运行模式ToolStripMenuItem.Size = new System.Drawing.Size(98, 32);
-            this.运行模式ToolStripMenuItem.Text = "运行模式";
-            // 
-            // 在线自动模式ToolStripMenuItem
-            // 
-            this.在线自动模式ToolStripMenuItem.Checked = true;
-            this.在线自动模式ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.在线自动模式ToolStripMenuItem.Name = "在线自动模式ToolStripMenuItem";
-            this.在线自动模式ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
-            this.在线自动模式ToolStripMenuItem.Text = "在线自动模式";
-            this.在线自动模式ToolStripMenuItem.Click += new System.EventHandler(this.RunModeToolStripMenuItem_Click);
-            // 
-            // 在线点检模式ToolStripMenuItem
-            // 
-            this.在线点检模式ToolStripMenuItem.Name = "在线点检模式ToolStripMenuItem";
-            this.在线点检模式ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
-            this.在线点检模式ToolStripMenuItem.Text = "在线点检模式";
-            this.在线点检模式ToolStripMenuItem.Click += new System.EventHandler(this.RunModeToolStripMenuItem_Click);
-            // 
-            // 离线自动模式ToolStripMenuItem
-            // 
-            this.离线自动模式ToolStripMenuItem.Name = "离线自动模式ToolStripMenuItem";
-            this.离线自动模式ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
-            this.离线自动模式ToolStripMenuItem.Text = "离线自动模式";
-            this.离线自动模式ToolStripMenuItem.Click += new System.EventHandler(this.RunModeToolStripMenuItem_Click);
-            // 
-            // 离线点检模式ToolStripMenuItem
-            // 
-            this.离线点检模式ToolStripMenuItem.Name = "离线点检模式ToolStripMenuItem";
-            this.离线点检模式ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
-            this.离线点检模式ToolStripMenuItem.Text = "离线点检模式";
-            this.离线点检模式ToolStripMenuItem.Click += new System.EventHandler(this.RunModeToolStripMenuItem_Click);
-            // 
             // 视图ToolStripMenuItem
             // 
             this.视图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.默认布局ToolStripMenuItem,
+            this.默认视图ToolStripMenuItem,
             this.图像显示ToolStripMenuItem,
             this.检测结果ToolStripMenuItem,
-            this.日志显示ToolStripMenuItem});
+            this.运行日志ToolStripMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
-            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.视图ToolStripMenuItem.Text = "视图";
             // 
-            // 默认布局ToolStripMenuItem
+            // 默认视图ToolStripMenuItem
             // 
-            this.默认布局ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.默认布局ToolStripMenuItem1,
-            this.保存布局ToolStripMenuItem1});
-            this.默认布局ToolStripMenuItem.Name = "默认布局ToolStripMenuItem";
-            this.默认布局ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
-            this.默认布局ToolStripMenuItem.Text = "窗口布局";
-            // 
-            // 默认布局ToolStripMenuItem1
-            // 
-            this.默认布局ToolStripMenuItem1.Name = "默认布局ToolStripMenuItem1";
-            this.默认布局ToolStripMenuItem1.Size = new System.Drawing.Size(182, 34);
-            this.默认布局ToolStripMenuItem1.Text = "默认布局";
-            this.默认布局ToolStripMenuItem1.Click += new System.EventHandler(this.默认布局ToolStripMenuItem1_Click);
-            // 
-            // 保存布局ToolStripMenuItem1
-            // 
-            this.保存布局ToolStripMenuItem1.Name = "保存布局ToolStripMenuItem1";
-            this.保存布局ToolStripMenuItem1.Size = new System.Drawing.Size(182, 34);
-            this.保存布局ToolStripMenuItem1.Text = "保存布局";
-            this.保存布局ToolStripMenuItem1.Click += new System.EventHandler(this.保存布局ToolStripMenuItem_Click);
+            this.默认视图ToolStripMenuItem.Checked = true;
+            this.默认视图ToolStripMenuItem.CheckOnClick = true;
+            this.默认视图ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.默认视图ToolStripMenuItem.Name = "默认视图ToolStripMenuItem";
+            this.默认视图ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.默认视图ToolStripMenuItem.Text = "默认视图";
+            this.默认视图ToolStripMenuItem.Click += new System.EventHandler(this.默认视图ToolStripMenuItem_Click);
             // 
             // 图像显示ToolStripMenuItem
             // 
+            this.图像显示ToolStripMenuItem.Checked = true;
             this.图像显示ToolStripMenuItem.CheckOnClick = true;
+            this.图像显示ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.图像显示ToolStripMenuItem.Name = "图像显示ToolStripMenuItem";
-            this.图像显示ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
-            this.图像显示ToolStripMenuItem.Text = "图像显示";
+            this.图像显示ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.图像显示ToolStripMenuItem.Text = "检测图像视图";
+            this.图像显示ToolStripMenuItem.Click += new System.EventHandler(this.检测图像视图ToolStripMenuItem_Click);
             // 
             // 检测结果ToolStripMenuItem
             // 
+            this.检测结果ToolStripMenuItem.Checked = true;
             this.检测结果ToolStripMenuItem.CheckOnClick = true;
+            this.检测结果ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.检测结果ToolStripMenuItem.Name = "检测结果ToolStripMenuItem";
-            this.检测结果ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
-            this.检测结果ToolStripMenuItem.Text = "检测结果";
+            this.检测结果ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.检测结果ToolStripMenuItem.Text = "检测结果视图";
+            this.检测结果ToolStripMenuItem.Click += new System.EventHandler(this.检测结果视图ToolStripMenuItem_Click);
             // 
-            // 日志显示ToolStripMenuItem
+            // 运行日志ToolStripMenuItem
             // 
-            this.日志显示ToolStripMenuItem.CheckOnClick = true;
-            this.日志显示ToolStripMenuItem.Name = "日志显示ToolStripMenuItem";
-            this.日志显示ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
-            this.日志显示ToolStripMenuItem.Text = "日志显示";
+            this.运行日志ToolStripMenuItem.Checked = true;
+            this.运行日志ToolStripMenuItem.CheckOnClick = true;
+            this.运行日志ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.运行日志ToolStripMenuItem.Name = "运行日志ToolStripMenuItem";
+            this.运行日志ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.运行日志ToolStripMenuItem.Text = "运行日志视图";
+            this.运行日志ToolStripMenuItem.Click += new System.EventHandler(this.运行日志视图ToolStripMenuItem_Click);
             // 
             // 设置ToolStripMenuItem
             // 
             this.设置ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.系统设置ToolStripMenuItem,
-            this.画布设置ToolStripMenuItem});
+            this.画布设置ToolStripMenuItem,
+            this.系统设置ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.设置ToolStripMenuItem.Text = "设置";
-            // 
-            // 系统设置ToolStripMenuItem
-            // 
-            this.系统设置ToolStripMenuItem.Name = "系统设置ToolStripMenuItem";
-            this.系统设置ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
-            this.系统设置ToolStripMenuItem.Text = "系统全局设置";
             // 
             // 画布设置ToolStripMenuItem
             // 
             this.画布设置ToolStripMenuItem.Name = "画布设置ToolStripMenuItem";
             this.画布设置ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
             this.画布设置ToolStripMenuItem.Text = "图像画布设置";
+            this.画布设置ToolStripMenuItem.Click += new System.EventHandler(this.画布设置ToolStripMenuItem_Click);
+            // 
+            // 系统设置ToolStripMenuItem
+            // 
+            this.系统设置ToolStripMenuItem.Name = "系统设置ToolStripMenuItem";
+            this.系统设置ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
+            this.系统设置ToolStripMenuItem.Text = "系统全局设置";
             // 
             // 帮助ToolStripMenuItem
             // 
@@ -259,7 +207,7 @@
             this.联系我们ToolStripMenuItem1,
             this.关于YTVisionProToolStripMenuItem1});
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // 使用教程ToolStripMenuItem
@@ -273,27 +221,29 @@
             this.联系我们ToolStripMenuItem1.Name = "联系我们ToolStripMenuItem1";
             this.联系我们ToolStripMenuItem1.Size = new System.Drawing.Size(248, 34);
             this.联系我们ToolStripMenuItem1.Text = "联系我们";
+            this.联系我们ToolStripMenuItem1.Click += new System.EventHandler(this.联系我们ToolStripMenuItem_Click);
             // 
             // 关于YTVisionProToolStripMenuItem1
             // 
             this.关于YTVisionProToolStripMenuItem1.Name = "关于YTVisionProToolStripMenuItem1";
             this.关于YTVisionProToolStripMenuItem1.Size = new System.Drawing.Size(248, 34);
             this.关于YTVisionProToolStripMenuItem1.Text = "关于YTVisionPro";
+            this.关于YTVisionProToolStripMenuItem1.Click += new System.EventHandler(this.关于YTVisionProToolStripMenuItem1_Click);
             // 
             // toolStrip1
             // 
             this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbt_SolSet,
+            this.tsbt_SolSettings,
             this.tsbt_SolNew,
-            this.tsbt_OpenSol,
+            this.tsbt_SolOpen,
             this.tsbt_SolSave,
-            this.tsbt_CreateProcess,
-            this.toolStripButton1,
-            this.tsbt_CameraSet,
-            this.tsbt_PlcSet,
-            this.tsbt_UserSet,
+            this.tsbt_ProcessManager,
+            this.tsbt_LightManager,
+            this.tsbt_CameraManager,
+            this.tsbt_PlcManager,
+            this.tsbt_UserLogin,
             this.tsbt_SolRunStart,
             this.tsbt_SolRunStop});
             this.toolStrip1.Location = new System.Drawing.Point(0, 32);
@@ -302,16 +252,16 @@
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // tsbt_SolSet
+            // tsbt_SolSettings
             // 
-            this.tsbt_SolSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_SolSet.Image = global::YTVisionPro.Properties.Resources.方案设置;
-            this.tsbt_SolSet.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_SolSet.Name = "tsbt_SolSet";
-            this.tsbt_SolSet.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_SolSet.Text = "方案设置";
-            this.tsbt_SolSet.ToolTipText = "方案设置";
-            this.tsbt_SolSet.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_SolSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_SolSettings.Image = global::YTVisionPro.Properties.Resources.方案设置;
+            this.tsbt_SolSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_SolSettings.Name = "tsbt_SolSettings";
+            this.tsbt_SolSettings.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_SolSettings.Text = "方案设置";
+            this.tsbt_SolSettings.ToolTipText = "方案设置";
+            this.tsbt_SolSettings.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_SolNew
             // 
@@ -324,16 +274,16 @@
             this.tsbt_SolNew.ToolTipText = "新建方案";
             this.tsbt_SolNew.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_OpenSol
+            // tsbt_SolOpen
             // 
-            this.tsbt_OpenSol.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_OpenSol.Image = global::YTVisionPro.Properties.Resources.打开项目;
-            this.tsbt_OpenSol.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_OpenSol.Name = "tsbt_OpenSol";
-            this.tsbt_OpenSol.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_OpenSol.Text = "打开方案";
-            this.tsbt_OpenSol.ToolTipText = "打开方案";
-            this.tsbt_OpenSol.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_SolOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_SolOpen.Image = global::YTVisionPro.Properties.Resources.打开项目;
+            this.tsbt_SolOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_SolOpen.Name = "tsbt_SolOpen";
+            this.tsbt_SolOpen.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_SolOpen.Text = "打开方案";
+            this.tsbt_SolOpen.ToolTipText = "打开方案";
+            this.tsbt_SolOpen.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_SolSave
             // 
@@ -346,58 +296,60 @@
             this.tsbt_SolSave.ToolTipText = "保存方案";
             this.tsbt_SolSave.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_CreateProcess
+            // tsbt_ProcessManager
             // 
-            this.tsbt_CreateProcess.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_CreateProcess.Image = global::YTVisionPro.Properties.Resources.添加流程;
-            this.tsbt_CreateProcess.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_CreateProcess.Name = "tsbt_CreateProcess";
-            this.tsbt_CreateProcess.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_CreateProcess.Text = "创建流程";
-            this.tsbt_CreateProcess.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_ProcessManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_ProcessManager.Image = global::YTVisionPro.Properties.Resources.添加流程;
+            this.tsbt_ProcessManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_ProcessManager.Name = "tsbt_ProcessManager";
+            this.tsbt_ProcessManager.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_ProcessManager.Text = "创建流程";
+            this.tsbt_ProcessManager.ToolTipText = "流程管理";
+            this.tsbt_ProcessManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // toolStripButton1
+            // tsbt_LightManager
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::YTVisionPro.Properties.Resources.光源;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButton1.Text = "全局光源";
-            this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_LightManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_LightManager.Image = global::YTVisionPro.Properties.Resources.光源;
+            this.tsbt_LightManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_LightManager.Name = "tsbt_LightManager";
+            this.tsbt_LightManager.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_LightManager.Text = "全局光源";
+            this.tsbt_LightManager.ToolTipText = "光源设备";
+            this.tsbt_LightManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_CameraSet
+            // tsbt_CameraManager
             // 
-            this.tsbt_CameraSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_CameraSet.Image = global::YTVisionPro.Properties.Resources.相机;
-            this.tsbt_CameraSet.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_CameraSet.Name = "tsbt_CameraSet";
-            this.tsbt_CameraSet.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_CameraSet.Text = "全局相机";
-            this.tsbt_CameraSet.ToolTipText = "全局相机";
-            this.tsbt_CameraSet.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_CameraManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_CameraManager.Image = global::YTVisionPro.Properties.Resources.相机;
+            this.tsbt_CameraManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_CameraManager.Name = "tsbt_CameraManager";
+            this.tsbt_CameraManager.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_CameraManager.Text = "全局相机";
+            this.tsbt_CameraManager.ToolTipText = "相机设备";
+            this.tsbt_CameraManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_PlcSet
+            // tsbt_PlcManager
             // 
-            this.tsbt_PlcSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_PlcSet.Image = ((System.Drawing.Image)(resources.GetObject("tsbt_PlcSet.Image")));
-            this.tsbt_PlcSet.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_PlcSet.Name = "tsbt_PlcSet";
-            this.tsbt_PlcSet.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_PlcSet.Text = "全局通信";
-            this.tsbt_PlcSet.ToolTipText = "全局PLC";
-            this.tsbt_PlcSet.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_PlcManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_PlcManager.Image = ((System.Drawing.Image)(resources.GetObject("tsbt_PlcManager.Image")));
+            this.tsbt_PlcManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_PlcManager.Name = "tsbt_PlcManager";
+            this.tsbt_PlcManager.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_PlcManager.Text = "全局通信";
+            this.tsbt_PlcManager.ToolTipText = "PLC设备";
+            this.tsbt_PlcManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_UserSet
+            // tsbt_UserLogin
             // 
-            this.tsbt_UserSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_UserSet.Image = global::YTVisionPro.Properties.Resources.用户登录;
-            this.tsbt_UserSet.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_UserSet.Name = "tsbt_UserSet";
-            this.tsbt_UserSet.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_UserSet.Text = "用户登录";
-            this.tsbt_UserSet.ToolTipText = "用户登录";
-            this.tsbt_UserSet.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_UserLogin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_UserLogin.Image = global::YTVisionPro.Properties.Resources.用户登录;
+            this.tsbt_UserLogin.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_UserLogin.Name = "tsbt_UserLogin";
+            this.tsbt_UserLogin.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_UserLogin.Text = "用户登录";
+            this.tsbt_UserLogin.ToolTipText = "用户登录";
+            this.tsbt_UserLogin.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_SolRunStart
             // 
@@ -483,13 +435,13 @@
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 帮助ToolStripMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton tsbt_SolSet;
+        private System.Windows.Forms.ToolStripButton tsbt_SolSettings;
         private System.Windows.Forms.ToolStripButton tsbt_SolNew;
-        private System.Windows.Forms.ToolStripButton tsbt_OpenSol;
+        private System.Windows.Forms.ToolStripButton tsbt_SolOpen;
         private System.Windows.Forms.ToolStripButton tsbt_SolSave;
-        private System.Windows.Forms.ToolStripButton tsbt_CameraSet;
-        private System.Windows.Forms.ToolStripButton tsbt_PlcSet;
-        private System.Windows.Forms.ToolStripButton tsbt_UserSet;
+        private System.Windows.Forms.ToolStripButton tsbt_CameraManager;
+        private System.Windows.Forms.ToolStripButton tsbt_PlcManager;
+        private System.Windows.Forms.ToolStripButton tsbt_UserLogin;
         private System.Windows.Forms.ToolStripButton tsbt_SolRunStart;
         private System.Windows.Forms.ToolStripButton tsbt_SolRunStop;
         private System.Windows.Forms.ToolStripMenuItem 新建方案ToolStripMenuItem;
@@ -497,28 +449,21 @@
         private System.Windows.Forms.ToolStripMenuItem 保存方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 另存方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 默认布局ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 默认视图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 检测结果ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 日志显示ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 运行日志ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 图像显示ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 系统设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 画布设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 使用教程ToolStripMenuItem;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
         private WeifenLuo.WinFormsUI.Docking.VS2015LightTheme vS2015LightTheme1;
-        private System.Windows.Forms.ToolStripMenuItem 默认布局ToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem 保存布局ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem 联系我们ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem 关于YTVisionProToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem 运行模式ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 在线自动模式ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 在线点检模式ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 离线自动模式ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 离线点检模式ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton tsbt_CreateProcess;
+        private System.Windows.Forms.ToolStripButton tsbt_ProcessManager;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton tsbt_LightManager;
     }
 }
 

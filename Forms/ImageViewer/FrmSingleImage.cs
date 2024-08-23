@@ -13,9 +13,11 @@ namespace YTVisionPro.Forms.ImageViewer
 {
     internal partial class FrmSingleImage : DockContent
     {
+        public static int i = 0;
         public FrmSingleImage()
         {
             InitializeComponent();
+            this.Text = $"图像窗口{i++}";
         }
     }
 }

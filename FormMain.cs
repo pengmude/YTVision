@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using YTVisionPro.Forms;
+using YTVisionPro.Forms.Helper;
+using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Forms.ProcessNew;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
@@ -44,13 +47,21 @@ namespace YTVisionPro
         /// </summary>
         static FormNewProcessWizard FrmNewProcessWizard = new FormNewProcessWizard();
         /// <summary>
+        /// 图像数量设置窗口
+        /// </summary>
+        static CanvasSet canvasSet = new CanvasSet();
+        /// <summary>
+        /// 联系我们
+        /// </summary>
+        static ContactUsFormForm contactUsFormForm = new ContactUsFormForm();
+        /// <summary>
+        /// 关于YTViisionPro
+        /// </summary>
+        static FrmAbout frmAbout = new FrmAbout();
+        /// <summary>
         /// 窗口布局配置
         /// </summary>
         private readonly string DockPanelConfig = Application.StartupPath + "\\DockPanel.config";
-        /// <summary>
-        /// 保存布局事件
-        /// </summary>
-        public static EventHandler SaveDockPanelEvent;
         /// <summary>
         /// 反序列化DockContent代理
         /// </summary>
@@ -85,6 +96,15 @@ namespace YTVisionPro
         private void FormMain_Load(object sender, EventArgs e)
         {
             InitDockPanel();
+
+            运行日志ToolStripMenuItem.Checked = FrmLoggerDlg.Visible;
+            检测结果ToolStripMenuItem.Checked = FrmResultDlg.Visible;
+            图像显示ToolStripMenuItem.Checked = FrmImgeDlg.Visible;
+            默认视图ToolStripMenuItem.Checked = FrmLoggerDlg.Visible && FrmResultDlg.Visible && FrmImgeDlg.Visible ? true : false;
+
+            FrmImgeDlg.HideChangedEvent += HideChangedEvent;
+            FrmResultDlg.HideChangedEvent += HideChangedEvent;
+            FrmLoggerDlg.HideChangedEvent += HideChangedEvent;
         }
         /// <summary>
         /// 加载窗口布局
@@ -116,6 +136,9 @@ namespace YTVisionPro
             FrmImgeDlg.Show(dockPanel1, DockState.Document);
             FrmResultDlg.Show(dockPanel1, DockState.DockRight);
             FrmLoggerDlg.Show(dockPanel1, DockState.DockBottom);
+            图像显示ToolStripMenuItem.Checked = true;
+            检测结果ToolStripMenuItem.Checked = true;
+            运行日志ToolStripMenuItem.Checked = true;
         }
         /// <summary>
         /// 配置委托函数
@@ -126,9 +149,6 @@ namespace YTVisionPro
         {
             if (persistString == typeof(Forms.ImageViewer.FrmImageViewer).ToString())
                 return FrmImgeDlg;
-
-            else if (persistString == typeof(Forms.FrmResultView).ToString())
-                return FrmResultDlg;
 
             else if (persistString == typeof(Forms.FrmResultView).ToString())
                 return FrmResultDlg;
@@ -252,8 +272,6 @@ namespace YTVisionPro
 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                //Solution = new Solution();
-                //Solution.SolFileName = saveFileDialog1.FileName;
                 File.Create(saveFileDialog1.FileName).Close();
             }
         }
@@ -263,64 +281,9 @@ namespace YTVisionPro
             MessageBox.Show("方案设置");
         }
 
-        private void 保存布局ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.dockPanel1.SaveAsXml(DockPanelConfig);
-            SaveDockPanelEvent?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void 默认布局ToolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-            LoadDefaultDockPanel();
-        }
-
         private void 联系我们ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form form = new Form();
-            form.ShowDialog();
-        }
-
-        /// <summary>
-        /// 切换运行模式
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RunModeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (IsRunning)
-            {
-                MessageBox.Show("请先停止当前任务再切换！");
-                return;
-            }
-
-            // 获取点击的 ToolStripMenuItem
-            ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
-
-            // 遍历 toolStrip1 上的所有 ToolStripMenuItem
-            foreach (ToolStripItem item in 运行模式ToolStripMenuItem.DropDownItems)
-            {
-                ToolStripMenuItem menuItem = (ToolStripMenuItem)item;
-
-                // 如果点击的不是当前项，则取消选中状态
-                if (menuItem != clickedItem)
-                {
-                    menuItem.Checked = false;
-                }
-                else
-                {
-                    // 设置点击的项为选中状态
-                    menuItem.Checked = true;
-                    if (clickedItem == 在线自动模式ToolStripMenuItem)
-                        CurRunMode = RunMode.ONLINE_AUTO;
-                    else if (clickedItem == 在线点检模式ToolStripMenuItem)
-                        CurRunMode = RunMode.ONLINE_JOG;
-                    else if (clickedItem == 离线自动模式ToolStripMenuItem)
-                        CurRunMode = RunMode.OFFLINE_AUTO;
-                    else if (clickedItem == 离线点检模式ToolStripMenuItem)
-                        CurRunMode = RunMode.OFFLINE_JOG;
-                    //MessageBox.Show($"{CurRunMode}");
-                }
-            }
+            contactUsFormForm.ShowDialog();
         }
 
         /// <summary>
@@ -338,6 +301,89 @@ namespace YTVisionPro
             }
         }
 
+        /// <summary>
+        /// 图像画布设置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 画布设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            canvasSet.ShowDialog();
+        }
+
+        private void 关于YTVisionProToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            frmAbout.ShowDialog();
+        }
+
+        private void 默认视图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadDefaultDockPanel();
+        }
+
+        private void 检测图像视图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FrmImgeDlg.Visible)
+            {
+                FrmImgeDlg.Hide(); // 如果窗口可见，隐藏它
+                图像显示ToolStripMenuItem.Checked = false;
+                默认视图ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                FrmImgeDlg.Show(); // 如果窗口隐藏，显示它
+                图像显示ToolStripMenuItem.Checked = true;
+                默认视图ToolStripMenuItem.Checked = FrmLoggerDlg.Visible && FrmResultDlg.Visible && FrmImgeDlg.Visible ? true : false;
+            }
+            this.dockPanel1.SaveAsXml(DockPanelConfig);
+        }
+
+        private void 检测结果视图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FrmResultDlg.Visible)
+            {
+                FrmResultDlg.Hide(); // 如果窗口可见，隐藏它
+                检测结果ToolStripMenuItem.Checked = false;
+                默认视图ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                FrmResultDlg.Show(); // 如果窗口隐藏，显示它
+                检测结果ToolStripMenuItem.Checked = true;
+                默认视图ToolStripMenuItem.Checked = FrmLoggerDlg.Visible && FrmResultDlg.Visible && FrmImgeDlg.Visible ? true : false;
+            }
+            this.dockPanel1.SaveAsXml(DockPanelConfig);
+        }
+
+        private void 运行日志视图ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (FrmLoggerDlg.Visible)
+            {
+                FrmLoggerDlg.Hide(); // 如果窗口可见，隐藏它
+                运行日志ToolStripMenuItem.Checked = false;
+                默认视图ToolStripMenuItem.Checked = false;
+            }
+            else
+            {
+                FrmLoggerDlg.Show(); // 如果窗口隐藏，显示它
+                运行日志ToolStripMenuItem.Checked = true;
+                默认视图ToolStripMenuItem.Checked = FrmLoggerDlg.Visible && FrmResultDlg.Visible && FrmImgeDlg.Visible ? true : false;
+            }
+            this.dockPanel1.SaveAsXml(DockPanelConfig);
+        }
+
+        private void HideChangedEvent(object sender, EventArgs e)
+        {
+            FrmImageViewer frmImageViewer = sender as FrmImageViewer;
+            FrmResultView frmResultView = sender as FrmResultView;
+            FrmLogger frmLogger = sender as FrmLogger;
+            if (frmImageViewer != null)
+                图像显示ToolStripMenuItem.Checked = frmImageViewer.Visible;
+            else if (frmResultView != null)
+                检测结果ToolStripMenuItem.Checked = frmResultView.Visible;
+            else if (frmLogger != null)
+                运行日志ToolStripMenuItem.Checked = frmLogger.Visible;
+        }
     }
 
 
