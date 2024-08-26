@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Basler.Pylon;
 using Logger;
 using Sunny.UI.Win32;
+using Newtonsoft.Json.Linq;
 
 namespace YTVisionPro.Hardware.Camera
 {
@@ -64,18 +65,14 @@ namespace YTVisionPro.Hardware.Camera
         public string UserDefinedName { get; set; }
 
         /// <summary>
-        /// 取流标记
-        /// </summary>
-        private bool OnGrabbing = false;
-
-        /// <summary>
         /// 重载构造函数
         /// </summary>
-        public CameraBasler(ICameraInfo info)
+        public CameraBasler(ICameraInfo info, string userName)
         {
             DevInfo = info;
             _camera = new Basler.Pylon.Camera(info);
             _devId = ++Solution.DeviceCount;
+            UserDefinedName = userName;
         }
 
         /// <summary>
@@ -292,6 +289,15 @@ namespace YTVisionPro.Hardware.Camera
         public void SetGain(float gainValue)
         {
             _camera.Parameters[PLCamera.GainRaw].SetValue((long)gainValue);
+        }
+
+        /// <summary>
+        /// 设置延迟触发
+        /// </summary>
+        /// <param name="time">单位：微秒</param>
+        public void SetTriggerDelay(float time)
+        {
+            _camera.Parameters[PLCamera.TriggerDelayAbs].SetValue(time);
         }
 
         /// <summary>

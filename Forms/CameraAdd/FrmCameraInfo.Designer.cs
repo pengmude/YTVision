@@ -56,6 +56,7 @@ namespace YTVisionPro.Forms.CameraAdd
             this.comboBoxCameraBrand.Name = "comboBoxCameraBrand";
             this.comboBoxCameraBrand.Size = new System.Drawing.Size(335, 36);
             this.comboBoxCameraBrand.TabIndex = 1;
+            this.comboBoxCameraBrand.SelectedIndexChanged += new System.EventHandler(this.comboBoxCameraBrand_SelectedIndexChanged);
             // 
             // textBoxUserName
             // 

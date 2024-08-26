@@ -177,6 +177,8 @@ namespace YTVisionPro.Node.Camera.HiK
             #endregion
 
             OnNodeParamChange?.Invoke(this, nodeParamCamera);
+            
+            Hide();
         }
     }
 }

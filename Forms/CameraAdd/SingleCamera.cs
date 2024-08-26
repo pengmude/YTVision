@@ -75,16 +75,16 @@ namespace YTVisionPro.Forms.CameraAdd
                 //创建相机设备并添加到方案中
                 if (parms.Brand == CameraBrand.HiKVision)
                 {
-                    Camera = new CameraHik(parms.DevInfo.Hik);
+                    Camera = new CameraHik(parms.DevInfo.Hik, parms.UserDefineName);
                 }
                 else if (parms.Brand == CameraBrand.Basler)
                 {
-                    Camera = new CameraBasler(parms.DevInfo.Basler);
+                    Camera = new CameraBasler(parms.DevInfo.Basler, parms.UserDefineName);
                 }
                 Solution.Instance.AddDevice(Camera);
 
                 //绑定图像显示控件界面
-                CameraParamsShowControl = new CameraParamsShowControl();
+                CameraParamsShowControl = new CameraParamsShowControl(Camera);
                 // 保存所有的实例
                 SingleCameraList.Add(this);
             }

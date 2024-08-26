@@ -96,6 +96,7 @@ namespace YTVisionPro
         private void FormMain_Load(object sender, EventArgs e)
         {
             InitDockPanel();
+            CameraHik.InitSDK();
 
             运行日志ToolStripMenuItem.Checked = FrmLoggerDlg.Visible;
             检测结果ToolStripMenuItem.Checked = FrmResultDlg.Visible;
@@ -106,6 +107,24 @@ namespace YTVisionPro
             FrmResultDlg.HideChangedEvent += HideChangedEvent;
             FrmLoggerDlg.HideChangedEvent += HideChangedEvent;
         }
+
+        /// <summary>
+        /// 主窗口关闭
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (IsRunning)
+            {
+                e.Cancel = true;
+                MessageBox.Show("请先停止当前任务再关闭！");
+                return;
+            }
+            CameraHik.Finalize();
+            this.dockPanel1.SaveAsXml(DockPanelConfig);
+        }
+
         /// <summary>
         /// 加载窗口布局
         /// </summary>
@@ -139,6 +158,7 @@ namespace YTVisionPro
             图像显示ToolStripMenuItem.Checked = true;
             检测结果ToolStripMenuItem.Checked = true;
             运行日志ToolStripMenuItem.Checked = true;
+            this.dockPanel1.SaveAsXml(DockPanelConfig);
         }
         /// <summary>
         /// 配置委托函数
@@ -284,21 +304,6 @@ namespace YTVisionPro
         private void 联系我们ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             contactUsFormForm.ShowDialog();
-        }
-
-        /// <summary>
-        /// 主窗口关闭
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (IsRunning)
-            {
-                e.Cancel = true;
-                MessageBox.Show("请先停止当前任务再关闭！");
-                return;
-            }
         }
 
         /// <summary>

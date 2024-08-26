@@ -57,7 +57,7 @@ namespace YTVisionPro.Forms.CameraAdd
             //然后移除掉方案中的全局相机并释放相机内存
             Solution.Instance.Devices.Remove(e.Camera);
             e.Camera.Dispose();
-            //最后移除掉光源控件
+            //最后移除掉单个相机控件
             flowLayoutPanel1.Controls.Remove(e);
         }
 
@@ -73,6 +73,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 SingleCamera singleCamera = new SingleCamera(e);
                 singleCamera.Anchor = AnchorStyles.Left;
                 singleCamera.Anchor = AnchorStyles.Right;
+                singleCamera.Width = flowLayoutPanel1.Size.Width - 20;
                 flowLayoutPanel1.Controls.Add(singleCamera);
                 singleCamera.CameraParamsShowControl.Dock = DockStyle.Fill;
             }

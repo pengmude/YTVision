@@ -18,6 +18,10 @@ namespace YTVisionPro.Hardware.Camera
     internal interface ICamera : IDevice
     {
         /// <summary>
+        /// 抓取图片事件
+        /// </summary>
+        event EventHandler<Bitmap> PublishImageEvent;
+        /// <summary>
         /// 设备类型
         /// </summary>
         DevType DevType { get; }
@@ -41,7 +45,7 @@ namespace YTVisionPro.Hardware.Camera
         void StopGrabbing();
 
         /// <summary>
-        /// 设置相机模式
+        /// 设置相机触发模式
         /// </summary>
         /// <param name="isTrigger"></param>
         void SetTriggerMode(bool isTrigger);
@@ -78,6 +82,12 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="ExposureTime"></param>
         /// <returns></returns>
         void SetExposureTime(float time);
+
+        /// <summary>
+        /// 设置触发延迟
+        /// </summary>
+        /// <param name="time"></param>
+        void SetTriggerDelay(float time);
 
         /// <summary>
         /// 关闭相机

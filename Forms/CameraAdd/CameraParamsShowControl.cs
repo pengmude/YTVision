@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sunny.UI.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,18 +14,16 @@ namespace YTVisionPro.Forms.CameraAdd
 {
     internal partial class CameraParamsShowControl : UserControl
     {
-        public CameraParamsShowControl()
+        public CameraParamsShowControl(ICamera camera)
         {
             InitializeComponent();
+            camera.PublishImageEvent += Camera_PublishImageEvent;
         }
 
-        /// <summary>
-        /// 给控件设置要显示的图片
-        /// </summary>
-        /// <param name="bitmap"></param>
-        public void SetImage(Bitmap bitmap)
+        private void Camera_PublishImageEvent(object sender, Bitmap e)
         {
-            ytPictrueBox1.SrcImage = bitmap;
+            ytPictrueBox1.SrcImage = e;
         }
+
     }
 }

@@ -15,13 +15,7 @@ namespace YTVisionPro.Node.Camera.HiK
         public NodeCamera(string nodeText, Process process) : base(process, new ParamFormCamera())
         {
             SetNodeText(nodeText);
-            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
             Result = new NodeResultCamera();
-        }
-
-        private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
-        {
-            MessageBox.Show("子类");
         }
 
         /// <summary>
@@ -44,6 +38,19 @@ namespace YTVisionPro.Node.Camera.HiK
             }
 
             var param = (NodeParamCamera)Params;
+            param.Camera.SetTriggerMode(true); // 触发模式
+            param.Camera.SetTriggerSource(param.TriggerSource);    // 触发源
+            if (param.TriggerSource == Hardware.Camera.TriggerSource.SOFT)
+            {
+                MessageBox.Show("软触发还没实现呢……");
+                SetRunStatus(startTime, false);
+                return;
+            }
+            param.Camera.SetTriggerEdge(param.TriggerEdge);
+            param.Camera.SetTriggerDelay(param.TriggerDelay);
+            param.Camera.SetExposureTime(param.ExposureTime);
+            param.Camera.SetGain(param.Gain);
+            // TODO: 上面设置了相机参数，接下来处理根据软硬触发相机拍照的逻辑
 
         }
 

@@ -24,7 +24,6 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox2.Text = "相机节点";
             nodeComboBox2.AddItem("海康相机", NodeType.Camera);
             nodeComboBox2.AddItem("巴斯勒相机", NodeType.Camera);
-            nodeComboBox2.AddItem("度申相机", NodeType.Camera);
 
             nodeComboBox3.Text = "PLC节点";
             nodeComboBox3.AddItem("松下PLC读", NodeType.PLCRead);
@@ -54,12 +53,16 @@ namespace YTVisionPro.Forms.ProcessNew
             tabPage.Controls.Add(nodeEditPanel);
             tabControl1.Controls.Add(tabPage);
 
-            string res = "";
-            foreach (var name in Solution.Instance.GetAllProcessName())
-            {
-                res += name + "\n";
-            }
-            MessageBox.Show($"方案中流程名称：\n{res}");
+            #region 调试代码，上线请注释
+
+            //string res = "";
+            //foreach (var name in Solution.Instance.GetAllProcessName())
+            //{
+            //    res += name + "\n";
+            //}
+            //MessageBox.Show($"方案中流程名称：\n{res}");
+
+            #endregion
         }
 
         /// <summary>
@@ -92,12 +95,16 @@ namespace YTVisionPro.Forms.ProcessNew
                 tabControl1.Controls.Remove(tabPageToDelete);
                 Solution.Instance.RemoveProcess(tabPageToDelete.Text);
 
+                #region 调试代码，上线请注释
+                
                 string res = "";
                 foreach (var name in Solution.Instance.GetAllProcessName())
                 {
                     res += name + "\n";
                 }
                 MessageBox.Show($"方案中流程名称：\n{res}");
+
+                #endregion
             }
         }
     }

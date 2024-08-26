@@ -47,7 +47,6 @@ namespace YTVisionPro.Node
         private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
         {
             Params = e;
-            MessageBox.Show("基类");
         }
 
         /// <summary>

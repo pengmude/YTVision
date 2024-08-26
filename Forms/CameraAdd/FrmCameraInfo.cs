@@ -4,6 +4,7 @@ using MvCameraControl;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Camera;
 
@@ -29,11 +30,11 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <summary>
         /// 相机信息列表
         /// </summary>
-        private List<IDeviceInfo> infoListHik;
-        private List<ICameraInfo> infoListBasler;
+        private List<IDeviceInfo> infoListHik = CameraHik.FindCamera();
+        private List<ICameraInfo> infoListBasler = CameraBasler.FindCamera();
 
         /// <summary>
-        /// 用来保存设备信息对应的设备名
+        /// 用来保存设备名对应的设备信息
         /// </summary>
         private Dictionary<string, IDeviceInfo> _mapHik = new Dictionary<string, IDeviceInfo>();
         private Dictionary<string, ICameraInfo> _mapBasler = new Dictionary<string, ICameraInfo>();
@@ -41,14 +42,25 @@ namespace YTVisionPro.Forms.CameraAdd
         public FrmCameraInfo()
         {
             InitializeComponent();
-            InitCameraList(0);
-            Shown += FrmCaFrmCameraInfo_ShownmeraInfo_Load;
-            comboBoxCameraBrand.SelectedIndexChanged += comboBoxCameraBrand_SelectedIndexChanged;
+            comboBoxCameraBrand.SelectedIndex = 0;
+            // 查找相机信息
+            infoListHik = CameraHik.FindCamera();
+            infoListBasler = CameraBasler.FindCamera();
+
+            // 保存各品牌相机信息map
+            _mapHik.Clear();
+            _mapBasler.Clear();
+            foreach (var info in infoListHik)
+                _mapHik[CameraHik.GetDevName(info)] = info;
+            foreach (var info in infoListBasler)
+                _mapBasler[info[CameraInfoKey.ModelName]] = info;
+            Shown += FrmCaFrmCameraInfo_Shown;
         }
 
-        private void FrmCaFrmCameraInfo_ShownmeraInfo_Load(object sender, EventArgs e)
+        private void FrmCaFrmCameraInfo_Shown(object sender, EventArgs e)
         {
-            textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机" + (comboBoxCameraBrand.SelectedIndex == 0 ? (_count1 + 1) : (_count2 + 1));
+            // 初始化相机列表
+            InitCameraList(comboBoxCameraBrand.SelectedIndex);
         }
 
         /// <summary>
@@ -57,32 +69,15 @@ namespace YTVisionPro.Forms.CameraAdd
         private void InitCameraList(int brandIndex)
         {
             comboBoxCameraList.Items.Clear();
-            comboBoxCameraBrand.SelectedIndex = brandIndex;
-            _mapHik.Clear();
-            _mapBasler.Clear();
-
             if (brandIndex == 0)
             {
-                // 海康相机
-                if(infoListHik == null)
-                    infoListHik = CameraHik.FindCamera();
                 foreach (var info in infoListHik)
-                {
-                    string name = CameraHik.GetDevName(info);
-                    comboBoxCameraList.Items.Add(name);
-                    _mapHik[name] = info;
-                }
+                    comboBoxCameraList.Items.Add(CameraHik.GetDevName(info));
             }
-            else if(brandIndex == 1)
-            {
-                // 巴斯勒相机
-                infoListBasler = CameraBasler.FindCamera();
+            else if (brandIndex == 1) 
+            { 
                 foreach (var info in infoListBasler)
-                {
-                    string name = info[CameraInfoKey.ModelName];
-                    comboBoxCameraList.Items.Add(name);
-                    _mapBasler[name] = info;
-                }
+                    comboBoxCameraList.Items.Add(info[CameraInfoKey.ModelName]);
             }
 
             #region 测试代码，测试数据
@@ -96,7 +91,44 @@ namespace YTVisionPro.Forms.CameraAdd
 
             if (comboBoxCameraList.Items.Count > 0)
                 comboBoxCameraList.SelectedIndex = 0;
-            textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机" + (comboBoxCameraBrand.SelectedIndex == 0 ? (_count1 + 1) : (_count2 + 1));
+        }
+
+        /// <summary>
+        /// 点击搜索相机
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            // 查找相机信息
+            infoListHik = CameraHik.FindCamera();
+            infoListBasler = CameraBasler.FindCamera();
+
+            // 保存各品牌相机信息map
+            _mapHik.Clear();
+            _mapBasler.Clear();
+            foreach (var info in infoListHik)
+                _mapHik[CameraHik.GetDevName(info)] = info;
+            foreach (var info in infoListBasler)
+                _mapBasler[info[CameraInfoKey.ModelName]] = info;
+
+            // 清空相机下拉框
+            comboBoxCameraList.Items.Clear();
+
+            // 保存
+            if (comboBoxCameraBrand.SelectedIndex == 0)
+            {
+                foreach (var info in infoListHik)
+                    comboBoxCameraList.Items.Add(CameraHik.GetDevName(info));
+            }
+            else if (comboBoxCameraBrand.SelectedIndex == 1)
+            {
+                foreach (var info in infoListBasler)
+                    comboBoxCameraList.Items.Add(info[CameraInfoKey.ModelName]);
+
+            }
+            if (comboBoxCameraList.Items.Count > 0)
+                comboBoxCameraList.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -107,6 +139,7 @@ namespace YTVisionPro.Forms.CameraAdd
         private void comboBoxCameraBrand_SelectedIndexChanged(object sender, EventArgs e)
         {
             InitCameraList(comboBoxCameraBrand.SelectedIndex);
+            textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机" + (comboBoxCameraBrand.SelectedIndex == 0 ? (_count1 + 1) : (_count2 + 1));
         }
 
         /// <summary>
@@ -139,7 +172,10 @@ namespace YTVisionPro.Forms.CameraAdd
             {
                 //通过事件传递相机参数
                 info.Brand = comboBoxCameraBrand.SelectedIndex == 0 ? CameraBrand.HiKVision : CameraBrand.Basler;
-                info.DevInfo = new CameraDevInfo(_mapHik[comboBoxCameraList.Text], _mapBasler[comboBoxCameraList.Text]);
+                if(comboBoxCameraBrand.SelectedIndex == 0)
+                    info.DevInfo = new CameraDevInfo(_mapHik[comboBoxCameraList.Text], null);
+                else if(comboBoxCameraBrand.SelectedIndex == 1)
+                    info.DevInfo = new CameraDevInfo(null, _mapBasler[comboBoxCameraList.Text]);
                 info.UserDefineName = textBoxUserName.Text;
 
                 AddCameraDevEvent?.Invoke(this, info);
@@ -151,6 +187,7 @@ namespace YTVisionPro.Forms.CameraAdd
             }
             catch (Exception ex)
             {
+                AddCameraDevEvent?.Invoke(this, info);
                 MessageBox.Show("添加相机异常：" + ex.Message);
 
                 #region 测试代码
@@ -163,16 +200,6 @@ namespace YTVisionPro.Forms.CameraAdd
 
                 #endregion
             }
-        }
-
-        /// <summary>
-        /// 点击搜索相机
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void buttonSearch_Click(object sender, EventArgs e)
-        {
-            InitCameraList(comboBoxCameraBrand.SelectedIndex);
         }
     }
 
