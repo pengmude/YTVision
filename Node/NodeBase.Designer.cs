@@ -34,6 +34,7 @@
             this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.启用ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.禁用ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.重命名ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,37 +58,45 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.删除ToolStripMenuItem,
             this.启用ToolStripMenuItem,
-            this.禁用ToolStripMenuItem});
+            this.禁用ToolStripMenuItem,
+            this.重命名ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 94);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 157);
             // 
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(116, 30);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
             // 启用ToolStripMenuItem
             // 
             this.启用ToolStripMenuItem.Name = "启用ToolStripMenuItem";
-            this.启用ToolStripMenuItem.Size = new System.Drawing.Size(116, 30);
+            this.启用ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
             this.启用ToolStripMenuItem.Text = "启用";
             this.启用ToolStripMenuItem.Click += new System.EventHandler(this.启用ToolStripMenuItem_Click);
             // 
             // 禁用ToolStripMenuItem
             // 
             this.禁用ToolStripMenuItem.Name = "禁用ToolStripMenuItem";
-            this.禁用ToolStripMenuItem.Size = new System.Drawing.Size(116, 30);
+            this.禁用ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
             this.禁用ToolStripMenuItem.Text = "禁用";
             this.禁用ToolStripMenuItem.Click += new System.EventHandler(this.禁用ToolStripMenuItem_Click);
             // 
-            // UserControlBase
+            // 重命名ToolStripMenuItem
+            // 
+            this.重命名ToolStripMenuItem.Name = "重命名ToolStripMenuItem";
+            this.重命名ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.重命名ToolStripMenuItem.Text = "重命名";
+            this.重命名ToolStripMenuItem.Click += new System.EventHandler(this.重命名ToolStripMenuItem_Click);
+            // 
+            // NodeBase
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.label1);
-            this.Name = "UserControlBase";
+            this.Name = "NodeBase";
             this.Size = new System.Drawing.Size(209, 121);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -101,5 +110,6 @@
         private System.Windows.Forms.ToolStripMenuItem 删除ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 启用ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 禁用ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 重命名ToolStripMenuItem;
     }
 }

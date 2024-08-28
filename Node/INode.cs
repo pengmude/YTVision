@@ -42,6 +42,14 @@ namespace YTVisionPro.Node
     /// </summary>
     internal interface INodeParamForm
     {
+        /// <summary>
+        /// 给节点参数界面类设置所属的节点
+        /// </summary>
+        /// <param name="node"></param>
+        void SetNodeBelong(NodeBase node);
+        /// <summary>
+        /// 节点参数界面类参数设置保存触发事件
+        /// </summary>
         event EventHandler<INodeParam> OnNodeParamChange;
     }
 
@@ -103,25 +111,29 @@ namespace YTVisionPro.Node
     internal enum NodeType
     {
         /// <summary>
-        /// 磐鑫光源节点
+        /// 光源控制
         /// </summary>
-        LightPPX,
+        LightSourceControl,
         /// <summary>
-        /// 锐视光源节点
+        /// 相机拍照
         /// </summary>
-        LightRsee,
+        CameraShot,
         /// <summary>
-        /// 相机节点
+        /// 本地图像
         /// </summary>
-        Camera,
+        LocalPicture,
         /// <summary>
-        /// 读取PLC寄存器节点
+        /// PLC寄存器读取
         /// </summary>
         PLCRead,
         /// <summary>
-        /// 写入PLC寄存器节点
+        /// PLC寄存器写入
         /// </summary>
         PLCWrite,
+        /// <summary>
+        /// PLC寄存器写入AI检测结果
+        /// </summary>
+        PLCHTAIResultSend,
         /// <summary>
         /// 汇图AI节点
         /// </summary>

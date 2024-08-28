@@ -12,10 +12,23 @@ namespace YTVisionPro.Node.Camera.HiK
 {
     internal class NodeCamera : NodeBase
     {
-        public NodeCamera(string nodeText, Process process) : base(process, new ParamFormCamera())
+        public NodeCamera(string nodeName, Process process) : base(nodeName, process)
         {
-            SetNodeText(nodeText);
+            ParamForm = new ParamFormCamera();
+            ParamForm.SetNodeBelong(this);
+            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
             Result = new NodeResultCamera();
+            ((NodeResultCamera)Result).Bitmap = new System.Drawing.Bitmap(@"C:\Users\pengm\Pictures\NOIMAGE.bmp");
+        }
+
+        /// <summary>
+        /// 节点参数改变时更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
+        {
+            Params = e;
         }
 
         /// <summary>

@@ -1,13 +1,5 @@
 ﻿using Logger;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Node.Light;
 using YTVisionPro.Node.Light.PPX;
 
 namespace YTVisionPro.Node.NodeLight.PPX
@@ -18,10 +10,22 @@ namespace YTVisionPro.Node.NodeLight.PPX
         /// 创建一个指定名称的节点
         /// </summary>
         /// <param name="nodeText"></param>
-        public NodeLight(string nodeText, Process process, LightBrand brand) : base(process, new ParamFormLight(brand))
+        public NodeLight(string nodeName, Process process) : base(nodeName, process)
         {
-            SetNodeText(nodeText);
+            ParamForm = new ParamFormLight(nodeName, process);
+            ParamForm.SetNodeBelong(this);
+            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
             Result = new NodeResultLight();
+        }
+
+        /// <summary>
+        /// 节点参数改变时更新
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
+        {
+            Params = e;
         }
 
         /// <summary>
@@ -51,6 +55,7 @@ namespace YTVisionPro.Node.NodeLight.PPX
             {
                 try
                 {
+                    param.Light.Brightness = param.Brightness;
                     param.Light.TurnOn(); 
                     SetRunStatus(startTime, true);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);

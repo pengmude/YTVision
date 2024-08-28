@@ -39,6 +39,18 @@ namespace YTVisionPro.Hardware.PLC
         /// </summary>
         void Release();
 
+        /// <summary>
+        /// 读取PLC寄存器
+        /// </summary>
+        /// <returns></returns>
+        object ReadPLCData(string address, ushort length, DataType dataType);
+
+        /// <summary>
+        /// 写入PLC寄存器
+        /// </summary>
+        /// <returns></returns>
+        void WritePLCData(string address, object value, DataType dataType);
+
     }
 
     /// <summary>
@@ -93,5 +105,15 @@ namespace YTVisionPro.Hardware.PLC
     {
         COM,
         ETHERNET
+    }
+
+    /// <summary>
+    /// 数据类型
+    /// </summary>
+    public enum DataType
+    {
+        BOOL,
+        INT,
+        STRING
     }
 }

@@ -87,8 +87,6 @@ namespace YTVisionPro
             RunTime = 0;
             if (Enable)
             {
-                LogHelper.AddLog(MsgLevel.Info, "", true);
-                LogHelper.AddLog(MsgLevel.Info, "", true);
                 LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
 
                 foreach (var node in _nodes)

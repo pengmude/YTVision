@@ -18,18 +18,18 @@ namespace YTVisionPro.Forms.ProcessNew
         private void InitNodeComboBox()
         {
             nodeComboBox1.Text = "光源节点";
-            nodeComboBox1.AddItem("磐鑫光源", NodeType.LightPPX);
-            nodeComboBox1.AddItem("锐视光源", NodeType.LightRsee);
+            nodeComboBox1.AddItem("光源控制", NodeType.LightSourceControl);
 
-            nodeComboBox2.Text = "相机节点";
-            nodeComboBox2.AddItem("海康相机", NodeType.Camera);
-            nodeComboBox2.AddItem("巴斯勒相机", NodeType.Camera);
+            nodeComboBox2.Text = "图像采集";
+            nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
+            nodeComboBox2.AddItem("本地图片", NodeType.LocalPicture);
 
-            nodeComboBox3.Text = "PLC节点";
+            nodeComboBox3.Text = "PLC寄存器读写";
             nodeComboBox3.AddItem("松下PLC读", NodeType.PLCRead);
             nodeComboBox3.AddItem("松下PLC写", NodeType.PLCWrite);
+            nodeComboBox3.AddItem("汇图AI结果发送", NodeType.PLCHTAIResultSend);
 
-            nodeComboBox5.Text = "AI节点";
+            nodeComboBox5.Text = "AI检测";
             nodeComboBox5.AddItem("汇图AI", NodeType.AIHT);
         }
 

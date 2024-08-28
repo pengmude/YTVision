@@ -54,66 +54,63 @@
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.trackBar1, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.button1, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.button1, 1, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28816F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.14237F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.14237F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.14237F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.14237F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17.14237F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(784, 437);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(755, 389);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 22);
+            this.label1.Location = new System.Drawing.Point(3, 24);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(386, 18);
+            this.label1.Size = new System.Drawing.Size(371, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "选择光源";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // comboBox1
             // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "[未设置]"});
-            this.comboBox1.Location = new System.Drawing.Point(492, 18);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(100, 2, 100, 2);
+            this.comboBox1.Location = new System.Drawing.Point(453, 20);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(192, 26);
+            this.comboBox1.Size = new System.Drawing.Size(225, 26);
             this.comboBox1.TabIndex = 1;
             // 
             // comboBox2
             // 
-            this.comboBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
             "打开",
             "关闭"});
-            this.comboBox2.Location = new System.Drawing.Point(492, 86);
-            this.comboBox2.Margin = new System.Windows.Forms.Padding(100, 2, 100, 2);
+            this.comboBox2.Location = new System.Drawing.Point(456, 94);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(192, 26);
+            this.comboBox2.Size = new System.Drawing.Size(219, 26);
             this.comboBox2.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 90);
+            this.label2.Location = new System.Drawing.Point(3, 98);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(386, 18);
+            this.label2.Size = new System.Drawing.Size(371, 18);
             this.label2.TabIndex = 0;
             this.label2.Text = "光源操作";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -122,9 +119,9 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 164);
+            this.label3.Location = new System.Drawing.Point(3, 178);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(386, 18);
+            this.label3.Size = new System.Drawing.Size(371, 18);
             this.label3.TabIndex = 0;
             this.label3.Text = "光源亮度值";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -132,10 +129,10 @@
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(472, 159);
+            this.textBox1.Location = new System.Drawing.Point(457, 173);
             this.textBox1.Margin = new System.Windows.Forms.Padding(80, 2, 80, 2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(232, 28);
+            this.textBox1.Size = new System.Drawing.Size(218, 28);
             this.textBox1.TabIndex = 2;
             this.textBox1.Text = "255";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -146,11 +143,11 @@
             this.trackBar1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.trackBar1.BackColor = System.Drawing.SystemColors.Control;
             this.tableLayoutPanel1.SetColumnSpan(this.trackBar1, 2);
-            this.trackBar1.Location = new System.Drawing.Point(60, 240);
+            this.trackBar1.Location = new System.Drawing.Point(60, 257);
             this.trackBar1.Margin = new System.Windows.Forms.Padding(60, 30, 60, 5);
             this.trackBar1.Maximum = 255;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(664, 39);
+            this.trackBar1.Size = new System.Drawing.Size(635, 45);
             this.trackBar1.TabIndex = 3;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar1.Value = 255;
@@ -159,10 +156,10 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Location = new System.Drawing.Point(472, 372);
+            this.button1.Location = new System.Drawing.Point(457, 323);
             this.button1.Margin = new System.Windows.Forms.Padding(80, 2, 80, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(232, 50);
+            this.button1.Size = new System.Drawing.Size(218, 50);
             this.button1.TabIndex = 4;
             this.button1.Text = "保存";
             this.button1.UseVisualStyleBackColor = true;
@@ -172,7 +169,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 437);
+            this.ClientSize = new System.Drawing.Size(755, 389);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

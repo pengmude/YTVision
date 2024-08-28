@@ -38,8 +38,6 @@ namespace YTVisionPro.Hardware.PLC
                 _panasonicMewtocol = new PanasonicMewtocol();
             else if(PLCParms.PlcConType == PlcConType.ETHERNET)
                 _panasonicMcNet = new PanasonicMcNet();
-            else
-                _panasonicMewtocol = new PanasonicMewtocol();
         }
 
         public bool Connect()
@@ -48,7 +46,6 @@ namespace YTVisionPro.Hardware.PLC
             {
                 if (PLCParms.EthernetParms.IP == null)
                 {
-                    //LogHelper.AddLog(MsgLevel.Exception, "PLC网口连接参数为空！", true);
                     throw new Exception("PLC网口连接参数为空！");
                 }
                 _panasonicMcNet.IpAddress = PLCParms.EthernetParms.IP;
@@ -61,7 +58,6 @@ namespace YTVisionPro.Hardware.PLC
             {
                 if (PLCParms.SerialParms.PortName == null)
                 {
-                    //LogHelper.AddLog(MsgLevel.Exception, "PLC串口连接参数为空！", true);
                     throw new Exception("PLC串口连接参数为空！");
                 }
                 _panasonicMewtocol.SerialPortInni(sp =>
@@ -75,7 +71,6 @@ namespace YTVisionPro.Hardware.PLC
 
                 if (_panasonicMewtocol.IsOpen())
                     return true;
-                //var res = _panasonicMewtocol.Open();
                 _isOpen = _panasonicMewtocol.Open().IsSuccess;
                 return _isOpen;
             }
@@ -109,24 +104,70 @@ namespace YTVisionPro.Hardware.PLC
                 _panasonicMcNet.Dispose();
         }
 
-        public OperateResult<bool> ReadBool(string address) 
+        /// <summary>
+        /// 读取PLC寄存器
+        /// </summary>
+        /// <returns></returns>
+        public object ReadPLCData(string address, ushort length, DataType dataType)
         {
-            if(PLCParms.PlcConType == PlcConType.COM)
+            switch (dataType)
+            {
+                case DataType.INT:
+                    return ReadInt(address).Content;
+                case DataType.BOOL:
+                    return ReadBool(address).Content;
+                case DataType.STRING:
+                    return ReadString(address, length).Content;
+                default:
+                    throw new ArgumentException("不支持的数据类型");
+            }
+        }
+
+        /// <summary>
+        /// 写入PLC寄存器
+        /// </summary>
+        /// <returns></returns>
+        public void WritePLCData(string address, object value, DataType dataType)
+        {
+            switch (dataType)
+            {
+                case DataType.BOOL:
+                    WriteBool(address, (bool)value);
+                    break;
+                case DataType.INT:
+                    WriteInt(address, (int)value);
+                    break;
+                default:
+                    throw new ArgumentException("不支持的数据类型");
+            }
+        }
+
+        private OperateResult<int> ReadInt(string address)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
+                return _panasonicMewtocol.ReadInt32(address);
+            else
+                return _panasonicMcNet.ReadInt32(address);
+        }
+
+        private OperateResult<bool> ReadBool(string address)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.ReadBool(address);
             else
                 return _panasonicMcNet.ReadBool(address);
         }
 
-        public OperateResult<string> ReadString(string address, ushort length, Encoding encoding) 
+        private OperateResult<string> ReadString(string address, ushort length)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
-                return _panasonicMewtocol.ReadString(address, length, encoding);
+                return _panasonicMewtocol.ReadString(address, length);
             else
-                return _panasonicMcNet.ReadString(address, length, encoding);
+                return _panasonicMcNet.ReadString(address, length);
 
         }
 
-        public OperateResult WriteBool(string address, bool value) 
+        private OperateResult WriteBool(string address, bool value)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.Write(address, value);
@@ -135,7 +176,7 @@ namespace YTVisionPro.Hardware.PLC
 
         }
 
-        public OperateResult WriteInt(string address, int value) 
+        private OperateResult WriteInt(string address, int value)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.Write(address, value);

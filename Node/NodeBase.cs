@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Reflection.Emit;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace YTVisionPro.Node
 {
@@ -12,7 +14,14 @@ namespace YTVisionPro.Node
         private int _id = 0;
         private bool _active = true;
         private bool _selected = false;
-        private Process _process; // 节点所属流程
+        private string _nodeName;
+        private FrmNodeRename _frmNodeRename;
+        /// <summary>
+        /// 节点所属流程
+        /// </summary>
+        public Process Process; 
+
+
 
         /// <summary>
         /// 因为是控件类，提供无参构造函数让设计器可以显示出来
@@ -28,25 +37,22 @@ namespace YTVisionPro.Node
         /// 实际只使用这个有参构造函数创建控件
         /// </summary>
         /// <param name="paramForm"></param>
-        public NodeBase(Process process, INodeParamForm paramForm = null)
+        public NodeBase(string nodeName, Process process)
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
             _id = ++Solution.NodeCount;
-            _process = process;
-            ParamForm = paramForm;
-            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
+            _nodeName = nodeName;
+            label1.Text = $"{ID}.{_nodeName}";
+            Process = process;
+            _frmNodeRename = new FrmNodeRename(this);
+            _frmNodeRename.RenameChangeEvent += RenameChangeEvent;
         }
 
-        /// <summary>
-        /// 节点参数改变时更新
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
+        private void RenameChangeEvent(object sender, string e)
         {
-            Params = e;
+            _nodeName = e;
+            label1.Text = ID + "." + e;
         }
 
         /// <summary>
@@ -83,21 +89,12 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 节点名称
         /// </summary>
-        public string NodeName { get { return label1.Text; } set { label1.Text = value; } }
+        public string NodeName { get => _nodeName; set => _nodeName = value; }
 
         /// <summary>
         /// 删除节点事件
         /// </summary>
         public static event EventHandler<int> NodeDeletedEvent;
-
-        /// <summary>
-        /// 设置节点文本
-        /// </summary>
-        /// <param name="text"></param>
-        protected void SetNodeText(string text)
-        {
-            label1.Text = text;
-        }
 
         /// <summary>
         /// 删除时触发删除事件，参数为待删除的节点ID
@@ -106,11 +103,48 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void 删除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            #region 测试节点删除前代码
+
+            //string str0 = "";
+            //foreach (var node in Solution.Nodes)
+            //{
+            //    str0 += node.NodeName + "\n";
+            //}
+            //MessageBox.Show("删除前方案节点：" + str0);
+
+            //string str1 = "";
+            //foreach (var node in Process.Nodes)
+            //{
+            //    str1 += node.NodeName + "\n";
+            //}
+            //MessageBox.Show("删除前流程节点：" + str1);
+
+            #endregion
+
             if (Selected)
             {
-                _process.Nodes.Remove(this);
+                Solution.Nodes.Remove(this);
+                Process.Nodes.Remove(this);
                 NodeDeletedEvent.Invoke(this, ID);
             }
+
+            #region 测试节点删除后代码
+
+            //string str2 = "";
+            //foreach (var node in Solution.Nodes)
+            //{
+            //    str2 += node.NodeName + "\n";
+            //}
+            //MessageBox.Show("删除后方案节点：" + str2);
+
+            //string str3 = "";
+            //foreach (var node in Process.Nodes)
+            //{
+            //    str3 += node.NodeName + "\n";
+            //}
+            //MessageBox.Show("删除后流程节点：" + str3);
+
+            #endregion
         }
 
         /// <summary>
@@ -205,5 +239,10 @@ namespace YTVisionPro.Node
         }
 
         #endregion 定义节点界面操作-结束
+
+        private void 重命名ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _frmNodeRename.ShowDialog();
+        }
     }
 }

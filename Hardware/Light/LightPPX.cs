@@ -78,7 +78,7 @@ namespace YTVisionPro.Hardware.Light
             DevName = lightParam.LightName;
             UserDefinedName = DevName;
             LightParam = lightParam;
-
+            Brightness = 255;
             try
             {
                 foreach (var serialPort in FrmLightListView.OccupiedComList)

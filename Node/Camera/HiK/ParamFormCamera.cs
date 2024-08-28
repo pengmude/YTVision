@@ -45,6 +45,12 @@ namespace YTVisionPro.Node.Camera.HiK
         }
 
         /// <summary>
+        /// 用于节点参数界面需要订阅结果的情况调用
+        /// </summary>
+        /// <param name="node"></param>
+        public void SetNodeBelong(NodeBase node) { }
+
+        /// <summary>
         /// 软硬触发切换
         /// </summary>
         /// <param name="sender"></param>

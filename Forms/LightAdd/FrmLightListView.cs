@@ -34,21 +34,6 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void SingleLight_SinglePLCRemoveEvent(object sender, SingleLight e)
         {
-            // 移除设备需要判断当前是否有节点使用该设备
-            foreach (var light in Solution.Instance.LightDevices)
-            {
-                foreach (var node in Solution.Nodes)
-                {
-                    if (node is NodeLight lightNode 
-                        && lightNode.Params is NodeParamLight paramLight 
-                        && light.UserDefinedName == paramLight.Light.UserDefinedName)
-                    {
-                        MessageBox.Show("当前方案的节点正在使用该光源，无法删除光源！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-                }
-            }
-
             //移除的是被选中的则要清除它参数显示控件
             if (e.IsSelected)
                 panel1.Controls.Remove(e.LightParamsShowControl);
@@ -64,7 +49,7 @@ namespace YTVisionPro.Forms.LightAdd
             Solution.Instance.Devices.Remove(e.Light);
             if (count == 1)
                 e.Light.Disconnect();
-            //最后移除掉光源控件
+            //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);
         }
 

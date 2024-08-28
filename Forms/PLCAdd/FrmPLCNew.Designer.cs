@@ -80,7 +80,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(186, 31);
             this.textBox2.TabIndex = 0;
-            this.textBox2.Text = "松下MewTocol";
+            this.textBox2.Text = "松下PLC";
             // 
             // groupBox3
             // 
@@ -380,7 +380,7 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(792, 454);
             this.tableLayoutPanel1.TabIndex = 14;
             // 
-            // FrmPLCNew1
+            // FrmPLCNew
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -390,7 +390,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrmPLCNew1";
+            this.Name = "FrmPLCNew";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "添加PLC";
             this.groupBox3.ResumeLayout(false);

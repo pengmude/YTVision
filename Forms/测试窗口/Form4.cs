@@ -15,7 +15,7 @@ namespace YTVisionPro.Forms.测试窗口
 
         private void button1_Click(object sender, EventArgs e)
         {
-            nodePreviewControl1.AddItem(textBox7.Text, Node.NodeType.Camera);
+            nodePreviewControl1.AddItem(textBox7.Text, Node.NodeType.CameraShot);
         }
 
         private void panel1_DragEnter(object sender, DragEventArgs e)

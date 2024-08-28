@@ -9,6 +9,8 @@ using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
 using YTVisionPro.Node.Camera.HiK;
 using YTVisionPro.Node.NodeLight.PPX;
+using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
+using YTVisionPro.Node.PLC.Panasonic.Read;
 using static YTVisionPro.Node.NodeComboBox;
 
 namespace YTVisionPro.Forms.ProcessNew
@@ -71,18 +73,22 @@ namespace YTVisionPro.Forms.ProcessNew
                 NodeBase node = null;
                 switch (data.NodeType)
                 {
-                    case NodeType.LightPPX:
-                        node = new NodeLight($"{Solution.NodeCount + 1}{data.Text}", _process, LightBrand.PPX);
+                    case NodeType.LightSourceControl:
+                        node = new NodeLight(data.Text, _process);
                         break;
-                    case NodeType.LightRsee:
-                        node = new NodeLight($"{Solution.NodeCount + 1}{data.Text}", _process, LightBrand.RSEE);
+                    case NodeType.CameraShot:
+                        node = new NodeCamera(data.Text, _process);
                         break;
-                    case NodeType.Camera:
-                        node = new NodeCamera($"{Solution.NodeCount + 1}{data.Text}", _process);
+                    case NodeType.LocalPicture:
+                        node = new NodeCamera(data.Text, _process);
                         break;
                     case NodeType.PLCRead:
+                        node = new NodeRead(data.Text, _process);
                         break;
                     case NodeType.PLCWrite:
+                        break;
+                    case NodeType.PLCHTAIResultSend:
+                        node = new NodeHTAISendSignal(data.Text, _process);
                         break;
                     case NodeType.AIHT:
                         break;
@@ -123,11 +129,6 @@ namespace YTVisionPro.Forms.ProcessNew
                 if (node.ID != e)
                 {
                     _stack.Push(node);
-                }
-                else
-                {
-                    Solution.Nodes.Remove(node);
-                    //_process.Nodes.Remove(node);
                 }
             }
 

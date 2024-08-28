@@ -8,32 +8,19 @@ namespace YTVisionPro.Node.Light.PPX
 {
     internal partial class ParamFormLight : Form, INodeParamForm
     {
+        private string _nodeName;
+        private Process _process;
         /// <summary>
         /// 参数改变事件，设置完参数后触发，给节点订阅
         /// </summary>
         public event EventHandler<INodeParam> OnNodeParamChange;
 
-        /// <summary>
-        /// 光源品牌
-        /// </summary>
-        private LightBrand _brand;
-
-        /// <summary>
-        /// 设置的光源名称
-        /// </summary>
-        //private string SelectedLightName = null;
-
-        public ParamFormLight()
+        public ParamFormLight(string nodeName, Process process)
         {
             InitializeComponent();
-        }
-
-        public ParamFormLight(LightBrand lightBrand)
-        {
-            InitializeComponent();
-
-            _brand = lightBrand;
             InitLightComboBox();
+            _nodeName = nodeName;
+            _process = process;
         }
 
         /// <summary>
@@ -49,17 +36,23 @@ namespace YTVisionPro.Node.Light.PPX
             // 初始化光源列表,只显示添加的光源COM号且是对应传入的品牌的
             foreach (var light in Solution.Instance.LightDevices)
             {
-                if (light.Brand == _brand)
-                {
-                    comboBox1.Items.Add(light.UserDefinedName);
-                }
+                comboBox1.Items.Add(light.UserDefinedName);
             }
             int index = comboBox1.Items.IndexOf(text);
             if(index == -1)
                 comboBox1.SelectedIndex = 0;
             else
                 comboBox1.SelectedIndex = index;
-            comboBox2.SelectedIndex = 0;
+            if(comboBox2.Text.IsNullOrEmpty())
+                comboBox2.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        /// 用于节点参数界面需要订阅结果的情况调用
+        /// </summary>
+        /// <param name="node"></param>
+        public void SetNodeBelong(NodeBase node)
+        {
         }
 
         /// <summary>
@@ -106,8 +99,8 @@ namespace YTVisionPro.Node.Light.PPX
         {
             if (comboBox1.Text.IsNullOrEmpty() || comboBox1.Text == "[未设置]")
             {
-                LogHelper.AddLog(MsgLevel.Exception, $"光源不能为空！", true);
-                MessageBox.Show("光源不能为空！", "错误", MessageBoxButtons.OK,MessageBoxIcon.Error);
+                LogHelper.AddLog(MsgLevel.Warn, $"节点[{_process.ProcessName}.{_nodeName}]光源未设置！", true);
+                MessageBox.Show($"节点[{_process.ProcessName}.{_nodeName}]光源未设置！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -117,7 +110,7 @@ namespace YTVisionPro.Node.Light.PPX
                 ILight light = null;
                 foreach (var lightTmp in Solution.Instance.LightDevices)
                 {
-                    if(lightTmp.UserDefinedName == comboBox1.Text)
+                    if (lightTmp.UserDefinedName == comboBox1.Text)
                     {
                         light = lightTmp;
                         break;
@@ -125,7 +118,7 @@ namespace YTVisionPro.Node.Light.PPX
                 }
 
                 //把设置好的参数传给光源节点NodeLight去更新结果
-                bool open = comboBox2.Text == "打开"  ? true  : false;
+                bool open = comboBox2.Text == "打开" ? true : false;
                 NodeParamLight nodeParamLight = new NodeParamLight(light, trackBar1.Value, open);
                 OnNodeParamChange?.Invoke(this, nodeParamLight);
                 Close();

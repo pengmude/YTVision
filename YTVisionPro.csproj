@@ -259,6 +259,12 @@
     <Compile Include="Node\Camera\HiK\ParamFormCamera.Designer.cs">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\FrmNodeRename.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\FrmNodeRename.Designer.cs">
+      <DependentUpon>FrmNodeRename.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\Light\PPX\NodeLight.cs">
       <SubType>UserControl</SubType>
@@ -361,6 +367,29 @@
     <Compile Include="Node\NodeSubscription.Designer.cs">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeInfo.cs" />
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeParamHTAISendSignal.cs" />
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeResultHTAISendSignal.cs" />
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeHTAISendSignal.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.Designer.cs">
+      <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Read\NodeParamRead.cs" />
+    <Compile Include="Node\PLC\Panasonic\Read\NodeRead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Read\NodeResultRead.cs" />
+    <Compile Include="Node\PLC\Panasonic\Read\ParamFormRead.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Read\ParamFormRead.Designer.cs">
+      <DependentUpon>ParamFormRead.cs</DependentUpon>
+    </Compile>
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -438,6 +467,9 @@
     <EmbeddedResource Include="Node\Camera\HiK\ParamFormCamera.resx">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\FrmNodeRename.resx">
+      <DependentUpon>FrmNodeRename.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\Light\PPX\ParamFormLight.resx">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
@@ -483,6 +515,12 @@
     <EmbeddedResource Include="Node\NodeSubscription.resx">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.resx">
+      <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormRead.resx">
+      <DependentUpon>ParamFormRead.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -522,7 +560,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Node\AI\" />
-    <Folder Include="Node\PLC\" />
     <Folder Include="Node\Tool\" />
   </ItemGroup>
   <ItemGroup>

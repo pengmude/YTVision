@@ -73,7 +73,7 @@ namespace YTVisionPro.Forms.LightAdd
                     lightParam.Port = this.comboBox2.Text;
                     lightParam.BaudRate = int.Parse(this.comboBox3.Text);
                     lightParam.DataBits = int.Parse(this.comboBox4.Text);
-                    lightParam.StopBits = comboBox5.Text == "1" ? StopBits.One : StopBits.Two;
+                    lightParam.StopBits = comboBox5.Text == "1" ? StopBits.One : comboBox5.Text == "1.5" ? StopBits.OnePointFive : StopBits.Two;
                     lightParam.Parity = comboBox6.Text == "奇" ? Parity.Odd : comboBox6.Text == "偶" ? Parity.Even : Parity.None;
 
                     // 已添加设备冲突判断

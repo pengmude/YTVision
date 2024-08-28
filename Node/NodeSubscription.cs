@@ -21,7 +21,6 @@ namespace YTVisionPro.Node
 {
     internal partial class NodeSubscription : UserControl
     {
-        Process _process;
         /// <summary>
         /// 所属节点
         /// </summary>
@@ -31,16 +30,13 @@ namespace YTVisionPro.Node
         /// </summary>
         NodeBase _selectedNode = null;
 
-
-
         public NodeSubscription()
         {
             InitializeComponent();
         }
 
-        public void Init(Process process, NodeBase node)
+        public void Init(NodeBase node)
         {
-            _process = process;
             _node = node;
             InitNodeIdList();
             NodeBase.NodeDeletedEvent += NodeBase_NodeDeletedEvent;
@@ -62,19 +58,19 @@ namespace YTVisionPro.Node
         /// <param name="ids"></param>
         private void InitNodeIdList()
         {
+            if(_node == null) return;
             _selectedNode = null;
             comboBox1.Items.Clear();
-            foreach (var node in _process.Nodes)
+            foreach (var node in _node.Process.Nodes)
             {
                 if(node.ID < _node.ID)
                 {
-                    comboBox1.Items.Add(node.ID);
+                    comboBox1.Items.Add($"{node.ID}.{node.NodeName}");
                     if(_selectedNode == null)
                         _selectedNode = node;
                 }
             }
             if (comboBox1.Items.Count > 0) comboBox1.SelectedIndex = 0;
-            if (comboBox1.SelectedIndex == 0) InitProperties(_selectedNode);
         }
 
         /// <summary>
@@ -84,9 +80,9 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (var node in _process.Nodes)
+            foreach (var node in _node.Process.Nodes)
             {
-                if(node.ID == _node.ID)
+                if($"{node.ID}.{node.NodeName}" == comboBox1.Text)
                 {
                     _selectedNode = node;
                     InitProperties(node);
@@ -108,17 +104,24 @@ namespace YTVisionPro.Node
             {
                 comboBox2.Items.Add(property.Name);
             }
+            if (comboBox2.Items.Count > 0) comboBox2.SelectedIndex = 0;
         }
 
         public T GetValue<T>()
         {
-            PropertyInfo propertyInfo = _selectedNode.Result.GetType().GetProperty(comboBox2.Text);
-            if (propertyInfo != null && propertyInfo.CanRead && propertyInfo.PropertyType == typeof(T))
+            try
             {
-                return (T)propertyInfo.GetValue(_selectedNode.Result);
+                PropertyInfo propertyInfo = _selectedNode.Result.GetType().GetProperty(comboBox2.Text);
+                if (propertyInfo != null && propertyInfo.CanRead && propertyInfo.PropertyType == typeof(T))
+                {
+                    return (T)propertyInfo.GetValue(_selectedNode.Result);
+                }
             }
-            LogHelper.AddLog(MsgLevel.Fatal, $"{_selectedNode.Result.GetType().Name}类型找不到属性{comboBox2.Text}!");
-            return (T)_selectedNode.Result;
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Fatal, $"节点({_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!原因：{ex.Message}");
+            }
+            return default(T);
         }
     }
 }

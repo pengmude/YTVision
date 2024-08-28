@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -68,18 +67,13 @@ namespace YTVisionPro.Forms.PLCAdd
         private void SinglePLCInfo_MouseClick(object sender, MouseEventArgs e)
         {
             SelectedChange?.Invoke(this, this);
+
             //先清除所有选中状态
             foreach (var item in SinglePLCs)
-            {
-                item.tableLayoutPanel1.BackColor = SystemColors.Control;
-                item.label1.BackColor = SystemColors.Control;
-                IsSelected = false;
-            }
+                item.SetSelectedStatus(false);
 
-            // 设置当前选中的样式
-            this.tableLayoutPanel1.BackColor = Color.Gray;
-            this.label1.BackColor = Color.Gray;
-            IsSelected = true;
+            // 设置当前实例为选中样式
+            SetSelectedStatus(true);
         }
 
         /// <summary>
@@ -98,7 +92,7 @@ namespace YTVisionPro.Forms.PLCAdd
                 this.tableLayoutPanel1.BackColor = SystemColors.Control;
                 this.label1.BackColor = SystemColors.Control;
             }
-            //uiSwitch1.Enabled = flag;
+            IsSelected = flag;
         }
 
         /// <summary>

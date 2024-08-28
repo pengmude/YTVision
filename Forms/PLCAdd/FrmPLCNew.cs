@@ -90,8 +90,8 @@ namespace YTVisionPro.Forms.PLCAdd
                                 }
                                 if (plc.UserDefinedName == pLCParms.UserDefinedName)
                                 {
-                                    MessageBox.Show("该光源名称已存在！");
-                                    LogHelper.AddLog(MsgLevel.Info, "该光源名称已存在！", true);
+                                    MessageBox.Show("该PLC名称已存在！");
+                                    LogHelper.AddLog(MsgLevel.Info, "该PLC名称已存在！", true);
                                     return;
                                 }
                             }
@@ -108,7 +108,7 @@ namespace YTVisionPro.Forms.PLCAdd
                 catch (Exception ex)
                 {
                     LogHelper.AddLog(MsgLevel.Warn, "添加PLC时参数设置错误！\n" + ex, true);
-                    MessageBox.Show("请检查参数是否有误！");
+                    MessageBox.Show("请检查PLC参数是否有误！");
                 }
             }
             else

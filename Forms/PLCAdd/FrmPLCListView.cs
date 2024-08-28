@@ -45,30 +45,16 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <param name="e"></param>
         private void SinglePLC_SelectedChange(object sender, SinglePLC e)
         {
-            //先取消选中
-            foreach (var control in flowLayoutPanel1.Controls)
-            {
-                if (control is SinglePLC plcItem)
-                {
-                    plcItem.SetSelectedStatus(false);
-                }
-            }
-
-            //再设置当前选中样式
-            e.SetSelectedStatus(true);
-
             //将选中的PLC的参数控件设置到右侧
             panel1.Controls.Clear();
             if (e.ConType == PlcConType.COM)
             {
                 e.SerialParamsControl.Dock = DockStyle.Fill;
-                //e.SerialParamsControl.Show();
                 panel1.Controls.Add(e.SerialParamsControl);
             }
             else if (e.ConType == PlcConType.ETHERNET)
             {
                 e.EthernetParamsControl.Dock = DockStyle.Fill;
-                //e.EthernetParamsControl.Show();
                 panel1.Controls.Add(e.EthernetParamsControl);
             }
         }
