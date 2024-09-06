@@ -25,6 +25,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
 
         List<NodeToClassName> _nodeToClassName;
 
+        public INodeParam Params { get; set; }
 
         public ParamFormHTAISendSignal()
         {

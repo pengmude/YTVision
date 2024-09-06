@@ -143,6 +143,12 @@
     <Compile Include="Forms\CameraAdd\SingleCamera.Designer.cs">
       <DependentUpon>SingleCamera.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FrmLogin.Designer.cs">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Helper\ContactUsFormForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -203,6 +209,20 @@
     <Compile Include="Forms\LightAdd\SingleLight.Designer.cs">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PLCMonitor\FrmSignalMonitor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PLCMonitor\FrmSignalMonitor.Designer.cs">
+      <DependentUpon>FrmSignalMonitor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PLCMonitor\PlcMonitor.cs" />
+    <Compile Include="Forms\PLCMonitor\SignalConfig.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\PLCMonitor\SignalConfig.Designer.cs">
+      <DependentUpon>SignalConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ResultView\SingleResultViewData.cs" />
     <Compile Include="Forms\YTMessageBox\YTMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,11 +262,19 @@
     <Compile Include="Hardware\Camera\CameraBasler.cs" />
     <Compile Include="Hardware\Camera\CameraHik.cs" />
     <Compile Include="Hardware\Camera\ICamera.cs" />
-    <Compile Include="Node\Camera\FormCameraTest.cs">
+    <Compile Include="Node\AI\HTAI\BitmapConvert.cs" />
+    <Compile Include="Node\AI\HTAI\HtAiDemo.cs" />
+    <Compile Include="Node\AI\HTAI\NGTpyePara.cs" />
+    <Compile Include="Node\AI\HTAI\NodeHTAI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\AI\HTAI\NodeParamHTAI.cs" />
+    <Compile Include="Node\AI\HTAI\NodeResultHTAI.cs" />
+    <Compile Include="Node\AI\HTAI\ParamFormHTAI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\Camera\FormCameraTest.Designer.cs">
-      <DependentUpon>FormCameraTest.cs</DependentUpon>
+    <Compile Include="Node\AI\HTAI\ParamFormHTAI.Designer.cs">
+      <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\Camera\HiK\NodeCamera.cs">
       <SubType>UserControl</SubType>
@@ -307,10 +335,10 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmResultView.cs">
+    <Compile Include="Forms\ResultView\FrmResultView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FrmResultView.Designer.cs">
+    <Compile Include="Forms\ResultView\FrmResultView.Designer.cs">
       <DependentUpon>FrmResultView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\测试窗口\Form1.cs">
@@ -380,15 +408,37 @@
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\PLC\Panasonic\Read\NodeParamRead.cs" />
-    <Compile Include="Node\PLC\Panasonic\Read\NodeRead.cs">
+    <Compile Include="Node\PLC\Panasonic\Read\NodePlcDataRead.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\PLC\Panasonic\Read\NodeResultRead.cs" />
-    <Compile Include="Node\PLC\Panasonic\Read\ParamFormRead.cs">
+    <Compile Include="Node\PLC\Panasonic\Read\NodeResultPlcDataRead.cs" />
+    <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcDataRead.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\PLC\Panasonic\Read\ParamFormRead.Designer.cs">
-      <DependentUpon>ParamFormRead.cs</DependentUpon>
+    <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcDataRead.Designer.cs">
+      <DependentUpon>ParamFormPlcDataRead.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Tool\ImageRead\NodeParamImageRead.cs" />
+    <Compile Include="Node\Tool\ImageRead\NodeImageRead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ImageRead\NodeResultImageRead.cs" />
+    <Compile Include="Node\Tool\ImageRead\ParamFormImageRead.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ImageRead\ParamFormImageRead.Designer.cs">
+      <DependentUpon>ParamFormImageRead.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Tool\ImageSave\NodeParamSaveImage.cs" />
+    <Compile Include="Node\Tool\ImageSave\NodeResultSaveImage.cs" />
+    <Compile Include="Node\Tool\ImageSave\NodeSaveImage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ImageSave\ParamFormSaveImage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ImageSave\ParamFormSaveImage.Designer.cs">
+      <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </Compile>
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
@@ -412,6 +462,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraAdd\SingleCamera.resx">
       <DependentUpon>SingleCamera.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Helper\ContactUsFormForm.resx">
       <DependentUpon>ContactUsFormForm.cs</DependentUpon>
@@ -443,6 +496,12 @@
     <EmbeddedResource Include="Forms\LightAdd\SingleLight.resx">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PLCMonitor\FrmSignalMonitor.resx">
+      <DependentUpon>FrmSignalMonitor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PLCMonitor\SignalConfig.resx">
+      <DependentUpon>SignalConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\YTMessageBox\YTMessageBox.resx">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -461,8 +520,8 @@
     <EmbeddedResource Include="Forms\PLCAdd\SinglePLC.resx">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\Camera\FormCameraTest.resx">
-      <DependentUpon>FormCameraTest.cs</DependentUpon>
+    <EmbeddedResource Include="Node\AI\HTAI\ParamFormHTAI.resx">
+      <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Camera\HiK\ParamFormCamera.resx">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
@@ -488,7 +547,7 @@
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FrmResultView.resx">
+    <EmbeddedResource Include="Forms\ResultView\FrmResultView.resx">
       <DependentUpon>FrmResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\测试窗口\Form1.resx">
@@ -518,8 +577,14 @@
     <EmbeddedResource Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.resx">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormRead.resx">
-      <DependentUpon>ParamFormRead.cs</DependentUpon>
+    <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormPlcDataRead.resx">
+      <DependentUpon>ParamFormPlcDataRead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\Tool\ImageRead\ParamFormImageRead.resx">
+      <DependentUpon>ParamFormImageRead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\Tool\ImageSave\ParamFormSaveImage.resx">
+      <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -558,10 +623,7 @@
   <ItemGroup>
     <None Include="Icon\添加流程.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Node\AI\" />
-    <Folder Include="Node\Tool\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="dll\Basler.Pylon.dll" />
     <Content Include="dll\HslCommunication.dll" />
@@ -577,6 +639,7 @@
     <None Include="Icon\流程添加.png" />
     <Content Include="Icon\点检模式.png" />
     <Content Include="Icon\用户登录.png" />
+    <None Include="Icon\监听.png" />
     <Content Include="Icon\相机.png" />
     <Content Include="Node\readme.txt" />
   </ItemGroup>

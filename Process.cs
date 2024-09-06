@@ -53,9 +53,9 @@ namespace YTVisionPro
         /// 流程运行是否成功
         /// </summary>
         public bool Success { get; private set; }
-        ///// <summary>
-        ///// 流程是否启用
-        ///// </summary>
+        /// <summary>
+        /// 流程是否启用
+        /// </summary>
         public bool Enable { get; set; } = true;
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace YTVisionPro
         {
             if(Nodes.Count == 0) 
             {
-                MessageBox.Show("流程节点个数为0！");
-                LogHelper.AddLog(MsgLevel.Warn, "流程节点个数为0！", true);
-                throw new Exception("流程节点个数为0！");
+                MessageBox.Show($"流程【{ProcessName}】节点个数为0！");
+                LogHelper.AddLog(MsgLevel.Warn, $"流程【{ProcessName}】节点个数为0！", true);
+                throw new Exception($"流程【{ProcessName}】节点个数为0！");
             }
             RunTime = 0;
             if (Enable)

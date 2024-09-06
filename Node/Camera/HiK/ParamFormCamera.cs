@@ -7,11 +7,15 @@ namespace YTVisionPro.Node.Camera.HiK
 {
     internal partial class ParamFormCamera : Form, INodeParamForm
     {
-        public event EventHandler<INodeParam> OnNodeParamChange;
+        public INodeParam Params { get; set; }
         public ParamFormCamera()
         {
             InitializeComponent();
             Shown += ParamFormCamera_Shown;
+            //触发方式
+            comboBoxType.SelectedIndex = 0;
+            //触发沿
+            comboBoxTriggerEdge.SelectedIndex = 0;
         }
 
         private void ParamFormCamera_Shown(object sender, EventArgs e)
@@ -27,21 +31,32 @@ namespace YTVisionPro.Node.Camera.HiK
         private void InitNodeData()
         {
             // 相机自定义名
+            string text1 = comboBoxCamera.Text;
+            comboBoxCamera.Items.Clear();
+            comboBoxCamera.Items.Add("[未设置]");
             foreach (var camera in Solution.Instance.CameraDevices)
             {
-                comboBox3.Items.Add(camera.UserDefinedName);
+                comboBoxCamera.Items.Add(camera.UserDefinedName);
             }
-            if (comboBox3.Items.Count > 0) comboBox3.SelectedIndex = 0;
-            //触发方式
-            comboBox1.SelectedIndex = 0;
-            //触发沿
-            comboBox2.SelectedIndex = 0;
-            //信号源plc
+            int index1 = comboBoxCamera.Items.IndexOf(text1);
+            if (index1 == -1)
+                comboBoxCamera.SelectedIndex = 0;
+            else
+                comboBoxCamera.SelectedIndex = index1;
+
+            //plc
+            string text2 = comboBoxPlc.Text;
+            comboBoxPlc.Items.Clear();
+            comboBoxPlc.Items.Add("[未设置]");
             foreach (var plc in Solution.Instance.PlcDevices)
             {
-                comboBox4.Items.Add(plc.UserDefinedName);
+                comboBoxPlc.Items.Add(plc.UserDefinedName);
             }
-            if(comboBox4.Items.Count > 0) comboBox4.SelectedIndex = 0;
+            int index2 = comboBoxPlc.Items.IndexOf(text2);
+            if (index2 == -1)
+                comboBoxPlc.SelectedIndex = 0;
+            else
+                comboBoxPlc.SelectedIndex = index2;
         }
 
         /// <summary>
@@ -57,17 +72,19 @@ namespace YTVisionPro.Node.Camera.HiK
         /// <param name="e"></param>
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(0 != comboBox1.SelectedIndex)
+            // 软触发
+            if(0 == comboBoxType.SelectedIndex)
             {
-                comboBox2.Enabled = true;
-                comboBox4.Enabled = false;
-                textBox4.Enabled = false;
+                comboBoxPlc.Enabled = true;
+                textBoxSignal.Enabled = true;
+                comboBoxTriggerEdge.Enabled = false;
             }
+            // 硬触发（Line0-Line4）
             else
             {
-                comboBox2.Enabled = false;
-                comboBox4.Enabled = true;
-                textBox4.Enabled = true;
+                comboBoxPlc.Enabled = false;
+                textBoxSignal.Enabled = false;
+                comboBoxTriggerEdge.Enabled = true;
             }
         }
 
@@ -81,7 +98,7 @@ namespace YTVisionPro.Node.Camera.HiK
             #region 参数合法校验
 
             int delay, exposureTime, gain;
-            if (comboBox3.Items.Count == 0 || comboBox3.Text.IsNullOrEmpty())
+            if (comboBoxCamera.Text == "[未设置]" || comboBoxCamera.Text.IsNullOrEmpty())
             {
                 MessageBox.Show("相机为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -98,11 +115,11 @@ namespace YTVisionPro.Node.Camera.HiK
                 MessageBox.Show("参数无法解析！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if(comboBox1.SelectedIndex == 0 && textBox4.Text.IsNullOrEmpty())
-            {
-                MessageBox.Show("软触发模式下必须设置触发信号地址！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            //if(comboBoxType.SelectedIndex == 0 && textBoxSignal.Text.IsNullOrEmpty())
+            //{
+            //    MessageBox.Show("软触发模式下必须设置触发信号地址！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
 
             #endregion
 
@@ -113,14 +130,14 @@ namespace YTVisionPro.Node.Camera.HiK
             //通过遍历方案设备查找选择的相机
             foreach (var camera in Solution.Instance.CameraDevices)
             {
-                if(camera.UserDefinedName == comboBox3.Text)
+                if(camera.UserDefinedName == comboBoxCamera.Text)
                 {
                     nodeParamCamera.Camera = camera;
                 }
             }
 
             //设置相机
-            switch (comboBox1.Text)
+            switch (comboBoxType.Text)
             {
                 case "软触发":
                     nodeParamCamera.TriggerSource = TriggerSource.SOFT;
@@ -142,20 +159,28 @@ namespace YTVisionPro.Node.Camera.HiK
                     break;
             }
 
-            // 软触发的信号源plc
-            foreach (var plc in Solution.Instance.PlcDevices)
+            // 控制软触发的plc
+            if (comboBoxPlc.Text.IsNullOrEmpty() || comboBoxPlc.Text == "[未设置]")
             {
-                if (plc.UserDefinedName == comboBox3.Text)
+                nodeParamCamera.Plc = null;
+                nodeParamCamera.TriggerSignal = "";
+            }
+            else
+            {
+                foreach (var plc in Solution.Instance.PlcDevices)
                 {
-                    nodeParamCamera.Plc = plc;
+                    if (plc.UserDefinedName == comboBoxPlc.Text)
+                    {
+                        nodeParamCamera.Plc = plc;
+                    }
                 }
+
+                //软触发设置触发信号
+                nodeParamCamera.TriggerSignal = textBoxSignal.Text;
             }
 
-            //软触发设置触发信号
-            nodeParamCamera.TriggerSignal = textBox4.Text;
-
             //硬触发设置触发沿
-            switch (comboBox2.Text)
+            switch (comboBoxTriggerEdge.Text)
             {
                 case "上升沿":
                     nodeParamCamera.TriggerEdge = TriggerEdge.Rising;
@@ -182,7 +207,7 @@ namespace YTVisionPro.Node.Camera.HiK
 
             #endregion
 
-            OnNodeParamChange?.Invoke(this, nodeParamCamera);
+            Params = nodeParamCamera;
             
             Hide();
         }

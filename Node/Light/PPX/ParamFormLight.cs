@@ -10,10 +10,8 @@ namespace YTVisionPro.Node.Light.PPX
     {
         private string _nodeName;
         private Process _process;
-        /// <summary>
-        /// 参数改变事件，设置完参数后触发，给节点订阅
-        /// </summary>
-        public event EventHandler<INodeParam> OnNodeParamChange;
+
+        public INodeParam Params { get; set; }
 
         public ParamFormLight(string nodeName, Process process)
         {
@@ -53,6 +51,7 @@ namespace YTVisionPro.Node.Light.PPX
         /// <param name="node"></param>
         public void SetNodeBelong(NodeBase node)
         {
+            nodeSubscription1.Init(node);
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace YTVisionPro.Node.Light.PPX
                 //把设置好的参数传给光源节点NodeLight去更新结果
                 bool open = comboBox2.Text == "打开" ? true : false;
                 NodeParamLight nodeParamLight = new NodeParamLight(light, trackBar1.Value, open);
-                OnNodeParamChange?.Invoke(this, nodeParamLight);
+                Params = nodeParamLight;
                 Close();
             }
             catch (Exception ex)

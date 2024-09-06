@@ -58,11 +58,7 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 节点参数设置界面
         /// </summary>
-        public INodeParamForm ParamForm { protected get; set; }
-        /// <summary>
-        /// 节点运行参数
-        /// </summary>
-        public INodeParam Params;
+        public INodeParamForm ParamForm { get; set; }
         /// <summary>
         /// 节点运行结果
         /// </summary>

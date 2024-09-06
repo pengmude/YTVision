@@ -9,12 +9,12 @@ using YTVisionPro.Node.Light.PPX;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
-    internal class NodeRead : NodeBase
+    internal class NodePlcDataRead : NodeBase
     {
-        public NodeRead(string nodeName, Process process) : base(nodeName, process)
+        public NodePlcDataRead(string nodeName, Process process) : base(nodeName, process)
         {
-            ParamForm = new ParamFormRead();
-            Result = new NodeResultRead();
+            ParamForm = new ParamFormPlcDataRead();
+            Result = new NodeResultPlcDataRead();
         }
 
         /// <summary>
@@ -29,33 +29,22 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 SetRunStatus(startTime, true);
                 return;
             }
-            if (Params == null)
+            if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
                 SetRunStatus(startTime, false);
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            var param = (NodeParamRead)Params;
-            if (Result is NodeResultRead res)
+            var param = (NodeParamPlcDataRead)ParamForm.Params;
+            if (Result is NodeResultPlcDataRead res)
             {
                 try
                 {
-                    res.CodeText = param.Plc.ReadPLCData(param.Address, param.Length, param.DataType);
+                    res.CodeText = param.Plc.ReadPLCData(param.Address, param.Length, DataType.STRING);
 
                     if (res.CodeText != null)
                     {
-                        ////文件名不能包含如下字符,在存图节点需要处理
-                        //res.CodeText = res.CodeText.Replace("\\", "");
-                        //res.CodeText = res.CodeText.Replace("/","");
-                        //res.CodeText = res.CodeText.Replace(":", "");
-                        //res.CodeText = res.CodeText.Replace("*", "");
-                        //res.CodeText = res.CodeText.Replace("?", "");
-                        //res.CodeText = res.CodeText.Replace("\"", "");
-                        //res.CodeText = res.CodeText.Replace("<", "");
-                        //res.CodeText = res.CodeText.Replace(">", "");
-                        //res.CodeText = res.CodeText.Replace("|", "");
-                        //res.CodeText = res.CodeText.Replace(".", "");
                         Result = res;
                         SetRunStatus(startTime, true);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);

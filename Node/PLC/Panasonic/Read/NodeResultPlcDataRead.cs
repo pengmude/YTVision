@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
-    internal class NodeResultRead : INodeResult
+    internal class NodeResultPlcDataRead : INodeResult
     {
         public bool Success { get; set; }
         public long RunTime { get; set; }

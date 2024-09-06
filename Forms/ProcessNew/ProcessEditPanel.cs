@@ -7,10 +7,13 @@ using System.Linq;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
+using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.ImageRead;
 using YTVisionPro.Node.NodeLight.PPX;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 using YTVisionPro.Node.PLC.Panasonic.Read;
+using YTVisionPro.Node.Tool.ImageSave;
 using static YTVisionPro.Node.NodeComboBox;
 
 namespace YTVisionPro.Forms.ProcessNew
@@ -66,7 +69,7 @@ namespace YTVisionPro.Forms.ProcessNew
             if (e.Data.GetDataPresent(DragDataFormat))
             {
 
-                #region TODO:根据text创建对应类型的节点，并且赋予节点对应类型的参数设置窗口（给ParamForm赋值）
+                #region TODO:根据text创建对应类型的节点
 
                 DragData data = (DragData)e.Data.GetData(DragDataFormat);
 
@@ -80,10 +83,10 @@ namespace YTVisionPro.Forms.ProcessNew
                         node = new NodeCamera(data.Text, _process);
                         break;
                     case NodeType.LocalPicture:
-                        node = new NodeCamera(data.Text, _process);
+                        node = new NodeImageRead(data.Text, _process);
                         break;
                     case NodeType.PLCRead:
-                        node = new NodeRead(data.Text, _process);
+                        node = new NodePlcDataRead(data.Text, _process);
                         break;
                     case NodeType.PLCWrite:
                         break;
@@ -91,11 +94,20 @@ namespace YTVisionPro.Forms.ProcessNew
                         node = new NodeHTAISendSignal(data.Text, _process);
                         break;
                     case NodeType.AIHT:
+                        node = new NodeHTAI(data.Text, _process);
+                        break;
+                    case NodeType.ImageSave:
+                        node = new NodeImageSave(data.Text, _process);
                         break;
                     default:
                         break;
                 }
-
+                if(node == null)
+                {
+                    MessageBox.Show("当前节点类型创建失败！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogHelper.AddLog(MsgLevel.Exception, "当前节点类型创建失败！", true);
+                    return;
+                }
                 node.Size = new Size(this.Size.Width - 5, 42);
                 node.Dock = DockStyle.Top;
                 NodeBase.NodeDeletedEvent += NewNode_NodeDeletedEvent;
@@ -199,7 +211,7 @@ namespace YTVisionPro.Forms.ProcessNew
             if (value)
                 LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}启用", true);
             else
-                LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}禁用用", true);
+                LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}禁用", true);
         }
     }
 }

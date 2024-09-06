@@ -17,7 +17,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
             ParamForm = new ParamFormHTAISendSignal();
             Result = new NodeResultHTAISendSignal();
         }
-
         /// <summary>
         /// 节点运行
         /// </summary>
@@ -31,21 +30,20 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                 return;
             }
 
-            if (Params == null)
+            if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
                 SetRunStatus(startTime, false);
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
             
-            var param = (NodeParamHTAISendSignal)Params;
+            var param = (NodeParamHTAISendSignal)ParamForm.Params;
 
             //深度学习结果
             Dictionary<string, string> DeepLearnResult = new Dictionary<string, string>
             {
                 { "dingwei", "1" },
                 { "fenlei", "断焊" },
-                { "fenlei", "其他" },
                 { "jiance", "焊洞" }
             };
             List<SignalRowData> allMatchingRows = new List<SignalRowData>();
@@ -89,14 +87,14 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                     {
                         do
                         {
-                            plcTmp.WritePLCData(dataRow.SignalAddress, true, DataType.BOOL);
+                            plcTmp.WritePLCData(dataRow.SignalAddress, true);
                             LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功", true);
 
                         } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, 0, DataType.BOOL));
                         
                         do
                         {
-                            plcTmp.WritePLCData(dataRow.SignalAddress, false, DataType.BOOL);
+                            plcTmp.WritePLCData(dataRow.SignalAddress, false);
                             LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号断开成功", true);
 
                         } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, 0, DataType.BOOL));

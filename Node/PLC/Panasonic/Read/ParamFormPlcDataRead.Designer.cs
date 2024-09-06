@@ -1,6 +1,6 @@
 ﻿namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
-    partial class ParamFormRead
+    partial class ParamFormPlcDataRead
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParamFormRead));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParamFormPlcDataRead));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -114,11 +114,11 @@
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(14, 253);
+            this.label4.Location = new System.Drawing.Point(86, 253);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(242, 18);
+            this.label4.Size = new System.Drawing.Size(98, 18);
             this.label4.TabIndex = 0;
-            this.label4.Text = "读取长度(仅对string生效)：";
+            this.label4.Text = "读取长度：";
             // 
             // textBox1
             // 
@@ -144,6 +144,7 @@
             // textBox3
             // 
             this.textBox3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.textBox3.Enabled = false;
             this.textBox3.Location = new System.Drawing.Point(310, 248);
             this.textBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox3.Name = "textBox3";
@@ -160,8 +161,9 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(191, 26);
             this.comboBox2.TabIndex = 1;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
-            // ParamFormRead
+            // ParamFormPlcDataRead
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -169,10 +171,9 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "ParamFormRead";
+            this.Name = "ParamFormPlcDataRead";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "读取PLC数据寄存器";
-            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.Text = "PLC数据寄存器读取";
             this.Shown += new System.EventHandler(this.ParamFormRead_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

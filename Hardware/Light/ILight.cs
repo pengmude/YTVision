@@ -28,17 +28,12 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 打开光源
         /// </summary>
-        void TurnOn();
+        void TurnOn(int value);
 
         /// <summary>
         /// 关闭光源
         /// </summary>
         void TurnOff();
-
-        /// <summary>
-        /// 设置光源亮度值（0-255）
-        /// </summary>
-        void SetValue(int value);
     }
 
     public enum LightBrand

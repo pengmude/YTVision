@@ -14,18 +14,7 @@ namespace YTVisionPro.Node.NodeLight.PPX
         {
             ParamForm = new ParamFormLight(nodeName, process);
             ParamForm.SetNodeBelong(this);
-            ParamForm.OnNodeParamChange += ParamForm_OnNodeParamChange;
             Result = new NodeResultLight();
-        }
-
-        /// <summary>
-        /// 节点参数改变时更新
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ParamForm_OnNodeParamChange(object sender, INodeParam e)
-        {
-            Params = e;
         }
 
         /// <summary>
@@ -40,14 +29,14 @@ namespace YTVisionPro.Node.NodeLight.PPX
                 SetRunStatus(startTime, true);
                 return;
             }
-            if(Params == null)
+            if(ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
                 SetRunStatus(startTime, false);
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            var param = (NodeParamLight)Params;
+            var param = (NodeParamLight)ParamForm.Params;
 
 
             // 打开操作
@@ -55,8 +44,7 @@ namespace YTVisionPro.Node.NodeLight.PPX
             {
                 try
                 {
-                    param.Light.Brightness = param.Brightness;
-                    param.Light.TurnOn(); 
+                    param.Light.TurnOn(param.Brightness); 
                     SetRunStatus(startTime, true);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);
                 }

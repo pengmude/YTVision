@@ -4,21 +4,20 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 
-/*
- * ******************************************************************************************************
- * 
- * 类名: NodeSubscription
- * 描述: 这是一个自定义控件类，用于订阅某个流程Process中的节点的运行结果。
- * 作者: pengmude
- * 创建时间: 2024年8月22日
- * 
- * 注意: 截止当前为止节点仅仅支持在当前流程订阅当前节点之前的节点结果。
- * 
- * ******************************************************************************************************
- */
-
 namespace YTVisionPro.Node
 {
+    /// <summary>
+    /// 
+    /// 【作者】: pengmude
+    /// 【类名】: NodeSubscription
+    /// 【创建时间】: 2024年8月22日
+    /// 【描述】: 这是一个自定义控件类，用于订阅某个流程Process中的节点的运行结果。
+    /// 【使用教程】：界面拖出本控件到节点参数设置界面后，还需要在节点参数设置界面类中的SetNodeBelong中
+    /// 初始化,如"nodeSubscription1.Init(node)"；最后需要在节点类的构造函数设置“节点参数设置窗口”
+    /// 所属的节点，如HTAI节点类：ParamForm.SetNodeBelong(this)，这样即可订阅到之前节点结果。
+    ///【注意事项】: 截止当前为止节点仅仅支持在当前流程订阅当前节点之前的节点结果。
+    ///
+    /// </summary>
     internal partial class NodeSubscription : UserControl
     {
         /// <summary>
@@ -106,7 +105,11 @@ namespace YTVisionPro.Node
             }
             if (comboBox2.Items.Count > 0) comboBox2.SelectedIndex = 0;
         }
-
+        /// <summary>
+        /// 获取节点对应结果的值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public T GetValue<T>()
         {
             try
@@ -120,6 +123,7 @@ namespace YTVisionPro.Node
             catch (Exception ex)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!原因：{ex.Message}");
+                throw ex;
             }
             return default(T);
         }

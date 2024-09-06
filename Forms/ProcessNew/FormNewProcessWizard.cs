@@ -20,17 +20,17 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox1.Text = "光源节点";
             nodeComboBox1.AddItem("光源控制", NodeType.LightSourceControl);
 
-            nodeComboBox2.Text = "图像采集";
+            nodeComboBox2.Text = "图像源";
             nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
             nodeComboBox2.AddItem("本地图片", NodeType.LocalPicture);
 
-            nodeComboBox3.Text = "PLC寄存器读写";
+            nodeComboBox3.Text = "PLC信号";
             nodeComboBox3.AddItem("松下PLC读", NodeType.PLCRead);
-            nodeComboBox3.AddItem("松下PLC写", NodeType.PLCWrite);
             nodeComboBox3.AddItem("汇图AI结果发送", NodeType.PLCHTAIResultSend);
 
-            nodeComboBox5.Text = "AI检测";
+            nodeComboBox5.Text = "工具箱";
             nodeComboBox5.AddItem("汇图AI", NodeType.AIHT);
+            nodeComboBox5.AddItem("存图", NodeType.ImageSave);
         }
 
         /// <summary>

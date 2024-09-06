@@ -7,11 +7,13 @@ using WeifenLuo.WinFormsUI.Docking;
 using YTVisionPro.Forms;
 using YTVisionPro.Forms.Helper;
 using YTVisionPro.Forms.ImageViewer;
+using YTVisionPro.Forms.PLCMonitor;
 using YTVisionPro.Forms.ProcessNew;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Forms.ResultView;
 
 namespace YTVisionPro
 {
@@ -29,15 +31,18 @@ namespace YTVisionPro
         /// PLC添加窗口
         /// </summary>
         Forms.PLCAdd.FrmPLCListView FrmPLCAdd= new Forms.PLCAdd.FrmPLCListView();
-
+        /// <summary>
+        /// PLC信号监听设置
+        /// </summary>
+        FrmSignalMonitor FrmSignalMonitor = new FrmSignalMonitor();
         /// <summary>
         /// 图像显示栏
         /// </summary>
-        static Forms.ImageViewer.FrmImageViewer FrmImgeDlg = new Forms.ImageViewer.FrmImageViewer();
+        static FrmImageViewer FrmImgeDlg = new FrmImageViewer();
         /// <summary>
         /// 结果数据显示栏
         /// </summary>
-        static Forms.FrmResultView FrmResultDlg = new Forms.FrmResultView();
+        static FrmResultView FrmResultDlg = new FrmResultView();
         /// <summary>
         /// 日志栏
         /// </summary>
@@ -58,6 +63,10 @@ namespace YTVisionPro
         /// 关于YTViisionPro
         /// </summary>
         static FrmAbout frmAbout = new FrmAbout();
+        /// <summary>
+        /// 用户登录界面
+        /// </summary>
+        static FrmLogin frmLogin = new FrmLogin();
         /// <summary>
         /// 窗口布局配置
         /// </summary>
@@ -170,7 +179,7 @@ namespace YTVisionPro
             if (persistString == typeof(Forms.ImageViewer.FrmImageViewer).ToString())
                 return FrmImgeDlg;
 
-            else if (persistString == typeof(Forms.FrmResultView).ToString())
+            else if (persistString == typeof(FrmResultView).ToString())
                 return FrmResultDlg;
 
             else if (persistString == typeof(FrmLogger).ToString())
@@ -201,20 +210,20 @@ namespace YTVisionPro
                 case "保存方案":
                     保存方案ToolStripMenuItem_Click(null, null);
                     break;
-                case "创建流程":
-                    创建流程ToolStripMenuItem_Click(null, null);
+                case "流程管理":
+                    流程管理ToolStripMenuItem_Click(null, null);
                     break;
-                case "全局光源":
-                    全局光源ToolStripMenuItem_Click(null, null);
+                case "光源管理":
+                    光源管理ToolStripMenuItem_Click(null, null);
                     break;
-                case "全局相机":
-                    全局相机ToolStripMenuItem_Click(null, null);
+                case "相机管理":
+                    相机管理ToolStripMenuItem_Click(null, null);
                     break;
-                case "全局通信":
-                    全局通信ToolStripMenuItem_Click(null, null);
+                case "PLC管理":
+                    PLC管理ToolStripMenuItem_Click(null, null);
                     break;
-                case "全局变量":
-                    全局变量ToolStripMenuItem_Click(null, null);
+                case "信号监听":
+                    信号监听ToolStripMenuItem_Click(null, null);
                     break;
                 case "用户登录":
                     用户登录ToolStripMenuItem_Click(null, null);
@@ -228,7 +237,7 @@ namespace YTVisionPro
             }
         }
 
-        private void 创建流程ToolStripMenuItem_Click(object value1, object value2)
+        private void 流程管理ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmNewProcessWizard.ShowDialog();
         }
@@ -245,25 +254,25 @@ namespace YTVisionPro
 
         private void 用户登录ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("用户登录");
+            frmLogin.ShowDialog();
         }
 
-        private void 全局变量ToolStripMenuItem_Click(object value1, object value2)
-        {
-            MessageBox.Show("全局变量");
-        }
-
-        private void 全局通信ToolStripMenuItem_Click(object value1, object value2)
+        private void PLC管理ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmPLCAdd.ShowDialog();
         }
 
-        private void 全局相机ToolStripMenuItem_Click(object value1, object value2)
+        private void 信号监听ToolStripMenuItem_Click(object value1, object value2)
+        {
+            FrmSignalMonitor.ShowDialog();
+        }
+
+        private void 相机管理ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmCameraAdd.ShowDialog();
         }
 
-        private void 全局光源ToolStripMenuItem_Click(object value1, object value2)
+        private void 光源管理ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmLightAdd.ShowDialog();
         }

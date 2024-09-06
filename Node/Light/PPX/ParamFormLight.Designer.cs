@@ -38,6 +38,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.button1 = new System.Windows.Forms.Button();
+            this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.SuspendLayout();
@@ -55,6 +56,7 @@
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.trackBar1, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.nodeSubscription1, 0, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -165,6 +167,14 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // nodeSubscription1
+            // 
+            this.nodeSubscription1.Location = new System.Drawing.Point(3, 310);
+            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription1.Name = "nodeSubscription1";
+            this.nodeSubscription1.Size = new System.Drawing.Size(264, 62);
+            this.nodeSubscription1.TabIndex = 5;
+            // 
             // ParamFormLight
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -199,5 +209,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBox2;
+        private NodeSubscription nodeSubscription1;
     }
 }

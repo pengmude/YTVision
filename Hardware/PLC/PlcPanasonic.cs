@@ -7,6 +7,10 @@ namespace YTVisionPro.Hardware.PLC
 {
     internal class PlcPanasonic : IPlc
     {
+        /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        public event EventHandler<bool> ConnectStatusEvent;
         public PLCParms PLCParms { get; set; } = new PLCParms();
 
         /// <summary>
@@ -52,6 +56,7 @@ namespace YTVisionPro.Hardware.PLC
                 _panasonicMcNet.Port = PLCParms.EthernetParms.Port;
                 //_panasonicMcNet.ConnectServer();
                 _isOpen = _panasonicMcNet.ConnectServer().IsSuccess;
+                ConnectStatusEvent?.Invoke(this, _isOpen);
                 return _isOpen;
             }
             else 
@@ -72,6 +77,7 @@ namespace YTVisionPro.Hardware.PLC
                 if (_panasonicMewtocol.IsOpen())
                     return true;
                 _isOpen = _panasonicMewtocol.Open().IsSuccess;
+                ConnectStatusEvent?.Invoke(this, _isOpen);
                 return _isOpen;
             }
         }
@@ -94,6 +100,7 @@ namespace YTVisionPro.Hardware.PLC
             {
                 _isOpen = !_panasonicMcNet.ConnectClose().IsSuccess;
             }
+            ConnectStatusEvent?.Invoke(this, _isOpen);
         }
 
         public void Release()
@@ -112,34 +119,30 @@ namespace YTVisionPro.Hardware.PLC
         {
             switch (dataType)
             {
-                case DataType.INT:
-                    return ReadInt(address).Content;
                 case DataType.BOOL:
                     return ReadBool(address).Content;
+                case DataType.INT:
+                    return ReadInt(address).Content;
                 case DataType.STRING:
                     return ReadString(address, length).Content;
+                case DataType.Bytes:
+                    return ReadBytes(address, length).Content;
                 default:
                     throw new ArgumentException("不支持的数据类型");
             }
         }
-
         /// <summary>
         /// 写入PLC寄存器
         /// </summary>
         /// <returns></returns>
-        public void WritePLCData(string address, object value, DataType dataType)
+        public void WritePLCData(string address, object value)
         {
-            switch (dataType)
-            {
-                case DataType.BOOL:
-                    WriteBool(address, (bool)value);
-                    break;
-                case DataType.INT:
-                    WriteInt(address, (int)value);
-                    break;
-                default:
-                    throw new ArgumentException("不支持的数据类型");
-            }
+            if (value is bool bValue)
+                WriteBool(address, bValue);
+            else if (value is int iValue)
+                WriteInt(address, iValue);
+            else
+                throw new ArgumentException("暂不支持写入的数据类型");
         }
 
         private OperateResult<int> ReadInt(string address)
@@ -164,6 +167,15 @@ namespace YTVisionPro.Hardware.PLC
                 return _panasonicMewtocol.ReadString(address, length);
             else
                 return _panasonicMcNet.ReadString(address, length);
+
+        }
+
+        private OperateResult<byte[]> ReadBytes(string address, ushort length)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
+                return _panasonicMewtocol.Read(address, length);
+            else
+                return _panasonicMcNet.Read(address, length);
 
         }
 

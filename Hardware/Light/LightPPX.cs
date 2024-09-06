@@ -78,7 +78,6 @@ namespace YTVisionPro.Hardware.Light
             DevName = lightParam.LightName;
             UserDefinedName = DevName;
             LightParam = lightParam;
-            Brightness = 255;
             try
             {
                 foreach (var serialPort in FrmLightListView.OccupiedComList)
@@ -146,13 +145,13 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 打开光源
         /// </summary>
-        public void TurnOn()
+        public void TurnOn(int value)
         {
             try
             {
                 if (!IsComOpen)
                     Connenct();
-                SetValue(Brightness);
+                SetValue(value);
                 IsOpen = true;
             }
             catch (Exception ex)
@@ -185,7 +184,7 @@ namespace YTVisionPro.Hardware.Light
         /// 设置光源亮度
         /// </summary>
         /// <param name="value"></param>
-        public void SetValue(int value)
+        private void SetValue(int value)
         {
             if (_serialPort.IsOpen)
             {
@@ -209,6 +208,5 @@ namespace YTVisionPro.Hardware.Light
             }
             Brightness = value;
         }
-
     }
 }

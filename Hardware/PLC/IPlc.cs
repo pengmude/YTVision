@@ -49,7 +49,7 @@ namespace YTVisionPro.Hardware.PLC
         /// 写入PLC寄存器
         /// </summary>
         /// <returns></returns>
-        void WritePLCData(string address, object value, DataType dataType);
+        void WritePLCData(string address, object value);
 
     }
 
@@ -114,6 +114,7 @@ namespace YTVisionPro.Hardware.PLC
     {
         BOOL,
         INT,
-        STRING
+        STRING,
+        Bytes
     }
 }

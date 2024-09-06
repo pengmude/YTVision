@@ -57,6 +57,7 @@
             this.tsbt_LightManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_CameraManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_PlcManager = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tsbt_UserLogin = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStart = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStop = new System.Windows.Forms.ToolStripButton();
@@ -144,7 +145,7 @@
             this.默认视图ToolStripMenuItem.CheckOnClick = true;
             this.默认视图ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.默认视图ToolStripMenuItem.Name = "默认视图ToolStripMenuItem";
-            this.默认视图ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.默认视图ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
             this.默认视图ToolStripMenuItem.Text = "默认视图";
             this.默认视图ToolStripMenuItem.Click += new System.EventHandler(this.默认视图ToolStripMenuItem_Click);
             // 
@@ -154,7 +155,7 @@
             this.图像显示ToolStripMenuItem.CheckOnClick = true;
             this.图像显示ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.图像显示ToolStripMenuItem.Name = "图像显示ToolStripMenuItem";
-            this.图像显示ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.图像显示ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
             this.图像显示ToolStripMenuItem.Text = "检测图像视图";
             this.图像显示ToolStripMenuItem.Click += new System.EventHandler(this.检测图像视图ToolStripMenuItem_Click);
             // 
@@ -164,7 +165,7 @@
             this.检测结果ToolStripMenuItem.CheckOnClick = true;
             this.检测结果ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.检测结果ToolStripMenuItem.Name = "检测结果ToolStripMenuItem";
-            this.检测结果ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.检测结果ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
             this.检测结果ToolStripMenuItem.Text = "检测结果视图";
             this.检测结果ToolStripMenuItem.Click += new System.EventHandler(this.检测结果视图ToolStripMenuItem_Click);
             // 
@@ -174,7 +175,7 @@
             this.运行日志ToolStripMenuItem.CheckOnClick = true;
             this.运行日志ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.运行日志ToolStripMenuItem.Name = "运行日志ToolStripMenuItem";
-            this.运行日志ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.运行日志ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
             this.运行日志ToolStripMenuItem.Text = "运行日志视图";
             this.运行日志ToolStripMenuItem.Click += new System.EventHandler(this.运行日志视图ToolStripMenuItem_Click);
             // 
@@ -243,6 +244,7 @@
             this.tsbt_LightManager,
             this.tsbt_CameraManager,
             this.tsbt_PlcManager,
+            this.toolStripButton1,
             this.tsbt_UserLogin,
             this.tsbt_SolRunStart,
             this.tsbt_SolRunStop});
@@ -303,7 +305,7 @@
             this.tsbt_ProcessManager.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbt_ProcessManager.Name = "tsbt_ProcessManager";
             this.tsbt_ProcessManager.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_ProcessManager.Text = "创建流程";
+            this.tsbt_ProcessManager.Text = "流程管理";
             this.tsbt_ProcessManager.ToolTipText = "流程管理";
             this.tsbt_ProcessManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
@@ -314,8 +316,8 @@
             this.tsbt_LightManager.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbt_LightManager.Name = "tsbt_LightManager";
             this.tsbt_LightManager.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_LightManager.Text = "全局光源";
-            this.tsbt_LightManager.ToolTipText = "光源设备";
+            this.tsbt_LightManager.Text = "光源管理";
+            this.tsbt_LightManager.ToolTipText = "光源管理";
             this.tsbt_LightManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_CameraManager
@@ -325,8 +327,8 @@
             this.tsbt_CameraManager.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbt_CameraManager.Name = "tsbt_CameraManager";
             this.tsbt_CameraManager.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_CameraManager.Text = "全局相机";
-            this.tsbt_CameraManager.ToolTipText = "相机设备";
+            this.tsbt_CameraManager.Text = "相机管理";
+            this.tsbt_CameraManager.ToolTipText = "相机管理";
             this.tsbt_CameraManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_PlcManager
@@ -336,9 +338,20 @@
             this.tsbt_PlcManager.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbt_PlcManager.Name = "tsbt_PlcManager";
             this.tsbt_PlcManager.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_PlcManager.Text = "全局通信";
-            this.tsbt_PlcManager.ToolTipText = "PLC设备";
+            this.tsbt_PlcManager.Text = "PLC管理";
+            this.tsbt_PlcManager.ToolTipText = "PLC管理";
             this.tsbt_PlcManager.Click += new System.EventHandler(this.ToolStripButton_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::YTVisionPro.Properties.Resources.监听;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButton1.Text = "信号监听";
+            this.toolStripButton1.ToolTipText = "PLC信号监听";
+            this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_UserLogin
             // 
@@ -464,6 +477,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripButton tsbt_LightManager;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 

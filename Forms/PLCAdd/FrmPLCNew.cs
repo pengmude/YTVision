@@ -14,7 +14,7 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <summary>
         /// PLC添加事件
         /// </summary>
-        public event EventHandler<PLCParms> PLCAddEvent;
+        public static event EventHandler<PLCParms> PLCAddEvent;
 
         public FrmPLCNew()
         {

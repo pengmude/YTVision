@@ -64,7 +64,43 @@ namespace Logger
 
         private void LogHelper_LogAddEvent(object sender, LevelAndInfo levelAndInfo)
         {
-            this.Invoke((MethodInvoker)delegate
+            if (this.InvokeRequired)
+            {
+                this.Invoke((MethodInvoker)delegate
+                {
+                    // 显示到特定日志等级栏
+                    switch (levelAndInfo.Level)
+                    {
+                        case MsgLevel.Debug:
+                            ControlListBox(levelAndInfo.Info, listBoxDebug);
+                            break;
+                        case MsgLevel.Info:
+                            ControlListBox(levelAndInfo.Info, listBoxInfo);
+                            break;
+                        case MsgLevel.Warn:
+                            ControlListBox(levelAndInfo.Info, listBoxWarn);
+                            break;
+                        case MsgLevel.Exception:
+                            ControlListBox(levelAndInfo.Info, listBoxExpection);
+                            break;
+                        case MsgLevel.Fatal:
+                            ControlListBox(levelAndInfo.Info, listBoxFatal);
+                            break;
+                        default:
+                            break;
+                    }
+                    // 同时显示到全部日志栏
+                    listBoxAll.Items.Add(levelAndInfo.Info);
+                    listBoxAll.SelectedIndex = listBoxAll.Items.Count - 1;
+                    // 显示1000条后自动清除UI日志
+                    if (listBoxAll.Items.Count > 1000)
+                    {
+                        listBoxAll.Items.Clear();
+                    }
+                    Application.DoEvents();
+                });
+            }
+            else
             {
                 // 显示到特定日志等级栏
                 switch (levelAndInfo.Level)
@@ -96,7 +132,7 @@ namespace Logger
                     listBoxAll.Items.Clear();
                 }
                 Application.DoEvents();
-            });
+            }
         }
 
         private void listBox1_DrawItem(object sender, DrawItemEventArgs e)

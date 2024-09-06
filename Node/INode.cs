@@ -7,50 +7,19 @@ using System.Threading.Tasks;
 namespace YTVisionPro.Node
 {
     /// <summary>
-    /// 泛型节点接口类
-    /// </summary>
-    /// <typeparam name="TParam">节点参数</typeparam>
-    /// <typeparam name="TResult">节点运行结果</typeparam>
-    internal interface INode<TNodeParamForm, TNodeParam, TNodeResult>
-    {
-        TNodeParamForm ParamForm { get; set; }
-        /// <summary>
-        /// 节点参数
-        /// </summary>
-        TNodeParam Param { get; set; }
-
-        /// <summary>
-        /// 节点运行
-        /// </summary>
-        void Run();
-
-        /// <summary>
-        /// 获取节点运行结果
-        /// </summary>
-        /// <returns></returns>
-        TNodeResult Result { get; }
-
-        /// <summary>
-        /// 设置节点文本
-        /// </summary>
-        /// <param name="text"></param>
-        void SetNodeText(string text);
-    }
-
-    /// <summary>
     /// 节点参数界面接口类
     /// </summary>
     internal interface INodeParamForm
     {
         /// <summary>
-        /// 给节点参数界面类设置所属的节点
+        /// 节点运行参数
+        /// </summary>
+        INodeParam Params { get; set; }
+        /// <summary>
+        /// 给节点参数界面类设置所属的节点,需要订阅结果必须调用
         /// </summary>
         /// <param name="node"></param>
         void SetNodeBelong(NodeBase node);
-        /// <summary>
-        /// 节点参数界面类参数设置保存触发事件
-        /// </summary>
-        event EventHandler<INodeParam> OnNodeParamChange;
     }
 
     /// <summary>
@@ -137,6 +106,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 汇图AI节点
         /// </summary>
-        AIHT
+        AIHT,
+        /// <summary>
+        /// 存图节点
+        /// </summary>
+        ImageSave
     }
 }

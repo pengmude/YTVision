@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Forms.PLCMonitor;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -19,7 +20,7 @@ namespace YTVisionPro.Forms.PLCAdd
         public FrmPLCListView()
         {
             InitializeComponent();
-            _frmAdd.PLCAddEvent += FrmAdd_PLCAddEvent;
+            FrmPLCNew.PLCAddEvent += FrmAdd_PLCAddEvent;
             SinglePLC.SelectedChange += SinglePLC_SelectedChange;
             SinglePLC.SinglePLCRemoveEvent += SinglePLC_SinglePLCRemoveEvent;
         }
@@ -30,6 +31,7 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <param name="e"></param>
         private void SinglePLC_SinglePLCRemoveEvent(object sender, SinglePLC e)
         {
+            SinglePLC.SinglePLCs.Remove(e);
             //移除的是被选中的则要清除它参数显示控件
             if (e.IsSelected)
                 panel1.Controls.Remove(e.SerialParamsControl);

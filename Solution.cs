@@ -54,7 +54,7 @@ namespace YTVisionPro
         public static int NodeCount = 0;
 
         /// <summary>
-        /// 方案已经添加的节点总数
+        /// 方案已经添加的节点
         /// </summary>
         public static List<NodeBase> Nodes = new List<NodeBase>();
 

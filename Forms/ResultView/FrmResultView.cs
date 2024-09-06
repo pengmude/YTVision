@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace YTVisionPro.Forms
+namespace YTVisionPro.Forms.ResultView
 {
     internal partial class FrmResultView : DockContent
     {

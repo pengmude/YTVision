@@ -126,7 +126,7 @@ namespace YTVisionPro.Forms.LightAdd
             {
                 try
                 {
-                    Light.TurnOn();
+                    Light.TurnOn(255);
                     LogHelper.AddLog(MsgLevel.Info, $"{Parms.LightName}(串口号：{Parms.Port}，通道：{Parms.Channel})已打开！", true);
                 }
                 catch (Exception e)
@@ -172,7 +172,7 @@ namespace YTVisionPro.Forms.LightAdd
             foreach (var node in Solution.Nodes)
             {
                 if (node is NodeLight lightNode
-                    && lightNode.Params is NodeParamLight paramLight
+                    && lightNode.ParamForm.Params is NodeParamLight paramLight
                     && Light.UserDefinedName == paramLight.Light.UserDefinedName)
                 {
                     MessageBox.Show("当前方案的节点正在使用该光源，无法删除光源！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);

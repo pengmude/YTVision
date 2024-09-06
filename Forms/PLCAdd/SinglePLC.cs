@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using YTVisionPro.Forms.PLCMonitor;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -48,7 +49,9 @@ namespace YTVisionPro.Forms.PLCAdd
             InitializeComponent();
             ConType = parms.PlcConType;
             this.label1.Text = parms.UserDefinedName;
-            Plc = new PlcPanasonic(parms);
+            var plc = new PlcPanasonic(parms);
+            plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
+            Plc = plc;
             Solution.Instance.AddDevice(Plc);
             if (ConType == PlcConType.COM)
             {
@@ -57,6 +60,14 @@ namespace YTVisionPro.Forms.PLCAdd
             else if(ConType == PlcConType.ETHERNET)
                 EthernetParamsControl = new EthernetParamsControl();
             SinglePLCs.Add(this);
+        }
+
+        /// <summary>
+        /// 订阅PLC连接状态
+        /// </summary>
+        private void Plc_ConnectStatusEvent(object sender, bool e)
+        {
+            uiSwitch1.Active = e;
         }
 
         /// <summary>
@@ -144,7 +155,12 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <param name="e"></param>
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SinglePLCs.Remove(this);
+            //判断当前pLC是否正在监听
+            if (SignalConfig.StartPlcs.Contains(Plc.UserDefinedName))
+            {
+                MessageBox.Show("当前PLC已经启动监听，若要移除设备请先关闭监听！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             SinglePLCRemoveEvent?.Invoke(this, this);
         }
     }
