@@ -11,7 +11,7 @@ namespace YTVisionPro.Node.AI.HTAI
         // 预测句柄
         public IntPtr TreePredictHandle { get; set; }
         // NGType类，包含配置信息和输出结果
-        public NGTypePara.NGType ngConfigs { get; set; }
+        public List<NGTypeConfig> AllNgConfigs { get; set; }
         // 检测出来的节点结果数
         public int TestNum { get; set; }
     }

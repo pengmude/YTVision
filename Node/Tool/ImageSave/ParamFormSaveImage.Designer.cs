@@ -39,9 +39,13 @@
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
-            this.checkBoxDayNight = new System.Windows.Forms.CheckBox();
-            this.checkBoxSaveWithNG = new System.Windows.Forms.CheckBox();
+            this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
             this.checkBoxBarCode = new System.Windows.Forms.CheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.checkBoxSaveWithNG = new System.Windows.Forms.CheckBox();
+            this.checkBoxDayNight = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
@@ -51,16 +55,12 @@
             this.label10 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tableLayoutPanelNG = new System.Windows.Forms.TableLayoutPanel();
+            this.nodeSubscription3 = new YTVisionPro.Node.NodeSubscription();
             this.tableLayoutPanelDayNight = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelCompress = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelBarCode = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
             this.nodeSubscription2 = new YTVisionPro.Node.NodeSubscription();
-            this.nodeSubscription3 = new YTVisionPro.Node.NodeSubscription();
-            this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tableLayoutPanelNG.SuspendLayout();
@@ -206,17 +206,48 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "【图片命名】";
             // 
-            // checkBoxDayNight
+            // nodeSubscription1
             // 
-            this.checkBoxDayNight.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.checkBoxDayNight.AutoSize = true;
-            this.checkBoxDayNight.Location = new System.Drawing.Point(387, 311);
-            this.checkBoxDayNight.Name = "checkBoxDayNight";
-            this.checkBoxDayNight.Size = new System.Drawing.Size(160, 22);
-            this.checkBoxDayNight.TabIndex = 7;
-            this.checkBoxDayNight.Text = "区分早晚班存图";
-            this.checkBoxDayNight.UseVisualStyleBackColor = true;
-            this.checkBoxDayNight.CheckedChanged += new System.EventHandler(this.checkBoxDayNight_CheckedChanged);
+            this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.tableLayoutPanel1.SetColumnSpan(this.nodeSubscription1, 3);
+            this.nodeSubscription1.Location = new System.Drawing.Point(280, 107);
+            this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription1.Name = "nodeSubscription1";
+            this.nodeSubscription1.Size = new System.Drawing.Size(373, 62);
+            this.nodeSubscription1.TabIndex = 3;
+            // 
+            // checkBoxBarCode
+            // 
+            this.checkBoxBarCode.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBoxBarCode.AutoSize = true;
+            this.checkBoxBarCode.Location = new System.Drawing.Point(230, 219);
+            this.checkBoxBarCode.Name = "checkBoxBarCode";
+            this.checkBoxBarCode.Size = new System.Drawing.Size(106, 22);
+            this.checkBoxBarCode.TabIndex = 7;
+            this.checkBoxBarCode.Text = "读码命名";
+            this.checkBoxBarCode.UseVisualStyleBackColor = true;
+            this.checkBoxBarCode.CheckedChanged += new System.EventHandler(this.checkBoxBarCode_CheckedChanged);
+            // 
+            // label7
+            // 
+            this.label7.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(27, 313);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(134, 18);
+            this.label7.TabIndex = 2;
+            this.label7.Text = "【存图子目录】";
+            // 
+            // label11
+            // 
+            this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(36, 407);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(116, 18);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "【压缩选项】";
             // 
             // checkBoxSaveWithNG
             // 
@@ -230,17 +261,28 @@
             this.checkBoxSaveWithNG.UseVisualStyleBackColor = true;
             this.checkBoxSaveWithNG.CheckedChanged += new System.EventHandler(this.checkBoxSaveWithNG_CheckedChanged);
             // 
-            // checkBoxBarCode
+            // checkBoxDayNight
             // 
-            this.checkBoxBarCode.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.checkBoxBarCode.AutoSize = true;
-            this.checkBoxBarCode.Location = new System.Drawing.Point(230, 219);
-            this.checkBoxBarCode.Name = "checkBoxBarCode";
-            this.checkBoxBarCode.Size = new System.Drawing.Size(106, 22);
-            this.checkBoxBarCode.TabIndex = 7;
-            this.checkBoxBarCode.Text = "读码命名";
-            this.checkBoxBarCode.UseVisualStyleBackColor = true;
-            this.checkBoxBarCode.CheckedChanged += new System.EventHandler(this.checkBoxBarCode_CheckedChanged);
+            this.checkBoxDayNight.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBoxDayNight.AutoSize = true;
+            this.checkBoxDayNight.Location = new System.Drawing.Point(387, 311);
+            this.checkBoxDayNight.Name = "checkBoxDayNight";
+            this.checkBoxDayNight.Size = new System.Drawing.Size(160, 22);
+            this.checkBoxDayNight.TabIndex = 7;
+            this.checkBoxDayNight.Text = "区分早晚班存图";
+            this.checkBoxDayNight.UseVisualStyleBackColor = true;
+            this.checkBoxDayNight.CheckedChanged += new System.EventHandler(this.checkBoxDayNight_CheckedChanged);
+            // 
+            // label12
+            // 
+            this.label12.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label12.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.label12, 2);
+            this.label12.Location = new System.Drawing.Point(422, 221);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(278, 18);
+            this.label12.TabIndex = 2;
+            this.label12.Text = "(注：不勾选默认以当前时间命名)";
             // 
             // dateTimePicker2
             // 
@@ -343,6 +385,16 @@
             this.tableLayoutPanelNG.TabIndex = 10;
             this.tableLayoutPanelNG.Visible = false;
             // 
+            // nodeSubscription3
+            // 
+            this.nodeSubscription3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nodeSubscription3.Location = new System.Drawing.Point(225, 21);
+            this.nodeSubscription3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.nodeSubscription3.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription3.Name = "nodeSubscription3";
+            this.nodeSubscription3.Size = new System.Drawing.Size(260, 62);
+            this.nodeSubscription3.TabIndex = 8;
+            // 
             // tableLayoutPanelDayNight
             // 
             this.tableLayoutPanelDayNight.ColumnCount = 5;
@@ -403,6 +455,16 @@
             this.tableLayoutPanelBarCode.TabIndex = 10;
             this.tableLayoutPanelBarCode.Visible = false;
             // 
+            // nodeSubscription2
+            // 
+            this.nodeSubscription2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.nodeSubscription2.Location = new System.Drawing.Point(225, 21);
+            this.nodeSubscription2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.nodeSubscription2.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription2.Name = "nodeSubscription2";
+            this.nodeSubscription2.Size = new System.Drawing.Size(260, 62);
+            this.nodeSubscription2.TabIndex = 7;
+            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 5;
@@ -420,68 +482,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1114, 81);
             this.tableLayoutPanel2.TabIndex = 11;
-            // 
-            // label7
-            // 
-            this.label7.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(27, 313);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(134, 18);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "【存图子目录】";
-            // 
-            // label11
-            // 
-            this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(36, 407);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(116, 18);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "【压缩选项】";
-            // 
-            // label12
-            // 
-            this.label12.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label12.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.label12, 2);
-            this.label12.Location = new System.Drawing.Point(422, 221);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(278, 18);
-            this.label12.TabIndex = 2;
-            this.label12.Text = "(注：不勾选默认以当前时间命名)";
-            // 
-            // nodeSubscription2
-            // 
-            this.nodeSubscription2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription2.Location = new System.Drawing.Point(225, 21);
-            this.nodeSubscription2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription2.MinimumSize = new System.Drawing.Size(260, 60);
-            this.nodeSubscription2.Name = "nodeSubscription2";
-            this.nodeSubscription2.Size = new System.Drawing.Size(260, 62);
-            this.nodeSubscription2.TabIndex = 7;
-            // 
-            // nodeSubscription3
-            // 
-            this.nodeSubscription3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription3.Location = new System.Drawing.Point(225, 21);
-            this.nodeSubscription3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription3.MinimumSize = new System.Drawing.Size(260, 60);
-            this.nodeSubscription3.Name = "nodeSubscription3";
-            this.nodeSubscription3.Size = new System.Drawing.Size(260, 62);
-            this.nodeSubscription3.TabIndex = 8;
-            // 
-            // nodeSubscription1
-            // 
-            this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tableLayoutPanel1.SetColumnSpan(this.nodeSubscription1, 3);
-            this.nodeSubscription1.Location = new System.Drawing.Point(280, 107);
-            this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
-            this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(373, 62);
-            this.nodeSubscription1.TabIndex = 3;
             // 
             // ParamFormImageSave
             // 

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTVisionPro.Forms.ResultView;
-using static YTVisionPro.Node.AI.HTAI.NGTypePara;
 
 namespace YTVisionPro.Node.AI.HTAI
 {

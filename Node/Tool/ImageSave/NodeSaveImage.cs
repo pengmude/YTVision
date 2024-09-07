@@ -91,67 +91,37 @@ namespace YTVisionPro.Node.Tool.ImageSave
 
             // 4.存图路径拼接
             List<string> paths = new List<string>();
+
             //区分早晚班
             if (param.IsDayNight)
             {
                 string dayNight = IsDayWorking(time.TimeOfDay, param.DayDataTime, param.NightDataTime) ? "早班" : "晚班";
                 imageSavePath = Path.Combine(imageSavePath, dayNight);
-                //区分OK/NG
-                if (param.NeedOkNg)
-                {
-                    if (param.AiResult == null)
-                        throw new Exception($"无法获取/解析AI检测结果！");
+            }
 
-                    string okNg = param.AiResult.IsAllOk ? "OK" : "NG";
-                    imageSavePath = Path.Combine(imageSavePath, okNg);
-                    foreach (var res in param.AiResult.DeepStudyResult)
-                    {
-                        // 默认只保存NG结果
-                        if(!res.IsOk)
-                            paths.Add(Path.Combine(imageSavePath, res.ClassName));
-                    }
+            //区分OK/NG
+            if (param.NeedOkNg)
+            {
+                if (param.AiResult == null)
+                    throw new Exception($"无法获取/解析AI检测结果！");
+
+                string okNg = param.AiResult.IsAllOk ? "OK" : "NG";
+                imageSavePath = Path.Combine(imageSavePath, okNg);
+                foreach (var res in param.AiResult.DeepStudyResult)
+                {
+                    // 默认只保存NG结果
+                    if (!res.IsOk)
+                        paths.Add(Path.Combine(imageSavePath, res.ClassName));
                 }
-                else
-                    paths.Add(imageSavePath);
             }
             else
-            {
-                //区分OK/NG
-                if (param.NeedOkNg)
-                {
-                    if (param.AiResult == null)
-                        throw new Exception($"无法获取/解析AI检测结果！");
-
-                    string okNg = param.AiResult.IsAllOk ? "OK" : "NG";
-                    imageSavePath = Path.Combine(imageSavePath, okNg);
-                    foreach (var res in param.AiResult.DeepStudyResult)
-                    {
-                        // 默认只保存NG结果
-                        if (!res.IsOk)
-                            paths.Add(Path.Combine(imageSavePath, res.ClassName));
-                    }
-                }
-                else
-                    paths.Add(imageSavePath);
-            }
+                paths.Add(imageSavePath);
 
 
             foreach (var path in paths)
             {
                 Save(param.Image, path, imageName, param.NeedCompress, param.CompressValue);
             }
-
-            ////存图路径是否区分早晚班
-            //if (param.IsDayNight)
-            //{
-            //    string workinghour = IsDayWorking(time.TimeOfDay, param.DayDataTime, param.NightDataTime) ? "早班" : "晚班";
-            //    imageSavePath = Path.Combine(param.SavePath, nowDataTime, workinghour, subFolder);
-            //}
-            //else
-            //    imageSavePath = Path.Combine(param.SavePath, nowDataTime, subFolder);
-
-            //// 保存图片
-            //Save(param.Image, imageSavePath, imageName, subFolder, NgNameList, param.IsCompress, param.CompressValue);
 
         }
 

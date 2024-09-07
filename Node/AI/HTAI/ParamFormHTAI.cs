@@ -25,8 +25,8 @@ namespace YTVisionPro.Node.AI.HTAI
         int TestNum;
         // 选择初始化的节点信息
         List<NodeInfo> node_info_choose = new List<NodeInfo>();
-        // NGType类，包含配置信息
-        private NGTypePara.NGType ngConfigs = new NGTypePara.NGType();
+        // 包含所有配置信息
+        private List<NGTypeConfig> _allNgConfigs = new List<NGTypeConfig>();
 
         /// <summary>
         /// 节点参数
@@ -205,25 +205,22 @@ namespace YTVisionPro.Node.AI.HTAI
         // 初始化NG配置表
         private void InitializeNGConfigs()
         {
-            ngConfigs.NGTypeConfigs.Clear();
+            _allNgConfigs.Clear();
             foreach (var item in node_info_choose)
             {
                 foreach (var classname in item.ClassNames)
                 {
-                    NGTypePara.NGTypeConfig nGTypeConfig = new NGTypePara.NGTypeConfig();
+                    NGTypeConfig nGTypeConfig = new NGTypeConfig();
                     nGTypeConfig.NodeName = item.NodeName;
                     nGTypeConfig.CLassName = classname;
                     nGTypeConfig.MinArea = 0;
                     nGTypeConfig.MaxArea = 999999999;
-                    nGTypeConfig.Area = new int[999];
                     nGTypeConfig.MinScore = 0.0f;
                     nGTypeConfig.MaxScore = 1.0f;
-                    nGTypeConfig.Score = new float[999];
                     nGTypeConfig.MinNum = 1;
                     nGTypeConfig.MaxNum = 999;
-                    nGTypeConfig.Num = 0;
                     nGTypeConfig.ForceOk = false;
-                    ngConfigs.NGTypeConfigs.Add(nGTypeConfig);
+                    _allNgConfigs.Add(nGTypeConfig);
                 }
             }
         }
@@ -249,7 +246,7 @@ namespace YTVisionPro.Node.AI.HTAI
         {
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
-            NGTypePara.NGTypeConfig ngconfig = ngConfigs.NGTypeConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
 
             if (ngconfig != null)
             {
@@ -280,7 +277,7 @@ namespace YTVisionPro.Node.AI.HTAI
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
 
-            NGTypePara.NGTypeConfig ngconfig = ngConfigs.NGTypeConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
 
             if (ngconfig != null)
             {
@@ -333,7 +330,7 @@ namespace YTVisionPro.Node.AI.HTAI
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
 
-            NGTypePara.NGTypeConfig ngconfig = ngConfigs.NGTypeConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
             if (ngconfig != null)
             {
                 if(btIsOK.Checked)
@@ -352,7 +349,7 @@ namespace YTVisionPro.Node.AI.HTAI
             }
             NodeParamHTAI nodeParamHTAI = new NodeParamHTAI();
             nodeParamHTAI.TreePredictHandle = TreePredictHandle;
-            nodeParamHTAI.ngConfigs = ngConfigs;
+            nodeParamHTAI.AllNgConfigs = _allNgConfigs;
             nodeParamHTAI.TestNum = TestNum;
             Params = nodeParamHTAI;
             Hide();

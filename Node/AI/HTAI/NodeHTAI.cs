@@ -1,14 +1,10 @@
 ﻿using Logger;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YTVisionPro.Forms.ResultView;
-using YTVisionPro.Node.Light.PPX;
 using static YTVisionPro.Node.AI.HTAI.HTAPI;
-using static YTVisionPro.Node.AI.HTAI.NGTypePara;
 
 namespace YTVisionPro.Node.AI.HTAI
 {
@@ -25,7 +21,7 @@ namespace YTVisionPro.Node.AI.HTAI
 
         private void NodeHTAI_NodeDeletedEvent(object sender, int e)
         {
-            if(PredictResult == null && PredictResult.Length != 0)
+            if(PredictResult != null && PredictResult.Length != 0)
                 HTAPI.ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
         }
 
@@ -62,7 +58,7 @@ namespace YTVisionPro.Node.AI.HTAI
                             ImageHt Frame = BitmapConvert.BitmapToImageHt(srcImg);
                             Bitmap renderImg = null;
                             PredictResult = DeepLearningDetection(param.TreePredictHandle, ref Frame, param.TestNum, out renderImg);
-                            res.ResultData = DeepStudyResult_Judge(PredictResult, param.ngConfigs, param.TestNum);
+                            res.ResultData = DeepStudyResult_Judge(PredictResult, param.AllNgConfigs, param.TestNum);
                             res.RenderImage = renderImg;
                             Result = res;
                             SetRunStatus(startTime, true);
@@ -100,59 +96,80 @@ namespace YTVisionPro.Node.AI.HTAI
         }
 
 
-        //判断出NG结果的信息 TODO:排查定位节点无法过滤的问题
-        private AiResult DeepStudyResult_Judge(NodeResult[] pstNodeRst, NGTypePara.NGType ngConfigs, int testNum)
+        /// <summary>
+        /// 判断出NG结果的信息
+        /// </summary>
+        /// <param name="pstNodeRst"></param>
+        /// <param name="allNgConfigs"></param>
+        /// <param name="testNum"></param>
+        /// <returns></returns>
+        private AiResult DeepStudyResult_Judge(NodeResult[] pstNodeRst, List<NGTypeConfig> allNgConfigs, int testNum)
         {
             AiResult aiResult = new AiResult();
+
             for (int i = 0; i < testNum; i++)
             {
-                //写入判断                      
-                string nodename = ConvertCharArrayToString(pstNodeRst[i].node_name);
-                int nodetype = pstNodeRst[i].node_type;
+                // 节点名称和节点类型
+                string nodeName = ConvertCharArrayToString(pstNodeRst[i].node_name);
+                int nodeType = pstNodeRst[i].node_type;
                 int detect_results_num = pstNodeRst[i].detect_results_num;
+
+                // 保存单个节点下符合NG的所有类别结果
+                List<DetectResult> detectResultsList = new List<DetectResult>();
+
+                // 保存要返回的结果
+                SingleResultViewData result = new SingleResultViewData();
+                result.NodeName = nodeName;
+
                 for (int j = 0; j < detect_results_num; j++)
                 {
-                    string classname;
-                    classname = ClassNameTostring(pstNodeRst[i].detect_results[j].class_name);
-                    NGTypePara.NGTypeConfig ngconfig = ngConfigs.NGTypeConfigs.Find(c => c.NodeName == nodename && c.CLassName == classname);
-                    ngconfig.Num = 0;
+                    string className = ClassNameTostring(pstNodeRst[i].detect_results[j].class_name);
+                    result.ClassName = className;
+                    var ngconfig = allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+
+
+                    // 首先判断当前节点当前类别是否设置为强制OK,强制OK跳过保存NG结果
+                    if (ngconfig == null || ngconfig.ForceOk)
+                        break;
+
+                    // 然后筛选当前类别检出结果个数，
+                    // 检出个数都不符合就不用看分数和面积了
+                    // 直接跳过当前类别，判断下一个类别
+                    if (detect_results_num < ngconfig.MinNum && detect_results_num >= ngconfig.MaxNum)
+                        break;
+
+                    // 获取检测结果的面积、分数个数信息
                     int area = pstNodeRst[i].detect_results[j].area;
                     float score = pstNodeRst[i].detect_results[j].score;
-                    // 每个节点的每个类别的OK数和分数
-                    if (nodetype == 0)
+
+
+                    // 非缺陷节点只有分数和个数（定位、分类、定位字符等……）
+                    if (score >= ngconfig.MinScore && score < ngconfig.MaxScore && detect_results_num >= ngconfig.MinNum && detect_results_num < ngconfig.MaxNum)
                     {
-                        if (area >= ngconfig.MinArea  && area < ngconfig.MaxArea && score >= ngconfig.MinScore && score < ngconfig.MaxScore)
+                        // 缺陷节点（节点类型为0）才有面积结果
+                        if (nodeType == 0)
                         {
-                            ngconfig.Num++;
-                            ngconfig.Area[j] = area;
-                            ngconfig.Score[j] = score;
+                            if (area >= ngconfig.MinArea && area < ngconfig.MaxArea)
+                                detectResultsList.Add(pstNodeRst[i].detect_results[j]);
                         }
-                    }
-                    else
-                    {
-                        if (score >= ngconfig.MinScore && score < ngconfig.MaxScore)
-                        {
-                            ngconfig.Num++;
-                            ngconfig.Score[j] = score;
-                        }
+                        else
+                            detectResultsList.Add(pstNodeRst[i].detect_results[j]);
                     }
                 }
-            }
-            int countOK = 0;
-            foreach (var ngconfig in ngConfigs.NGTypeConfigs)
-            {
-                //保存的结果包含了用户在初始化模型前选择的节点的所有结果
-                SingleResultViewData result = new SingleResultViewData();
-                result.NodeName = ngconfig.NodeName;
-                result.ClassName = ngconfig.CLassName;
-                result.IsOk = ngconfig.ForceOk ? true : ngconfig.IsOk;
-                result.DetectResult = $"{ngconfig.Score} {ngconfig.Area}";
+
+                result.IsOk = detectResultsList.Count == 0 ? true : false;
+
+                string tmp = "";
+                foreach (DetectResult classResult in detectResultsList)
+                {
+                    if (nodeType == 0)
+                        tmp += $"({classResult.score},{classResult.area})\n";
+                    else
+                        tmp += $"({classResult.score})\n";
+                }
+                result.DetectResult = tmp;
                 aiResult.DeepStudyResult.Add(result);
-                if (result.IsOk)
-                    countOK++;
             }
-            if(countOK == ngConfigs.NGTypeConfigs.Count)
-                aiResult.IsAllOk = true;
 
             return aiResult;
         }
