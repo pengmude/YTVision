@@ -262,6 +262,7 @@
     <Compile Include="Hardware\Camera\CameraBasler.cs" />
     <Compile Include="Hardware\Camera\CameraHik.cs" />
     <Compile Include="Hardware\Camera\ICamera.cs" />
+    <Compile Include="Hardware\Light\LightRsee.cs" />
     <Compile Include="Node\AI\HTAI\BitmapConvert.cs" />
     <Compile Include="Node\AI\HTAI\HtAiDemo.cs" />
     <Compile Include="Node\AI\HTAI\NGTpyePara.cs" />
@@ -294,15 +295,15 @@
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\INode.cs" />
-    <Compile Include="Node\Light\PPX\NodeLight.cs">
+    <Compile Include="Node\Light\NodeLight.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\Light\PPX\NodeParamLight.cs" />
-    <Compile Include="Node\Light\PPX\NodeResultLight.cs" />
-    <Compile Include="Node\Light\PPX\ParamFormLight.cs">
+    <Compile Include="Node\Light\NodeParamLight.cs" />
+    <Compile Include="Node\Light\NodeResultLight.cs" />
+    <Compile Include="Node\Light\ParamFormLight.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\Light\PPX\ParamFormLight.Designer.cs">
+    <Compile Include="Node\Light\ParamFormLight.Designer.cs">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.cs">
@@ -440,6 +441,17 @@
     <Compile Include="Node\Tool\ImageSave\ParamFormSaveImage.Designer.cs">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\Tool\SleepTool\NodeParamFormSleepTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\SleepTool\NodeParamFormSleepTool.Designer.cs">
+      <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Tool\SleepTool\NodeParamSleepTool.cs" />
+    <Compile Include="Node\Tool\SleepTool\NodeResultSleepTool.cs" />
+    <Compile Include="Node\Tool\SleepTool\SleepTool.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -529,7 +541,7 @@
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\Light\PPX\ParamFormLight.resx">
+    <EmbeddedResource Include="Node\Light\ParamFormLight.resx">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
@@ -586,6 +598,9 @@
     <EmbeddedResource Include="Node\Tool\ImageSave\ParamFormSaveImage.resx">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\Tool\SleepTool\NodeParamFormSleepTool.resx">
+      <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -632,6 +647,7 @@
     <Content Include="Icon\停止执行.png" />
     <None Include="Icon\光源.png" />
     <Content Include="Icon\单次执行.png" />
+    <None Include="Icon\循环执行.png" />
     <Content Include="Icon\打开项目.png" />
     <Content Include="Icon\新建方案.png" />
     <Content Include="Icon\方案设置.png" />

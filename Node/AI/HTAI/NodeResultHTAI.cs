@@ -22,7 +22,7 @@ namespace YTVisionPro.Node.AI.HTAI
 
     internal class AiResult
     {
-        public bool IsAllOk;
+        public bool IsAllOk { get { return DeepStudyResult.TrueForAll(sr => sr.IsOk); } }
         public List<SingleResultViewData> DeepStudyResult = new List<SingleResultViewData>();
     }
 }

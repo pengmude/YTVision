@@ -45,11 +45,14 @@ namespace YTVisionPro.Forms.LightAdd
             // 校验位
             comboBox6.SelectedIndex = 0;
             // 品牌
-            comboBox1.SelectedIndex = 0;
+            comboBoxBrand.SelectedIndex = 0;
             // 通信方式
-            comboBox8.SelectedIndex = 0;
+            comboBoxConnectType.SelectedIndex = 0;
             // 光源通道
-            comboBox7.SelectedIndex = 0;
+            comboBoxChannel.SelectedIndex = 0;
+
+            // 锐视光源种类
+            comboBoxRseeType.SelectedIndex = 0;
 
         }
 
@@ -60,14 +63,15 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(this.textBox2.Text))
+            if (!string.IsNullOrWhiteSpace(this.textBoxLightName.Text))
             {
                 LightParam lightParam = new LightParam();
                 try
                 {
-                    lightParam.Brand = this.comboBox1.Text == "磐鑫" ? LightBrand.PPX : this.comboBox1.Text == "锐视" ? LightBrand.RSEE : LightBrand.UNKNOW;
-                    lightParam.Channel = byte.Parse(comboBox7.Text);
-                    lightParam.LightName = this.textBox2.Text;
+                    lightParam.Brand = this.comboBoxBrand.Text == "磐鑫" ? LightBrand.PPX : this.comboBoxBrand.Text == "锐视" ? LightBrand.RSEE : LightBrand.UNKNOW;
+                    lightParam.RseeDeviceType = comboBoxRseeType.SelectedIndex == 0 ? RseeDeviceType.PM_D : RseeDeviceType.P_MDPS_24W75;
+                    lightParam.Channel = byte.Parse(comboBoxChannel.Text);
+                    lightParam.LightName = this.textBoxLightName.Text;
                     lightParam.Value = 255;
 
                     lightParam.Port = this.comboBox2.Text;
@@ -106,6 +110,21 @@ namespace YTVisionPro.Forms.LightAdd
             {
                 MessageBox.Show("无效的光源名称！");
             }
+        }
+
+        private void comboBoxBrand_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxBrand.SelectedIndex == 0)
+            {
+                comboBoxRseeType.Enabled = false;
+                textBoxLightName.Text = "磐鑫光源";
+            }
+            else
+            {
+                comboBoxRseeType.Enabled = true;
+                textBoxLightName.Text = "锐视光源";
+            }
+
         }
     }
 }

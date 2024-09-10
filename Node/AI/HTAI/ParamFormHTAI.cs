@@ -10,7 +10,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Node.Light.PPX;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 using static System.Windows.Forms.MonthCalendar;
 
@@ -212,7 +211,7 @@ namespace YTVisionPro.Node.AI.HTAI
                 {
                     NGTypeConfig nGTypeConfig = new NGTypeConfig();
                     nGTypeConfig.NodeName = item.NodeName;
-                    nGTypeConfig.CLassName = classname;
+                    nGTypeConfig.ClassName = classname;
                     nGTypeConfig.MinArea = 0;
                     nGTypeConfig.MaxArea = 999999999;
                     nGTypeConfig.MinScore = 0.0f;
@@ -246,7 +245,7 @@ namespace YTVisionPro.Node.AI.HTAI
         {
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
-            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.ClassName == className);
 
             if (ngconfig != null)
             {
@@ -277,7 +276,7 @@ namespace YTVisionPro.Node.AI.HTAI
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
 
-            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.ClassName == className);
 
             if (ngconfig != null)
             {
@@ -330,7 +329,7 @@ namespace YTVisionPro.Node.AI.HTAI
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
 
-            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.CLassName == className);
+            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.ClassName == className);
             if (ngconfig != null)
             {
                 if(btIsOK.Checked)

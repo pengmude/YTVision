@@ -59,7 +59,8 @@
             this.tsbt_PlcManager = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tsbt_UserLogin = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_SolRunStart = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_SolRunOnce = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_SolRunLoop = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStop = new System.Windows.Forms.ToolStripButton();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.vS2015LightTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015LightTheme();
@@ -246,7 +247,8 @@
             this.tsbt_PlcManager,
             this.toolStripButton1,
             this.tsbt_UserLogin,
-            this.tsbt_SolRunStart,
+            this.tsbt_SolRunOnce,
+            this.tsbt_SolRunLoop,
             this.tsbt_SolRunStop});
             this.toolStrip1.Location = new System.Drawing.Point(0, 32);
             this.toolStrip1.Name = "toolStrip1";
@@ -364,21 +366,34 @@
             this.tsbt_UserLogin.ToolTipText = "用户登录";
             this.tsbt_UserLogin.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_SolRunStart
+            // tsbt_SolRunOnce
             // 
-            this.tsbt_SolRunStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_SolRunStart.Image = global::YTVisionPro.Properties.Resources.单次执行;
-            this.tsbt_SolRunStart.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_SolRunStart.Margin = new System.Windows.Forms.Padding(120, 2, 0, 3);
-            this.tsbt_SolRunStart.Name = "tsbt_SolRunStart";
-            this.tsbt_SolRunStart.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_SolRunStart.Text = "开始运行";
-            this.tsbt_SolRunStart.ToolTipText = "开始运行";
-            this.tsbt_SolRunStart.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_SolRunOnce.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_SolRunOnce.Image = global::YTVisionPro.Properties.Resources.单次执行;
+            this.tsbt_SolRunOnce.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_SolRunOnce.Margin = new System.Windows.Forms.Padding(120, 2, 0, 3);
+            this.tsbt_SolRunOnce.Name = "tsbt_SolRunOnce";
+            this.tsbt_SolRunOnce.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_SolRunOnce.Text = "单次运行";
+            this.tsbt_SolRunOnce.ToolTipText = "单次运行";
+            this.tsbt_SolRunOnce.Click += new System.EventHandler(this.ToolStripButton_Click);
+            // 
+            // tsbt_SolRunLoop
+            // 
+            this.tsbt_SolRunLoop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_SolRunLoop.Image = global::YTVisionPro.Properties.Resources.循环执行;
+            this.tsbt_SolRunLoop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_SolRunLoop.Margin = new System.Windows.Forms.Padding(20, 2, 0, 3);
+            this.tsbt_SolRunLoop.Name = "tsbt_SolRunLoop";
+            this.tsbt_SolRunLoop.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_SolRunLoop.Text = "循环运行";
+            this.tsbt_SolRunLoop.ToolTipText = "循环运行";
+            this.tsbt_SolRunLoop.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_SolRunStop
             // 
             this.tsbt_SolRunStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_SolRunStop.Enabled = false;
             this.tsbt_SolRunStop.Image = global::YTVisionPro.Properties.Resources.停止执行;
             this.tsbt_SolRunStop.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbt_SolRunStop.Margin = new System.Windows.Forms.Padding(20, 2, 0, 3);
@@ -455,7 +470,7 @@
         private System.Windows.Forms.ToolStripButton tsbt_CameraManager;
         private System.Windows.Forms.ToolStripButton tsbt_PlcManager;
         private System.Windows.Forms.ToolStripButton tsbt_UserLogin;
-        private System.Windows.Forms.ToolStripButton tsbt_SolRunStart;
+        private System.Windows.Forms.ToolStripButton tsbt_SolRunOnce;
         private System.Windows.Forms.ToolStripButton tsbt_SolRunStop;
         private System.Windows.Forms.ToolStripMenuItem 新建方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 打开方案ToolStripMenuItem;
@@ -478,6 +493,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripButton tsbt_LightManager;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton tsbt_SolRunLoop;
     }
 }
 

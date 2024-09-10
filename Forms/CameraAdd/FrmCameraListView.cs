@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basler.Pylon;
-using YTVisionPro.Node.Light.PPX;
-using YTVisionPro.Node.NodeLight.PPX;
 
 namespace YTVisionPro.Forms.CameraAdd
 {

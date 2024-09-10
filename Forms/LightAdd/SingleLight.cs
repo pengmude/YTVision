@@ -18,9 +18,7 @@ using System.Web;
 using System.Windows.Forms;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
-using YTVisionPro.Node.Light.PPX;
-using YTVisionPro.Node.NodeLight.PPX;
+using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Forms.LightAdd
 {
@@ -71,7 +69,10 @@ namespace YTVisionPro.Forms.LightAdd
             try
             {
                 //创建光源设备并添加到方案中
-                Light = new LightPPX(Parms);
+                if (Parms.Brand == LightBrand.PPX)
+                    Light = new LightPPX(Parms);
+                else
+                    Light = new LightRsee(Parms);
                 Solution.Instance.AddDevice(Light);
                 //给光源绑定参数界面
                 LightParamsShowControl = new LightParamsShowControl(Parms);

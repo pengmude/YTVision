@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
-using YTVisionPro.Node.Light.PPX;
-using YTVisionPro.Node.NodeLight.PPX;
 
 namespace YTVisionPro.Forms.LightAdd
 {
@@ -82,7 +80,6 @@ namespace YTVisionPro.Forms.LightAdd
             try
             {
                 singleLight = new SingleLight(e);
-                singleLight.Light.Connenct();
                 singleLight.Anchor = AnchorStyles.Left;
                 singleLight.Anchor = AnchorStyles.Right;
                 flowLayoutPanel1.Controls.Add(singleLight);

@@ -228,8 +228,11 @@ namespace YTVisionPro
                 case "用户登录":
                     用户登录ToolStripMenuItem_Click(null, null);
                     break;
-                case "开始运行":
-                    开始运行ToolStripMenuItem_Click(null, null);
+                case "循环运行":
+                    循环运行ToolStripMenuItem_Click(null, null);
+                    break;
+                case "单次运行":
+                    单次运行ToolStripMenuItem_Click(null, null);
                     break;
                 case "停止运行":
                     停止运行ToolStripMenuItem_Click(null, null);
@@ -244,12 +247,31 @@ namespace YTVisionPro
 
         private void 停止运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("停止运行");
+            if(MessageBox.Show("确定停止当前方案运行？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                return;
+            Solution.Instance.Stop();
+            SetRunStatus(false);
         }
 
-        private void 开始运行ToolStripMenuItem_Click(object value1, object value2)
+        private async void 循环运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            Solution.Instance.Run();
+            SetRunStatus(true);
+            await Solution.Instance.Run(true);
+            SetRunStatus(false);
+        }
+
+        private async void 单次运行ToolStripMenuItem_Click(object value1, object value2)
+        {
+            SetRunStatus(true);
+            await Solution.Instance.Run(false);
+            SetRunStatus(false);
+        }
+
+        private void SetRunStatus(bool isRunning)
+        {
+            tsbt_SolRunOnce.Enabled = !isRunning;
+            tsbt_SolRunLoop.Enabled = !isRunning;
+            tsbt_SolRunStop.Enabled = isRunning;
         }
 
         private void 用户登录ToolStripMenuItem_Click(object value1, object value2)

@@ -110,6 +110,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 存图节点
         /// </summary>
-        ImageSave
+        ImageSave,
+        /// <summary>
+        /// 延迟工具
+        /// </summary>
+        SleepTool
     }
 }

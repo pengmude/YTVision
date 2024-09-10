@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
@@ -33,6 +36,11 @@ namespace YTVisionPro
         /// </summary>
         private readonly object _deviceLock = new object();
         private List<IDevice> _devices = new List<IDevice>();
+
+        /// <summary>
+        /// 方案运行取消源，通过它控制方案的停止
+        /// </summary>
+        private CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         #endregion
 
@@ -81,7 +89,7 @@ namespace YTVisionPro
         /// <summary>
         /// 方案是否正在运行
         /// </summary>
-        public bool IsRuning { get; set; } = false;
+        public bool IsRunning { get; set; } = false;
 
         /// <summary>
         /// 方案被修改
@@ -102,6 +110,11 @@ namespace YTVisionPro
         /// 方案适配的软件版本
         /// </summary>
         public string SolVersion { get; set; } = VersionInfo.VersionInfo.GetExeVer();
+
+        /// <summary>
+        /// 方案运行取消令牌，嵌入到流程和节点中，实现对它们的控制
+        /// </summary>
+        public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
         #endregion
 
@@ -191,15 +204,34 @@ namespace YTVisionPro
             return result;
         }
 
-        /// <summary>
-        /// 方案执行
-        /// </summary>
-        public void Run()
+        public async Task Run(bool isCyclical = false)
         {
-            foreach (var process in _allProcesses)
+            try
             {
-                process.Run();
+                IsRunning = true;
+                _cancellationTokenSource = new CancellationTokenSource();
+
+                // 启动所有流程
+                var tasks = new List<Task>();
+                foreach (var process in _allProcesses)
+                {
+                    tasks.Add(process.Run(isCyclical, _cancellationTokenSource.Token));
+                }
+                // 等待所有流程完成
+                await Task.WhenAll(tasks);
             }
+            catch (OperationCanceledException ex) { }
+            catch (Exception ex) { }
+
+            IsRunning = false;
+        }
+
+        /// <summary>
+        /// 方案运行停止
+        /// </summary>
+        public void Stop()
+        {
+            _cancellationTokenSource.Cancel();
         }
 
         /// <summary>

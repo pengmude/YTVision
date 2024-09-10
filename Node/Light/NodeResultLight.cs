@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node.Light.PPX
+namespace YTVisionPro.Node.Light
 {
     internal class NodeResultLight : INodeResult
     {

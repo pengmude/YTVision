@@ -4,7 +4,7 @@ using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
 
-namespace YTVisionPro.Node.Light.PPX
+namespace YTVisionPro.Node.Light
 {
     internal partial class ParamFormLight : Form, INodeParamForm
     {
@@ -41,18 +41,15 @@ namespace YTVisionPro.Node.Light.PPX
                 comboBox1.SelectedIndex = 0;
             else
                 comboBox1.SelectedIndex = index;
-            if(comboBox2.Text.IsNullOrEmpty())
-                comboBox2.SelectedIndex = 0;
+            if(comboBoxOpenClose.Text.IsNullOrEmpty())
+                comboBoxOpenClose.SelectedIndex = 0;
         }
 
         /// <summary>
         /// 用于节点参数界面需要订阅结果的情况调用
         /// </summary>
         /// <param name="node"></param>
-        public void SetNodeBelong(NodeBase node)
-        {
-            nodeSubscription1.Init(node);
-        }
+        public void SetNodeBelong(NodeBase node) { }
 
         /// <summary>
         /// 滑动滑块
@@ -61,7 +58,7 @@ namespace YTVisionPro.Node.Light.PPX
         /// <param name="e"></param>
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
-            textBox1.Text = trackBar1.Value.ToString();
+            textBoxValue.Text = trackBarValue.Value.ToString();
         }
 
         /// <summary>
@@ -73,18 +70,18 @@ namespace YTVisionPro.Node.Light.PPX
         {
             try
             {
-                int value = int.Parse(textBox1.Text);
+                int value = int.Parse(textBoxValue.Text);
                 if (value < 0 || value > 255)
                 {
                     throw new Exception("光源亮度有效值为0-255");
                 }
-                trackBar1.Value = value;
+                trackBarValue.Value = value;
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBox1.Text = "255";
+                textBoxValue.Text = "255";
                 return;
             }
         }
@@ -117,10 +114,10 @@ namespace YTVisionPro.Node.Light.PPX
                 }
 
                 //把设置好的参数传给光源节点NodeLight去更新结果
-                bool open = comboBox2.Text == "打开" ? true : false;
-                NodeParamLight nodeParamLight = new NodeParamLight(light, trackBar1.Value, open);
+                bool open = comboBoxOpenClose.Text == "打开" ? true : false;
+                NodeParamLight nodeParamLight = new NodeParamLight(light, trackBarValue.Value, open);
                 Params = nodeParamLight;
-                Close();
+                Hide();
             }
             catch (Exception ex)
             {
@@ -137,6 +134,20 @@ namespace YTVisionPro.Node.Light.PPX
         private void ParamFormLight_Shown(object sender, EventArgs e)
         {
             InitLightComboBox();
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(comboBoxOpenClose.SelectedIndex == 0)
+            {
+                textBoxValue.Enabled = true;
+                trackBarValue.Enabled = true;
+            }
+            else
+            {
+                textBoxValue.Enabled = false;
+                trackBarValue.Enabled = false;
+            }
         }
     }
 }

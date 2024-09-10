@@ -4,11 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.测试窗口;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Node.Light.PPX;
 
 namespace YTVisionPro.Node.Camera.HiK
 {
@@ -37,14 +36,14 @@ namespace YTVisionPro.Node.Camera.HiK
         /// <summary>
         /// 重写相机节点Run
         /// </summary>
-        public override void Run()
+        public override Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunStatus(startTime, true);
-                return;
+                return Task.CompletedTask;
             }
             if (ParamForm.Params == null)
             {
@@ -55,29 +54,51 @@ namespace YTVisionPro.Node.Camera.HiK
 
             var param = (NodeParamCamera)ParamForm.Params;
 
-            param.Camera.SetTriggerMode(true); // 设置为触发模式
-            param.Camera.SetTriggerSource(param.TriggerSource);    // 设置触发源
-            if (param.TriggerSource == Hardware.Camera.TriggerSource.SOFT)
+            try
             {
-                if(param.Plc == null || param.TriggerSignal.IsNullOrEmpty())
-                {
-                    // 软触发不需要等plc信号
-                    param.Camera.GrabOne();
-                }
-                else
-                {
-                    // TODO:软触发需要plc给信号才拍照
+                base.Run(token);
 
+                param.Camera.SetTriggerMode(true); // 设置为触发模式
+                param.Camera.SetTriggerSource(param.TriggerSource);    // 设置触发源
+                if (param.TriggerSource == Hardware.Camera.TriggerSource.SOFT)
+                {
+                    if (param.Plc == null || param.TriggerSignal.IsNullOrEmpty())
+                    {
+                        // 软触发不需要等plc信号
+                        param.Camera.GrabOne();
+                    }
+                    else
+                    {
+                        // TODO:软触发需要plc给信号才拍照
+
+                    }
+                    SetRunStatus(startTime, false);
+                    return Task.CompletedTask;
                 }
-                SetRunStatus(startTime, false);
-                return;
+                param.Camera.SetTriggerEdge(param.TriggerEdge);
+                param.Camera.SetTriggerDelay(param.TriggerDelay);
+                param.Camera.SetExposureTime(param.ExposureTime);
+                param.Camera.SetGain(param.Gain);
+                // TODO: 上面设置了相机参数，接下来处理根据软硬触发相机拍照的逻辑
+
+
+                SetRunStatus(startTime, true);
+                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
             }
-            param.Camera.SetTriggerEdge(param.TriggerEdge);
-            param.Camera.SetTriggerDelay(param.TriggerDelay);
-            param.Camera.SetExposureTime(param.ExposureTime);
-            param.Camera.SetGain(param.Gain);
-            // TODO: 上面设置了相机参数，接下来处理根据软硬触发相机拍照的逻辑
+            catch (OperationCanceledException)
+            {
+                LogHelper.AddLog(MsgLevel.Warn, $"节点({ID}.{NodeName})运行取消！", true);
+                SetRunStatus(startTime, false);
+                throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+
+
+            return Task.CompletedTask;
         }
 
         private void SetRunStatus(DateTime startTime, bool isOk)

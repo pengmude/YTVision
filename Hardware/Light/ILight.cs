@@ -95,6 +95,11 @@ namespace YTVisionPro.Hardware.Light
         public LightBrand Brand { get; set; }
 
         /// <summary>
+        /// 锐视光源型号
+        /// </summary>
+        public RseeDeviceType RseeDeviceType { get; set; }
+
+        /// <summary>
         /// 亮度值
         /// </summary>
         public int Value {  get; set; }

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace YTVisionPro.Node.Tool.ImageSave
@@ -21,7 +23,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override void Run()
+        public override Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
 
@@ -29,7 +31,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
             if (!Active)
             {
                 SetRunStatus(startTime, true);
-                return;
+                return Task.CompletedTask;
             }
             if (ParamForm.Params == null)
             {
@@ -44,6 +46,8 @@ namespace YTVisionPro.Node.Tool.ImageSave
                 {
                     try
                     {
+                        base.Run(token);
+
                         // 参数获取订阅控件的值
                         if (param.IsBarCode)
                         {
@@ -66,6 +70,12 @@ namespace YTVisionPro.Node.Tool.ImageSave
                         SetRunStatus(startTime, true);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
                     }
+                    catch (OperationCanceledException)
+                    {
+                        LogHelper.AddLog(MsgLevel.Warn, $"节点({ID}.{NodeName})运行取消！", true);
+                        SetRunStatus(startTime, false);
+                        throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
+                    }
                     catch (Exception ex)
                     {
                         LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！原因:{ex.Message}", true);
@@ -75,6 +85,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
 
                 }
             }
+            return Task.CompletedTask;
         }
 
         private void SaveImage(DateTime time, NodeParamSaveImage param)

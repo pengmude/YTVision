@@ -10,10 +10,11 @@ using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Node.Camera.HiK;
 using YTVisionPro.Node.ImageRead;
-using YTVisionPro.Node.NodeLight.PPX;
+using YTVisionPro.Node.Light;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 using YTVisionPro.Node.PLC.Panasonic.Read;
 using YTVisionPro.Node.Tool.ImageSave;
+using YTVisionPro.Node.Tool.SleepTool;
 using static YTVisionPro.Node.NodeComboBox;
 
 namespace YTVisionPro.Forms.ProcessNew
@@ -99,6 +100,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     case NodeType.ImageSave:
                         node = new NodeImageSave(data.Text, _process);
                         break;
+                    case NodeType.SleepTool:
+                        node = new SleepTool(data.Text, _process);
+                        break;
                     default:
                         break;
                 }
@@ -167,12 +171,14 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
             //运行流程
             try
             {
-                _process.Run();
+                buttonRun.Enabled = false;
+                uiSwitchEnable.Enabled = false;
+                await _process.Run(false, Solution.Instance.CancellationToken);
 
                 SetRunStatus(_process.RunTime, true);
 
@@ -181,6 +187,9 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 SetRunStatus(_process.RunTime, false);
             }
+
+            buttonRun.Enabled = true;
+            uiSwitchEnable.Enabled = true;
         }
 
         /// <summary>
@@ -197,7 +206,7 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 uiLedBulb1.Color = Color.Red;
             }
-            label2.Text = $"耗时:{time}ms";
+            label2.Text = $"耗时:{time} ms";
         }
 
         /// <summary>

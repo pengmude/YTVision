@@ -127,8 +127,8 @@
   <data name="保存项目" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\保存项目.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="打开项目" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\打开项目.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="单次执行" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\单次执行.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="用户登录" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\用户登录.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,17 +136,17 @@
   <data name="PLC" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\PLC.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="方案设置" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\方案设置.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="流程删除" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\流程删除.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="停止执行" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\停止执行.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="单次执行" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\单次执行.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="相机" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\相机.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="方案设置" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\方案设置.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="流程添加" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\流程添加.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -157,10 +157,13 @@
   <data name="IMG20240327183803" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IMG20240327183803.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="相机" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\相机.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="监听" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\监听.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="打开项目" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\打开项目.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="循环执行" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Icon\循环执行.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

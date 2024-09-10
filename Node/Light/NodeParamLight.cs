@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YTVisionPro.Hardware.Light;
 
-namespace YTVisionPro.Node.Light.PPX
+namespace YTVisionPro.Node.Light
 {
     internal class NodeParamLight : INodeParam
     {

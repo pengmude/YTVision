@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static YTVisionPro.Node.AI.HTAI.HTAPI;
 
 namespace YTVisionPro.Node.AI.HTAI
 {
-    public class NGTypeConfig
+    internal class NGTypeConfig
     {
         /// <summary>
         /// 节点名
@@ -15,7 +13,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <summary>
         /// 节点名对应的类型
         /// </summary>
-        public string CLassName { get; set; }
+        public string ClassName { get; set; }
         /// <summary>
         /// 最小面积
         /// </summary>
@@ -44,5 +42,16 @@ namespace YTVisionPro.Node.AI.HTAI
         /// 是否是OK项
         /// </summary>
         public bool ForceOk { get; set; }
+    }
+
+    /// <summary>
+    /// 单个类别结果
+    /// </summary>
+    internal class AiClassResult
+    {
+        public string NodeName;
+        public int NodeType;
+        public string ClassName;
+        public List<DetectResult> Results;
     }
 }

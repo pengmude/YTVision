@@ -31,6 +31,7 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox5.Text = "工具箱";
             nodeComboBox5.AddItem("汇图AI", NodeType.AIHT);
             nodeComboBox5.AddItem("存图", NodeType.ImageSave);
+            nodeComboBox5.AddItem("延迟", NodeType.SleepTool);
         }
 
         /// <summary>
@@ -97,12 +98,12 @@ namespace YTVisionPro.Forms.ProcessNew
 
                 #region 调试代码，上线请注释
                 
-                string res = "";
-                foreach (var name in Solution.Instance.GetAllProcessName())
-                {
-                    res += name + "\n";
-                }
-                MessageBox.Show($"方案中流程名称：\n{res}");
+                //string res = "";
+                //foreach (var name in Solution.Instance.GetAllProcessName())
+                //{
+                //    res += name + "\n";
+                //}
+                //MessageBox.Show($"方案中流程名称：\n{res}");
 
                 #endregion
             }

@@ -1,8 +1,9 @@
 ﻿using Logger;
 using System;
-using YTVisionPro.Node.Light.PPX;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace YTVisionPro.Node.NodeLight.PPX
+namespace YTVisionPro.Node.Light
 {
     internal class NodeLight : NodeBase
     {
@@ -13,21 +14,20 @@ namespace YTVisionPro.Node.NodeLight.PPX
         public NodeLight(string nodeName, Process process) : base(nodeName, process)
         {
             ParamForm = new ParamFormLight(nodeName, process);
-            ParamForm.SetNodeBelong(this);
             Result = new NodeResultLight();
         }
 
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override void Run()
+        public override Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunStatus(startTime, true);
-                return;
+                return Task.CompletedTask;
             }
             if(ParamForm.Params == null)
             {
@@ -38,38 +38,31 @@ namespace YTVisionPro.Node.NodeLight.PPX
 
             var param = (NodeParamLight)ParamForm.Params;
 
-
-            // 打开操作
-            if (param.Open) 
+            try
             {
-                try
-                {
-                    param.Light.TurnOn(param.Brightness); 
-                    SetRunStatus(startTime, true);
-                    LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);
-                }
-                catch (Exception)
-                {
-                    LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行失败！", true);
-                    SetRunStatus(startTime, false);
-                    throw new Exception($"节点({NodeName})运行失败！");
-                }
-            }
-            else
-            {
-                try
-                {
+                base.Run(token);
+                // 打开操作
+                if (param.Open)
+                    param.Light.TurnOn(param.Brightness);
+                else
                     param.Light.TurnOff();
-                    SetRunStatus(startTime, true);
-                    LogHelper.AddLog(MsgLevel.Info, $"节点({NodeName})运行成功！", true);
-                }
-                catch (Exception)
-                {
-                    LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行失败！", true);
-                    SetRunStatus(startTime, false);
-                    throw new Exception($"节点({NodeName})运行失败！");
-                }
+                SetRunStatus(startTime, true);
+                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
             }
+            catch(OperationCanceledException)
+            {
+                LogHelper.AddLog(MsgLevel.Warn, $"节点({ID}.{NodeName})运行取消！", true);
+                SetRunStatus(startTime, false);
+                throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
+            }
+            catch (Exception)
+            {
+                LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！", true);
+                SetRunStatus(startTime, false);
+                throw new Exception($"节点({ID}.{NodeName})运行失败！");
+            }
+
+            return Task.CompletedTask;
         }
 
         private void SetRunStatus(DateTime startTime, bool isOk)

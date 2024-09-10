@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection.Emit;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
@@ -66,7 +68,19 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 节点运行，虚函数需要重写
         /// </summary>
-        public virtual void Run() { }
+        public virtual Task Run(CancellationToken token) 
+        {
+            try
+            {
+                // 检查取消请求
+                token.ThrowIfCancellationRequested();
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw ex;
+            }
+            return Task.CompletedTask;
+        }
         /// <summary>
         /// 节点id
         /// </summary>

@@ -18,11 +18,6 @@ namespace YTVisionPro.Hardware.Light
         public LightParam LightParam { get; set; }
 
         /// <summary>
-        /// 类实例个数
-        /// </summary>
-        private static int _newCount = 0;
-
-        /// <summary>
         /// 设备id
         /// </summary>
         private int _devId;
@@ -140,6 +135,7 @@ namespace YTVisionPro.Hardware.Light
         {
             _serialPort.Close();
             IsComOpen = false;
+            FrmLightListView.OccupiedComList.Remove(_serialPort);
         }
 
         /// <summary>

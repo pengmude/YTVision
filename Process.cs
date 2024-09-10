@@ -1,6 +1,8 @@
 ﻿using Logger;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 using YTVisionPro.Hardware.Camera;
@@ -45,6 +47,11 @@ namespace YTVisionPro
         public List<NodeBase> Nodes { get => _nodes;}
 
         /// <summary>
+        /// 流程是否正在运行
+        /// </summary>
+        public bool IsRuning { get; set; } = false;
+
+        /// <summary>
         /// 流程运行时间
         /// </summary>
         public long RunTime { get; private set; } = 0;
@@ -76,45 +83,50 @@ namespace YTVisionPro
         /// <summary>
         /// 流程开始运行
         /// </summary>
-        public void Run()
+        public async Task Run(bool isCyclical, CancellationToken token)
         {
-            if(Nodes.Count == 0) 
-            {
-                MessageBox.Show($"流程【{ProcessName}】节点个数为0！");
-                LogHelper.AddLog(MsgLevel.Warn, $"流程【{ProcessName}】节点个数为0！", true);
-                throw new Exception($"流程【{ProcessName}】节点个数为0！");
-            }
-            RunTime = 0;
-            if (Enable)
-            {
-                LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
+            if (Nodes.Count == 0)
+                return;
 
-                foreach (var node in _nodes)
+            do
+            {
+                RunTime = 0;
+                if (Enable)
                 {
-                    try
+                    LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
+                    IsRuning = true;
+                    Success = false;
+                    foreach (var node in _nodes)
                     {
-                        node.Run();
-                        Success = true;
+                        try
+                        {
+                            await node.Run(token);
+                            RunTime += node.Result.RunTime;
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            Success = false;
+                            IsRuning = false;
+                            RunTime += node.Result.RunTime;
+                            LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                            throw ex;
+                        }
+                        catch (Exception ex)
+                        {
+                            Success = false;
+                            IsRuning = false;
+                            RunTime += node.Result.RunTime;
+                            LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                            throw ex;
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Success = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                        throw ex;
-                    }
+
+                    Success = true;
+                    IsRuning = false;
+                    LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
+
                 }
-
-                LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-            }
-        }
-
-        /// <summary>
-        /// 流程停止运行
-        /// </summary>
-        public void Stop()
-        {
-
+            } while (isCyclical);
         }
     }
 }
