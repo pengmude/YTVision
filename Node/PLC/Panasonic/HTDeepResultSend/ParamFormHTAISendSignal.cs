@@ -14,11 +14,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
     internal partial class ParamFormHTAISendSignal : Form, INodeParamForm
     {
         /// <summary>
-        /// 参数改变事件，设置完参数后触发，给节点订阅
-        /// </summary>
-        public event EventHandler<INodeParam> OnNodeParamChange;
-
-        /// <summary>
         /// 信号列表
         /// </summary>
         private DataTable dataTable;
@@ -184,7 +179,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                 });
             }
             nodeParamSendSignal.Data = dataList;
-            OnNodeParamChange?.Invoke(this, nodeParamSendSignal);
+            Params = nodeParamSendSignal;
         }
 
 

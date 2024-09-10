@@ -13,8 +13,6 @@ namespace YTVisionPro.Node.ImageRead
             InitializeComponent();
         }
 
-        public event EventHandler<INodeParam> OnNodeParamChange;
-
         void INodeParamForm.SetNodeBelong(NodeBase node) { }
 
         private void button1_Click(object sender, EventArgs e)

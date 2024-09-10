@@ -18,6 +18,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
             ParamForm = new ParamFormHTAISendSignal();
             Result = new NodeResultHTAISendSignal();
         }
+
         /// <summary>
         /// 节点运行
         /// </summary>

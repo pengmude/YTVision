@@ -23,5 +23,6 @@ namespace YTVisionPro.Forms.ResultView
             this.Hide(); // 隐藏窗口
             HideChangedEvent?.Invoke(this, EventArgs.Empty);
         }
+
     }
 }

@@ -21,11 +21,6 @@ namespace YTVisionPro.Node.Tool.ImageSave
         }
 
         /// <summary>
-        /// 参数改变事件，设置完参数后触发，给节点订阅
-        /// </summary>
-        public event EventHandler<INodeParam> OnNodeParamChange;
-
-        /// <summary>
         /// 用于节点参数界面需要订阅结果的情况调用
         /// </summary>
         /// <param name="node"></param>

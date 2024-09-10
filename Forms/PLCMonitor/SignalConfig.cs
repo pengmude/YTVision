@@ -25,11 +25,11 @@ namespace YTVisionPro.Forms.PLCMonitor
         /// </summary>
         DataTable DataTable = new DataTable();
         // 保存更新后的地址范围
-        Dictionary<string, AddressRange> AddressRanges = new Dictionary<string, AddressRange>();
+        Dictionary<string, AddressRange> AddressRangesDic = new Dictionary<string, AddressRange>();
         /// <summary>
         /// 信号对应的字节索引
         /// </summary>
-        Dictionary<string, List<SingleSignal>> SignalNameIndexMap = new Dictionary<string, List<SingleSignal>>();
+        Dictionary<string, List<SingleSignal>> SignalNameIndexDic = new Dictionary<string, List<SingleSignal>>();
         /// <summary>
         /// 绑定的plc
         /// </summary>
@@ -54,8 +54,8 @@ namespace YTVisionPro.Forms.PLCMonitor
             dataGridView1.ColumnAdded += DataGridView_ColumnAdded;
 
 
-            SignalNameIndexMap["D"] = new List<SingleSignal>();
-            SignalNameIndexMap["R"] = new List<SingleSignal>();
+            SignalNameIndexDic["D"] = new List<SingleSignal>();
+            SignalNameIndexDic["R"] = new List<SingleSignal>();
         }
 
         public void SetPlc(IPlc plc)
@@ -128,7 +128,7 @@ namespace YTVisionPro.Forms.PLCMonitor
                 return;
             }
 
-            // TODO:检查地址是否被占用
+            // TODO:检查地址是否被与已经添加的地址存在冲突
 
 
             DataRow newRow = DataTable.NewRow();
@@ -138,8 +138,14 @@ namespace YTVisionPro.Forms.PLCMonitor
             newRow["信号名称"] = textBox2.Text;
             DataTable.Rows.Add(newRow);
 
-            // 更新结果
-            UpdateSignals();
+            try
+            {
+                // 更新结果
+                UpdateSignals();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -212,8 +218,8 @@ namespace YTVisionPro.Forms.PLCMonitor
         /// <returns></returns>
         public void CalculateAddressRanges(DataTable dataTable)
         {
-            AddressRanges.Clear();
-            SignalNameIndexMap.Clear();
+            AddressRangesDic.Clear();
+            SignalNameIndexDic.Clear();
             List<SingleSignal> dSignals = new List<SingleSignal>();
             List<SingleSignal> rSignals = new List<SingleSignal>();
 
@@ -247,47 +253,47 @@ namespace YTVisionPro.Forms.PLCMonitor
                     rSignals.Add(new SingleSignal(address, DataType.Bool, name, length));
 
                 // 如果D/R类型寄存器还没添加过
-                if (!AddressRanges.ContainsKey(prefix))
+                if (!AddressRangesDic.ContainsKey(prefix))
                 {
-                    AddressRanges[prefix] = new AddressRange();
-                    AddressRanges[prefix].Prefix = prefix;
-                    AddressRanges[prefix].StartAddress = number;
-                    AddressRanges[prefix].EndAddress = number + length - 1;
+                    AddressRangesDic[prefix] = new AddressRange();
+                    AddressRangesDic[prefix].Prefix = prefix;
+                    AddressRangesDic[prefix].StartAddress = number;
+                    AddressRangesDic[prefix].EndAddress = number + length - 1;
                     continue;
                 }
                 else
                 {
                     // 添加的地址在已有的地址区间内,但长度超出最大地址
-                    if (AddressRanges[prefix].StartAddress < number && number < AddressRanges[prefix].EndAddress && number + length > AddressRanges[prefix].EndAddress)
+                    if (AddressRangesDic[prefix].StartAddress < number && number < AddressRangesDic[prefix].EndAddress && number + length > AddressRangesDic[prefix].EndAddress)
                     {
                         // TODO:不需要更新连续地址，但要做防呆处理——新添加的地址在现有的连续地址范围内，需要判断会不会与内部的地址重合
                         
                         // 更新最大地址
-                        AddressRanges[prefix].EndAddress = number + length - 1;
+                        AddressRangesDic[prefix].EndAddress = number + length - 1;
                     }
                     // 添加的地址比最小地址小
-                    else if (AddressRanges[prefix].StartAddress > number)
+                    else if (AddressRangesDic[prefix].StartAddress > number)
                     {
-                        AddressRanges[prefix].StartAddress = number;
+                        AddressRangesDic[prefix].StartAddress = number;
                     }
                     // 添加的地址比最大地址大
-                    else if (AddressRanges[prefix].EndAddress < number)
+                    else if (AddressRangesDic[prefix].EndAddress < number)
                     {
-                        AddressRanges[prefix].EndAddress = number + length - 1;
+                        AddressRangesDic[prefix].EndAddress = number + length - 1;
                     }
                 }
             }
 
-            SignalNameIndexMap["D"] = dSignals;
-            SignalNameIndexMap["R"] = rSignals;
+            SignalNameIndexDic["D"] = dSignals;
+            SignalNameIndexDic["R"] = rSignals;
 
             //排序,为了按顺序解析数据
-            SortAddresses(SignalNameIndexMap["D"]);
-            SortAddresses(SignalNameIndexMap["R"]);
+            SortAddresses(SignalNameIndexDic["D"]);
+            SortAddresses(SignalNameIndexDic["R"]);
 
             // 添加监听任务
             PLCMonitor.Tasks.Clear();
-            foreach (var range in AddressRanges)
+            foreach (var range in AddressRangesDic)
             {
                 PLCMonitor.AddMonitorTask(range.Key, range.Value);
                 // 以下是调试信息

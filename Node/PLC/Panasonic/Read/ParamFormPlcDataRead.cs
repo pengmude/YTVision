@@ -9,12 +9,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
     internal partial class ParamFormPlcDataRead : Form, INodeParamForm
     {
         public INodeParam Params { get; set; }
-
-        /// <summary>
-        /// 参数改变事件，设置完参数后触发，给节点订阅
-        /// </summary>
-        public event EventHandler<INodeParam> OnNodeParamChange;
-
+        
         public ParamFormPlcDataRead()
         {
             InitializeComponent();
@@ -121,7 +116,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 default:
                     break;
             }
-            OnNodeParamChange?.Invoke(this, nodeParamRead);
+            Params = nodeParamRead;
             Hide();
         }
 

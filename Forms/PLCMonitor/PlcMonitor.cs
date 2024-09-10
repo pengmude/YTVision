@@ -104,7 +104,7 @@ namespace YTVisionPro.Forms.PLCMonitor
 
             try
             {
-                int i = 0, j = 0;
+                ulong i = 0, j = 0;
                 while (!cancellationToken.IsCancellationRequested)
                 {
 
