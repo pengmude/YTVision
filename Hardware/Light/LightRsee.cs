@@ -110,6 +110,8 @@ namespace YTVisionPro.Hardware.Light
                 }
                 if (ComHandle == 0)
                     Connenct();
+                else
+                    IsComOpen = true;
             }
             catch (Exception ex)
             {

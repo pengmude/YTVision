@@ -16,7 +16,8 @@ namespace YTVisionPro.Node.Camera.HiK
         public NodeCamera(string nodeName, Process process) : base(nodeName, process)
         {
             ParamForm = new ParamFormCamera();
-            ParamForm.SetNodeBelong(this);
+            ParamForm.SetNodeBelong(this); 
+            ((NodeParamCamera)ParamForm.Params).Camera.PublishImageEvent += Camera_PublishImageEvent;
             Result = new NodeResultCamera();
         }
 
@@ -60,6 +61,8 @@ namespace YTVisionPro.Node.Camera.HiK
 
                 param.Camera.SetTriggerMode(true); // 设置为触发模式
                 param.Camera.SetTriggerSource(param.TriggerSource);    // 设置触发源
+                param.Camera.StartGrabbing();
+
                 if (param.TriggerSource == Hardware.Camera.TriggerSource.SOFT)
                 {
                     if (param.Plc == null || param.TriggerSignal.IsNullOrEmpty())

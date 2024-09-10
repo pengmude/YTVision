@@ -52,9 +52,11 @@ namespace YTVisionPro.Forms.CameraAdd
             //移除的是被选中的则要清除它参数显示控件
             if (e.IsSelected)
                 panel1.Controls.Remove(e.CameraParamsShowControl);
+
             //然后移除掉方案中的全局相机并释放相机内存
             Solution.Instance.Devices.Remove(e.Camera);
             e.Camera.Dispose();
+
             //最后移除掉单个相机控件
             flowLayoutPanel1.Controls.Remove(e);
         }
@@ -81,7 +83,7 @@ namespace YTVisionPro.Forms.CameraAdd
             }
         }
         
-        /// <summary>
+        /// <summary>aq
         /// 处理选中事件
         /// </summary>
         /// <param name="sender"></param>
@@ -113,7 +115,7 @@ namespace YTVisionPro.Forms.CameraAdd
         {
             foreach (var item in Solution.Instance.CameraDevices)
             {
-                item.Close();
+                item.StopGrabbing();
             }
         }
     }

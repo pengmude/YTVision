@@ -119,6 +119,8 @@ namespace YTVisionPro.Node.AI.HTAI
             AiResult aiResult = new AiResult();
             List<AiClassResult>  ResList = SaveResult(pstNodeRst, testNum);
 
+            #region 添加NG部分结果
+
             foreach (var item in ResList)
             {
                 // 保存要返回的结果
@@ -165,6 +167,29 @@ namespace YTVisionPro.Node.AI.HTAI
                 result.DetectResult = tmp;
                 aiResult.DeepStudyResult.Add(result);
             }
+
+            #endregion
+
+            #region 添加OK部分结果
+
+            List<SingleResultViewData> okRes = new List<SingleResultViewData>();
+            foreach (var ngConfig in allNgConfigs)
+            {
+                var isExist = aiResult.DeepStudyResult.Exists(r => r.NodeName == ngConfig.NodeName && r.ClassName == ngConfig.ClassName);
+                if(!isExist)
+                {
+                    SingleResultViewData data = new SingleResultViewData();
+                    data.IsOk = true;
+                    data.DetectResult = "";
+                    data.DetectName = "";
+                    data.NodeName = ngConfig.NodeName;
+                    data.ClassName = ngConfig.ClassName;
+                    aiResult.DeepStudyResult.Add(data);
+                }
+            }
+
+            #endregion
+
             return aiResult;
         }
 

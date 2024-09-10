@@ -26,12 +26,12 @@ namespace YTVisionPro.Forms.ProcessNew
 
             nodeComboBox3.Text = "PLC信号";
             nodeComboBox3.AddItem("松下PLC读", NodeType.PLCRead);
-            nodeComboBox3.AddItem("汇图AI结果发送", NodeType.PLCHTAIResultSend);
+            nodeComboBox3.AddItem("AI结果发送", NodeType.PLCHTAIResultSend);
 
             nodeComboBox5.Text = "工具箱";
-            nodeComboBox5.AddItem("汇图AI", NodeType.AIHT);
-            nodeComboBox5.AddItem("存图", NodeType.ImageSave);
-            nodeComboBox5.AddItem("延迟", NodeType.SleepTool);
+            nodeComboBox5.AddItem("AI检测", NodeType.AIHT);
+            nodeComboBox5.AddItem("保存图像", NodeType.ImageSave);
+            nodeComboBox5.AddItem("延迟执行", NodeType.SleepTool);
         }
 
         /// <summary>
