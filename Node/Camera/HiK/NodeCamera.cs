@@ -1,12 +1,8 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using YTVisionPro.Forms.测试窗口;
 
 namespace YTVisionPro.Node.Camera.HiK
@@ -16,8 +12,7 @@ namespace YTVisionPro.Node.Camera.HiK
         public NodeCamera(string nodeName, Process process) : base(nodeName, process)
         {
             ParamForm = new ParamFormCamera();
-            ParamForm.SetNodeBelong(this); 
-            ((NodeParamCamera)ParamForm.Params).Camera.PublishImageEvent += Camera_PublishImageEvent;
+            ParamForm.SetNodeBelong(this);
             Result = new NodeResultCamera();
         }
 
@@ -54,6 +49,7 @@ namespace YTVisionPro.Node.Camera.HiK
             }
 
             var param = (NodeParamCamera)ParamForm.Params;
+            param.Camera.PublishImageEvent += Camera_PublishImageEvent;
 
             try
             {
