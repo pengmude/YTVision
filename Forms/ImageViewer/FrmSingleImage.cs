@@ -19,5 +19,12 @@ namespace YTVisionPro.Forms.ImageViewer
             InitializeComponent();
             this.Text = $"图像窗口{i++}";
         }
+
+        private void FrmSingleImage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            FrmImageViewer.CurWindowsNum--;
+            e.Cancel = true;
+            Hide();
+        }
     }
 }

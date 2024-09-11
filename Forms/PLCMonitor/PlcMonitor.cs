@@ -114,7 +114,7 @@ namespace YTVisionPro.Forms.PLCMonitor
                         string address = task.AddressRange.Prefix + task.AddressRange.StartAddress.ToString();
                         ushort length = (ushort)task.AddressRange.Length;
                         DateTime startTime = DateTime.Now;
-                        var content = _plc.ReadPLCData(address, length, Hardware.PLC.DataType.Bytes);
+                        var content = _plc.ReadPLCData(address, Hardware.PLC.DataType.Bytes, length);
                         //_plc.WritePLCData(address, true);
                         time = GetRunTime(startTime);
                     }

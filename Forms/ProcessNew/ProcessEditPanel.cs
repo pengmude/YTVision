@@ -1,14 +1,13 @@
 ﻿using Logger;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Camera.HiK.WaitHardTrigger;
+using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 using YTVisionPro.Node.ImageRead;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
@@ -87,7 +86,7 @@ namespace YTVisionPro.Forms.ProcessNew
                         node = new NodeImageRead(data.Text, _process);
                         break;
                     case NodeType.PLCRead:
-                        node = new NodePlcDataRead(data.Text, _process);
+                        node = new NodePlcRead(data.Text, _process);
                         break;
                     case NodeType.PLCWrite:
                         break;
@@ -102,6 +101,12 @@ namespace YTVisionPro.Forms.ProcessNew
                         break;
                     case NodeType.SleepTool:
                         node = new SleepTool(data.Text, _process);
+                        break;
+                    case NodeType.WaitSoftTrigger:
+                        node = new NodeWaitSoftTrigger(data.Text, _process);
+                        break;
+                    case NodeType.WaitHardTrigger:
+                        node = new NodeWaitHardTrigger(data.Text, _process);
                         break;
                     default:
                         break;

@@ -115,7 +115,7 @@ namespace YTVisionPro.Hardware.PLC
         /// 读取PLC寄存器
         /// </summary>
         /// <returns></returns>
-        public object ReadPLCData(string address, ushort length, DataType dataType)
+        public object ReadPLCData(string address, DataType dataType, ushort length = 0)
         {
             switch (dataType)
             {

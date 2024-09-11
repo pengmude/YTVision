@@ -288,6 +288,17 @@
     <Compile Include="Node\Camera\HiK\ParamFormCamera.Designer.cs">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\Camera\WaitHardTrigger\NodeParamWaitHardTrigger.cs" />
+    <Compile Include="Node\Camera\WaitHardTrigger\NodeResultWaitHardTrigger.cs" />
+    <Compile Include="Node\Camera\WaitHardTrigger\NodeWaitHardTrigger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Camera\WaitHardTrigger\ParamFormWaitHardTrigger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Camera\WaitHardTrigger\ParamFormWaitHardTrigger.Designer.cs">
+      <DependentUpon>ParamFormWaitHardTrigger.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\FrmNodeRename.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -408,16 +419,27 @@
     <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.Designer.cs">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\PLC\Panasonic\Read\NodeParamRead.cs" />
-    <Compile Include="Node\PLC\Panasonic\Read\NodePlcDataRead.cs">
+    <Compile Include="Node\Camera\WaitSoftTrigger\NodeParamWaitSoftTrigger.cs" />
+    <Compile Include="Node\Camera\WaitSoftTrigger\NodeWaitSoftTrigger.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\PLC\Panasonic\Read\NodeResultPlcDataRead.cs" />
-    <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcDataRead.cs">
+    <Compile Include="Node\Camera\WaitSoftTrigger\NodeResultWaitSoftTrigger.cs" />
+    <Compile Include="Node\Camera\WaitSoftTrigger\ParamFormWaitSoftTrigger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcDataRead.Designer.cs">
-      <DependentUpon>ParamFormPlcDataRead.cs</DependentUpon>
+    <Compile Include="Node\Camera\WaitSoftTrigger\ParamFormWaitSoftTrigger.Designer.cs">
+      <DependentUpon>ParamFormWaitSoftTrigger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Read\NodeParamPlcRead.cs" />
+    <Compile Include="Node\PLC\Panasonic\Read\NodeResultPlcRead.cs" />
+    <Compile Include="Node\PLC\Panasonic\Read\NodePlcRead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.Designer.cs">
+      <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\Tool\ImageRead\NodeParamImageRead.cs" />
     <Compile Include="Node\Tool\ImageRead\NodeImageRead.cs">
@@ -538,6 +560,9 @@
     <EmbeddedResource Include="Node\Camera\HiK\ParamFormCamera.resx">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\Camera\WaitHardTrigger\ParamFormWaitHardTrigger.resx">
+      <DependentUpon>ParamFormWaitHardTrigger.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
     </EmbeddedResource>
@@ -589,8 +614,11 @@
     <EmbeddedResource Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.resx">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormPlcDataRead.resx">
-      <DependentUpon>ParamFormPlcDataRead.cs</DependentUpon>
+    <EmbeddedResource Include="Node\Camera\WaitSoftTrigger\ParamFormWaitSoftTrigger.resx">
+      <DependentUpon>ParamFormWaitSoftTrigger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.resx">
+      <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\ImageRead\ParamFormImageRead.resx">
       <DependentUpon>ParamFormImageRead.cs</DependentUpon>

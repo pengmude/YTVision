@@ -126,13 +126,13 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
             }
         }
 
-        public List<SignalRowData> FindMatchSignalRow(List<SignalRowData> list, string nodeName, string className)
+        private List<SignalRowData> FindMatchSignalRow(List<SignalRowData> list, string nodeName, string className)
         {
             var matchingRows = list.Where(row => row.NodeName == nodeName && row.ClassName == className).ToList();
             return matchingRows;
         }
 
-        public static void SendSignalToPlc(SignalRowData dataRow)
+        private static void SendSignalToPlc(SignalRowData dataRow)
         {
             if (dataRow != null)
             {
@@ -145,14 +145,14 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                             plcTmp.WritePLCData(dataRow.SignalAddress, true);
                             LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功", true);
 
-                        } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, 0, DataType.BOOL));
+                        } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
                         
                         do
                         {
                             plcTmp.WritePLCData(dataRow.SignalAddress, false);
                             LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号断开成功", true);
 
-                        } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, 0, DataType.BOOL));
+                        } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
                         break;
                     }
                 }

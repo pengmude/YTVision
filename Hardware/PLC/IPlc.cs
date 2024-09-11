@@ -43,7 +43,7 @@ namespace YTVisionPro.Hardware.PLC
         /// 读取PLC寄存器
         /// </summary>
         /// <returns></returns>
-        object ReadPLCData(string address, ushort length, DataType dataType);
+        object ReadPLCData(string address, DataType dataType, ushort length = 0);
 
         /// <summary>
         /// 写入PLC寄存器

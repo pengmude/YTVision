@@ -91,12 +91,35 @@ namespace YTVisionPro.Forms.ImageViewer
                         string text = radioButton.Text;
                         text = text.Remove(0, 2);
                         int num = int.Parse(text);
-                        WindowNumChangeEvent?.Invoke(this, num);
+                        if(num != FrmImageViewer.CurWindowsNum)
+                            WindowNumChangeEvent?.Invoke(this, num);
                     }
                 }
             }
             SaveDockPanelEvent?.Invoke(this, EventArgs.Empty);
             this.Close();
+        }
+
+        /// <summary>
+        /// 窗口显示时选中匹配数量的单选框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CanvasSet_Shown(object sender, EventArgs e)
+        {
+            foreach (var control in tableLayoutPanel17.Controls)
+            {
+                if (control is RadioButton radioButton)
+                {
+                    string text = radioButton.Text;
+                    text = text.Remove(0, 2);
+                    int num = int.Parse(text);
+                    if (num == FrmImageViewer.CurWindowsNum)
+                    {
+                        radioButton.Checked = true;
+                    }
+                }
+            }
         }
     }
 }

@@ -88,9 +88,17 @@ namespace YTVisionPro.Node
         /// </summary>
         LightSourceControl,
         /// <summary>
+        /// 软触发等待
+        /// </summary>
+        WaitSoftTrigger,
+        /// <summary>
         /// 相机拍照
         /// </summary>
         CameraShot,
+        /// <summary>
+        /// 硬触发等待
+        /// </summary>
+        WaitHardTrigger,
         /// <summary>
         /// 本地图像
         /// </summary>

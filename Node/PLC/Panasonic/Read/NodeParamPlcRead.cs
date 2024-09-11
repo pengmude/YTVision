@@ -2,7 +2,7 @@
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
-    internal class NodeParamPlcDataRead : INodeParam
+    internal class NodeParamPlcRead : INodeParam
     {
         public IPlc Plc { get; set; }
         public ushort Length { get; set; } = 0;

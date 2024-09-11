@@ -2438,6 +2438,7 @@ namespace YTVisionPro.Forms.ImageViewer
             this.Name = "CanvasSet";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "图像显示窗口布局";
+            this.Shown += new System.EventHandler(this.CanvasSet_Shown);
             this.tableLayoutPanel13.ResumeLayout(false);
             this.tableLayoutPanel13.PerformLayout();
             this.tableLayoutPanel14.ResumeLayout(false);

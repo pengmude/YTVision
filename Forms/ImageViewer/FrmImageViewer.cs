@@ -126,15 +126,9 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="num">窗口数</param>
         public void SetWindowNum(int num)
         {
-            if (CurWindowsNum > num)
+            foreach (var win in _frmSingleImages)
             {
-                for (int i = 0; i < CurWindowsNum - num; i++)
-                {
-                    FrmSingleImage frmSingleImage = _frmSingleImages[CurWindowsNum - 1 - i];
-
-                    frmSingleImage.Hide();
-
-                }
+                win.Hide();
             }
 
             for (int i = 0; i < num; i++)

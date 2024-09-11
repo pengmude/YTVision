@@ -43,20 +43,6 @@ namespace YTVisionPro.Node.Camera.HiK
                 comboBoxCamera.SelectedIndex = 0;
             else
                 comboBoxCamera.SelectedIndex = index1;
-
-            //plc
-            string text2 = comboBoxPlc.Text;
-            comboBoxPlc.Items.Clear();
-            comboBoxPlc.Items.Add("[未设置]");
-            foreach (var plc in Solution.Instance.PlcDevices)
-            {
-                comboBoxPlc.Items.Add(plc.UserDefinedName);
-            }
-            int index2 = comboBoxPlc.Items.IndexOf(text2);
-            if (index2 == -1)
-                comboBoxPlc.SelectedIndex = 0;
-            else
-                comboBoxPlc.SelectedIndex = index2;
         }
 
         /// <summary>
@@ -74,18 +60,10 @@ namespace YTVisionPro.Node.Camera.HiK
         {
             // 软触发
             if(0 == comboBoxType.SelectedIndex)
-            {
-                comboBoxPlc.Enabled = true;
-                textBoxSignal.Enabled = true;
                 comboBoxTriggerEdge.Enabled = false;
-            }
             // 硬触发（Line0-Line4）
             else
-            {
-                comboBoxPlc.Enabled = false;
-                textBoxSignal.Enabled = false;
                 comboBoxTriggerEdge.Enabled = true;
-            }
         }
 
         /// <summary>
@@ -108,18 +86,12 @@ namespace YTVisionPro.Node.Camera.HiK
                 delay = int.Parse(textBox3.Text);
                 exposureTime = int.Parse(textBox1.Text);
                 gain = int.Parse(textBox2.Text);
-
             }
             catch (Exception)
             {
                 MessageBox.Show("参数无法解析！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            //if(comboBoxType.SelectedIndex == 0 && textBoxSignal.Text.IsNullOrEmpty())
-            //{
-            //    MessageBox.Show("软触发模式下必须设置触发信号地址！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return;
-            //}
 
             #endregion
 
@@ -157,26 +129,6 @@ namespace YTVisionPro.Node.Camera.HiK
                 case "Line4":
                     nodeParamCamera.TriggerSource = TriggerSource.LINE4;
                     break;
-            }
-
-            // 控制软触发的plc
-            if (comboBoxPlc.Text.IsNullOrEmpty() || comboBoxPlc.Text == "[未设置]")
-            {
-                nodeParamCamera.Plc = null;
-                nodeParamCamera.TriggerSignal = "";
-            }
-            else
-            {
-                foreach (var plc in Solution.Instance.PlcDevices)
-                {
-                    if (plc.UserDefinedName == comboBoxPlc.Text)
-                    {
-                        nodeParamCamera.Plc = plc;
-                    }
-                }
-
-                //软触发设置触发信号
-                nodeParamCamera.TriggerSignal = textBoxSignal.Text;
             }
 
             //硬触发设置触发沿

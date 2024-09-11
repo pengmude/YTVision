@@ -3,14 +3,15 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
-    internal partial class ParamFormPlcDataRead : Form, INodeParamForm
+    internal partial class ParamFormWaitSoftTrigger : Form, INodeParamForm
     {
         public INodeParam Params { get; set; }
         
-        public ParamFormPlcDataRead()
+        public ParamFormWaitSoftTrigger()
         {
             InitializeComponent();
             InitPLCComboBox();
@@ -37,17 +38,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 comboBox1.SelectedIndex = 0;
             else
                 comboBox1.SelectedIndex = index1;
-
-            string text2 = comboBox2.Text;
-            comboBox2.Items.Clear();
-            comboBox2.Items.Add("整数类型");
-            comboBox2.Items.Add("布尔类型");
-            comboBox2.Items.Add("字符串类型");
-            int index2 = comboBox2.Items.IndexOf(text2);
-            if (index2 == -1)
-                comboBox2.SelectedIndex = 0;
-            else
-                comboBox2.SelectedIndex = index2;
         }
 
         /// <summary>
@@ -69,12 +59,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 MessageBox.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if(this.comboBox2.Text == "字符串类型" && string.IsNullOrEmpty(this.textBox3.Text))
-            {
-                LogHelper.AddLog(MsgLevel.Exception, "读取字符串类型需要设置读取长度", true);
-                MessageBox.Show("读取字符串类型需要设置读取长度", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
 
 
             //查找当前选择的PLC
@@ -89,33 +73,9 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
             }
 
             //把设置好的参数传给PLC节点NodePlcDataRead去更新结果
-            NodeParamPlcDataRead nodeParamRead = new NodeParamPlcDataRead();
+            NodeParamWaitSoftTrigger nodeParamRead = new NodeParamWaitSoftTrigger();
             nodeParamRead.Plc = plc;
             nodeParamRead.Address = this.textBox1.Text;
-            switch (this.comboBox2.Text)
-            {
-                case "整数类型":
-                    nodeParamRead.DataType = DataType.INT;
-                    break;
-                case "布尔类型":
-                    nodeParamRead.DataType = DataType.BOOL;
-                    break;
-                case "字符串类型":
-                    nodeParamRead.DataType = DataType.STRING;
-                    try
-                    {
-                        nodeParamRead.Length = ushort.Parse(this.textBox3.Text);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
-                        MessageBox.Show("保存失败,请检查参数是否有误！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
-                    }
-                    break;
-                default:
-                    break;
-            }
             Params = nodeParamRead;
             Hide();
         }
@@ -128,11 +88,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
         private void ParamFormRead_Shown(object sender, EventArgs e)
         {
             InitPLCComboBox();
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            textBox3.Enabled = comboBox2.Text == "字符串类型" ? true : false;
         }
     }
 }

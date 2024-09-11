@@ -123,5 +123,23 @@ namespace YTVisionPro.Node
                 throw new Exception($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
             }
         }
+
+        /// <summary>
+        /// 获取节点名称
+        /// </summary>
+        /// <returns></returns>
+        public string GetText1()
+        {
+            return comboBox1.Text;
+        }
+
+        /// <summary>
+        /// 获取节点结果
+        /// </summary>
+        /// <returns></returns>
+        public string GetText2()
+        {
+            return comboBox2.Text;
+        }
     }
 }

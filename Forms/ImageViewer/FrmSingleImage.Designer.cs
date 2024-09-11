@@ -35,7 +35,7 @@
             // ytPictrueBox1
             // 
             this.ytPictrueBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ytPictrueBox1.DisplayImageType = YTVisionPro.Forms.ImageViewer.DisplayImageType.RENDERIMG;
+            this.ytPictrueBox1.DisplayImageType = YTVisionPro.Forms.ImageViewer.DisplayImageType.SRCIMG;
             this.ytPictrueBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ytPictrueBox1.Location = new System.Drawing.Point(0, 0);
             this.ytPictrueBox1.Name = "ytPictrueBox1";
@@ -54,6 +54,7 @@
             this.Name = "FrmSingleImage";
             this.ShowIcon = false;
             this.Text = "窗口标题";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmSingleImage_FormClosing);
             this.ResumeLayout(false);
 
         }

@@ -20,8 +20,10 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox1.Text = "光源节点";
             nodeComboBox1.AddItem("光源控制", NodeType.LightSourceControl);
 
-            nodeComboBox2.Text = "图像源";
+            nodeComboBox2.Text = "图像采集";
             nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
+            nodeComboBox2.AddItem("软触发等待", NodeType.WaitSoftTrigger);
+            nodeComboBox2.AddItem("硬触发等待", NodeType.WaitHardTrigger);
             nodeComboBox2.AddItem("本地图片", NodeType.LocalPicture);
 
             nodeComboBox3.Text = "PLC信号";
@@ -39,7 +41,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button2_Click(object sender, System.EventArgs e)
+        private void button2_Click(object sender, EventArgs e)
         {
             Solution.ProcessCount++;
             TabPage tabPage = new TabPage();

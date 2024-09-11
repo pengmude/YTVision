@@ -1,21 +1,18 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
-    internal class NodePlcDataRead : NodeBase
+    internal class NodePlcRead : NodeBase
     {
-        public NodePlcDataRead(string nodeName, Process process) : base(nodeName, process)
+        public NodePlcRead(string nodeName, Process process) : base(nodeName, process)
         {
-            ParamForm = new ParamFormPlcDataRead();
-            Result = new NodeResultPlcDataRead();
+            ParamForm = new ParamFormWaitSoftTrigger();
+            Result = new NodeResultPlcRead();
         }
 
         /// <summary>
@@ -37,15 +34,16 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            var param = (NodeParamPlcDataRead)ParamForm.Params;
-            if (Result is NodeResultPlcDataRead res)
+            var param = (NodeParamPlcRead)ParamForm.Params;
+
+            if (Result is NodeResultPlcRead res)
             {
                 try
                 {
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    res.CodeText = param.Plc.ReadPLCData(param.Address, param.Length, DataType.STRING);
+                    res.CodeText = param.Plc.ReadPLCData(param.Address, DataType.STRING, param.Length);
                     if (res.CodeText.ToString().IsNullOrEmpty())
                         throw new Exception("读码为空！");
 

@@ -15,14 +15,6 @@ namespace YTVisionPro.Node.Camera.HiK
         /// </summary>
         public TriggerSource TriggerSource;
         /// <summary>
-        /// 软触发使用的plc
-        /// </summary>
-        public IPlc Plc;
-        /// <summary>
-        /// 触发信号的PLC地址
-        /// </summary>
-        public string TriggerSignal;
-        /// <summary>
         /// 触发沿
         /// </summary>
         public TriggerEdge TriggerEdge;
