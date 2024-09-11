@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
 {
@@ -34,7 +35,19 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
         /// 给节点参数界面类设置所属的节点
         /// </summary>
         /// <param name="node"></param>
-        public void SetNodeBelong(NodeBase node) { }
+        public void SetNodeBelong(NodeBase node) 
+        { 
+            nodeSubscription1.Init(node);
+        }
+
+        /// <summary>
+        /// 获取订阅的结果
+        /// </summary>
+        /// <returns></returns>
+        public AiResult GetAiResult()
+        {
+            return nodeSubscription1.GetValue<AiResult>();
+        }
 
         private void InitComboBox()
         {

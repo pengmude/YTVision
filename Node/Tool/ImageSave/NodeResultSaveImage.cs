@@ -8,7 +8,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
 {
     internal class NodeResultImageSave : INodeResult
     {
-        public bool Success { get; set; }
+        public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
         public NodeRunStatusCode RunStatusCode { get; set; }
     }

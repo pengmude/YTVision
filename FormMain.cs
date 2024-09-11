@@ -250,24 +250,24 @@ namespace YTVisionPro
             if(MessageBox.Show("确定停止当前方案运行？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 return;
             Solution.Instance.Stop();
-            SetRunStatus(false);
+            SetSolRunStatus(false);
         }
 
         private async void 循环运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            SetRunStatus(true);
+            SetSolRunStatus(true);
             await Solution.Instance.Run(true);
-            SetRunStatus(false);
+            SetSolRunStatus(false);
         }
 
         private async void 单次运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            SetRunStatus(true);
+            SetSolRunStatus(true);
             await Solution.Instance.Run(false);
-            SetRunStatus(false);
+            SetSolRunStatus(false);
         }
 
-        private void SetRunStatus(bool isRunning)
+        private void SetSolRunStatus(bool isRunning)
         {
             tsbt_SolRunOnce.Enabled = !isRunning;
             tsbt_SolRunLoop.Enabled = !isRunning;

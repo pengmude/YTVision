@@ -30,14 +30,13 @@ namespace YTVisionPro.Node.Tool.SleepTool
             // 参数合法性校验
             if (!Active)
             {
-                SetRunStatus(startTime, true);
+                SetRunResult(startTime, NodeStatus.Unexecuted);
                 return;
-                //return Task.CompletedTask;
             }
             if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行参数未设置或保存！", true);
-                SetRunStatus(startTime, false);
+                SetRunResult(startTime, NodeStatus.Failed);
                 throw new Exception($"节点({ID}.{NodeName})运行参数未设置或保存！");
             }
 
@@ -47,50 +46,34 @@ namespace YTVisionPro.Node.Tool.SleepTool
                 {
                     try
                     {
+                        SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
                         // 异步执行睡眠操作
                         await ExecuteSleepAsync(param.Time);
-                        SetRunStatus(startTime, true);
+                        SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
                     }
                     catch (OperationCanceledException)
                     {
                         LogHelper.AddLog(MsgLevel.Warn, $"节点({ID}.{NodeName})运行取消！", true);
-                        SetRunStatus(startTime, false);
+                        SetRunResult(startTime, NodeStatus.Unexecuted);
                         throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
                     }
                     catch (Exception ex)
                     {
                         LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！原因:{ex.Message}", true);
-                        SetRunStatus(startTime, false);
+                        SetRunResult(startTime, NodeStatus.Failed);
                         throw new Exception($"节点({ID}.{NodeName})运行失败，原因：{ex.Message}");
                     }
                 }
             }
-
-            //return Task.CompletedTask;
         }
 
         private async Task ExecuteSleepAsync(int timeInMilliseconds)
         {
             // 使用 Task.Delay 在后台线程上执行异步睡眠操作
             await Task.Delay(timeInMilliseconds);
-        }
-
-        /// <summary>
-        /// 设置基本的运行结果
-        /// </summary>
-        /// <param name="startTime"></param>
-        /// <param name="isOk"></param>
-        private void SetRunStatus(DateTime startTime, bool isOk)
-        {
-            DateTime endTime = DateTime.Now;
-            TimeSpan elapsed = endTime - startTime;
-            long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
-            Result.RunTime = elapsedMi11iseconds;
-            Result.Success = isOk;
-            Result.RunStatusCode = isOk ? NodeRunStatusCode.OK : NodeRunStatusCode.UNKNOW_ERROR;
         }
     }
 }

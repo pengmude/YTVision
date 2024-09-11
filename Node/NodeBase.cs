@@ -23,8 +23,6 @@ namespace YTVisionPro.Node
         /// </summary>
         public Process Process; 
 
-
-
         /// <summary>
         /// 因为是控件类，提供无参构造函数让设计器可以显示出来
         /// </summary>
@@ -107,6 +105,57 @@ namespace YTVisionPro.Node
         public static event EventHandler<int> NodeDeletedEvent;
 
         /// <summary>
+        /// 设置节点状态,主要颜色，中心颜色，是否闪烁
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name=""></param>
+        public void SetStatus(NodeStatus status, string time)
+        {
+            label2.Text = $"{time} ms";
+            switch (status)
+            {
+                case NodeStatus.Unexecuted:
+                    uiLight1.State = Sunny.UI.UILightState.Off;
+                    label2.ForeColor = uiLight1.OffColor;
+                    label2.Text = $"* ms";
+                    break;
+                case NodeStatus.Successful:
+                    uiLight1.OnColor = Color.Green;
+                    uiLight1.OnCenterColor = Color.Lime;
+                    uiLight1.State = Sunny.UI.UILightState.On;
+                    label2.ForeColor = uiLight1.OnCenterColor;
+                    break;
+                case NodeStatus.Failed:
+                    uiLight1.OnColor = Color.DarkRed;
+                    uiLight1.OnCenterColor = Color.Red;
+                    uiLight1.State = Sunny.UI.UILightState.Blink;
+                    label2.ForeColor = uiLight1.OnCenterColor;
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+        /// <summary>
+        /// 节点运行结果基本状态设置
+        /// </summary>
+        /// <param name="startTime"></param>
+        /// <param name="status"></param>
+        public void SetRunResult(DateTime startTime, NodeStatus status)
+        {
+            DateTime endTime = DateTime.Now;
+            TimeSpan elapsed = endTime - startTime;
+            long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
+            SetStatus(status, elapsedMi11iseconds.ToString());
+            Result.RunTime = elapsedMi11iseconds;
+            Result.Status = status;
+            Result.RunStatusCode = status == NodeStatus.Successful ? NodeRunStatusCode.OK
+                                : status == NodeStatus.Unexecuted ? NodeRunStatusCode.UNEXECUTED
+                                : NodeRunStatusCode.UNKNOW_ERROR;
+        }
+
+        /// <summary>
         /// 删除时触发删除事件，参数为待删除的节点ID
         /// </summary>
         /// <param name="sender"></param>
@@ -187,12 +236,14 @@ namespace YTVisionPro.Node
             if (_active)
             {
                 label1.BackColor = SystemColors.ActiveCaption;
+                tableLayoutPanel1.BackColor = SystemColors.ActiveCaption;
                 禁用ToolStripMenuItem.Enabled = true;
                 启用ToolStripMenuItem.Enabled = false;
             }
             else
             {
                 label1.BackColor = SystemColors.AppWorkspace;
+                tableLayoutPanel1.BackColor = SystemColors.AppWorkspace;
                 禁用ToolStripMenuItem.Enabled = false;
                 启用ToolStripMenuItem.Enabled = true;
             }
@@ -209,16 +260,28 @@ namespace YTVisionPro.Node
             if (_active)
             {
                 if (_selected)
+                {
                     label1.BackColor = Color.CornflowerBlue;
+                    tableLayoutPanel1.BackColor = Color.CornflowerBlue;
+                }
                 else
-                    label1.BackColor = SystemColors.ActiveCaption; 
+                {
+                    label1.BackColor = SystemColors.ActiveCaption;
+                    tableLayoutPanel1.BackColor = SystemColors.ActiveCaption;
+                }
             }
             else
             {
                 if (_selected)
+                {
                     label1.BackColor = SystemColors.ControlDarkDark;
+                    tableLayoutPanel1.BackColor = SystemColors.ControlDarkDark;
+                }
                 else
+                {
                     label1.BackColor = SystemColors.AppWorkspace;
+                    tableLayoutPanel1.BackColor = SystemColors.AppWorkspace;
+                }
             }
         }
 
@@ -255,4 +318,24 @@ namespace YTVisionPro.Node
             _frmNodeRename.ShowDialog();
         }
     }
+
+    /// <summary>
+    /// 节点运行状态
+    /// </summary>
+    internal enum NodeStatus
+    {
+        /// <summary>
+        /// 未运行的
+        /// </summary>
+        Unexecuted,
+        /// <summary>
+        /// 运行成功的
+        /// </summary>
+        Successful,
+        /// <summary>
+        /// 运行失败的
+        /// </summary>
+        Failed
+    }
+
 }

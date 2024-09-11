@@ -9,7 +9,7 @@ namespace YTVisionPro.Node.Camera.HiK
 {
     internal class NodeResultCamera : INodeResult
     {
-        public bool Success { get; set; }
+        public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
         public NodeRunStatusCode RunStatusCode { get; set; }
         /// <summary>

@@ -6,7 +6,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
         /// <summary>
         /// 是否成功
         /// </summary>
-        public bool Success { get; set; }
+        public NodeStatus Status { get; set; }
         /// <summary>
         /// 运行耗时
         /// </summary>

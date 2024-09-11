@@ -180,12 +180,12 @@ namespace YTVisionPro.Forms.ProcessNew
                 uiSwitchEnable.Enabled = false;
                 await _process.Run(false, Solution.Instance.CancellationToken);
 
-                SetRunStatus(_process.RunTime, true);
+                SetProcessRunStatus(_process.RunTime, true);
 
             }
             catch (Exception)
             {
-                SetRunStatus(_process.RunTime, false);
+                SetProcessRunStatus(_process.RunTime, false);
             }
 
             buttonRun.Enabled = true;
@@ -196,7 +196,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// 设置界面的运行状态
         /// </summary>
         /// <param name="ok"></param>
-        private void SetRunStatus(long time, bool ok)
+        private void SetProcessRunStatus(long time, bool ok)
         {
             if (ok)
             {

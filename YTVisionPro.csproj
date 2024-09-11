@@ -396,12 +396,12 @@
     <Compile Include="Node\NodeSubscription.Designer.cs">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeInfo.cs" />
-    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeParamHTAISendSignal.cs" />
-    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeResultHTAISendSignal.cs" />
     <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeHTAISendSignal.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeInfo.cs" />
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeParamHTAISendSignal.cs" />
+    <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\NodeResultHTAISendSignal.cs" />
     <Compile Include="Node\PLC\Panasonic\HTDeepResultSend\ParamFormHTAISendSignal.cs">
       <SubType>Form</SubType>
     </Compile>

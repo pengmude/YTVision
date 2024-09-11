@@ -33,9 +33,9 @@ namespace YTVisionPro.Node
     internal interface INodeResult 
     {
         /// <summary>
-        /// 节点运行是否成功
+        /// 节点运行状态
         /// </summary>
-        bool Success { get; set; }
+        NodeStatus Status { get; set; }
         /// <summary>
         /// 节点运行时间ms，计算方法：
         /// DateTime startTime = DateTime.Now;
@@ -60,6 +60,10 @@ namespace YTVisionPro.Node
         /// 成功
         /// </summary>
         OK,
+        /// <summary>
+        /// 未运行
+        /// </summary>
+        UNEXECUTED = 0x00099,
         /// <summary>
         /// 参数有误
         /// </summary>

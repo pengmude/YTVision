@@ -23,20 +23,20 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override Task Run(CancellationToken token)
+        public override async Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
 
             // 参数合法性校验
             if (!Active)
             {
-                SetRunStatus(startTime, true);
-                return Task.CompletedTask;
+                SetRunResult(startTime, NodeStatus.Unexecuted);
+                return;
             }
             if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行参数未设置或保存！", true);
-                SetRunStatus(startTime, false);
+                SetRunResult(startTime, NodeStatus.Failed);
                 throw new Exception($"节点({ID}.{NodeName})运行参数未设置或保存！");
             }
 
@@ -46,6 +46,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
                 {
                     try
                     {
+                        SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
                         // 参数获取订阅控件的值
@@ -67,25 +68,24 @@ namespace YTVisionPro.Node.Tool.ImageSave
 
                         // 保存
                         SaveImage(startTime, param);
-                        SetRunStatus(startTime, true);
+                        SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
                     }
                     catch (OperationCanceledException)
                     {
                         LogHelper.AddLog(MsgLevel.Warn, $"节点({ID}.{NodeName})运行取消！", true);
-                        SetRunStatus(startTime, false);
+                        SetRunResult(startTime, NodeStatus.Unexecuted);
                         throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
                     }
                     catch (Exception ex)
                     {
                         LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！原因:{ex.Message}", true);
-                        SetRunStatus(startTime, false);
+                        SetRunResult(startTime, NodeStatus.Failed);
                         throw new Exception($"节点({ID}.{NodeName})运行失败，原因：{ex.Message}");
                     }
 
                 }
             }
-            return Task.CompletedTask;
         }
 
         private void SaveImage(DateTime time, NodeParamSaveImage param)
@@ -143,16 +143,6 @@ namespace YTVisionPro.Node.Tool.ImageSave
             Directory.CreateDirectory(savePath); // 如果目录已存在，CreateDirectory 不会抛异常
             string fileName = GetFileName(savePath, imageName);
             SaveWithCompress(bitmap, fileName, needCompress, compressValue);
-        }
-
-        private void SetRunStatus(DateTime startTime, bool isOk)
-        {
-            DateTime endTime = DateTime.Now;
-            TimeSpan elapsed = endTime - startTime;
-            long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
-            Result.RunTime = elapsedMi11iseconds;
-            Result.Success = isOk;
-            Result.RunStatusCode = isOk ? NodeRunStatusCode.OK : NodeRunStatusCode.UNKNOW_ERROR;
         }
 
         /// <summary>

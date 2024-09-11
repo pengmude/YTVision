@@ -43,13 +43,13 @@ namespace YTVisionPro.Node.Camera.HiK
 
             if (!Active)
             {
-                SetRunStatus(startTime, true);
+                SetRunResult(startTime, NodeStatus.Unexecuted);
                 return Task.CompletedTask;
             }
             if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
-                SetRunStatus(startTime, false);
+                SetRunResult(startTime, NodeStatus.Failed);
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
@@ -57,6 +57,7 @@ namespace YTVisionPro.Node.Camera.HiK
 
             try
             {
+                SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
 
                 param.Camera.SetTriggerMode(true); // 设置为触发模式
@@ -75,8 +76,6 @@ namespace YTVisionPro.Node.Camera.HiK
                         // TODO:软触发需要plc给信号才拍照
 
                     }
-                    SetRunStatus(startTime, false);
-                    return Task.CompletedTask;
                 }
                 param.Camera.SetTriggerEdge(param.TriggerEdge);
                 param.Camera.SetTriggerDelay(param.TriggerDelay);
@@ -85,13 +84,13 @@ namespace YTVisionPro.Node.Camera.HiK
                 // TODO: 上面设置了相机参数，接下来处理根据软硬触发相机拍照的逻辑
 
 
-                SetRunStatus(startTime, true);
+                SetRunResult(startTime, NodeStatus.Successful);
                 LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
             }
             catch (OperationCanceledException)
             {
                 LogHelper.AddLog(MsgLevel.Warn, $"节点({ID}.{NodeName})运行取消！", true);
-                SetRunStatus(startTime, false);
+                SetRunResult(startTime, NodeStatus.Unexecuted);
                 throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
             }
             catch (Exception)
@@ -103,16 +102,5 @@ namespace YTVisionPro.Node.Camera.HiK
 
             return Task.CompletedTask;
         }
-
-        private void SetRunStatus(DateTime startTime, bool isOk)
-        {
-            DateTime endTime = DateTime.Now;
-            TimeSpan elapsed = endTime - startTime;
-            long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
-            Result.RunTime = elapsedMi11iseconds;
-            Result.Success = isOk;
-            Result.RunStatusCode = isOk ? NodeRunStatusCode.OK : NodeRunStatusCode.UNKNOW_ERROR;
-        }
-
     }
 }

@@ -8,7 +8,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
     internal class NodeResultPlcDataRead : INodeResult
     {
-        public bool Success { get; set; }
+        public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
         public NodeRunStatusCode RunStatusCode { get; set; }
         public Object CodeText { get; set; }
