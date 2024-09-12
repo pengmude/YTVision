@@ -12,7 +12,9 @@ using YTVisionPro.Node.ImageRead;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 using YTVisionPro.Node.PLC.Panasonic.Read;
+using YTVisionPro.Node.Tool.DataShow;
 using YTVisionPro.Node.Tool.ImageSave;
+using YTVisionPro.Node.Tool.ImageShow;
 using YTVisionPro.Node.Tool.SleepTool;
 using static YTVisionPro.Node.NodeComboBox;
 
@@ -77,36 +79,42 @@ namespace YTVisionPro.Forms.ProcessNew
                 switch (data.NodeType)
                 {
                     case NodeType.LightSourceControl:
-                        node = new NodeLight(data.Text, _process);
+                        node = new NodeLight(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.CameraShot:
-                        node = new NodeCamera(data.Text, _process);
+                        node = new NodeCamera(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.LocalPicture:
-                        node = new NodeImageRead(data.Text, _process);
+                        node = new NodeImageRead(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.PLCRead:
-                        node = new NodePlcRead(data.Text, _process);
+                        node = new NodePlcRead(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.PLCWrite:
                         break;
                     case NodeType.PLCHTAIResultSend:
-                        node = new NodeHTAISendSignal(data.Text, _process);
+                        node = new NodeHTAISendSignal(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.AIHT:
-                        node = new NodeHTAI(data.Text, _process);
+                        node = new NodeHTAI(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.ImageSave:
-                        node = new NodeImageSave(data.Text, _process);
+                        node = new NodeImageSave(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.SleepTool:
-                        node = new SleepTool(data.Text, _process);
+                        node = new SleepTool(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.WaitSoftTrigger:
-                        node = new NodeWaitSoftTrigger(data.Text, _process);
+                        node = new NodeWaitSoftTrigger(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.WaitHardTrigger:
-                        node = new NodeWaitHardTrigger(data.Text, _process);
+                        node = new NodeWaitHardTrigger(data.Text, _process, data.NodeType);
+                        break;
+                    case NodeType.DetectResultShow:
+                        node = new NodeDataShow(data.Text, _process, data.NodeType);
+                        break;
+                    case NodeType.ImageShow:
+                        node = new NodeImageShow(data.Text, _process, data.NodeType);
                         break;
                     default:
                         break;
@@ -137,8 +145,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void NewNode_NodeDeletedEvent(object sender, int e)
+        private void NewNode_NodeDeletedEvent(object sender, NodeBase e)
         {
             //使用Stack<Node> 来临时存储控件，因为不能在迭代Stack时修改它
             Stack<NodeBase> tmp = new Stack<NodeBase>(_stack);
@@ -147,7 +154,7 @@ namespace YTVisionPro.Forms.ProcessNew
             foreach (NodeBase node in tmp)
             {
                 // 如果控件的Name与目标控件不同，再压入栈中
-                if (node.ID != e)
+                if (node.ID != e.ID)
                 {
                     _stack.Push(node);
                 }

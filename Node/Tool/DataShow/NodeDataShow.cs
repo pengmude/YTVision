@@ -1,18 +1,23 @@
 ﻿using Logger;
-using Sunny.UI;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.AI.HTAI;
 
-namespace YTVisionPro.Node.PLC.Panasonic.Read
+namespace YTVisionPro.Node.Tool.DataShow
 {
-    internal class NodePlcRead : NodeBase
+    internal class NodeDataShow : NodeBase
     {
-        public NodePlcRead(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public static event EventHandler<DatashowData> DataShow;
+
+        public NodeDataShow(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormWaitSoftTrigger();
-            Result = new NodeResultPlcRead();
+            ParamForm = new NodeParamFormDataShow();
+            ParamForm.SetNodeBelong(this);
+            Result = new NodeResultDataShow();
         }
 
         /// <summary>
@@ -27,6 +32,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 SetRunResult(startTime, NodeStatus.Unexecuted);
                 return;
             }
+
             if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
@@ -34,23 +40,20 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            var param = (NodeParamPlcRead)ParamForm.Params;
-
-            if (Result is NodeResultPlcRead res)
+            var param = (NodeParamDataShow)ParamForm.Params;
+            if(ParamForm is NodeParamFormDataShow form)
             {
                 try
                 {
+                    // 初始化运行状态
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    res.CodeText = param.Plc.ReadPLCData(param.Address, DataType.STRING, param.Length);
-                    if (res.CodeText.ToString().IsNullOrEmpty())
-                        throw new Exception("读码为空！");
+                    AiResult aiResult = form.GetAiResult();
+                    DataShow?.Invoke(this,new DatashowData(ID.ToString()+NodeName, aiResult));
 
-                    Result = res;
                     SetRunResult(startTime, NodeStatus.Successful);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
-
                 }
                 catch (OperationCanceledException)
                 {

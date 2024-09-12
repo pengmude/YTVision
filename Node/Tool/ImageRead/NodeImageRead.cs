@@ -11,7 +11,7 @@ namespace YTVisionPro.Node.ImageRead
 {
     internal class NodeImageRead : NodeBase
     {
-        public NodeImageRead(string nodeName, Process process) : base(nodeName, process) 
+        public NodeImageRead(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormImageRead();
             Result = new NodeResultImageRead();
@@ -41,7 +41,7 @@ namespace YTVisionPro.Node.ImageRead
 
                 if (Result is NodeResultImageRead res)
                 {
-                    res.Bitmap = new Bitmap(param.ImagePath);
+                    res.Image = new Bitmap(param.ImagePath);
                     Result = res;
                     SetRunResult(startTime, NodeStatus.Successful);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);

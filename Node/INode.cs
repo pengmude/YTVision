@@ -83,6 +83,7 @@ namespace YTVisionPro.Node
     /// </summary>
     internal enum NodeType
     {
+        UNKNOWN,
         /// <summary>
         /// 光源控制
         /// </summary>
@@ -120,12 +121,20 @@ namespace YTVisionPro.Node
         /// </summary>
         AIHT,
         /// <summary>
+        /// 图像显示节点
+        /// </summary>
+        ImageShow,
+        /// <summary>
         /// 存图节点
         /// </summary>
         ImageSave,
         /// <summary>
         /// 延迟工具
         /// </summary>
-        SleepTool
+        SleepTool,
+        /// <summary>
+        /// 检测结果显示
+        /// </summary>
+        DetectResultShow
     }
 }

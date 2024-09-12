@@ -57,7 +57,7 @@ namespace YTVisionPro
         public static int ProcessCount = 0;
 
         /// <summary>
-        /// 方案已经添加的节点总数
+        /// 方案节点统计（包含删除的节点）
         /// </summary>
         public static int NodeCount = 0;
 
@@ -172,6 +172,11 @@ namespace YTVisionPro
         public void RemoveProcess(Process process)
         {
             _allProcesses.Remove(process);
+
+            foreach (var node in process.Nodes)
+            {
+                Solution.Nodes.Remove(node);
+            }
         }
 
         /// <summary>
@@ -187,6 +192,11 @@ namespace YTVisionPro
             {
                 // 从列表中移除流程
                 _allProcesses.Remove(processToRemove);
+
+                foreach (var node in processToRemove.Nodes)
+                {
+                    Solution.Nodes.Remove(node);
+                }
             }
         }
 
@@ -232,6 +242,7 @@ namespace YTVisionPro
         public void Stop()
         {
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         /// <summary>

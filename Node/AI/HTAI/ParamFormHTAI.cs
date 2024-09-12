@@ -35,7 +35,7 @@ namespace YTVisionPro.Node.AI.HTAI
         public ParamFormHTAI()
         {
             InitializeComponent();
-            NodeHTAI.NodeDeletedEvent += NodeHTAI_NodeDeletedEvent;
+            NodeBase.NodeDeletedEvent += NodeHTAI_NodeDeletedEvent;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NodeHTAI_NodeDeletedEvent(object sender, int e)
+        private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
             if(TreePredictHandle != IntPtr.Zero)
             {

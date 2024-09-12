@@ -13,7 +13,7 @@ namespace YTVisionPro.Node.Tool.SleepTool
 {
     internal class SleepTool : NodeBase
     {
-        public SleepTool(string nodeName, Process process) : base(nodeName, process)
+        public SleepTool(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
             ParamForm = new NodeParamFormSleepTool();
             ParamForm.SetNodeBelong(this);

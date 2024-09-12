@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using YTVisionPro.Node.Tool.ImageShow;
 
 namespace YTVisionPro.Node.ImageRead
 {
@@ -7,7 +8,6 @@ namespace YTVisionPro.Node.ImageRead
         public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
         public NodeRunStatusCode RunStatusCode { get; set; }
-
-        public Bitmap Bitmap { get; set; }
+        public Bitmap Image { get; set; } = null;
     }
 }

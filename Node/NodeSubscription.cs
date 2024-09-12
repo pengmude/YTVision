@@ -1,4 +1,5 @@
 ﻿using Logger;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -46,9 +47,18 @@ namespace YTVisionPro.Node
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void NodeBase_NodeDeletedEvent(object sender, int e)
+        private void NodeBase_NodeDeletedEvent(object sender, NodeBase e)
         {
-            InitNodeIdList();
+            // 移除的节点是当前实例的订阅节点，要置空
+            if(_selectedNode != null && e.ID == _selectedNode.ID)
+                _selectedNode = null;
+            // 更新节点列表
+            comboBox1.Items.Remove($"{e.ID}.{e.NodeName}");
+            if(comboBox1.Items.Count == 0)
+            {
+                comboBox2.Items.Clear();
+                comboBox2.Text = "";
+            }
         }
 
         /// <summary>
@@ -58,15 +68,12 @@ namespace YTVisionPro.Node
         private void InitNodeIdList()
         {
             if(_node == null) return;
-            _selectedNode = null;
             comboBox1.Items.Clear();
             foreach (var node in _node.Process.Nodes)
             {
-                if(node.ID < _node.ID)
+                if (node.ID < _node.ID)
                 {
                     comboBox1.Items.Add($"{node.ID}.{node.NodeName}");
-                    if(_selectedNode == null)
-                        _selectedNode = node;
                 }
             }
             if (comboBox1.Items.Count > 0) comboBox1.SelectedIndex = 0;
@@ -112,6 +119,9 @@ namespace YTVisionPro.Node
         /// <returns></returns>
         public T GetValue<T>()
         {
+            if(comboBox2.Text.IsNullOrEmpty())
+                throw new Exception($"节点无法获取订阅的值!");
+
             PropertyInfo propertyInfo = _selectedNode.Result.GetType().GetProperty(comboBox2.Text);
             if (propertyInfo != null && propertyInfo.CanRead && propertyInfo.PropertyType == typeof(T))
             {
@@ -122,24 +132,6 @@ namespace YTVisionPro.Node
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
                 throw new Exception($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
             }
-        }
-
-        /// <summary>
-        /// 获取节点名称
-        /// </summary>
-        /// <returns></returns>
-        public string GetText1()
-        {
-            return comboBox1.Text;
-        }
-
-        /// <summary>
-        /// 获取节点结果
-        /// </summary>
-        /// <returns></returns>
-        public string GetText2()
-        {
-            return comboBox2.Text;
         }
     }
 }

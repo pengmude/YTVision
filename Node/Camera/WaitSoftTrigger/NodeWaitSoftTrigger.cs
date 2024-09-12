@@ -13,7 +13,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
     internal class NodeWaitSoftTrigger : NodeBase
     {
-        public NodeWaitSoftTrigger(string nodeName, Process process) : base(nodeName, process)
+        public NodeWaitSoftTrigger(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
             ParamForm = new ParamFormWaitSoftTrigger();
             Result = new NodeResultWaitSoftTrigger();

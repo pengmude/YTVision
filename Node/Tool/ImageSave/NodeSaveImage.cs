@@ -13,7 +13,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
 {
     internal class NodeImageSave : NodeBase
     {
-        public NodeImageSave(string nodeName, Process process) : base(nodeName, process) 
+        public NodeImageSave(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormImageSave();
             ParamForm.SetNodeBelong(this);
@@ -116,13 +116,22 @@ namespace YTVisionPro.Node.Tool.ImageSave
                 if (param.AiResult == null)
                     throw new Exception($"无法获取/解析AI检测结果！");
 
+
                 string okNg = param.AiResult.IsAllOk ? "OK" : "NG";
                 imageSavePath = Path.Combine(imageSavePath, okNg);
-                foreach (var res in param.AiResult.DeepStudyResult)
+
+                if (!param.AiResult.IsAllOk)
                 {
-                    // 默认只保存NG结果
-                    if (!res.IsOk)
-                        paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                    foreach (var res in param.AiResult.DeepStudyResult)
+                    {
+                        // 默认只保存NG结果
+                        if (!res.IsOk)
+                            paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                    }
+                }
+                else
+                {
+                    paths.Add(imageSavePath);
                 }
             }
             else

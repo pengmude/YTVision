@@ -288,17 +288,6 @@
     <Compile Include="Node\Camera\HiK\ParamFormCamera.Designer.cs">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\Camera\WaitHardTrigger\NodeParamWaitHardTrigger.cs" />
-    <Compile Include="Node\Camera\WaitHardTrigger\NodeResultWaitHardTrigger.cs" />
-    <Compile Include="Node\Camera\WaitHardTrigger\NodeWaitHardTrigger.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\Camera\WaitHardTrigger\ParamFormWaitHardTrigger.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\Camera\WaitHardTrigger\ParamFormWaitHardTrigger.Designer.cs">
-      <DependentUpon>ParamFormWaitHardTrigger.cs</DependentUpon>
-    </Compile>
     <Compile Include="Node\FrmNodeRename.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -441,6 +430,17 @@
     <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.Designer.cs">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\Tool\DataShow\NodeDataShow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\DataShow\NodeParamDataShow.cs" />
+    <Compile Include="Node\Tool\DataShow\NodeParamFormDataShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\DataShow\NodeParamFormDataShow.Designer.cs">
+      <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Tool\DataShow\NodeResultDataShow.cs" />
     <Compile Include="Node\Tool\ImageRead\NodeParamImageRead.cs" />
     <Compile Include="Node\Tool\ImageRead\NodeImageRead.cs">
       <SubType>UserControl</SubType>
@@ -462,6 +462,17 @@
     </Compile>
     <Compile Include="Node\Tool\ImageSave\ParamFormSaveImage.Designer.cs">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Tool\ImageShow\NodeImageShow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ImageShow\NodeParamImageShow.cs" />
+    <Compile Include="Node\Tool\ImageShow\NodeResultImageShow.cs" />
+    <Compile Include="Node\Tool\ImageShow\ParamFormImageShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ImageShow\ParamFormImageShow.Designer.cs">
+      <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\Tool\SleepTool\NodeParamFormSleepTool.cs">
       <SubType>Form</SubType>
@@ -560,9 +571,6 @@
     <EmbeddedResource Include="Node\Camera\HiK\ParamFormCamera.resx">
       <DependentUpon>ParamFormCamera.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\Camera\WaitHardTrigger\ParamFormWaitHardTrigger.resx">
-      <DependentUpon>ParamFormWaitHardTrigger.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
     </EmbeddedResource>
@@ -620,11 +628,17 @@
     <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.resx">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\Tool\DataShow\NodeParamFormDataShow.resx">
+      <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\ImageRead\ParamFormImageRead.resx">
       <DependentUpon>ParamFormImageRead.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\ImageSave\ParamFormSaveImage.resx">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\Tool\ImageShow\ParamFormImageShow.resx">
+      <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\SleepTool\NodeParamFormSleepTool.resx">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>

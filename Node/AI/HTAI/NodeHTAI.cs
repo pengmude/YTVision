@@ -14,18 +14,23 @@ namespace YTVisionPro.Node.AI.HTAI
     internal class NodeHTAI : NodeBase
     {
         NodeResult[] PredictResult;
-        public NodeHTAI(string nodeName, Process process) : base(nodeName, process)
+        public NodeHTAI(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
             ParamForm = new ParamFormHTAI();
             ParamForm.SetNodeBelong(this);
             Result = new NodeResultHTAI();
-            NodeHTAI.NodeDeletedEvent += NodeHTAI_NodeDeletedEvent;
+            NodeDeletedEvent += NodeHTAI_NodeDeletedEvent;
         }
 
-        private void NodeHTAI_NodeDeletedEvent(object sender, int e)
+        /// <summary>
+        /// AI节点删除时候要释放AI检测结果
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
-            if(PredictResult != null && PredictResult.Length != 0)
-                HTAPI.ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
+            if(e is NodeBase && PredictResult != null && PredictResult.Length != 0)
+                ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
         }
 
         /// <summary>
@@ -119,6 +124,15 @@ namespace YTVisionPro.Node.AI.HTAI
         {
             AiResult aiResult = new AiResult();
             List<AiClassResult>  ResList = SaveResult(pstNodeRst, testNum);
+
+            //// 检测结果个数为0的情况分两种：有定位节点和无定位节点的模型
+            //// 模型有定位节点但是所有检出结果为0，说明了定位都定位不到，可能是图像和模型不一致，也有可能图像被遮挡
+            //// 模型无定位节点但是所有检出结果为0，也就是“添加NG部分结果”没有添加，将会在“添加OK部分结果”中全部当做OK
+            //// 导致一个bug，使用不匹配模型且带定位节点的图像检测，检出的ResList为空，
+            //if (ResList.Count == 0)
+            //    throw new Exception("相机采出来的图像和模型不匹配！");
+
+            //TODO : 缺乏考虑图像和模型不一致的情况 2024年9月12日
 
             #region 添加NG部分结果
 

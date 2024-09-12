@@ -1,18 +1,32 @@
 ﻿using Logger;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using YTVisionPro.Forms.ImageViewer;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Tool.SleepTool;
 
-namespace YTVisionPro.Node.Camera.HiK.WaitHardTrigger
+namespace YTVisionPro.Node.Tool.ImageShow
 {
-    internal class NodeWaitHardTrigger : NodeBase
+    
+    internal partial class NodeImageShow : NodeBase
     {
-        public NodeWaitHardTrigger(string nodeName, Process process) : base(nodeName, process)
+        public static event EventHandler<Paramsa> ImageShowChanged;
+
+        private Paramsa _param = new Paramsa();
+
+        public NodeImageShow(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormWaitHardTrigger();
+            ParamForm = new ParamFormImageShow();
+            Result = new NodeResultImageShow();
             ParamForm.SetNodeBelong(this);
-            Result = new NodeResultWaitHardTrigger();
         }
 
         /// <summary>
@@ -21,7 +35,7 @@ namespace YTVisionPro.Node.Camera.HiK.WaitHardTrigger
         public override async Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
-
+            // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
@@ -34,33 +48,17 @@ namespace YTVisionPro.Node.Camera.HiK.WaitHardTrigger
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is ParamFormWaitHardTrigger form)
+            if(ParamForm is ParamFormImageShow form)
             {
-                if (form.Params is NodeParamWaitHardTrigger param)
+                if(ParamForm.Params is NodeParamImageShow param)
                 {
                     try
                     {
-                        SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
-
-                        // 设置超时时间为10秒
-                        int timeoutMilliseconds = 10;
-
-                        // 空图像对象
-                        Bitmap bitmap = null;
-
-                        // 循环等待，当硬触发的图像不空才放行去执行后面的节点
-                        while (bitmap == null)
-                        {
-                            DateTime endTime = DateTime.Now;
-                            TimeSpan elapsed = endTime - startTime;
-                            long seconds = (long)elapsed.TotalSeconds;
-                            if (seconds > 10)
-                                throw new Exception("运行超时！");
-
-                            bitmap = form.GetImage();
-                        }
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                        Bitmap image = form.GetImage();
+                        _param.Winname = param.WindowName;
+                        _param.Bitmap = image;
+                        ImageShowChanged?.Invoke(this, _param);
+                        SetRunResult(startTime, NodeStatus.Successful);
                     }
                     catch (OperationCanceledException)
                     {
@@ -76,6 +74,17 @@ namespace YTVisionPro.Node.Camera.HiK.WaitHardTrigger
                     }
                 }
             }
+        }
+    }
+    public class Paramsa
+    {
+        public string Winname;
+        public Bitmap Bitmap;
+        public Paramsa() { }
+        public Paramsa(string winname, Bitmap bitmap)
+        {
+            Winname = winname;
+            Bitmap = bitmap;
         }
     }
 }

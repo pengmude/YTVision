@@ -21,9 +21,9 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox1.AddItem("光源控制", NodeType.LightSourceControl);
 
             nodeComboBox2.Text = "图像采集";
-            nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
             nodeComboBox2.AddItem("软触发等待", NodeType.WaitSoftTrigger);
             nodeComboBox2.AddItem("硬触发等待", NodeType.WaitHardTrigger);
+            nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
             nodeComboBox2.AddItem("本地图片", NodeType.LocalPicture);
 
             nodeComboBox3.Text = "PLC信号";
@@ -31,9 +31,11 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox3.AddItem("AI结果发送", NodeType.PLCHTAIResultSend);
 
             nodeComboBox5.Text = "工具箱";
-            nodeComboBox5.AddItem("AI检测", NodeType.AIHT);
-            nodeComboBox5.AddItem("保存图像", NodeType.ImageSave);
             nodeComboBox5.AddItem("延迟执行", NodeType.SleepTool);
+            nodeComboBox5.AddItem("结果显示", NodeType.DetectResultShow);
+            nodeComboBox5.AddItem("保存图像", NodeType.ImageSave);
+            nodeComboBox5.AddItem("图像显示", NodeType.ImageShow);
+            nodeComboBox5.AddItem("AI检测", NodeType.AIHT);
         }
 
         /// <summary>
@@ -99,13 +101,20 @@ namespace YTVisionPro.Forms.ProcessNew
                 Solution.Instance.RemoveProcess(tabPageToDelete.Text);
 
                 #region 调试代码，上线请注释
-                
+
                 //string res = "";
                 //foreach (var name in Solution.Instance.GetAllProcessName())
                 //{
                 //    res += name + "\n";
                 //}
                 //MessageBox.Show($"方案中流程名称：\n{res}");
+
+                //string res = "";
+                //foreach (var node in Solution.Nodes)
+                //{
+                //    res += node.ID + "\n";
+                //}
+                //MessageBox.Show($"方案中节点：\n{res}");
 
                 #endregion
             }

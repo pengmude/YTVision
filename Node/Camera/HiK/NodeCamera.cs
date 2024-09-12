@@ -11,8 +11,13 @@ namespace YTVisionPro.Node.Camera.HiK
 {
     internal class NodeCamera : NodeBase
     {
+        /// <summary>
+        /// 自动重置事件，用于确保软触发或者硬触发
+        /// 采集到图像才继续往下执行其他节点
+        /// </summary>
+        private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
 
-        public NodeCamera(string nodeName, Process process) : base(nodeName, process)
+        public NodeCamera(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
             ParamForm = new ParamFormCamera();
             ParamForm.SetNodeBelong(this);
@@ -27,11 +32,7 @@ namespace YTVisionPro.Node.Camera.HiK
         private void Camera_PublishImageEvent(object sender, Bitmap e)
         {
             ((NodeResultCamera)Result).Bitmap = (Bitmap)(Image)e;
-
-            // 测试代码
-            Form3 form = new Form3();
-            form.ShowDialog();
-            form.SetBitMap(((NodeResultCamera)Result).Bitmap);
+            _autoResetEvent.Set();
         }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace YTVisionPro.Node.Camera.HiK
                 {
                     try
                     {
+                        param.Camera.PublishImageEvent -= Camera_PublishImageEvent;
                         param.Camera.PublishImageEvent += Camera_PublishImageEvent;
 
                         SetStatus(NodeStatus.Unexecuted, "*");
@@ -79,11 +81,12 @@ namespace YTVisionPro.Node.Camera.HiK
                             case Hardware.Camera.TriggerSource.SOFT:
                                 // 软触发
                                 param.Camera.GrabOne();                         // 软触发能直接获得图像
+                                _autoResetEvent.WaitOne();
                                 break;
                             default:
                                 // 硬触发LINE0~LINE4
                                 param.Camera.SetTriggerEdge(param.TriggerEdge); // 设置硬触发沿
-                                ((NodeResultCamera)Result).Bitmap = null;       // 硬触发只能获得空图
+                                _autoResetEvent.WaitOne();
                                 break;
                         }
 

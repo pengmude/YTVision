@@ -24,6 +24,11 @@ namespace YTVisionPro.Node
         public Process Process; 
 
         /// <summary>
+        /// 节点的类别
+        /// </summary>
+        public NodeType NodeType;
+
+        /// <summary>
         /// 因为是控件类，提供无参构造函数让设计器可以显示出来
         /// </summary>
         public NodeBase() 
@@ -37,7 +42,7 @@ namespace YTVisionPro.Node
         /// 实际只使用这个有参构造函数创建控件
         /// </summary>
         /// <param name="paramForm"></param>
-        public NodeBase(string nodeName, Process process)
+        public NodeBase(string nodeName, Process process, NodeType nodeType)
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
@@ -47,6 +52,7 @@ namespace YTVisionPro.Node
             Process = process;
             _frmNodeRename = new FrmNodeRename(this);
             _frmNodeRename.RenameChangeEvent += RenameChangeEvent;
+            NodeType = nodeType;
         }
 
         private void RenameChangeEvent(object sender, string e)
@@ -102,7 +108,7 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 删除节点事件
         /// </summary>
-        public static event EventHandler<int> NodeDeletedEvent;
+        public static event EventHandler<NodeBase> NodeDeletedEvent;
 
         /// <summary>
         /// 设置节点状态,主要颜色，中心颜色，是否闪烁
@@ -184,7 +190,7 @@ namespace YTVisionPro.Node
             {
                 Solution.Nodes.Remove(this);
                 Process.Nodes.Remove(this);
-                NodeDeletedEvent.Invoke(this, ID);
+                NodeDeletedEvent.Invoke(this, this);
             }
 
             #region 测试节点删除后代码

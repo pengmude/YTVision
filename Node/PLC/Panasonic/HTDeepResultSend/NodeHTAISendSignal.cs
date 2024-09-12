@@ -16,7 +16,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
 {
     internal class NodeHTAISendSignal : NodeBase
     {
-        public NodeHTAISendSignal(string nodeName, Process process) : base(nodeName, process) 
+        public NodeHTAISendSignal(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormHTAISendSignal();
             ParamForm.SetNodeBelong(this);
