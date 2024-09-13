@@ -97,10 +97,6 @@ namespace YTVisionPro.Node
         /// </summary>
         CameraShot,
         /// <summary>
-        /// 硬触发等待
-        /// </summary>
-        WaitHardTrigger,
-        /// <summary>
         /// 本地图像
         /// </summary>
         LocalPicture,

@@ -6,8 +6,6 @@ using System.Windows.Forms;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Camera.HiK.WaitHardTrigger;
-using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 using YTVisionPro.Node.ImageRead;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
@@ -106,9 +104,6 @@ namespace YTVisionPro.Forms.ProcessNew
                         break;
                     case NodeType.WaitSoftTrigger:
                         node = new NodeWaitSoftTrigger(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.WaitHardTrigger:
-                        node = new NodeWaitHardTrigger(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.DetectResultShow:
                         node = new NodeDataShow(data.Text, _process, data.NodeType);
