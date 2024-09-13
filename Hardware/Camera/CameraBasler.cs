@@ -274,6 +274,26 @@ namespace YTVisionPro.Hardware.Camera
         }
 
         /// <summary>
+        /// 获取曝光
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public float GetExposureTime()
+        {
+            return (float)_camera.Parameters[PLCamera.ExposureTimeAbs].GetValue();
+        }
+
+        /// <summary>
+        /// 获取增益
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public float GetGain()
+        {
+            return (float)_camera.Parameters[PLCamera.GainRaw].GetValue();
+        }
+
+        /// <summary>
         /// 设置曝光
         /// </summary>
         /// <param name="exposureTime"></param>

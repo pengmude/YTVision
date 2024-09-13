@@ -77,6 +77,18 @@ namespace YTVisionPro.Hardware.Camera
         void SetGain(float gainValue);
 
         /// <summary>
+        /// 获取相机曝光
+        /// </summary>
+        /// <returns></returns>
+        float GetExposureTime();
+
+        /// <summary>
+        /// 获取相机增益
+        /// </summary>
+        /// <returns></returns>
+        float GetGain();
+
+        /// <summary>
         /// 设置曝光
         /// </summary>
         /// <param name="ExposureTime"></param>

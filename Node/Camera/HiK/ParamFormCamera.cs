@@ -163,5 +163,23 @@ namespace YTVisionPro.Node.Camera.HiK
             
             Hide();
         }
+        
+        /// <summary>
+        /// 选择相机改变事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBoxCamera_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // 获取对应相机曝光和增益参数
+            foreach (var camera in Solution.Instance.CameraDevices)
+            {
+                if (camera.UserDefinedName == comboBoxCamera.Text)
+                {
+                    textBox1.Text = camera.GetExposureTime().ToString();
+                    textBox2.Text = camera.GetGain().ToString();
+                }
+            }
+        }
     }
 }
