@@ -1,17 +1,10 @@
 ﻿using Logger;
+using Sunny.UI;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Node.Camera.HiK;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace YTVisionPro.Node.Tool.ImageShow
 {
@@ -22,7 +15,7 @@ namespace YTVisionPro.Node.Tool.ImageShow
             InitializeComponent();
             for (int i = 0; i < FrmImageViewer.CurWindowsNum; i++)
             {
-                WindowNameList.Items.Add($"图像窗口{i}");
+                WindowNameList.Items.Add($"图像窗口{i+1}");
             }
             CanvasSet.WindowNumChangeEvent += CanvasSet_WindowNumChangeEvent;
         }
@@ -32,7 +25,7 @@ namespace YTVisionPro.Node.Tool.ImageShow
             WindowNameList.Items.Clear();
             for (int i = 0; i < e; i++)
             {
-                WindowNameList.Items.Add($"图像窗口{i}");
+                WindowNameList.Items.Add($"图像窗口{i+1}");
             }
         }
 
@@ -58,6 +51,19 @@ namespace YTVisionPro.Node.Tool.ImageShow
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (nodeSubscription1.GetText1().IsNullOrEmpty())
+            {
+                MessageBox.Show("未订阅任何结果！");
+                LogHelper.AddLog(MsgLevel.Fatal, "未订阅任何结果！", true);
+                return;
+            }
+            if (WindowNameList.Text.IsNullOrEmpty())
+            {
+                MessageBox.Show("图像窗口名称不能为空！");
+                LogHelper.AddLog(MsgLevel.Fatal, "图像窗口名称不能为空！", true);
+                return;
+            }
+
             NodeParamImageShow nodeParamImageShow = new NodeParamImageShow();
             nodeParamImageShow.WindowName = WindowNameList.Text;
             Params = nodeParamImageShow;

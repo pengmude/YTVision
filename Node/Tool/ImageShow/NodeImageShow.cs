@@ -54,6 +54,10 @@ namespace YTVisionPro.Node.Tool.ImageShow
                 {
                     try
                     {
+                        // 初始化状态
+                        SetStatus(NodeStatus.Unexecuted, "*");
+                        base.Run(token);
+
                         Bitmap image = form.GetImage();
                         _param.Winname = param.WindowName;
                         _param.Bitmap = image;

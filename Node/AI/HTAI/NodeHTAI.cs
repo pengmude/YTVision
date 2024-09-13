@@ -62,6 +62,7 @@ namespace YTVisionPro.Node.AI.HTAI
                         {
                             SetStatus(NodeStatus.Unexecuted, "*");
                             base.Run(token);
+
                             // 获取订阅的图像
                             Bitmap srcImg = form.GetImage();
                             // 转换为汇图图像

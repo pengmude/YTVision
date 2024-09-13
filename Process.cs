@@ -83,7 +83,7 @@ namespace YTVisionPro
         /// <summary>
         /// 流程开始运行
         /// </summary>
-        public async Task Run(bool isCyclical, CancellationToken token)
+        public async Task Run(bool isCyclical, CancellationToken token = default(CancellationToken))
         {
             if (Nodes.Count == 0)
                 return;

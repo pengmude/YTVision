@@ -18,7 +18,7 @@ namespace YTVisionPro.Forms.ImageViewer
         public FrmSingleImage()
         {
             InitializeComponent();
-            this.Text = $"图像窗口{i++}";
+            this.Text = $"图像窗口{++i}";
             NodeImageShow.ImageShowChanged += NodeImageShow_ImageShowChanged;
         }
 

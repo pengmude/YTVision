@@ -213,7 +213,11 @@ namespace YTVisionPro
             }
             return result;
         }
-
+        /// <summary>
+        /// 方案运行
+        /// </summary>
+        /// <param name="isCyclical">是否循环运行</param>
+        /// <returns></returns>
         public async Task Run(bool isCyclical = false)
         {
             try
