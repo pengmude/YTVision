@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Timers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -92,6 +94,8 @@ namespace YTVisionPro.Hardware.Light
 
         private static List<ComHandle> Com2HandleList = new List<ComHandle>();
 
+        private Timer _timer;
+
         public LightRsee(LightParam lightParam)
         {
             _devId = ++Solution.DeviceCount;
@@ -173,7 +177,7 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 打开光源
         /// </summary>
-        public void TurnOn(int value)
+        public void TurnOn(int value, int time = -1)
         {
             try
             {
@@ -181,12 +185,31 @@ namespace YTVisionPro.Hardware.Light
                     Connenct();
                 SetValue(value);
                 IsOpen = true;
+
+                // -1为常亮
+
+                if (time == -1)
+                    return;
+                if (_timer != null)
+                {
+                    _timer.Stop();
+                    _timer.Dispose();
+                    _timer = null;
+                }
+                _timer = new Timer(time);
+                _timer.Elapsed += OnTimedEvent;
+                _timer.Start();
             }
             catch (Exception ex)
             {
                 IsOpen = false;
                 throw ex;
             }
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            TurnOff();
         }
 
         /// <summary>

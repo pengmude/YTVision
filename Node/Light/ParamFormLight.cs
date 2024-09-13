@@ -41,8 +41,6 @@ namespace YTVisionPro.Node.Light
                 comboBox1.SelectedIndex = 0;
             else
                 comboBox1.SelectedIndex = index;
-            if(comboBoxOpenClose.Text.IsNullOrEmpty())
-                comboBoxOpenClose.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -50,41 +48,6 @@ namespace YTVisionPro.Node.Light
         /// </summary>
         /// <param name="node"></param>
         public void SetNodeBelong(NodeBase node) { }
-
-        /// <summary>
-        /// 滑动滑块
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            textBoxValue.Text = trackBarValue.Value.ToString();
-        }
-
-        /// <summary>
-        /// 光源亮度值改变
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                int value = int.Parse(textBoxValue.Text);
-                if (value < 0 || value > 255)
-                {
-                    throw new Exception("光源亮度有效值为0-255");
-                }
-                trackBarValue.Value = value;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                textBoxValue.Text = "255";
-                return;
-            }
-        }
 
         /// <summary>
         /// 点击保存当前参数配置
@@ -113,9 +76,7 @@ namespace YTVisionPro.Node.Light
                     }
                 }
 
-                //把设置好的参数传给光源节点NodeLight去更新结果
-                bool open = comboBoxOpenClose.Text == "打开" ? true : false;
-                NodeParamLight nodeParamLight = new NodeParamLight(light, trackBarValue.Value, open);
+                NodeParamLight nodeParamLight = new NodeParamLight(light, Convert.ToInt32(numericUpDownValue.Value), Convert.ToInt32(numericUpDownTime.Value));
                 Params = nodeParamLight;
                 Hide();
             }
@@ -134,20 +95,6 @@ namespace YTVisionPro.Node.Light
         private void ParamFormLight_Shown(object sender, EventArgs e)
         {
             InitLightComboBox();
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(comboBoxOpenClose.SelectedIndex == 0)
-            {
-                textBoxValue.Enabled = true;
-                trackBarValue.Enabled = true;
-            }
-            else
-            {
-                textBoxValue.Enabled = false;
-                trackBarValue.Enabled = false;
-            }
         }
     }
 }

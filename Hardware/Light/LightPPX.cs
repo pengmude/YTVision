@@ -1,6 +1,8 @@
 ﻿using Logger;
 using System;
 using System.IO.Ports;
+//using System.Threading;
+using System.Timers;
 using YTVisionPro.Forms.LightAdd;
 
 namespace YTVisionPro.Hardware.Light
@@ -66,6 +68,8 @@ namespace YTVisionPro.Hardware.Light
         /// 光源所连接的串口对象
         /// </summary>
         private SerialPort _serialPort;
+
+        private Timer _timer;
 
         public LightPPX(LightParam lightParam)
         {
@@ -139,9 +143,9 @@ namespace YTVisionPro.Hardware.Light
         }
 
         /// <summary>
-        /// 打开光源
+        /// 打开光源特定时间
         /// </summary>
-        public void TurnOn(int value)
+        public void TurnOn(int value, int time = -1)
         {
             try
             {
@@ -149,12 +153,29 @@ namespace YTVisionPro.Hardware.Light
                     Connenct();
                 SetValue(value);
                 IsOpen = true;
+
+                if(time == -1)
+                    return;
+                if (_timer != null)
+                {
+                    _timer.Stop();
+                    _timer.Dispose();
+                    _timer = null;
+                }
+                _timer = new Timer(time);
+                _timer.Elapsed += OnTimedEvent;
+                _timer.Start();
             }
             catch (Exception ex)
             {
                 IsOpen = false;
                 throw ex;
             }
+        }
+
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            TurnOff();
         }
 
         /// <summary>

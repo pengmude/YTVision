@@ -9,14 +9,14 @@ namespace YTVisionPro.Node.Light
 {
     internal class NodeParamLight : INodeParam
     {
-        public NodeParamLight(ILight light, int brightness, bool open)
+        public NodeParamLight(ILight light, int brightness, int time)
         {
             this.Light = light;
             this.Brightness = brightness;
-            this.Open = open;
+            this.Time = time;
         }
         public ILight Light { get; set; }
         public int Brightness { get; set; } //光源值
-        public bool Open { get; set; } //打开或关闭
+        public int Time { get; set; } //打开时长
     }
 }

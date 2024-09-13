@@ -42,11 +42,7 @@ namespace YTVisionPro.Node.Light
             {
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
-                // 打开操作
-                if (param.Open)
-                    param.Light.TurnOn(param.Brightness);
-                else
-                    param.Light.TurnOff();
+                param.Light.TurnOn(param.Brightness, param.Time);
                 SetRunResult(startTime, NodeStatus.Successful);
                 LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
             }

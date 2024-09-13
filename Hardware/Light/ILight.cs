@@ -28,7 +28,7 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 打开光源
         /// </summary>
-        void TurnOn(int value);
+        void TurnOn(int value, int time = -1);
 
         /// <summary>
         /// 关闭光源
