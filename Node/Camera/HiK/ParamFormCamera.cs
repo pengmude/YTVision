@@ -75,7 +75,8 @@ namespace YTVisionPro.Node.Camera.HiK
         {
             #region 参数合法校验
 
-            int delay, exposureTime, gain;
+            int delay, exposureTime;
+            float gain;
             if (comboBoxCamera.Text == "[未设置]" || comboBoxCamera.Text.IsNullOrEmpty())
             {
                 MessageBox.Show("相机为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -85,7 +86,7 @@ namespace YTVisionPro.Node.Camera.HiK
             {
                 delay = int.Parse(textBox3.Text);
                 exposureTime = int.Parse(textBox1.Text);
-                gain = int.Parse(textBox2.Text);
+                gain = float.Parse(textBox2.Text);
             }
             catch (Exception)
             {

@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Timers;
+using YTVisionPro.Forms.LightAdd;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Hardware.Light
@@ -172,6 +174,9 @@ namespace YTVisionPro.Hardware.Light
                 }
             }
             Com2HandleList.Remove(toRemove);
+
+            //移除方案中的全局光源
+            Solution.Instance.Devices.Remove(this);
         }
 
         /// <summary>

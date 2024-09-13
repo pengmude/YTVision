@@ -20,11 +20,6 @@ namespace YTVisionPro.Hardware.Camera
         public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
 
         /// <summary>
-        /// 保存已创建的海康相机对象，便于相机对象数量为0时，自动调用SDK反初始化
-        /// </summary>
-        private List<MvCameraControl.IDevice> _hikList = new List<MvCameraControl.IDevice>();
-
-        /// <summary>
         /// 抓取图片事件
         /// </summary>
         public event EventHandler<Bitmap> PublishImageEvent;
@@ -98,7 +93,6 @@ namespace YTVisionPro.Hardware.Camera
             {
                 device = DeviceFactory.CreateDevice(devInfo);
                 DevInfo = devInfo;
-                _hikList.Add(device);
                 UserDefinedName = userName;
             }
             catch (Exception ex)
@@ -424,7 +418,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void Dispose()
         {
-            _hikList.Remove(device);
+            if (device.IsConnected) { device.Close(); }
             device?.Dispose();
         }
 

@@ -29,8 +29,16 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <param name="e"></param>
         private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
-            if(e is NodeBase && PredictResult != null && PredictResult.Length != 0)
-                ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
+            if (e is NodeBase && PredictResult != null && PredictResult.Length != 0)
+                ReleaseAIResult();
+        }
+
+        /// <summary>
+        /// 提供主窗口等外部释放AI检测结果
+        /// </summary>
+        public void ReleaseAIResult()
+        {
+            ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
         }
 
         /// <summary>

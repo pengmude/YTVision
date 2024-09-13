@@ -334,6 +334,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void Dispose()
         {
+            if (_camera.IsOpen) { _camera.Close(); }
             _camera?.Dispose();
         }
 

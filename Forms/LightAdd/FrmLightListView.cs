@@ -35,18 +35,10 @@ namespace YTVisionPro.Forms.LightAdd
             //移除的是被选中的则要清除它参数显示控件
             if (e.IsSelected)
                 panel1.Controls.Remove(e.LightParamsShowControl);
-            //删除光源前先判断是否需要释放占用的串口
-            //（当除了待删除的光源外，均没有使用和待删除光源的串口，则需要释放串口）
-            int count = 0;
-            foreach (var light in Solution.Instance.LightDevices)
-            {
-                if(light.LightParam.Port == e.Light.LightParam.Port)
-                    count++;
-            }
-            //然后移除掉方案中的全局光源并释放串口资源
-            Solution.Instance.Devices.Remove(e.Light);
-            if (count == 1)
-                e.Light.Disconnect();
+            
+            // 移除光源实例
+            e.Light.Disconnect();
+
             //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);
         }

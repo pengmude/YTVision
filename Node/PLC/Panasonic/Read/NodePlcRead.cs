@@ -11,7 +11,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
     {
         public NodePlcRead(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormWaitSoftTrigger();
+            ParamForm = new ParamFormPlcRead();
             Result = new NodeResultPlcRead();
         }
 

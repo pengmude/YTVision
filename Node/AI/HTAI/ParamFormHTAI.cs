@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
-using static System.Windows.Forms.MonthCalendar;
 
 namespace YTVisionPro.Node.AI.HTAI
 {
@@ -45,11 +44,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <param name="e"></param>
         private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
-            if(TreePredictHandle != IntPtr.Zero)
-            {
-                HTAPI.ReleaseTree(TreePredictHandle);
-                TreePredictHandle = IntPtr.Zero;
-            }
+            ReleaseAIHandle();
         }
 
         /// <summary>
@@ -70,6 +65,17 @@ namespace YTVisionPro.Node.AI.HTAI
             return nodeSubscription1.GetValue<Bitmap>();
         }
 
+        /// <summary>
+        /// 提供主窗口等外部释放AI句柄资源
+        /// </summary>
+        public void ReleaseAIHandle()
+        {
+            if (TreePredictHandle != IntPtr.Zero)
+            {
+                HTAPI.ReleaseTree(TreePredictHandle);
+                TreePredictHandle = IntPtr.Zero;
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {

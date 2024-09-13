@@ -14,6 +14,7 @@ using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Forms.ResultView;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro
 {
@@ -104,14 +105,19 @@ namespace YTVisionPro
         /// <param name="e"></param>
         private void FormMain_Load(object sender, EventArgs e)
         {
+            // 初始化主窗口布局
             InitDockPanel();
+
+            // 初始化海康相机SDK
             CameraHik.InitSDK();
 
+            // 工具菜单状态同步
             运行日志ToolStripMenuItem.Checked = FrmLoggerDlg.Visible;
             检测结果ToolStripMenuItem.Checked = FrmResultDlg.Visible;
             图像显示ToolStripMenuItem.Checked = FrmImgeDlg.Visible;
             默认视图ToolStripMenuItem.Checked = FrmLoggerDlg.Visible && FrmResultDlg.Visible && FrmImgeDlg.Visible ? true : false;
 
+            // 布局同步更新事件
             FrmImgeDlg.HideChangedEvent += HideChangedEvent;
             FrmResultDlg.HideChangedEvent += HideChangedEvent;
             FrmLoggerDlg.HideChangedEvent += HideChangedEvent;
@@ -124,13 +130,53 @@ namespace YTVisionPro
         /// <param name="e"></param>
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // 主程序关闭提醒
+            if(MessageBox.Show("确认关闭程序？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            // 检测任务正在运行提示
             if (IsRunning)
             {
                 e.Cancel = true;
                 MessageBox.Show("请先停止当前任务再关闭！");
                 return;
             }
+
+            // 释放AI节点的内存
+            foreach (var node in Solution.Nodes)
+            {
+                if(node is NodeHTAI nodeAi)
+                {
+                    nodeAi.ReleaseAIResult();
+                    ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
+                }
+            }
+
+            // 释放硬件资源（光源、相机、PLC）
+            foreach (var dev in Solution.Instance.Devices)
+            {
+                if(dev is ILight light)
+                {
+                    light.Disconnect();
+                }
+                else if(dev is ICamera camera)
+                {
+                    camera.Dispose();
+                }
+                else if(dev is IPlc plc)
+                {
+                    plc.Disconnect();
+                }
+
+            }
+
+            // 海康相机SDK反序列化
             CameraHik.Finalize();
+
+            // 保存主窗口布局
             this.dockPanel1.SaveAsXml(DockPanelConfig);
         }
 

@@ -137,9 +137,22 @@ namespace YTVisionPro.Hardware.Light
         /// </summary>
         public void Disconnect()
         {
-            _serialPort.Close();
-            IsComOpen = false;
-            FrmLightListView.OccupiedComList.Remove(_serialPort);
+            //删除光源前先判断是否需要释放占用的串口
+            //（当除了待删除的光源外，均没有使用和待删除光源的串口，则需要释放串口）
+            int count = 0;
+            foreach (var light in Solution.Instance.LightDevices)
+            {
+                if (light.LightParam.Port == this.LightParam.Port)
+                    count++;
+            }
+            //然后移除掉方案中的全局光源并释放串口资源
+            Solution.Instance.Devices.Remove(this);
+            if (count == 1)
+            {
+                _serialPort.Close();
+                IsComOpen = false;
+                FrmLightListView.OccupiedComList.Remove(_serialPort);
+            }
         }
 
         /// <summary>
