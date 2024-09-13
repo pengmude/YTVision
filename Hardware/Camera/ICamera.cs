@@ -45,6 +45,12 @@ namespace YTVisionPro.Hardware.Camera
         void StopGrabbing();
 
         /// <summary>
+        /// 获取相机取流状态
+        /// </summary>
+        /// <returns></returns>
+        bool GetGrabStatus();
+
+        /// <summary>
         /// 设置相机触发模式
         /// </summary>
         /// <param name="isTrigger"></param>

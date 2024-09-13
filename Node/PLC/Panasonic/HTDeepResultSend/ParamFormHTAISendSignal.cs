@@ -57,7 +57,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
             {
                 comboBox2.Items.Add(plc.UserDefinedName);
             }
-            comboBox2.Items.Add("松下PLC");
             if (comboBox2.Items.Count > 0)
                 comboBox2.SelectedIndex = 0;
             //初始NG等级

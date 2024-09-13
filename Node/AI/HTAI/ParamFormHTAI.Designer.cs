@@ -475,7 +475,7 @@
             this.MinimizeBox = false;
             this.Name = "ParamFormHTAI";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "汇图AI检测节点参数设置";
+            this.Text = "AI检测节点参数设置";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

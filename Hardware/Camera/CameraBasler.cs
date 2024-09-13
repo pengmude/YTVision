@@ -261,8 +261,11 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void StartGrabbing()
         {
-            // 抓取每一帧图片处理之后继续抓取下一帧，抓取图片循环方式由相机内部自动管理
-            _camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
+            if (!_camera.StreamGrabber.IsGrabbing)
+            {
+                // 抓取每一帧图片处理之后继续抓取下一帧，抓取图片循环方式由相机内部自动管理
+                _camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
+            }
         }
 
         /// <summary>
@@ -271,6 +274,15 @@ namespace YTVisionPro.Hardware.Camera
         public void StopGrabbing()
         {
             _camera.StreamGrabber.Stop();
+        }
+
+        /// <summary>
+        /// 获取相机取流状态
+        /// </summary>
+        /// <returns></returns>
+        public bool GetGrabStatus()
+        {
+            return _camera.StreamGrabber.IsGrabbing;
         }
 
         /// <summary>

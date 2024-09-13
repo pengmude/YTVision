@@ -44,7 +44,8 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <param name="e"></param>
         private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
-            ReleaseAIHandle();
+            if (e is NodeHTAI)
+                ReleaseAIHandle();
         }
 
         /// <summary>

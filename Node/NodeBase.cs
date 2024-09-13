@@ -162,7 +162,7 @@ namespace YTVisionPro.Node
         }
 
         /// <summary>
-        /// 删除时触发删除事件，参数为待删除的节点ID
+        /// 删除时触发删除事件，参数为待删除的节点
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

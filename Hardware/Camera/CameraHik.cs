@@ -59,6 +59,8 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public string DevName => GetDevName(DevInfo);
 
+        private bool _isGrabbing = false;
+
         /// <summary>
         /// 根据设备信息获取设备名称
         /// </summary>
@@ -257,15 +259,6 @@ namespace YTVisionPro.Hardware.Camera
         }
 
         /// <summary>
-        /// 开始取流
-        /// </summary>
-        /// <returns></returns>
-        public void StartGrabbing()
-        {
-            device.StreamGrabber.StartGrabbing();
-        }
-
-        /// <summary>
         /// 设置相机触发模式
         /// </summary>
         /// <param name="isTrigger"></param>
@@ -394,12 +387,35 @@ namespace YTVisionPro.Hardware.Camera
         }
 
         /// <summary>
+        /// 开始取流
+        /// </summary>
+        /// <returns></returns>
+        public void StartGrabbing()
+        {
+            if (!_isGrabbing)
+            {
+                device.StreamGrabber.StartGrabbing();
+                _isGrabbing = true;
+            }
+        }
+
+        /// <summary>
         /// 停止取流
         /// </summary>
         /// <returns></returns>
         public void StopGrabbing()
         {
             device.StreamGrabber.StopGrabbing();
+            _isGrabbing = false;
+        }
+
+        /// <summary>
+        /// 获取相机取流状态
+        /// </summary>
+        /// <returns></returns>
+        public bool GetGrabStatus()
+        {
+            return _isGrabbing;
         }
 
         /// <summary>

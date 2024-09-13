@@ -143,23 +143,18 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                         do
                         {
                             plcTmp.WritePLCData(dataRow.SignalAddress, true);
-                            LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功", true);
 
                         } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
-                        
+                        LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功", true);
+
                         do
                         {
                             plcTmp.WritePLCData(dataRow.SignalAddress, false);
-                            LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号断开成功", true);
-
-                        } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
+                        } while ((bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
+                        LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号断开成功", true);
                         break;
                     }
                 }
-            }
-            else
-            {
-                
             }
         }
     }
