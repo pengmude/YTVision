@@ -8,6 +8,7 @@ using Logger;
 using MvCameraControl;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace YTVisionPro.Hardware.Camera
 {
@@ -71,11 +72,11 @@ namespace YTVisionPro.Hardware.Camera
             string name = "";
             if (cameraDevInfo.UserDefinedName != "")
             {
-                name = (cameraDevInfo.TLayerType.ToString() + ": " + cameraDevInfo.UserDefinedName + " (" + cameraDevInfo.SerialNumber + ")");
+                name = (cameraDevInfo.UserDefinedName + "(" + cameraDevInfo.SerialNumber + ")");
             }
             else
             {
-                name = (cameraDevInfo.TLayerType.ToString() + ": " + cameraDevInfo.ManufacturerName + " " + cameraDevInfo.ModelName + " (" + cameraDevInfo.SerialNumber + ")");
+                name = (cameraDevInfo.ManufacturerName + cameraDevInfo.ModelName + " (" + cameraDevInfo.SerialNumber + ")");
             }
             return name;
         }
@@ -172,6 +173,7 @@ namespace YTVisionPro.Hardware.Camera
                 else
                 {
                     nRet = device.Parameters.SetIntValue("GevSCPSPacketSize", (long)optionPacketSize);
+                    LogHelper.AddLog(MsgLevel.Info, $"设置网络最佳包大小：{optionPacketSize}", true);
                     if (nRet != MvError.MV_OK)
                     {
                         LogHelper.AddLog(MsgLevel.Warn, $"设置网络最佳包大小失败！错误码：{nRet}");
@@ -181,11 +183,10 @@ namespace YTVisionPro.Hardware.Camera
             }
             // 连续模式
             device.Parameters.SetEnumValueByString("AcquisitionMode", "Continuous");
-            // 关闭触发模式
-            device.Parameters.SetEnumValue("TriggerMode", 0);
-            // 设置适合缓存节点数量
-            device.StreamGrabber.SetImageNodeNum(5);
+            // 设置触发模式
+            SetTriggerMode(false);
             // 注册回调函数
+            device.StreamGrabber.FrameGrabedEvent -= FrameGrabedEventHandler;
             device.StreamGrabber.FrameGrabedEvent += FrameGrabedEventHandler;
             return true;
         }
@@ -195,17 +196,12 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
         private void FrameGrabedEventHandler(object sender, FrameGrabbedEventArgs e)
         {
-            int nRet;
             IImage inputImage = e.FrameOut.Image;
-            IImage outImage;
-            IntPtr pImageBuf = IntPtr.Zero;
             uint nChannelNum = 0;
             PixelFormat m_bitmapPixelFormat = PixelFormat.Undefined;
             MvGvspPixelType dstPixelType = MvGvspPixelType.PixelType_Gvsp_Undefined;
-
             if (IsColorPixelFormat(e.FrameOut.Image.PixelType))
             {
                 dstPixelType = MvGvspPixelType.PixelType_Gvsp_RGB8_Packed;
@@ -218,44 +214,16 @@ namespace YTVisionPro.Hardware.Camera
                 m_bitmapPixelFormat = PixelFormat.Format8bppIndexed;
                 nChannelNum = 1;
             }
-            else
-            {
-                LogHelper.AddLog(MsgLevel.Warn, $"采集图像格式错误，不为彩色和黑白图像", true);
-                return;
-            }
-            if (IntPtr.Zero == pImageBuf)
-            {
-                pImageBuf = Marshal.AllocHGlobal((int)(e.FrameOut.Image.Width * e.FrameOut.Image.Height * nChannelNum));
-                if (IntPtr.Zero == pImageBuf)
-                {
-                    LogHelper.AddLog(MsgLevel.Exception, $"图像采集为空", true);
-                    return;
-                }
-            }
-            nRet = device.PixelTypeConverter.ConvertPixelType(inputImage, out outImage, dstPixelType);
-            if (MvError.MV_OK != nRet)
-            {
-                LogHelper.AddLog(MsgLevel.Exception, $"图像转换异常", true);
-                return;
-            }
-
-            Bitmap Bitmap = new Bitmap((Int32)outImage.Width, (Int32)outImage.Height, m_bitmapPixelFormat);
-            BitmapData bitmapData = Bitmap.LockBits(new Rectangle(0, 0, (Int32)outImage.Width, (Int32)outImage.Height), ImageLockMode.ReadWrite, Bitmap.PixelFormat);
-            CopyMemory(bitmapData.Scan0, outImage.PixelDataPtr, (UInt32)(bitmapData.Stride * Bitmap.Height));
-            Bitmap.UnlockBits(bitmapData);
-
             //通过设置调色板从伪彩改为灰度
             if (nChannelNum == 1)
             {
-                var pal = Bitmap.Palette;
+                var pal = inputImage.ToBitmap().Palette;
                 for (int j = 0; j < 256; j++)
-                    pal.Entries[j] = System.Drawing.Color.FromArgb(j, j, j);
-                Bitmap.Palette = pal;
+                    pal.Entries[j] = Color.FromArgb(j, j, j);
+                inputImage.ToBitmap().Palette = pal;
             }
 
-            // 发布图片给调用方
-            //PublishImageEvent?.Invoke(this, e.FrameOut.Image.ToBitmap());
-            PublishImageEvent?.Invoke(this, Bitmap);
+            PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
         }
 
         /// <summary>
@@ -355,6 +323,16 @@ namespace YTVisionPro.Hardware.Camera
         {
             device.Parameters.GetFloatValue("Gain", out IFloatValue gain);
             return gain.CurValue;
+        }
+
+        /// <summary>
+        /// 获取触发延迟时间
+        /// </summary>
+        /// <returns></returns>
+        public float GetTriggerDelay()
+        {
+            device.Parameters.GetFloatValue("TriggerDelay", out IFloatValue triggerDelay);
+            return triggerDelay.CurValue;
         }
 
         /// <summary>

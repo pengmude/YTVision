@@ -187,7 +187,6 @@ namespace YTVisionPro.Forms.CameraAdd
             }
             catch (Exception ex)
             {
-                AddCameraDevEvent?.Invoke(this, info);
                 MessageBox.Show("添加相机异常：" + ex.Message);
 
                 #region 测试代码

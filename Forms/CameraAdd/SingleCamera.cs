@@ -22,6 +22,8 @@ using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -114,14 +116,14 @@ namespace YTVisionPro.Forms.CameraAdd
             //先清除所有选中状态
             foreach (var item in SingleCameraList)
             {
-                item.tableLayoutPanel1.BackColor = SystemColors.Control;
-                item.label1.BackColor = SystemColors.Control;
+                item.tableLayoutPanel1.BackColor = Color.LightSteelBlue;
+                item.label1.BackColor = Color.LightSteelBlue;
                 IsSelected = false;
             }
-
+            
             // 设置当前选中的样式
-            this.tableLayoutPanel1.BackColor = Color.Gray;
-            this.label1.BackColor = Color.Gray;
+            this.tableLayoutPanel1.BackColor = Color.CornflowerBlue;
+            this.label1.BackColor = Color.CornflowerBlue;
             IsSelected = true;
         }
 
@@ -130,27 +132,28 @@ namespace YTVisionPro.Forms.CameraAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="value"></param>
-        private void uiSwitch1_ValueChanged(object sender, bool value)
+        private async void uiSwitch1_ValueChanged(object sender, bool value)
         {
             if (value)
             {
                 try
                 {
-                    Camera.Open();
-                    Camera.SetTriggerMode(false);
-                    Camera.SetExposureTime(10000);
-                    Camera.SetGain(1);
-                    Camera.StartGrabbing();
+                    await Task.Run(() =>
+                    {
+                        Camera.Open();
+                        Camera.SetTriggerMode(false);
+                        Camera.StartGrabbing();
+                    });
                     LogHelper.AddLog(MsgLevel.Info, $"{Params.UserDefineName}已打开！", true);
                 }
                 catch (Exception e)
                 {
                     //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                    this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
+                    this.uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
                     MessageBox.Show(e.Message);
                     LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
                     uiSwitch1.Active = false;
-                    this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
+                    this.uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Params.UserDefineName}打开失败！", true);
                 }
             }
@@ -164,11 +167,11 @@ namespace YTVisionPro.Forms.CameraAdd
                 catch (Exception e)
                 {
                     //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                    this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
+                    this.uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
                     MessageBox.Show(e.Message);
                     LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
                     uiSwitch1.Active = true;
-                    this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
+                    this.uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Params.UserDefineName}关闭失败！", true);
                 }
             }
@@ -182,6 +185,17 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // 移除设备需要判断当前是否有节点使用该设备
+            foreach (var node in Solution.Nodes)
+            {
+                if (node is NodeCamera cameraNode
+                    && cameraNode.ParamForm.Params is NodeParamCamera paramCamera
+                    && Camera.UserDefinedName == paramCamera.Camera.UserDefinedName)
+                {
+                    MessageBox.Show("当前方案的节点正在使用该相机，无法删除相机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
             SingleCameraList.Remove(this);
             SingleCameraRemoveEvent?.Invoke(this, this);
         }

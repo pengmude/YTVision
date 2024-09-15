@@ -14,5 +14,7 @@ namespace YTVisionPro.Node.AI.HTAI
         public List<NGTypeConfig> AllNgConfigs { get; set; }
         // 检测出来的节点结果数
         public int TestNum { get; set; }
+
+        public string WindowName {  get; set; }
     }
 }

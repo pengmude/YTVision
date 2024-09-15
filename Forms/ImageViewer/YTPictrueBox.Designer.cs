@@ -31,11 +31,11 @@
             this.components = new System.ComponentModel.Container();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.保存图片ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.还原ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.保存原图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.原图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.渲染图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.保存渲染图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.默认大小ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.上次大小ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.清空图像ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -56,48 +56,48 @@
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.保存图片ToolStripMenuItem,
             this.还原ToolStripMenuItem,
-            this.保存原图ToolStripMenuItem,
-            this.保存渲染图ToolStripMenuItem});
+            this.清空图像ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(241, 127);
             // 
+            // 保存图片ToolStripMenuItem
+            // 
+            this.保存图片ToolStripMenuItem.Name = "保存图片ToolStripMenuItem";
+            this.保存图片ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.保存图片ToolStripMenuItem.Text = "保存";
+            this.保存图片ToolStripMenuItem.Click += new System.EventHandler(this.保存图片ToolStripMenuItem_Click);
+            // 
             // 还原ToolStripMenuItem
             // 
+            this.还原ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.默认大小ToolStripMenuItem,
+            this.上次大小ToolStripMenuItem});
             this.还原ToolStripMenuItem.Name = "还原ToolStripMenuItem";
-            this.还原ToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
-            this.还原ToolStripMenuItem.Text = "还原";
-            this.还原ToolStripMenuItem.Click += new System.EventHandler(this.还原ToolStripMenuItem_Click);
+            this.还原ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.还原ToolStripMenuItem.Text = "恢复";
             // 
-            // 保存原图ToolStripMenuItem
+            // 默认大小ToolStripMenuItem
             // 
-            this.保存原图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.原图ToolStripMenuItem,
-            this.渲染图ToolStripMenuItem});
-            this.保存原图ToolStripMenuItem.Name = "保存原图ToolStripMenuItem";
-            this.保存原图ToolStripMenuItem.Size = new System.Drawing.Size(188, 30);
-            this.保存原图ToolStripMenuItem.Text = "显示";
+            this.默认大小ToolStripMenuItem.Name = "默认大小ToolStripMenuItem";
+            this.默认大小ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.默认大小ToolStripMenuItem.Text = "默认大小";
+            this.默认大小ToolStripMenuItem.Click += new System.EventHandler(this.默认大小ToolStripMenuItem_Click);
             // 
-            // 原图ToolStripMenuItem
+            // 上次大小ToolStripMenuItem
             // 
-            this.原图ToolStripMenuItem.Name = "原图ToolStripMenuItem";
-            this.原图ToolStripMenuItem.Size = new System.Drawing.Size(164, 34);
-            this.原图ToolStripMenuItem.Text = "原图";
-            this.原图ToolStripMenuItem.Click += new System.EventHandler(this.原图ToolStripMenuItem_Click);
+            this.上次大小ToolStripMenuItem.Name = "上次大小ToolStripMenuItem";
+            this.上次大小ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.上次大小ToolStripMenuItem.Text = "缩放前大小";
+            this.上次大小ToolStripMenuItem.Click += new System.EventHandler(this.上次大小ToolStripMenuItem_Click);
             // 
-            // 渲染图ToolStripMenuItem
+            // 清空图像ToolStripMenuItem
             // 
-            this.渲染图ToolStripMenuItem.Name = "渲染图ToolStripMenuItem";
-            this.渲染图ToolStripMenuItem.Size = new System.Drawing.Size(164, 34);
-            this.渲染图ToolStripMenuItem.Text = "渲染图";
-            this.渲染图ToolStripMenuItem.Click += new System.EventHandler(this.渲染图ToolStripMenuItem_Click);
-            // 
-            // 保存渲染图ToolStripMenuItem
-            // 
-            this.保存渲染图ToolStripMenuItem.Name = "保存渲染图ToolStripMenuItem";
-            this.保存渲染图ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
-            this.保存渲染图ToolStripMenuItem.Text = "保存当前图片";
-            this.保存渲染图ToolStripMenuItem.Click += new System.EventHandler(this.保存渲染图ToolStripMenuItem_Click);
+            this.清空图像ToolStripMenuItem.Name = "清空图像ToolStripMenuItem";
+            this.清空图像ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
+            this.清空图像ToolStripMenuItem.Text = "清除图像";
+            this.清空图像ToolStripMenuItem.Click += new System.EventHandler(this.清空图像ToolStripMenuItem_Click);
             // 
             // saveFileDialog1
             // 
@@ -122,10 +122,10 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 还原ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 保存原图ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 保存渲染图ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 原图ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 渲染图ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 保存图片ToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.ToolStripMenuItem 清空图像ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 默认大小ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 上次大小ToolStripMenuItem;
     }
 }

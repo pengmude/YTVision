@@ -1,5 +1,6 @@
 ﻿using Logger;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,8 +45,8 @@ namespace YTVisionPro.Node.Light
                 base.Run(token);
 
                 param.Light.TurnOn(param.Brightness, param.Time);
-                SetRunResult(startTime, NodeStatus.Successful);
-                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                long time = SetRunResult(startTime, NodeStatus.Successful);
+                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
             }
             catch(OperationCanceledException)
             {

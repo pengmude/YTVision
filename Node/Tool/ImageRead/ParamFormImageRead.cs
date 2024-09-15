@@ -1,6 +1,7 @@
 ﻿using Logger;
 using System;
 using System.Windows.Forms;
+using YTVisionPro.Forms.ImageViewer;
 
 namespace YTVisionPro.Node.ImageRead
 {
@@ -11,6 +12,25 @@ namespace YTVisionPro.Node.ImageRead
         public ParamFormImageRead()
         {
             InitializeComponent();
+            // 图像显示窗口名称
+            WindowNameList.Items.Add("[未设置]");
+            for (int i = 0; i < FrmImageViewer.CurWindowsNum; i++)
+            {
+                WindowNameList.Items.Add($"图像窗口{i + 1}");
+            }
+            WindowNameList.SelectedIndex = 0;
+            CanvasSet.WindowNumChangeEvent += CanvasSet_WindowNumChangeEvent;
+        }
+
+        private void CanvasSet_WindowNumChangeEvent(object sender, int e)
+        {
+            WindowNameList.Items.Clear();
+            WindowNameList.Items.Add("[未设置]");
+            for (int i = 0; i < e; i++)
+            {
+                WindowNameList.Items.Add($"图像窗口{i + 1}");
+            }
+            WindowNameList.SelectedIndex = 0;
         }
 
         void INodeParamForm.SetNodeBelong(NodeBase node) { }
@@ -34,6 +54,7 @@ namespace YTVisionPro.Node.ImageRead
             }
             NodeParamImageRead nodeParamReadImage = new NodeParamImageRead();
             nodeParamReadImage.ImagePath = this.textBox1.Text;
+            nodeParamReadImage.WindowName = WindowNameList.Text;
             Params = nodeParamReadImage;
             Hide();
         }

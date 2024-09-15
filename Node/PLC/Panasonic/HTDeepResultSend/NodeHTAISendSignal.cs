@@ -3,6 +3,7 @@ using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -103,13 +104,16 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                         throw new Exception($"节点({ID}.{NodeName})没有匹配到对应的信号！");
                     }
 
-                    // 发送信号到对应的PLC
-                    foreach (var maxSignalRow in maxSignalRowsByPlc)
+                    await Task.Run(() =>
                     {
-                        SendSignalToPlc(maxSignalRow);
-                    }
-                    SetRunResult(startTime, NodeStatus.Successful);
-                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                        // 发送信号到对应的PLC
+                        foreach (var maxSignalRow in maxSignalRowsByPlc)
+                        {
+                            SendSignalToPlc(maxSignalRow);
+                        }
+                    });
+                    long time = SetRunResult(startTime, NodeStatus.Successful);
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                 }
                 catch (OperationCanceledException)
                 {
@@ -145,13 +149,12 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                             plcTmp.WritePLCData(dataRow.SignalAddress, true);
 
                         } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
-                        LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功", true);
 
                         do
                         {
                             plcTmp.WritePLCData(dataRow.SignalAddress, false);
                         } while ((bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
-                        LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号断开成功", true);
+                        LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功!", true);
                         break;
                     }
                 }

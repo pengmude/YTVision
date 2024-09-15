@@ -146,19 +146,18 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 节点运行结果基本状态设置
         /// </summary>
-        /// <param name="startTime"></param>
+        /// <param name="stopwatch"></param>
         /// <param name="status"></param>
-        public void SetRunResult(DateTime startTime, NodeStatus status)
+        public long SetRunResult(DateTime startTime, NodeStatus status)
         {
-            DateTime endTime = DateTime.Now;
-            TimeSpan elapsed = endTime - startTime;
-            long elapsedMi11iseconds = (long)elapsed.TotalMilliseconds;
+            long elapsedMi11iseconds = (long)(DateTime.Now - startTime).TotalMilliseconds;
             SetStatus(status, elapsedMi11iseconds.ToString());
             Result.RunTime = elapsedMi11iseconds;
             Result.Status = status;
             Result.RunStatusCode = status == NodeStatus.Successful ? NodeRunStatusCode.OK
                                 : status == NodeStatus.Unexecuted ? NodeRunStatusCode.UNEXECUTED
                                 : NodeRunStatusCode.UNKNOW_ERROR;
+            return elapsedMi11iseconds;
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using YTVisionPro.Node.Tool.ImageShow;
 
 namespace YTVisionPro.Node.ImageRead
 {

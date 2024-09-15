@@ -11,6 +11,6 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
         public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
         public NodeRunStatusCode RunStatusCode { get; set; }
-        public Object CodeText { get; set; }
+        public object ReadData { get; set; }
     }
 }

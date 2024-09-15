@@ -105,14 +105,14 @@ namespace YTVisionPro.Forms.LightAdd
             //先清除所有选中状态
             foreach (var item in SingleLights)
             {
-                item.tableLayoutPanel1.BackColor = SystemColors.Control;
-                item.label1.BackColor = SystemColors.Control;
+                item.tableLayoutPanel1.BackColor = Color.LightSteelBlue;
+                item.label1.BackColor = Color.LightSteelBlue;
                 IsSelected = false;
             }
 
             // 设置当前选中的样式
-            this.tableLayoutPanel1.BackColor = Color.Gray;
-            this.label1.BackColor = Color.Gray;
+            this.tableLayoutPanel1.BackColor = Color.CornflowerBlue;
+            this.label1.BackColor = Color.CornflowerBlue;
             IsSelected = true;
         }
 

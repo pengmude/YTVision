@@ -21,7 +21,7 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox1.AddItem("光源控制", NodeType.LightSourceControl);
 
             nodeComboBox2.Text = "图像采集";
-            nodeComboBox2.AddItem("软触发等待", NodeType.WaitSoftTrigger);
+            nodeComboBox2.AddItem("获取软触发信号", NodeType.WaitSoftTrigger);
             nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
             nodeComboBox2.AddItem("本地图片", NodeType.LocalPicture);
 

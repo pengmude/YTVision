@@ -30,6 +30,10 @@ namespace YTVisionPro.Node.Camera.HiK
         /// 增益
         /// </summary>
         public float Gain;
+        /// <summary>
+        /// 图像显示窗口名称
+        /// </summary>
+        public string WindowName;
     }
 
 }

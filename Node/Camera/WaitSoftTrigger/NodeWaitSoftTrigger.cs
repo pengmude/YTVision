@@ -2,6 +2,7 @@
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -48,11 +49,14 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        // 监听拍照信号
-                        SendSignalToPlc(param);
+                        await Task.Run(() =>
+                        {
+                            // 监听拍照信号
+                            SendSignalToPlc(param);
+                        });
 
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                        long time = SetRunResult(startTime, NodeStatus.Successful);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
                     catch (OperationCanceledException)
                     {
@@ -77,12 +81,13 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
             do
             {
                 flag = (bool)param.Plc.ReadPLCData(param.Address, DataType.BOOL);
-                LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
-
             } while (!flag);
-
             // 重置拍照信号
-            param.Plc.WritePLCData(param.Address, false);
+            do
+            {
+                param.Plc.WritePLCData(param.Address, false);
+            } while ((bool)param.Plc.ReadPLCData(param.Address, DataType.BOOL));
+            LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
         }
 
     }

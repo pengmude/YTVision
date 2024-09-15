@@ -55,6 +55,8 @@
             this.label8 = new System.Windows.Forms.Label();
             this.tbMaxNum = new System.Windows.Forms.TextBox();
             this.btIsOK = new System.Windows.Forms.CheckBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.WindowNameList = new System.Windows.Forms.ComboBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
@@ -187,7 +189,9 @@
             this.tableLayoutPanel2.Controls.Add(this.label8, 1, 8);
             this.tableLayoutPanel2.Controls.Add(this.tbMaxNum, 2, 8);
             this.tableLayoutPanel2.Controls.Add(this.btIsOK, 2, 9);
-            this.tableLayoutPanel2.Controls.Add(this.buttonSave, 1, 10);
+            this.tableLayoutPanel2.Controls.Add(this.label10, 0, 10);
+            this.tableLayoutPanel2.Controls.Add(this.WindowNameList, 1, 10);
+            this.tableLayoutPanel2.Controls.Add(this.buttonSave, 2, 11);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 34);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -412,11 +416,34 @@
             this.btIsOK.UseVisualStyleBackColor = true;
             this.btIsOK.CheckedChanged += new System.EventHandler(this.cbIsOK_CheckedChanged);
             // 
+            // label10
+            // 
+            this.label10.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(19, 491);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(194, 26);
+            this.label10.TabIndex = 6;
+            this.label10.Text = "渲染图显示窗口";
+            // 
+            // WindowNameList
+            // 
+            this.WindowNameList.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.WindowNameList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.WindowNameList.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.WindowNameList.FormattingEnabled = true;
+            this.WindowNameList.Location = new System.Drawing.Point(257, 490);
+            this.WindowNameList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.WindowNameList.Name = "WindowNameList";
+            this.WindowNameList.Size = new System.Drawing.Size(182, 28);
+            this.WindowNameList.TabIndex = 0;
+            this.WindowNameList.SelectedIndexChanged += new System.EventHandler(this.cbClasses_SelectedIndexChanged);
+            // 
             // buttonSave
             // 
             this.buttonSave.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonSave.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonSave.Location = new System.Drawing.Point(292, 484);
+            this.buttonSave.Location = new System.Drawing.Point(525, 536);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(111, 40);
@@ -519,5 +546,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label12;
         private NodeSubscription nodeSubscription1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox WindowNameList;
     }
 }

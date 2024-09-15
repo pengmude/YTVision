@@ -12,7 +12,6 @@ using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 using YTVisionPro.Node.PLC.Panasonic.Read;
 using YTVisionPro.Node.Tool.DataShow;
 using YTVisionPro.Node.Tool.ImageSave;
-using YTVisionPro.Node.Tool.ImageShow;
 using YTVisionPro.Node.Tool.SleepTool;
 using static YTVisionPro.Node.NodeComboBox;
 
@@ -108,9 +107,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     case NodeType.DetectResultShow:
                         node = new NodeDataShow(data.Text, _process, data.NodeType);
                         break;
-                    case NodeType.ImageShow:
-                        node = new NodeImageShow(data.Text, _process, data.NodeType);
-                        break;
+                    //case NodeType.ImageShow:
+                    //    node = new NodeImageShow(data.Text, _process, data.NodeType);
+                    //    break;
                     default:
                         break;
                 }

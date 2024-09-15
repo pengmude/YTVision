@@ -2,6 +2,7 @@
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -67,9 +68,9 @@ namespace YTVisionPro.Node.Tool.ImageSave
                             throw new Exception($"订阅的图片对象为空！");
 
                         // 保存
-                        SaveImage(startTime, param);
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                        SaveImage(param);
+                        long time = SetRunResult(startTime, NodeStatus.Successful);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
                     catch (OperationCanceledException)
                     {
@@ -88,8 +89,9 @@ namespace YTVisionPro.Node.Tool.ImageSave
             }
         }
 
-        private void SaveImage(DateTime time, NodeParamSaveImage param)
+        private void SaveImage(NodeParamSaveImage param)
         {
+            DateTime time = DateTime.Now;
             // 1.存图路径（不包含图片名称）
             string imageSavePath;
 

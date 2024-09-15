@@ -38,7 +38,7 @@ namespace YTVisionPro.Node
         NodeStatus Status { get; set; }
         /// <summary>
         /// 节点运行时间ms，计算方法：
-        /// DateTime startTime = DateTime.Now;
+        /// Stopwatch stopwatch = new Stopwatch();
         /// DateTime endTime = DateTime.Now;
         /// TimeSpan elapsed = endTime - startTime;
         /// long elapsedMilliseconds = elapsed.TotalMilliseconds;

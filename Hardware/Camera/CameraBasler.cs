@@ -12,6 +12,7 @@ using Basler.Pylon;
 using Logger;
 using Sunny.UI.Win32;
 using Newtonsoft.Json.Linq;
+using MvCameraControl;
 
 namespace YTVisionPro.Hardware.Camera
 {
@@ -306,6 +307,15 @@ namespace YTVisionPro.Hardware.Camera
         }
 
         /// <summary>
+        /// 获取延迟触发时间
+        /// </summary>
+        /// <returns></returns>
+        public float GetTriggerDelay()
+        {
+            return (float)_camera.Parameters[PLCamera.TriggerDelayAbs].GetValue();
+        }
+
+        /// <summary>
         /// 设置曝光
         /// </summary>
         /// <param name="exposureTime"></param>
@@ -338,6 +348,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void Close()
         {
+            _camera.StreamGrabber.Stop();
             _camera.Close();
         }
 

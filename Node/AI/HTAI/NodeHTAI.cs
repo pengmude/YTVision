@@ -1,11 +1,14 @@
 ﻿using Logger;
 using Sunny.UI;
+using Sunny.UI.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Forms.ResultView;
 using static YTVisionPro.Node.AI.HTAI.HTAPI;
 
@@ -14,6 +17,10 @@ namespace YTVisionPro.Node.AI.HTAI
     internal class NodeHTAI : NodeBase
     {
         NodeResult[] PredictResult;
+        /// <summary>
+        /// 图像发布事件
+        /// </summary>
+        public static event EventHandler<Paramsa> ImageShowChanged;
         public NodeHTAI(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
         {
             ParamForm = new ParamFormHTAI();
@@ -38,7 +45,8 @@ namespace YTVisionPro.Node.AI.HTAI
         /// </summary>
         public void ReleaseAIResult()
         {
-            ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
+            if(((NodeParamHTAI)ParamForm.Params) != null && PredictResult != null)
+                ReleasePredictResult(PredictResult, ((NodeParamHTAI)ParamForm.Params).TestNum);
         }
 
         /// <summary>
@@ -80,8 +88,9 @@ namespace YTVisionPro.Node.AI.HTAI
                             res.ResultData = DeepStudyResult_Judge(PredictResult, param.AllNgConfigs, param.TestNum);
                             res.RenderImage = renderImg;
                             Result = res;
-                            SetRunResult(startTime, NodeStatus.Successful);
-                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                            ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, renderImg));
+                            long time = SetRunResult(startTime, NodeStatus.Successful);
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                         }
                         catch (OperationCanceledException)
                         {

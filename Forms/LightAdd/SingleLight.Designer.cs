@@ -40,6 +40,7 @@
             // 
             // tableLayoutPanel1
             // 
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.LightSteelBlue;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
@@ -73,6 +74,7 @@
             // 
             // uiSwitch1
             // 
+            this.uiSwitch1.ActiveColor = System.Drawing.Color.Teal;
             this.uiSwitch1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiSwitch1.InActiveColor = System.Drawing.Color.Silver;
             this.uiSwitch1.Location = new System.Drawing.Point(134, 4);
@@ -90,10 +92,10 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.ContextMenuStrip = this.contextMenuStrip1;
-            this.label1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(34, 12);
+            this.label1.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.label1.Location = new System.Drawing.Point(27, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(62, 18);
+            this.label1.Size = new System.Drawing.Size(76, 21);
             this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             this.label1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SinglePLCInfo_MouseClick);

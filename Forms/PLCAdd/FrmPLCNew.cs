@@ -1,10 +1,7 @@
 ﻿using Logger;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -78,31 +75,16 @@ namespace YTVisionPro.Forms.PLCAdd
                         pLCParms.SerialParms.Parity = comboBox6.SelectedIndex == 0 ? Parity.None : (comboBox6.SelectedIndex == 1 ? Parity.Odd : Parity.Even);
 
                         // 已添加设备冲突判断
-                        foreach (var plc in Solution.Instance.PlcDevices)
+                        bool exist = Solution.Instance.PlcDevices.Exists(plc => plc.PLCParms.SerialParms.PortName == comboBox2.Text || plc.UserDefinedName == textBox2.Text);
+                        if (exist)
                         {
-                            try
-                            {
-                                if (plc.PLCParms.SerialParms.PortName == comboBox2.Text)
-                                {
-                                    MessageBox.Show("对应串口的PLC已存在！");
-                                    LogHelper.AddLog(MsgLevel.Info, "对应串口的PLC已存在！", true);
-                                    return;
-                                }
-                                if (plc.UserDefinedName == pLCParms.UserDefinedName)
-                                {
-                                    MessageBox.Show("该PLC名称已存在！");
-                                    LogHelper.AddLog(MsgLevel.Info, "该PLC名称已存在！", true);
-                                    return;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                continue;
-                            }
+                            MessageBox.Show("PLC的串口号和用户自定义名不能相同！");
+                            LogHelper.AddLog(MsgLevel.Warn, "PLC的串口号和用户自定义名不能相同！", true);
+                            return;
                         }
 
                         PLCAddEvent?.Invoke(this, pLCParms);
-                        this.Close();
+                        Hide();
                     }
                 }
                 catch (Exception ex)

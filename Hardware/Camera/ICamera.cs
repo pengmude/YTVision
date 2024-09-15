@@ -27,6 +27,11 @@ namespace YTVisionPro.Hardware.Camera
         DevType DevType { get; }
 
         /// <summary>
+        /// 相机是否连接
+        /// </summary>
+        bool IsOpen { get; }
+
+        /// <summary>
         /// 开启相机
         /// </summary>
         /// <returns></returns>
@@ -93,6 +98,12 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         /// <returns></returns>
         float GetGain();
+
+        /// <summary>
+        /// 获取触发延迟
+        /// </summary>
+        /// <returns></returns>
+        float GetTriggerDelay();
 
         /// <summary>
         /// 设置曝光

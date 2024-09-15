@@ -12,5 +12,9 @@ namespace YTVisionPro.Node.ImageRead
         /// 图片路径
         /// </summary>
         public string ImagePath;
+        /// <summary>
+        /// 要显示的窗口名称
+        /// </summary>
+        public string WindowName;
     }
 }

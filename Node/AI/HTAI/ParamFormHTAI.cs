@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 
 namespace YTVisionPro.Node.AI.HTAI
@@ -35,8 +36,26 @@ namespace YTVisionPro.Node.AI.HTAI
         {
             InitializeComponent();
             NodeBase.NodeDeletedEvent += NodeHTAI_NodeDeletedEvent;
+            // 图像显示窗口名称
+            WindowNameList.Items.Add("[未设置]");
+            for (int i = 0; i < FrmImageViewer.CurWindowsNum; i++)
+            {
+                WindowNameList.Items.Add($"图像窗口{i + 1}");
+            }
+            WindowNameList.SelectedIndex = 0;
+            CanvasSet.WindowNumChangeEvent += CanvasSet_WindowNumChangeEvent;
         }
 
+        private void CanvasSet_WindowNumChangeEvent(object sender, int e)
+        {
+            WindowNameList.Items.Clear();
+            WindowNameList.Items.Add("[未设置]");
+            for (int i = 0; i < e; i++)
+            {
+                WindowNameList.Items.Add($"图像窗口{i + 1}");
+            }
+            WindowNameList.SelectedIndex = 0;
+        }
         /// <summary>
         /// AI节点删除时候要释放句柄
         /// </summary>
@@ -234,6 +253,8 @@ namespace YTVisionPro.Node.AI.HTAI
         // 节点信息下拉框选择
         private void cbNodes_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cbNodes.SelectedItem == null)
+                return;
             string selectedNode = cbNodes.SelectedItem.ToString();
             NodeInfo nodeInfo = node_info_choose.Find(n => n.NodeName == selectedNode);
             cbClasses.DataSource = nodeInfo.ClassNames;
@@ -250,6 +271,8 @@ namespace YTVisionPro.Node.AI.HTAI
         // 显示判别条件和ok栏
         private void UpdateTbCbValues()
         {
+            if (cbNodes.SelectedItem == null)
+                return;
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
             NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.ClassName == className);
@@ -357,6 +380,7 @@ namespace YTVisionPro.Node.AI.HTAI
             nodeParamHTAI.TreePredictHandle = TreePredictHandle;
             nodeParamHTAI.AllNgConfigs = _allNgConfigs;
             nodeParamHTAI.TestNum = TestNum;
+            nodeParamHTAI.WindowName = WindowNameList.Text;
             Params = nodeParamHTAI;
             Hide();
         }

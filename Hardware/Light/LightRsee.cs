@@ -174,9 +174,6 @@ namespace YTVisionPro.Hardware.Light
                 }
             }
             Com2HandleList.Remove(toRemove);
-
-            //移除方案中的全局光源
-            Solution.Instance.Devices.Remove(this);
         }
 
         /// <summary>

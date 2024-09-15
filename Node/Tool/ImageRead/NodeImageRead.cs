@@ -2,15 +2,22 @@
 using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
+using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Node.AI.HTAI;
+using YTVisionPro.Node.Camera.HiK;
 
 namespace YTVisionPro.Node.ImageRead
 {
     internal class NodeImageRead : NodeBase
     {
+        /// <summary>
+        /// 图像发布事件
+        /// </summary>
+        public static event EventHandler<Paramsa> ImageShowChanged;
         // 读写锁保护相同图像文件的多线程访问安全
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         public NodeImageRead(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
@@ -21,8 +28,8 @@ namespace YTVisionPro.Node.ImageRead
 
         public override async Task Run(CancellationToken token)
         {
-            DateTime startTime = DateTime.Now;
 
+            DateTime startTime = DateTime.Now;
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
@@ -45,15 +52,14 @@ namespace YTVisionPro.Node.ImageRead
                         base.Run(token);
 
                         _lock.EnterReadLock();
-                        await Task.Run(() =>
-                        {
-                            res.Image = new Bitmap(param.ImagePath);
-                            Result = res;
-                        }, token);
+                        Bitmap bitmap = new Bitmap(param.ImagePath);
+                        ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, bitmap));
+                        res.Image = bitmap;
+                        Result = res;
                         _lock.ExitReadLock();
 
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                        long time = SetRunResult(startTime, NodeStatus.Successful);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
                     catch (OperationCanceledException)
                     {

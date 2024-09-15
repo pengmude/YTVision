@@ -98,7 +98,7 @@ namespace YTVisionPro.Forms.LightAdd
                     }
 
                     LightAddEvent?.Invoke(this, lightParam);
-                    this.Close();
+                    this.Hide();
                 }
                 catch (Exception ex)
                 {

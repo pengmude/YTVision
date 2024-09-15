@@ -209,19 +209,6 @@
     <Compile Include="Forms\LightAdd\SingleLight.Designer.cs">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PLCMonitor\FrmSignalMonitor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PLCMonitor\FrmSignalMonitor.Designer.cs">
-      <DependentUpon>FrmSignalMonitor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\PLCMonitor\PlcMonitor.cs" />
-    <Compile Include="Forms\PLCMonitor\SignalConfig.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Forms\PLCMonitor\SignalConfig.Designer.cs">
-      <DependentUpon>SignalConfig.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ResultView\SingleResultViewData.cs" />
     <Compile Include="Forms\YTMessageBox\YTMessageBox.cs">
       <SubType>Form</SubType>
@@ -463,17 +450,6 @@
     <Compile Include="Node\Tool\ImageSave\ParamFormSaveImage.Designer.cs">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\Tool\ImageShow\NodeImageShow.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\Tool\ImageShow\NodeParamImageShow.cs" />
-    <Compile Include="Node\Tool\ImageShow\NodeResultImageShow.cs" />
-    <Compile Include="Node\Tool\ImageShow\ParamFormImageShow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\Tool\ImageShow\ParamFormImageShow.Designer.cs">
-      <DependentUpon>ParamFormImageShow.cs</DependentUpon>
-    </Compile>
     <Compile Include="Node\Tool\SleepTool\NodeParamFormSleepTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -540,12 +516,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LightAdd\SingleLight.resx">
       <DependentUpon>SingleLight.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PLCMonitor\FrmSignalMonitor.resx">
-      <DependentUpon>FrmSignalMonitor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PLCMonitor\SignalConfig.resx">
-      <DependentUpon>SignalConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\YTMessageBox\YTMessageBox.resx">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
@@ -636,9 +606,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\ImageSave\ParamFormSaveImage.resx">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\Tool\ImageShow\ParamFormImageShow.resx">
-      <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\SleepTool\NodeParamFormSleepTool.resx">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>

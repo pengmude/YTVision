@@ -86,6 +86,8 @@ namespace Logger
                     }
                     // 同时显示到全部日志栏
                     listBoxAll.Items.Add(levelAndInfo.Info);
+                    listBoxAll.SelectedIndex = listBoxAll.Items.Count - 1;
+                    listBoxAll.SelectedIndex = -1;    //是否取消选中行
                     // 显示1000条后自动清除UI日志
                     if (listBoxAll.Items.Count > 1000)
                     {
@@ -119,6 +121,8 @@ namespace Logger
                 }
                 // 同时显示到全部日志栏
                 listBoxAll.Items.Add(levelAndInfo.Info);
+                listBoxAll.SelectedIndex = listBoxAll.Items.Count - 1;
+                listBoxAll.SelectedIndex = -1;    //是否取消选中行
                 // 显示1000条后自动清除UI日志
                 if (listBoxAll.Items.Count > 1000)
                 {

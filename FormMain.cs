@@ -7,7 +7,6 @@ using WeifenLuo.WinFormsUI.Docking;
 using YTVisionPro.Forms;
 using YTVisionPro.Forms.Helper;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Forms.PLCMonitor;
 using YTVisionPro.Forms.ProcessNew;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
@@ -15,6 +14,7 @@ using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
+using System.Threading.Tasks;
 
 namespace YTVisionPro
 {
@@ -35,7 +35,7 @@ namespace YTVisionPro
         /// <summary>
         /// PLC信号监听设置
         /// </summary>
-        FrmSignalMonitor FrmSignalMonitor = new FrmSignalMonitor();
+        //FrmSignalMonitor FrmSignalMonitor = new FrmSignalMonitor();
         /// <summary>
         /// 图像显示栏
         /// </summary>
@@ -76,14 +76,6 @@ namespace YTVisionPro
         /// 反序列化DockContent代理
         /// </summary>
         private DeserializeDockContent DeserializeDockContent = new DeserializeDockContent(GetContentFromPersistString);
-        /// <summary>
-        /// 系统当前的运行模式
-        /// </summary>
-        private RunMode CurRunMode { get; set; }
-        /// <summary>
-        /// 系统是否正在运行
-        /// </summary>
-        private bool IsRunning { get; set; }
 
         public FormMain()
         {
@@ -138,7 +130,7 @@ namespace YTVisionPro
             }
 
             // 检测任务正在运行提示
-            if (IsRunning)
+            if (Solution.Instance.IsRunning)
             {
                 e.Cancel = true;
                 MessageBox.Show("请先停止当前任务再关闭！");
@@ -170,7 +162,6 @@ namespace YTVisionPro
                 {
                     plc.Disconnect();
                 }
-
             }
 
             // 海康相机SDK反序列化
@@ -291,10 +282,11 @@ namespace YTVisionPro
             FrmNewProcessWizard.ShowDialog();
         }
 
-        private void 停止运行ToolStripMenuItem_Click(object value1, object value2)
+        private async void 停止运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            if(MessageBox.Show("确定停止当前方案运行？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                return;
+            //if (MessageBox.Show("确定停止当前方案运行？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            //    return;
+
             Solution.Instance.Stop();
             SetSolRunStatus(false);
         }
@@ -332,7 +324,7 @@ namespace YTVisionPro
 
         private void 信号监听ToolStripMenuItem_Click(object value1, object value2)
         {
-            FrmSignalMonitor.ShowDialog();
+            //FrmSignalMonitor.ShowDialog();
         }
 
         private void 相机管理ToolStripMenuItem_Click(object value1, object value2)

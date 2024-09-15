@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Forms.PLCMonitor;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -76,9 +75,9 @@ namespace YTVisionPro.Forms.PLCAdd
                 singlePLC.Anchor = AnchorStyles.Right;
                 flowLayoutPanel1.Controls.Add(singlePLC);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                SinglePLC.SinglePLCs.Remove(singlePLC);
+                throw ex;
             }
         }
 

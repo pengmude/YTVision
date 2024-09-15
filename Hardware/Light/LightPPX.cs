@@ -145,8 +145,6 @@ namespace YTVisionPro.Hardware.Light
                 if (light.LightParam.Port == this.LightParam.Port)
                     count++;
             }
-            //然后移除掉方案中的全局光源并释放串口资源
-            Solution.Instance.Devices.Remove(this);
             if (count == 1)
             {
                 _serialPort.Close();

@@ -1,6 +1,8 @@
-﻿using Sunny.UI;
+﻿using Logger;
+using Sunny.UI;
 using System;
 using System.Windows.Forms;
+using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Hardware.Camera;
 
 namespace YTVisionPro.Node.Camera.HiK
@@ -16,6 +18,26 @@ namespace YTVisionPro.Node.Camera.HiK
             comboBoxType.SelectedIndex = 0;
             //触发沿
             comboBoxTriggerEdge.SelectedIndex = 0;
+
+            // 图像显示窗口名称
+            WindowNameList.Items.Add("[未设置]");
+            for (int i = 0; i < FrmImageViewer.CurWindowsNum; i++)
+            {
+                WindowNameList.Items.Add($"图像窗口{i + 1}");
+            }
+            WindowNameList.SelectedIndex = 0;
+            CanvasSet.WindowNumChangeEvent += CanvasSet_WindowNumChangeEvent;
+        }
+
+        private void CanvasSet_WindowNumChangeEvent(object sender, int e)
+        {
+            WindowNameList.Items.Clear();
+            WindowNameList.Items.Add("[未设置]");
+            for (int i = 0; i < e; i++)
+            {
+                WindowNameList.Items.Add($"图像窗口{i + 1}");
+            }
+            WindowNameList.SelectedIndex = 0;
         }
 
         private void ParamFormCamera_Shown(object sender, EventArgs e)
@@ -158,6 +180,9 @@ namespace YTVisionPro.Node.Camera.HiK
             //增益设置
             nodeParamCamera.Gain = gain;
 
+            // 窗口名称
+            nodeParamCamera.WindowName = WindowNameList.Text;
+
             #endregion
 
             Params = nodeParamCamera;
@@ -177,10 +202,19 @@ namespace YTVisionPro.Node.Camera.HiK
             {
                 if (camera.UserDefinedName == comboBoxCamera.Text)
                 {
-                    textBox1.Text = camera.GetExposureTime().ToString();
-                    textBox2.Text = camera.GetGain().ToString();
+                    // 当前相机触发延迟
+                    label3.Text = $"触发延迟(当前{camera.GetTriggerDelay()})";
+                    // 当前相机曝光
+                    label4.Text = $"曝光(当前{camera.GetExposureTime()})";
+                    // 当前相机增益
+                    label5.Text = $"增益(当前{camera.GetGain()})";
+
+                    return;
                 }
             }
+            label3.Text = "触发延迟(us)";
+            label4.Text = "曝光(us)";
+            label5.Text = "增益";
         }
     }
 }

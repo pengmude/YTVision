@@ -35,13 +35,11 @@
             // ytPictrueBox1
             // 
             this.ytPictrueBox1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.ytPictrueBox1.DisplayImageType = YTVisionPro.Forms.ImageViewer.DisplayImageType.SRCIMG;
             this.ytPictrueBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ytPictrueBox1.Location = new System.Drawing.Point(0, 0);
             this.ytPictrueBox1.Name = "ytPictrueBox1";
-            this.ytPictrueBox1.RenderImage = null;
             this.ytPictrueBox1.Size = new System.Drawing.Size(486, 472);
-            this.ytPictrueBox1.SrcImage = null;
+            this.ytPictrueBox1.Image = null;
             this.ytPictrueBox1.TabIndex = 0;
             // 
             // CameraParamsShowControl

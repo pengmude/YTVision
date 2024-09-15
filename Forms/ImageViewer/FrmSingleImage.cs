@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using YTVisionPro.Node.Tool.ImageShow;
+using YTVisionPro.Node.AI.HTAI;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.ImageRead;
 
 namespace YTVisionPro.Forms.ImageViewer
 {
@@ -19,13 +21,32 @@ namespace YTVisionPro.Forms.ImageViewer
         {
             InitializeComponent();
             this.Text = $"图像窗口{++i}";
-            NodeImageShow.ImageShowChanged += NodeImageShow_ImageShowChanged;
+            NodeCamera.ImageShowChanged += NodeImageShow_ImageShowChanged;
+            NodeImageRead.ImageShowChanged += NodeImageShow_ImageShowChanged;
+            NodeHTAI.ImageShowChanged += NodeImageShow_ImageShowChanged;
         }
 
         private void NodeImageShow_ImageShowChanged(object sender, Paramsa e)
         {
-            if(Text == e.Winname)
-                ytPictrueBox1.SrcImage = e.Bitmap;
+            // 确保图像更新在 UI 线程中执行
+            if (this.InvokeRequired)
+            {
+                this./*Begin*/Invoke(new MethodInvoker(() => UpdatePictureBox(e)));
+            }
+            else
+            {
+                UpdatePictureBox(e);
+            }
+        }
+
+        /// <summary>
+        /// 更新 PictureBox 的方法
+        /// </summary>
+        /// <param name="e"></param>
+        private void UpdatePictureBox(Paramsa e)
+        {
+            if (Text == e.Winname)
+                ytPictrueBox1.Image = e.Bitmap;
         }
 
         private void FrmSingleImage_FormClosing(object sender, FormClosingEventArgs e)
@@ -33,6 +54,16 @@ namespace YTVisionPro.Forms.ImageViewer
             FrmImageViewer.CurWindowsNum--;
             e.Cancel = true;
             Hide();
+        }
+    }
+    public class Paramsa
+    {
+        public string Winname;
+        public Bitmap Bitmap;
+        public Paramsa(string winname, Bitmap bitmap)
+        {
+            Winname = winname;
+            Bitmap = bitmap;
         }
     }
 }

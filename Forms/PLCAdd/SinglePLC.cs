@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.PLCMonitor;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -95,13 +94,13 @@ namespace YTVisionPro.Forms.PLCAdd
         {
             if (flag)
             {
-                this.tableLayoutPanel1.BackColor = Color.Gray;
-                this.label1.BackColor = Color.Gray;
+                this.tableLayoutPanel1.BackColor = Color.LightSteelBlue;
+                this.label1.BackColor = Color.LightSteelBlue;
             }
             else
             {
-                this.tableLayoutPanel1.BackColor = SystemColors.Control;
-                this.label1.BackColor = SystemColors.Control;
+                this.tableLayoutPanel1.BackColor = Color.CornflowerBlue;
+                this.label1.BackColor = Color.CornflowerBlue;
             }
             IsSelected = flag;
         }
@@ -156,11 +155,11 @@ namespace YTVisionPro.Forms.PLCAdd
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //判断当前pLC是否正在监听
-            if (SignalConfig.StartPlcs.Contains(Plc.UserDefinedName))
-            {
-                MessageBox.Show("当前PLC已经启动监听，若要移除设备请先关闭监听！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            //if (SignalConfig.StartPlcs.Contains(Plc.UserDefinedName))
+            //{
+            //    MessageBox.Show("当前PLC已经启动监听，若要移除设备请先关闭监听！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
             SinglePLCRemoveEvent?.Invoke(this, this);
         }
     }

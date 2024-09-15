@@ -39,6 +39,9 @@ namespace YTVisionPro.Forms.LightAdd
             // 移除光源实例
             e.Light.Disconnect();
 
+            //然后移除掉方案中的全局光源
+            Solution.Instance.Devices.Remove(e.Light);
+
             //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace YTVisionPro.Forms.ImageViewer
@@ -12,10 +13,6 @@ namespace YTVisionPro.Forms.ImageViewer
         int _zoomStep = 100;                                        // 缩放步长
         Point _srcResizeLoc = new Point();                                // 保存缩放前的位置
         Size _srcResizeSize = new Size();                                 // 保存缩放前的大小
-        Image _srcImg = null;                                       // 原图
-        Image _renderImg = null;                                    // 渲染图
-        Image _curImg = null;                                       // 当前图
-        DisplayImageType _showType = DisplayImageType.RENDERIMG;    // 当前显示的是渲染图还是原图
 
 
         public YTPictrueBox()
@@ -36,100 +33,61 @@ namespace YTVisionPro.Forms.ImageViewer
         }
 
         /// <summary>
-        /// 原图
+        /// 设置要显示的图片
         /// </summary>
-        public Image SrcImage 
+        public Image Image
         {
-            get => _srcImg;
+            get => pictureBox1.Image;
             set
             {
-                _srcImg = value;
-                // 没有渲染图就显示原图
-                if(_renderImg == null)
-                {
-                    DisplayImageType = DisplayImageType.SRCIMG;
-                    this.渲染图ToolStripMenuItem.Checked = false;
-                    this.原图ToolStripMenuItem.Checked = true;
-                }
+                if (pictureBox1.Image != null)
+                    pictureBox1.Image.Dispose();
+                pictureBox1.Image = value;
+                _srcResizeLoc = pictureBox1.Location;
+                _srcResizeSize = pictureBox1.Size;
+                SetLocationCenter();
             }
         }
-        /// <summary>
-        /// 渲染图
-        /// </summary>
-        public Image RenderImage
-        {
-            get => _renderImg;
-            set
-            {
-                _renderImg = value;
-                // 设置了渲染图就显示渲染图
-                DisplayImageType = DisplayImageType.RENDERIMG;
-                this.渲染图ToolStripMenuItem.Checked = true;
-                this.原图ToolStripMenuItem.Checked = false;
-            }
-        }
-        /// <summary>
-        /// 当前窗口显示的图像类型（原图/渲染图）
-        /// </summary>
-        public DisplayImageType DisplayImageType
-        {
-            get => _showType;
-            set
-            {
-                _showType = value;
-                SetDisplayImageType(_showType);
-            }
-        }
-        /// <summary>
-        /// 点击显示原图
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 原图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DisplayImageType = DisplayImageType.SRCIMG;
-            this.渲染图ToolStripMenuItem.Checked = false;
-            this.原图ToolStripMenuItem.Checked = true;
-        }
-        /// <summary>
-        /// 点击显示渲染图
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 渲染图ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DisplayImageType = DisplayImageType.RENDERIMG;
-            this.渲染图ToolStripMenuItem.Checked = true;
-            this.原图ToolStripMenuItem.Checked = false;
-        }
+
         /// <summary>
         /// 设置图像居中显示
         /// </summary>
-        private void SetLocationCenter()
+        private async void SetLocationCenter()
         {
-            // 设置 PictureBox 的位置和大小，使其居中
-            int picWidth = pictureBox1.Width;
-            int picHeight = pictureBox1.Height;
-            int left = (this.Width - picWidth) / 2;
-            int top = (this.Height - picHeight) / 2;
-            pictureBox1.Location = new Point(left, top);
+            if (pictureBox1.InvokeRequired)
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        // 使用 BeginInvoke 异步地执行设置位置的操作
+                        this.BeginInvoke(new MethodInvoker(() =>
+                        {
+                            int picWidth = pictureBox1.Width;
+                            int picHeight = pictureBox1.Height;
+                            int left = (this.Width - picWidth) / 2;
+                            int top = (this.Height - picHeight) / 2;
+                            pictureBox1.Location = new Point(left, top);
+                        }));
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                });
+                
+            }
+            else
+            {
+                // 如果当前线程就是 UI 线程，直接设置位置
+                int picWidth = pictureBox1.Width;
+                int picHeight = pictureBox1.Height;
+                int left = (this.Width - picWidth) / 2;
+                int top = (this.Height - picHeight) / 2;
+                pictureBox1.Location = new Point(left, top);
+            }
         }
-        /// <summary>
-        /// 设置当前显示的图像类型（原图还是渲染图）
-        /// </summary>
-        /// <param name="displayImageType"></param>
-        private void SetDisplayImageType(DisplayImageType displayImageType)
-        {
-            if (displayImageType == DisplayImageType.SRCIMG)
-                _curImg = _srcImg;
-            if(displayImageType == DisplayImageType.RENDERIMG)
-                _curImg = _renderImg;
-            pictureBox1.Image = _curImg;
-            SetLocationCenter();
-            // 保存初始位置和大小，用于还原
-            _srcResizeLoc = pictureBox1.Location;
-            _srcResizeSize = pictureBox1.Size;
-        }
+
         /// <summary>
         /// 鼠标在图像控件上缩放
         /// </summary>
@@ -137,53 +95,59 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="e"></param>
         private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
         {
-            if (_curImg != null)
-            {
-                // 图像初次显示时候需要填充，缩放时不能使用填充，否则无法缩放
-                if (pictureBox1.Dock == DockStyle.Fill)
-                    pictureBox1.Dock = DockStyle.None;
 
-                int x = e.Location.X;
-                int y = e.Location.Y;
-                int ow = pictureBox1.Width;
-                int oh = pictureBox1.Height;
-                int VX, VY; //因缩放产生的位移矢量
-                if (e.Delta > 0) //放大
+            if (pictureBox1.Image != null)
+            {
+                try
                 {
-                    //第①步
-                    pictureBox1.Width += _zoomStep;
-                    pictureBox1.Height += _zoomStep;
-                    //第②步
-                    PropertyInfo pInfo = pictureBox1.GetType().GetProperty("ImageRectangle", BindingFlags.Instance |
-                    BindingFlags.NonPublic);
-                    Rectangle rect = (Rectangle)pInfo.GetValue(pictureBox1, null);
-                    //第③步
-                    pictureBox1.Width = rect.Width;
-                    pictureBox1.Height = rect.Height;
-                }
-                if (e.Delta < 0) //缩小
-                {
-                    // 防止一直缩成负值或过小
-                    if (pictureBox1.Width - _zoomStep >= pictureBox1.MinimumSize.Width)
+                    // 图像初次显示时候需要填充，缩放时不能使用填充，否则无法缩放
+                    if (pictureBox1.Dock == DockStyle.Fill)
+                        pictureBox1.Dock = DockStyle.None;
+
+                    int x = e.Location.X;
+                    int y = e.Location.Y;
+                    int ow = pictureBox1.Width;
+                    int oh = pictureBox1.Height;
+                    int VX, VY; //因缩放产生的位移矢量
+                    if (e.Delta > 0) //放大
                     {
-                        pictureBox1.Width -= _zoomStep;
-                        pictureBox1.Height -= _zoomStep;
-                    }
-                    else
-                    {
-                        pictureBox1.Width -= _zoomStep;
-                        pictureBox1.Height -= _zoomStep;
+                        //第①步
+                        pictureBox1.Width += _zoomStep;
+                        pictureBox1.Height += _zoomStep;
+                        //第②步
                         PropertyInfo pInfo = pictureBox1.GetType().GetProperty("ImageRectangle", BindingFlags.Instance |
                         BindingFlags.NonPublic);
                         Rectangle rect = (Rectangle)pInfo.GetValue(pictureBox1, null);
+                        //第③步
                         pictureBox1.Width = rect.Width;
                         pictureBox1.Height = rect.Height;
                     }
+                    if (e.Delta < 0) //缩小
+                    {
+                        // 防止一直缩成负值或过小
+                        if (pictureBox1.Width - _zoomStep >= pictureBox1.MinimumSize.Width)
+                        {
+                            pictureBox1.Width -= _zoomStep;
+                            pictureBox1.Height -= _zoomStep;
+                        }
+                        else
+                        {
+                            pictureBox1.Width -= _zoomStep;
+                            pictureBox1.Height -= _zoomStep;
+                            PropertyInfo pInfo = pictureBox1.GetType().GetProperty("ImageRectangle", BindingFlags.Instance |
+                            BindingFlags.NonPublic);
+                            Rectangle rect = (Rectangle)pInfo.GetValue(pictureBox1, null);
+                            pictureBox1.Width = rect.Width;
+                            pictureBox1.Height = rect.Height;
+                        }
+                    }
+                    //第④步，求因缩放产生的位移，进行补偿，实现锚点缩放的效果
+                    VX = (int)((double)x * (ow - pictureBox1.Width) / ow);
+                    VY = (int)((double)y * (oh - pictureBox1.Height) / oh);
+                    pictureBox1.Location = new Point(pictureBox1.Location.X + VX, pictureBox1.Location.Y + VY);
                 }
-                //第④步，求因缩放产生的位移，进行补偿，实现锚点缩放的效果
-                VX = (int)((double)x * (ow - pictureBox1.Width) / ow);
-                VY = (int)((double)y * (oh - pictureBox1.Height) / oh);
-                pictureBox1.Location = new Point(pictureBox1.Location.X + VX, pictureBox1.Location.Y + VY);
+                catch (Exception) { }
+                
             }
         }
         /// <summary>
@@ -193,7 +157,7 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if(_curImg != null)
+            if(pictureBox1.Image != null)
             {
                 if (e.Button == MouseButtons.Left)
                 {
@@ -211,7 +175,7 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="e"></param>
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_curImg != null)
+            if (pictureBox1.Image != null)
             {
                 pictureBox1.Focus(); //鼠标在picturebox上时才有焦点，此时可以缩放
                 if (_isMove)
@@ -235,7 +199,7 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="e"></param>
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            if (_curImg != null)
+            if (pictureBox1.Image != null)
             {
                 if (e.Button == MouseButtons.Left)
                 {
@@ -250,7 +214,7 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="e"></param>
         private void YTPictrueBox_MouseDown(object sender, MouseEventArgs e)
         {
-            if (_curImg != null)
+            if (pictureBox1.Image != null)
             {
                 if (e.Button == MouseButtons.Left)
                 {
@@ -263,7 +227,7 @@ namespace YTVisionPro.Forms.ImageViewer
 
         private void YTPictrueBox_MouseUp(object sender, MouseEventArgs e)
         {
-            if (_curImg != null)
+            if (pictureBox1.Image != null)
             {
                 if (e.Button == MouseButtons.Left)
                 {
@@ -274,7 +238,7 @@ namespace YTVisionPro.Forms.ImageViewer
 
         private void YTPictrueBox_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_curImg != null)
+            if (pictureBox1.Image != null)
             {
                 this.Focus(); //鼠标不在picturebox上时焦点给别的控件，此时无法缩放
                 if (_isMove)
@@ -292,36 +256,53 @@ namespace YTVisionPro.Forms.ImageViewer
             }
         }
 
-        private void 还原ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 保存图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_curImg != null)
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    if(pictureBox1.Image != null)
+                    {
+                        pictureBox1.Image.Save(saveFileDialog1.FileName);
+                        YTMessageBox.YTMessageBox yTMessageBox = new YTMessageBox.YTMessageBox("图像保存成功！");
+                        yTMessageBox.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("图像为空！");
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("图像保存失败！");
+                    return;
+                }
+            }
+        }
+
+        private void 默认大小ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Dock = DockStyle.Fill;
+        }
+
+        private void 上次大小ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (pictureBox1.Image != null)
             {
                 pictureBox1.Location = _srcResizeLoc;
                 pictureBox1.Size = _srcResizeSize;
             }
         }
 
-        private void 保存渲染图ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void 清空图像ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            if(pictureBox1.Image != null)
             {
-                try
-                {
-                    pictureBox1.Image.Save(saveFileDialog1.FileName);
-                    YTMessageBox.YTMessageBox yTMessageBox = new YTMessageBox.YTMessageBox("保存图像成功！");
-                    yTMessageBox.Show();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("保存图像失败！");
-                }
+                pictureBox1.Image.Dispose();
+                pictureBox1.Image = null;
             }
         }
-    }
-
-    public enum DisplayImageType
-    {
-        SRCIMG,
-        RENDERIMG
     }
 }

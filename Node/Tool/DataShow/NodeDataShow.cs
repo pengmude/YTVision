@@ -1,6 +1,7 @@
 ﻿using Logger;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -52,8 +53,8 @@ namespace YTVisionPro.Node.Tool.DataShow
                     AiResult aiResult = form.GetAiResult();
                     DataShow?.Invoke(this,new DatashowData(ID.ToString()+NodeName, aiResult));
 
-                    SetRunResult(startTime, NodeStatus.Successful);
-                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                    long time = SetRunResult(startTime, NodeStatus.Successful);
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                 }
                 catch (OperationCanceledException)
                 {

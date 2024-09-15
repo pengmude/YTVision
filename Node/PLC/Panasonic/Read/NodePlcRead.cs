@@ -1,6 +1,8 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
+using System.Data;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Hardware.PLC;
@@ -43,13 +45,19 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    res.CodeText = param.Plc.ReadPLCData(param.Address, DataType.STRING, param.Length);
-                    if (res.CodeText.ToString().IsNullOrEmpty())
-                        throw new Exception("读码为空！");
-
+                    object data = null;
+                    await Task.Run(() =>
+                    {
+                        do
+                        {
+                            data = param.Plc.ReadPLCData(param.Address, param.DataType, param.Length);
+                        } while (data == null || data.ToString().IsNullOrEmpty());
+                    });
+                    
+                    res.ReadData = data;
                     Result = res;
-                    SetRunResult(startTime, NodeStatus.Successful);
-                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！", true);
+                    long time = SetRunResult(startTime, NodeStatus.Successful);
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
 
                 }
                 catch (OperationCanceledException)
