@@ -117,10 +117,6 @@ namespace YTVisionPro.Node
         /// </summary>
         AIHT,
         /// <summary>
-        /// 图像显示节点
-        /// </summary>
-        ImageShow,
-        /// <summary>
         /// 存图节点
         /// </summary>
         ImageSave,
@@ -131,6 +127,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 检测结果显示
         /// </summary>
-        DetectResultShow
+        DetectResultShow,
+        /// <summary>
+        /// 结果总判断
+        /// </summary>
+        Summarize
     }
 }

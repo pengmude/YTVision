@@ -63,7 +63,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <param name="e"></param>
         private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
-            if (e is NodeHTAI)
+            if (e.ParamForm.Equals(this))
                 ReleaseAIHandle();
         }
 
@@ -138,11 +138,8 @@ namespace YTVisionPro.Node.AI.HTAI
                 LogHelper.AddLog(MsgLevel.Warn, "未选择tree文件！", true);
                 return;
             }
-            if (TreePredictHandle != IntPtr.Zero)
-            {
-                HTAPI.ReleaseTree(TreePredictHandle);
-                TreePredictHandle = IntPtr.Zero;
-            }
+            
+            //ReleaseAIHandle();
 
             // 项目模型配置文件
             string config = this.tbTreeFlie.Text;

@@ -259,9 +259,6 @@ namespace YTVisionPro
                 case "PLC管理":
                     PLC管理ToolStripMenuItem_Click(null, null);
                     break;
-                case "信号监听":
-                    信号监听ToolStripMenuItem_Click(null, null);
-                    break;
                 case "用户登录":
                     用户登录ToolStripMenuItem_Click(null, null);
                     break;
@@ -284,32 +281,51 @@ namespace YTVisionPro
 
         private async void 停止运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            //if (MessageBox.Show("确定停止当前方案运行？", "确认", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-            //    return;
-
             Solution.Instance.Stop();
-            SetSolRunStatus(false);
+            SetRunStatus(false);
         }
 
         private async void 循环运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            SetSolRunStatus(true);
+            SetRunStatus(true);
             await Solution.Instance.Run(true);
-            SetSolRunStatus(false);
+            SetRunStatus(false);
         }
 
         private async void 单次运行ToolStripMenuItem_Click(object value1, object value2)
         {
-            SetSolRunStatus(true);
+            SetRunStatus(true);
             await Solution.Instance.Run(false);
-            SetSolRunStatus(false);
+            SetRunStatus(false);
         }
 
-        private void SetSolRunStatus(bool isRunning)
+        /// <summary>
+        /// 设置运行状态，启用/禁用控件
+        /// </summary>
+        /// <param name="isRunning"></param>
+        private void SetRunStatus(bool isRunning)
         {
+            // 运行和停止按钮
             tsbt_SolRunOnce.Enabled = !isRunning;
             tsbt_SolRunLoop.Enabled = !isRunning;
             tsbt_SolRunStop.Enabled = isRunning;
+
+            // 其他设置禁用/启用
+            tsbt_SolSettings.Enabled = !isRunning;
+            tsbt_SolNew.Enabled = !isRunning;
+            tsbt_SolOpen.Enabled = !isRunning;
+            tsbt_SolSave.Enabled = !isRunning;
+            tsbt_ProcessManager.Enabled = !isRunning;
+            tsbt_LightManager.Enabled = !isRunning;
+            tsbt_CameraManager.Enabled = !isRunning;
+            tsbt_PlcManager.Enabled = !isRunning;
+            tsbt_UserLogin.Enabled = !isRunning;
+
+            // 文件
+            文件ToolStripMenuItem.Enabled = !isRunning;
+            视图ToolStripMenuItem.Enabled = !isRunning;
+            设置ToolStripMenuItem.Enabled = !isRunning;
+            帮助ToolStripMenuItem.Enabled = !isRunning;
         }
 
         private void 用户登录ToolStripMenuItem_Click(object value1, object value2)
@@ -321,12 +337,6 @@ namespace YTVisionPro
         {
             FrmPLCAdd.ShowDialog();
         }
-
-        private void 信号监听ToolStripMenuItem_Click(object value1, object value2)
-        {
-            //FrmSignalMonitor.ShowDialog();
-        }
-
         private void 相机管理ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmCameraAdd.ShowDialog();

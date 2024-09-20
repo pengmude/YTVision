@@ -36,7 +36,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <param name="e"></param>
         private void NodeHTAI_NodeDeletedEvent(object sender, NodeBase e)
         {
-            if (e is NodeHTAI && PredictResult != null && PredictResult.Length != 0)
+            if (e.Equals(this) && PredictResult != null && PredictResult.Length != 0)
                 ReleaseAIResult();
         }
 

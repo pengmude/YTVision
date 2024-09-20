@@ -417,6 +417,17 @@
     <Compile Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.Designer.cs">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\PLC\Panasonic\Wirte\NodeParamPlcWrite.cs" />
+    <Compile Include="Node\PLC\Panasonic\Wirte\NodePlcWrite.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Wirte\NodeResultPlcWrite.cs" />
+    <Compile Include="Node\PLC\Panasonic\Wirte\ParamFormPlcWrite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\PLC\Panasonic\Wirte\ParamFormPlcWrite.Designer.cs">
+      <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\Tool\DataShow\NodeDataShow.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -449,6 +460,17 @@
     </Compile>
     <Compile Include="Node\Tool\ImageSave\ParamFormSaveImage.Designer.cs">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\Tool\ResultSummarize\NodeParamSummarize.cs" />
+    <Compile Include="Node\Tool\ResultSummarize\NodeResultSummarize.cs" />
+    <Compile Include="Node\Tool\ResultSummarize\NodeSummarize.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ResultSummarize\ParamFormSummarize.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\Tool\ResultSummarize\ParamFormSummarize.Designer.cs">
+      <DependentUpon>ParamFormSummarize.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\Tool\SleepTool\NodeParamFormSleepTool.cs">
       <SubType>Form</SubType>
@@ -598,6 +620,9 @@
     <EmbeddedResource Include="Node\PLC\Panasonic\Read\ParamFormPlcRead.resx">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\PLC\Panasonic\Wirte\ParamFormPlcWrite.resx">
+      <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\DataShow\NodeParamFormDataShow.resx">
       <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
     </EmbeddedResource>
@@ -606,6 +631,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\ImageSave\ParamFormSaveImage.resx">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\Tool\ResultSummarize\ParamFormSummarize.resx">
+      <DependentUpon>ParamFormSummarize.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\Tool\SleepTool\NodeParamFormSleepTool.resx">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>

@@ -57,7 +57,6 @@
             this.tsbt_LightManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_CameraManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_PlcManager = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tsbt_UserLogin = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunOnce = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunLoop = new System.Windows.Forms.ToolStripButton();
@@ -245,7 +244,6 @@
             this.tsbt_LightManager,
             this.tsbt_CameraManager,
             this.tsbt_PlcManager,
-            this.toolStripButton1,
             this.tsbt_UserLogin,
             this.tsbt_SolRunOnce,
             this.tsbt_SolRunLoop,
@@ -343,17 +341,6 @@
             this.tsbt_PlcManager.Text = "PLC管理";
             this.tsbt_PlcManager.ToolTipText = "PLC管理";
             this.tsbt_PlcManager.Click += new System.EventHandler(this.ToolStripButton_Click);
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::YTVisionPro.Properties.Resources.监听;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButton1.Text = "信号监听";
-            this.toolStripButton1.ToolTipText = "PLC信号监听";
-            this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_UserLogin
             // 
@@ -492,7 +479,6 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripButton tsbt_LightManager;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton tsbt_SolRunLoop;
     }
 }

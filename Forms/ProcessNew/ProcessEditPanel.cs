@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
@@ -10,8 +11,10 @@ using YTVisionPro.Node.ImageRead;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 using YTVisionPro.Node.PLC.Panasonic.Read;
+using YTVisionPro.Node.PLC.Panasonic.Wirte;
 using YTVisionPro.Node.Tool.DataShow;
 using YTVisionPro.Node.Tool.ImageSave;
+using YTVisionPro.Node.Tool.ResultSummarize;
 using YTVisionPro.Node.Tool.SleepTool;
 using static YTVisionPro.Node.NodeComboBox;
 
@@ -88,6 +91,7 @@ namespace YTVisionPro.Forms.ProcessNew
                         node = new NodePlcRead(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.PLCWrite:
+                        node = new NodePlcWrite(data.Text, _process, data.NodeType);
                         break;
                     case NodeType.PLCHTAIResultSend:
                         node = new NodeHTAISendSignal(data.Text, _process, data.NodeType);
@@ -107,9 +111,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     case NodeType.DetectResultShow:
                         node = new NodeDataShow(data.Text, _process, data.NodeType);
                         break;
-                    //case NodeType.ImageShow:
-                    //    node = new NodeImageShow(data.Text, _process, data.NodeType);
-                    //    break;
+                    case NodeType.Summarize:
+                        node = new NodeSummarize(data.Text, _process, data.NodeType);
+                        break;
                     default:
                         break;
                 }
@@ -184,6 +188,8 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 buttonRun.Enabled = false;
                 uiSwitchEnable.Enabled = false;
+                if (Solution.Instance.CancellationToken.IsCancellationRequested)
+                    Solution.Instance.ResetTokenSource();
                 await _process.Run(false, Solution.Instance.CancellationToken);
 
                 SetProcessRunStatus(_process.RunTime, true);

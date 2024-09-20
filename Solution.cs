@@ -155,6 +155,7 @@ namespace YTVisionPro
 
         #endregion
 
+        #region 流程相关操作
 
         /// <summary>
         /// 添加流程
@@ -213,6 +214,11 @@ namespace YTVisionPro
             }
             return result;
         }
+
+        #endregion
+
+        #region 方案相关操作
+
         /// <summary>
         /// 方案运行
         /// </summary>
@@ -246,7 +252,6 @@ namespace YTVisionPro
         public void Stop()
         {
             _cancellationTokenSource.Cancel();
-            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         /// <summary>
@@ -266,6 +271,21 @@ namespace YTVisionPro
         {
 
         }
+
+        #endregion
+
+        #region 控制停止运行的取消令牌
+
+        /// <summary>
+        /// 重置令牌源
+        /// </summary>
+        public void ResetTokenSource()
+        {
+            if(_cancellationTokenSource.IsCancellationRequested)
+                _cancellationTokenSource = new CancellationTokenSource();
+        }
+
+        #endregion
 
         #endregion
     }

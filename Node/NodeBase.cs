@@ -111,6 +111,11 @@ namespace YTVisionPro.Node
         public static event EventHandler<NodeBase> NodeDeletedEvent;
 
         /// <summary>
+        /// 禁用节点事件
+        /// </summary>
+        public static event EventHandler<bool> NodeDisableEvent;
+
+        /// <summary>
         /// 设置节点状态,主要颜色，中心颜色，是否闪烁
         /// </summary>
         /// <param name="color"></param>
@@ -229,6 +234,7 @@ namespace YTVisionPro.Node
         private void 禁用ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetActive(false);
+            NodeDisableEvent?.Invoke(this, false);
         }
 
         /// <summary>
