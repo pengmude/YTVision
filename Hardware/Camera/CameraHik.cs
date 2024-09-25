@@ -1,5 +1,4 @@
-﻿//using MvCamCtrl.NET;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
@@ -9,6 +8,9 @@ using MvCameraControl;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using JsonSubTypes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace YTVisionPro.Hardware.Camera
 {
@@ -31,78 +33,108 @@ namespace YTVisionPro.Hardware.Camera
         private MvCameraControl.IDevice device = null;
 
         /// <summary>
+        /// 是否正在取流
+        /// </summary>
+        private bool _isGrabbing = false;
+
+        /// <summary>
         /// 设备是否启用
         /// </summary>
-        public bool IsOpen => device.IsConnected;
+        public bool IsOpen { get; set; }
 
         /// <summary>
         /// 设备类型
         /// </summary>
-        public DevType DevType { get; } = DevType.CAMERA;
+        public DevType DevType { get; set; } = DevType.CAMERA;
 
         /// <summary>
-        /// 相机ID
+        /// 相机SN
         /// </summary>
-        public int ID { get; set; }
+        public string SN { get; set; }
 
         /// <summary>
         /// 相机品牌
         /// </summary>
-        public CameraBrand Brand { get; set; } = CameraBrand.HiKVision;
-
-        /// <summary>
-        /// 设备信息
-        /// </summary>
-        public IDeviceInfo DevInfo { get; set; }
+        public DeviceBrand Brand { get; set; } = DeviceBrand.HikVision;
 
         /// <summary>
         /// 设备名称
         /// </summary>
-        public string DevName => GetDevName(DevInfo);
-
-        private bool _isGrabbing = false;
-
-        /// <summary>
-        /// 根据设备信息获取设备名称
-        /// </summary>
-        /// <param name="cameraDevInfo"></param>
-        /// <returns></returns>
-        public static string GetDevName(IDeviceInfo cameraDevInfo)
-        {
-            string name = "";
-            if (cameraDevInfo.UserDefinedName != "")
-            {
-                name = (cameraDevInfo.UserDefinedName + "(" + cameraDevInfo.SerialNumber + ")");
-            }
-            else
-            {
-                name = (cameraDevInfo.ManufacturerName + cameraDevInfo.ModelName + " (" + cameraDevInfo.SerialNumber + ")");
-            }
-            return name;
-        }
+        public string DevName {  get; set; }
 
         /// <summary>
         /// 用户定义名称
         /// </summary>
         public string UserDefinedName { get; set; }
 
+
+        #region 反序列化相关函数
+
+        [JsonConstructor]
+        /// <summary>
+        /// 无参构造提供给反序列化使用
+        /// 反序列化相机对象步骤：
+        /// 1.使用无参构造函数创建对象
+        /// 2.通过反序列化得到的SN对比找到对应IDevice类相机对象
+        /// 3.调用打开相机
+        /// </summary>
+        public CameraHik() { }
+
+        /// <summary>
+        /// 创建相机设备
+        /// </summary>
+        /// <param name="devIP"></param>
+        /// <returns></returns>
+        public void CreateDevice()
+        {
+            try
+            {
+                /*只枚举网口类型的相机*/
+                List<IDeviceInfo> devInfoList = null;
+                int ret = DeviceEnumerator.EnumDevicesEx(DeviceTLayerType.MvGigEDevice, "Hikrobot", out devInfoList);
+                if (ret == MvError.MV_OK)
+                {
+                    foreach (IGigEDeviceInfo devInfo in devInfoList)
+                    {
+                        if (devInfo.SerialNumber == SN)
+                        {
+                            device = DeviceFactory.CreateDevice(devInfo);
+                            return;
+                        }
+                    }
+                }
+                throw new Exception("创建相机失败！");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        #endregion
+
         /// <summary>
         /// 使用相机信息构造相机对象
         /// </summary>
         /// <param name="DeviceInfo"></param>
-        public CameraHik(IDeviceInfo devInfo, string userName)
+        internal CameraHik(IDeviceInfo devInfo, string userName)
         {
             try
             {
                 device = DeviceFactory.CreateDevice(devInfo);
-                DevInfo = devInfo;
+                DevName = GetDevNameByDevInfo(device.DeviceInfo);
                 UserDefinedName = userName;
+                if (devInfo is IGigEDeviceInfo info)
+                {
+                    SN = info.SerialNumber;
+                }
+                else
+                    throw new Exception("暂时不支持非网口连接的相机！");
             }
             catch (Exception ex)
             {
-                Dispose();
-                LogHelper.AddLog(MsgLevel.Fatal, ex.Message, true);
-                return;
+                throw ex;
             }
         }
 
@@ -120,6 +152,25 @@ namespace YTVisionPro.Hardware.Camera
         public static void Finalize()
         {
             SDKSystem.Finalize();
+        }
+
+        /// <summary>
+        /// 根据设备信息获取设备名称
+        /// </summary>
+        /// <param name="cameraDevInfo"></param>
+        /// <returns></returns>
+        public static string GetDevNameByDevInfo(IDeviceInfo cameraDevInfo)
+        {
+            string name = "";
+            if (cameraDevInfo.UserDefinedName != "")
+            {
+                name = (cameraDevInfo.UserDefinedName + "(" + cameraDevInfo.SerialNumber + ")");
+            }
+            else
+            {
+                name = (cameraDevInfo.ManufacturerName + cameraDevInfo.ModelName + " (" + cameraDevInfo.SerialNumber + ")");
+            }
+            return name;
         }
 
         /// <summary>
@@ -155,7 +206,7 @@ namespace YTVisionPro.Hardware.Camera
                 MessageBox.Show("打开相机失败！");
                 return false;
             }
-
+            IsOpen = true;
             //ch: 判断是否为gige设备 | en: Determine whether it is a GigE device
             if (device is IGigEDevice)
             {
@@ -180,6 +231,10 @@ namespace YTVisionPro.Hardware.Camera
                         return false;
                     }
                 }
+            }
+            else
+            {
+                throw new Exception("暂不支持非GigE相机！");
             }
             // 连续模式
             device.Parameters.SetEnumValueByString("AcquisitionMode", "Continuous");
@@ -405,6 +460,7 @@ namespace YTVisionPro.Hardware.Camera
             //先停止取流
             StopGrabbing();
             device.Close();
+            IsOpen = false;
         }
 
         /// <summary>
@@ -412,8 +468,11 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void Dispose()
         {
-            if (device.IsConnected) { device.Close(); }
-            device?.Dispose();
+            if(device != null)
+            {
+                if (device.IsConnected) { device.Close(); }
+                device?.Dispose();
+            }
         }
 
         /// <summary>

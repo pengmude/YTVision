@@ -19,23 +19,10 @@ namespace YTVisionPro
     /// </summary>
     internal class Process
     {
-        private List<IPlc> _plcList;
-        private List<ICamera> _cameraList;
-        private List<ILight> _light;
+        /// <summary>
+        /// 流程包含的节点
+        /// </summary>
         private List<NodeBase> _nodes = new List<NodeBase>();
-
-        private static int _countInstance = 0;
-
-        /// <summary>
-        /// 类实例id
-        /// </summary>
-        private int _id = 0;
-
-        /// <summary>
-        /// 流程ID
-        /// </summary>
-        public int ID { get { return _id; } }
-
         /// <summary>
         /// 流程名称
         /// </summary>
@@ -72,7 +59,6 @@ namespace YTVisionPro
         public Process(string processName)
         {
             ProcessName = processName;
-            _id = _countInstance++;
         }
 
         public void AddNode(NodeBase node)
@@ -126,7 +112,12 @@ namespace YTVisionPro
                     LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
 
                 }
-            } while (isCyclical);
+                // 引入一个异步等待点，避免立即进入下一次循环
+                if (isCyclical)
+                {
+                    await Task.Delay(1, token); // 异步等待 1 毫秒
+                }
+            } while (isCyclical && !token.IsCancellationRequested);
         }
     }
 }

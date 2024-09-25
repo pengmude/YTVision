@@ -143,5 +143,14 @@ namespace YTVisionPro.Node
         {
             return comboBox2.Text;
         }
+        public void SetText1(string text1)
+        {
+            comboBox1.Text = text1;
+        }
+
+        public void SetText2(string text2)
+        {
+            comboBox2.Text = text2;
+        }
     }
 }

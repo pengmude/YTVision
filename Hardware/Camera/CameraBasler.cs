@@ -3,23 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Basler.Pylon;
-using Logger;
-using Sunny.UI.Win32;
-using Newtonsoft.Json.Linq;
-using MvCameraControl;
+using JsonSubTypes;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace YTVisionPro.Hardware.Camera
 {
     internal class CameraBasler : ICamera
     {
-        private int _devId;
-
         /// <summary>
         /// 单个Basler相机对象
         /// </summary>
@@ -33,46 +27,67 @@ namespace YTVisionPro.Hardware.Camera
         /// <summary>
         /// 相机是否打开
         /// </summary>
-        public bool IsOpen => _camera.IsOpen;
+        public bool IsOpen { get; set; }
 
         /// <summary>
         /// 品牌名称
         /// </summary>
-        public CameraBrand Brand { get; set; } = CameraBrand.Basler;
+        public DeviceBrand Brand { get; set; } = DeviceBrand.Basler;
 
         /// <summary>
         /// 设备类型
         /// </summary>
-        public DevType DevType { get; } = DevType.CAMERA;
+        public DevType DevType { get; set; } = DevType.CAMERA;
 
         /// <summary>
-        /// 设备ID
+        /// 设备SN
         /// </summary>
-        public int ID { get => _devId; }
-
-        /// <summary>
-        /// 设备信息
-        /// </summary>
-        public ICameraInfo DevInfo { get; set; }
+        public string SN { get; set; }
 
         /// <summary>
         /// 设备名称
         /// </summary>
-        public string DevName => DevInfo[CameraInfoKey.ModelName];
+        public string DevName { get; set; }
 
         /// <summary>
         /// 用户定义名称
         /// </summary>
         public string UserDefinedName { get; set; }
 
+
+        #region 反序列化专用函数
+
+        /// <summary>
+        /// 指定反序列化使用的构造函数
+        /// </summary>
+        [JsonConstructor]
+        public CameraBasler() { }
+
+        /// <summary>
+        /// 先调用构造函数再调用创建设备函数
+        /// </summary>
+        public void CreateDevice()
+        {
+            foreach (var cameraInfo in CameraFinder.Enumerate())
+            {
+                if(cameraInfo[CameraInfoKey.SerialNumber] == SN)
+                {
+                    _camera = new Basler.Pylon.Camera(cameraInfo);
+                    return;
+                }
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// 重载构造函数
         /// </summary>
         public CameraBasler(ICameraInfo info, string userName)
         {
-            DevInfo = info;
             _camera = new Basler.Pylon.Camera(info);
-            _devId = ++Solution.DeviceCount;
+            SN = info[CameraInfoKey.SerialNumber];
+            DevName = info[CameraInfoKey.ModelName];
             UserDefinedName = userName;
         }
 
@@ -105,6 +120,7 @@ namespace YTVisionPro.Hardware.Camera
                 MessageBox.Show(ex.Message);
                 return false;
             }
+            IsOpen = true;
             return true;
         }
 
@@ -350,6 +366,7 @@ namespace YTVisionPro.Hardware.Camera
         {
             _camera.StreamGrabber.Stop();
             _camera.Close();
+            IsOpen = false;
         }
 
         /// <summary>

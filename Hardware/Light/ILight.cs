@@ -1,19 +1,38 @@
-﻿using System;
+﻿using JsonSubTypes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.IO.Ports;
 using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Hardware.Light
 {
     internal interface ILight : IDevice
     {
+        /// <summary>
+        /// 光源是否打开
+        /// </summary>
+        bool IsOpen { get; set; }
         LightParam LightParam { get; set; }
-
-        LightBrand Brand { get; }
-
+        /// <summary>
+        /// 光源品牌
+        /// </summary>
+        DeviceBrand Brand { get; }
+        /// <summary>
+        /// 设备类型
+        /// </summary>
+        DevType DevType { get; set; }
         /// <summary>
         /// 光源亮度值
         /// </summary>
         int Brightness { get; set; }
+        /// <summary>
+        /// 创建设备，反序列化用
+        /// </summary>
+        void CreateDevice();
 
         /// <summary>
         /// 通过串口去连接光源
@@ -36,22 +55,6 @@ namespace YTVisionPro.Hardware.Light
         void TurnOff();
     }
 
-    public enum LightBrand
-    {
-        /// <summary>
-        /// 磐鑫
-        /// </summary>
-        PPX,
-        /// <summary>
-        /// 锐视
-        /// </summary>
-        RSEE,
-        /// <summary>
-        /// 未知品牌
-        /// </summary>
-        UNKNOW
-    }
-
     public struct LightParam
     {
         /// <summary>
@@ -72,11 +75,13 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 停止位
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public StopBits StopBits { get; set; }
 
         /// <summary>
         /// 校验位
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Parity Parity { get; set; }
 
         /// <summary>
@@ -89,14 +94,17 @@ namespace YTVisionPro.Hardware.Light
         /// </summary>
         public string LightName { get; set; }
 
+
         /// <summary>
-        /// 光源品牌
+        /// 设备品牌
         /// </summary>
-        public LightBrand Brand { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DeviceBrand Brand { get; set; }
 
         /// <summary>
         /// 锐视光源型号
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public RseeDeviceType RseeDeviceType { get; set; }
 
         /// <summary>

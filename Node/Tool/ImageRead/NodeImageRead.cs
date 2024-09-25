@@ -20,7 +20,7 @@ namespace YTVisionPro.Node.ImageRead
         public static event EventHandler<Paramsa> ImageShowChanged;
         // 读写锁保护相同图像文件的多线程访问安全
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        public NodeImageRead(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
+        public NodeImageRead(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormImageRead();
             Result = new NodeResultImageRead();

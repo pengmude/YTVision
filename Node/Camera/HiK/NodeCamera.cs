@@ -1,15 +1,10 @@
 ﻿using Logger;
-using Sunny.UI;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Forms.测试窗口;
 using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Tool.SleepTool;
 
 namespace YTVisionPro.Node.Camera.HiK
 {
@@ -25,7 +20,7 @@ namespace YTVisionPro.Node.Camera.HiK
         /// </summary>
         public static event EventHandler<Paramsa> ImageShowChanged;
 
-        public NodeCamera(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeCamera(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormCamera();
             ParamForm.SetNodeBelong(this);

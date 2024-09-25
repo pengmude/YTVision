@@ -1,9 +1,12 @@
-﻿using Logger;
+﻿using JsonSubTypes;
+using Logger;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System;
 using System.IO.Ports;
-//using System.Threading;
 using System.Timers;
 using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Hardware.Camera;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -20,19 +23,9 @@ namespace YTVisionPro.Hardware.Light
         public LightParam LightParam { get; set; }
 
         /// <summary>
-        /// 设备id
-        /// </summary>
-        private int _devId;
-
-        /// <summary>
-        /// 设备ID
-        /// </summary>
-        public int ID { get =>_devId;}
-
-        /// <summary>
         /// 硬件硬件名称
         /// </summary>
-        public string DevName { get; }
+        public string DevName { get; set; }
 
         /// <summary>
         /// 用户自定义设备名
@@ -42,22 +35,22 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 设备类型
         /// </summary>
-        public DevType DevType { get; } = DevType.LIGHT;
+        public DevType DevType { get; set; } = DevType.LIGHT;
 
         /// <summary>
         /// 光源品牌-磐鑫
         /// </summary>
-        public LightBrand Brand { get; } = LightBrand.PPX;
+        public DeviceBrand Brand { get; set; } = DeviceBrand.PPX;
 
         /// <summary>
         /// 光源是否打开
         /// </summary>
-        public bool IsOpen { get; private set; }
+        public bool IsOpen { get; set; }
 
         /// <summary>
         /// 光源串口是否打开
         /// </summary>
-        public bool IsComOpen { get; private set; }
+        public bool IsComOpen { get; set; }
 
         /// <summary>
         /// 光源亮度值
@@ -71,12 +64,46 @@ namespace YTVisionPro.Hardware.Light
 
         private Timer _timer;
 
+
+        #region 反序列化专用函数
+
+        /// <summary>
+        /// 指定反序列化的构造函数
+        /// </summary>
+        [JsonConstructor]
+        public LightPPX() { }
+
+        public void CreateDevice()
+        {
+            try
+            {
+                foreach (var serialPort in FrmLightListView.OccupiedComList)
+                {
+                    if (serialPort.PortName == LightParam.Port)
+                    {
+                        _serialPort = serialPort;
+                        break;
+                    }
+                }
+                if (_serialPort == null)
+                {
+                    _serialPort = new SerialPort();
+                    FrmLightListView.OccupiedComList.Add(_serialPort);
+                }
+                Connenct();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        #endregion
+
+
         public LightPPX(LightParam lightParam)
         {
-            _devId = ++Solution.DeviceCount;
-            DevName = lightParam.LightName;
-            UserDefinedName = DevName;
-            LightParam = lightParam;
             try
             {
                 foreach (var serialPort in FrmLightListView.OccupiedComList)
@@ -92,6 +119,9 @@ namespace YTVisionPro.Hardware.Light
                     _serialPort = new SerialPort();
                     FrmLightListView.OccupiedComList.Add(_serialPort);
                 }
+                DevName = lightParam.LightName;
+                UserDefinedName = DevName;
+                LightParam = lightParam;
                 Connenct();
             }
             catch (Exception ex)

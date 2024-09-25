@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using YTVisionPro.Forms.ResultView;
@@ -7,9 +9,12 @@ namespace YTVisionPro.Node.AI.HTAI
 {
     internal class NodeResultHTAI : INodeResult
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
-        NodeRunStatusCode INodeResult.RunStatusCode { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public NodeRunStatusCode RunStatusCode { get; set; }
         /// <summary>
         /// AI检测结果数据
         /// </summary>

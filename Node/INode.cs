@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.IO.Ports;
 
 namespace YTVisionPro.Node
 {
@@ -20,6 +17,10 @@ namespace YTVisionPro.Node
         /// </summary>
         /// <param name="node"></param>
         void SetNodeBelong(NodeBase node);
+        /// <summary>
+        /// 将反序列化的参数设置到界面
+        /// </summary>
+        void SetParam2Form();
     }
 
     /// <summary>

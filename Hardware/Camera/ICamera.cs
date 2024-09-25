@@ -1,6 +1,9 @@
 ﻿using Basler.Pylon;
+using JsonSubTypes;
 using MvCamCtrl.NET;
 using MvCameraControl;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +12,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using YTVisionPro.Hardware.Light;
+using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Hardware.Camera
 {
@@ -22,15 +27,25 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         event EventHandler<Bitmap> PublishImageEvent;
         /// <summary>
-        /// 设备类型
-        /// </summary>
-        DevType DevType { get; }
-
-        /// <summary>
         /// 相机是否连接
         /// </summary>
-        bool IsOpen { get; }
-
+        bool IsOpen { get; set; }
+        /// <summary>
+        /// 设备序列号
+        /// </summary>
+        string SN { get; }
+        /// <summary>
+        /// 相机品牌
+        /// </summary>
+        DeviceBrand Brand { get; set; }
+        /// <summary>
+        /// 设备类型
+        /// </summary>
+        DevType DevType { get; set; }
+        /// <summary>
+        /// 创建设备，反序列化用
+        /// </summary>
+        void CreateDevice();
         /// <summary>
         /// 开启相机
         /// </summary>
@@ -143,7 +158,6 @@ namespace YTVisionPro.Hardware.Camera
             Basler = baslerInfo;
         }
     }
-
 
     /// <summary>
     /// 触发方式

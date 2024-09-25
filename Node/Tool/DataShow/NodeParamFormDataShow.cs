@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Node.AI.HTAI;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.PLC.Panasonic.Wirte;
 
 namespace YTVisionPro.Node.Tool.DataShow
 {
@@ -38,6 +40,17 @@ namespace YTVisionPro.Node.Tool.DataShow
         {
             Params = new NodeParamDataShow();
             Hide();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamDataShow param)
+            {
+
+            }
         }
     }
 }

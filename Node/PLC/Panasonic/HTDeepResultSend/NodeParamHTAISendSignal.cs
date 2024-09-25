@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using JsonSubTypes;
+using System.Collections.Generic;
+using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
 {
-    public class NodeParamHTAISendSignal : INodeParam
+    internal class NodeParamHTAISendSignal : INodeParam
     {
         public List<SignalRowData> Data;
     }

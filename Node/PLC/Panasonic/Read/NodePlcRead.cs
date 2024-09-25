@@ -11,7 +11,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
     internal class NodePlcRead : NodeBase
     {
-        public NodePlcRead(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodePlcRead(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormPlcRead();
             Result = new NodeResultPlcRead();

@@ -12,9 +12,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Node.Tool.SleepTool
 {
-    internal class SleepTool : NodeBase
+    internal class NodeSleepTool : NodeBase
     {
-        public SleepTool(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeSleepTool(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new NodeParamFormSleepTool();
             ParamForm.SetNodeBelong(this);

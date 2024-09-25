@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Tool.ImageSave;
 
 namespace YTVisionPro.Node.Tool.ResultSummarize
 {
@@ -71,6 +73,17 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
             nodeParamSummarize.DetectResult = GetDetectResult();
             Params = nodeParamSummarize;
             Hide();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamSummarize param)
+            {
+
+            }
         }
     }
 }

@@ -83,7 +83,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 {
                     Camera = new CameraBasler(parms.DevInfo.Basler, parms.UserDefineName);
                 }
-                Solution.Instance.AddDevice(Camera);
+                Solution.Instance.AllDevices.Add(Camera);
 
                 //绑定图像显示控件界面
                 CameraParamsShowControl = new CameraParamsShowControl(Camera);
@@ -186,7 +186,7 @@ namespace YTVisionPro.Forms.CameraAdd
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // 移除设备需要判断当前是否有节点使用该设备
-            foreach (var node in Solution.Nodes)
+            foreach (var node in Solution.Instance.Nodes)
             {
                 if (node is NodeCamera cameraNode
                     && cameraNode.ParamForm.Params is NodeParamCamera paramCamera

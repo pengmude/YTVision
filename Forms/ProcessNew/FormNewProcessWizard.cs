@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using YTVisionPro.Node;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -10,6 +11,50 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             InitializeComponent();
             InitNodeComboBox();
+            ConfigHelper.DeserializationCompletionEvent += Deserialization;
+        }
+        /// <summary>
+        /// 反序列化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Deserialization(object sender, EventArgs e)
+        {
+            // 遍历所有流程节点，释放特定节点的内存资源
+            foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)
+            {
+                foreach (var nodeInfo in processInfo.NodeInfos)
+                {
+                    if(nodeInfo.NodeType == NodeType.AIHT && nodeInfo.NodeParam is NodeParamHTAI paramAI)
+                    {
+                        paramAI.Dispose(true);
+                    }
+                }
+            }
+
+            // 方案重置
+            tabControl1.Controls.Clear();
+            Solution.Instance.ProcessCount = 0;
+            Solution.Instance.AllProcesses.Clear();
+            Solution.Instance.NodeCount = 0;
+            Solution.Instance.Nodes.Clear();
+
+            // 根据加载的配置重新添加流程控件
+            foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)
+            {
+                Solution.Instance.ProcessCount++;
+                TabPage tabPage = new TabPage();
+                tabPage.Name = processInfo.ProcessName;
+                tabPage.Padding = new Padding(3);
+                tabPage.Size = new System.Drawing.Size(465, 643);
+                tabPage.Text = processInfo.ProcessName;
+                tabPage.UseVisualStyleBackColor = true;
+
+                ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text, processInfo);
+                nodeEditPanel.Dock = DockStyle.Fill;
+                tabPage.Controls.Add(nodeEditPanel);
+                tabControl1.Controls.Add(tabPage);
+            }
         }
 
         /// <summary>
@@ -45,12 +90,12 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
-            Solution.ProcessCount++;
+            Solution.Instance.ProcessCount++;
             TabPage tabPage = new TabPage();
-            tabPage.Name = $"process{Solution.ProcessCount}";
+            tabPage.Name = $"process{Solution.Instance.ProcessCount}";
             tabPage.Padding = new Padding(3);
             tabPage.Size = new System.Drawing.Size(465, 643);
-            tabPage.Text = $"流程{Solution.ProcessCount}";
+            tabPage.Text = $"流程{Solution.Instance.ProcessCount}";
             tabPage.UseVisualStyleBackColor = true;
 
             ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text);
@@ -110,7 +155,7 @@ namespace YTVisionPro.Forms.ProcessNew
                 //MessageBox.Show($"方案中流程名称：\n{res}");
 
                 //string res = "";
-                //foreach (var node in Solution.Nodes)
+                //foreach (var node in Solution.Instance.Nodes)
                 //{
                 //    res += node.ID + "\n";
                 //}

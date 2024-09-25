@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Node.Tool.ResultSummarize;
 
 namespace YTVisionPro.Node.Tool.SleepTool
 {
@@ -36,5 +37,14 @@ namespace YTVisionPro.Node.Tool.SleepTool
         }
 
         void INodeParamForm.SetNodeBelong(NodeBase node) { }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if(Params is NodeParamSleepTool param)
+                numericUpDown1.Value = param.Time;
+        }
     }
 }

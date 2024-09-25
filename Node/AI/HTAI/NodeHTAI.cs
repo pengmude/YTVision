@@ -21,7 +21,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// 图像发布事件
         /// </summary>
         public static event EventHandler<Paramsa> ImageShowChanged;
-        public NodeHTAI(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeHTAI(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormHTAI();
             ParamForm.SetNodeBelong(this);

@@ -3,6 +3,7 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.Camera.HiK;
 using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
@@ -88,6 +89,17 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
         private void ParamFormRead_Shown(object sender, EventArgs e)
         {
             InitPLCComboBox();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamWaitSoftTrigger param)
+            {
+
+            }
         }
     }
 }

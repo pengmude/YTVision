@@ -4,6 +4,7 @@ using System;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.Camera.HiK
 {
@@ -215,6 +216,17 @@ namespace YTVisionPro.Node.Camera.HiK
             label3.Text = "触发延迟(us)";
             label4.Text = "曝光(us)";
             label5.Text = "增益";
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamCamera param)
+            {
+
+            }
         }
     }
 }

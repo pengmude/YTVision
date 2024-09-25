@@ -11,7 +11,7 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
 {
     internal class NodeSummarize : NodeBase
     {
-        public NodeSummarize(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeSummarize(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormSummarize();
             ParamForm.SetNodeBelong(this);

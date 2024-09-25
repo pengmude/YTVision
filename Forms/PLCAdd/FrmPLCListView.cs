@@ -34,8 +34,8 @@ namespace YTVisionPro.Forms.PLCAdd
             //移除的是被选中的则要清除它参数显示控件
             if (e.IsSelected)
                 panel1.Controls.Remove(e.SerialParamsControl);
+            Solution.Instance.AllDevices.Remove(e.Plc);
             e.Plc.Disconnect();
-            Solution.Instance.Devices.Remove(e.Plc);
             flowLayoutPanel1.Controls.Remove(e);
         }
 

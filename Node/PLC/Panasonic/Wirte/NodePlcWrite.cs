@@ -12,7 +12,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Wirte
 {
     internal class NodePlcWrite : NodeBase
     {
-        public NodePlcWrite(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
+        public NodePlcWrite(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormPlcWrite();
             Result = new NodeResultPlcWrite();

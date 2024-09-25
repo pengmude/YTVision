@@ -14,7 +14,7 @@ namespace YTVisionPro.Node.Tool.DataShow
     {
         public static event EventHandler<DatashowData> DataShow;
 
-        public NodeDataShow(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeDataShow(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new NodeParamFormDataShow();
             ParamForm.SetNodeBelong(this);

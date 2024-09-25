@@ -1,37 +1,13 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.IO.Ports;
 using System.Runtime.InteropServices;
 using System.Timers;
 using YTVisionPro.Forms.LightAdd;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Linq;
 
 namespace YTVisionPro.Hardware.Light
 {
-    /// <summary>
-    /// 串口号对应的锐视句柄
-    /// </summary>
-    internal class ComHandle
-    {
-        public string ComPort;
-        public int Handle;
-        public ComHandle(string comPort, int handle)
-        {
-            ComPort = comPort;
-            Handle = handle;
-        }
-    }
-
-    /// <summary>
-    /// 锐视光源型号
-    /// </summary>
-    public enum RseeDeviceType
-    {
-        PM_D,
-        P_MDPS_24W75
-    }
-
     /// <summary>
     /// 锐视光源控制类
     /// </summary>
@@ -43,14 +19,14 @@ namespace YTVisionPro.Hardware.Light
         public LightParam LightParam { get; set; }
 
         /// <summary>
-        /// 设备id
-        /// </summary>
-        private int _devId;
-
-        /// <summary>
         /// 光源品牌-锐视
         /// </summary>
-        public LightBrand Brand { get; } = LightBrand.RSEE;
+        public DeviceBrand Brand { get; set; } = DeviceBrand.Rsee;
+
+        /// <summary>
+        /// 设备类型
+        /// </summary>
+        public DevType DevType { get; set; } = DevType.LIGHT;
 
         /// <summary>
         /// 光源亮度值
@@ -58,57 +34,52 @@ namespace YTVisionPro.Hardware.Light
         public int Brightness { get; set; }
 
         /// <summary>
-        /// 设备ID
-        /// </summary>
-        public int ID { get => _devId; }
-
-        /// <summary>
         /// 硬件硬件名称
         /// </summary>
-        public string DevName { get; }
+        public string DevName { get; set; }
 
         /// <summary>
         /// 用户自定义设备名
         /// </summary>
         public string UserDefinedName { get; set; }
-
         /// <summary>
-        /// 设备类型
+        /// 锐视设备型号
         /// </summary>
-        public DevType DevType { get; } = DevType.LIGHT;
-
-        private RseeDeviceType RseeDeviceType { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public RseeDeviceType RseeDeviceType { get; set; }
 
         /// <summary>
         /// 光源是否打开
         /// </summary>
-        public bool IsOpen { get; private set; }
+        public bool IsOpen { get; set; }
 
         /// <summary>
         /// 光源串口是否打开
         /// </summary>
-        public bool IsComOpen { get; private set; }
+        public bool IsComOpen { get; set; }
 
         /// <summary>
         /// 串口通信句柄
         /// </summary>
-        int ComHandle = 0;
-
-        private static List<ComHandle> Com2HandleList = new List<ComHandle>();
+        private int ComHandle = 0;
 
         private Timer _timer;
 
-        public LightRsee(LightParam lightParam)
+        #region 反序列化专用函数
+
+        /// <summary>
+        /// 指定反序列化的构造函数
+        /// </summary>
+        [JsonConstructor]
+        public LightRsee() { }
+
+        public void CreateDevice()
         {
-            _devId = ++Solution.DeviceCount;
-            DevName = lightParam.LightName;
-            UserDefinedName = DevName;
-            LightParam = lightParam;
             try
             {
-                foreach (var item in Com2HandleList)
+                foreach (var item in FrmLightListView.Com2HandleList)
                 {
-                    if (item.ComPort == lightParam.Port)
+                    if (item.ComPort == LightParam.Port)
                     {
                         ComHandle = item.Handle;
                         break;
@@ -123,7 +94,31 @@ namespace YTVisionPro.Hardware.Light
             {
                 throw new Exception(ex.Message);
             }
-            this.RseeDeviceType = lightParam.RseeDeviceType;
+        }
+
+        #endregion
+
+        public LightRsee(LightParam lightParam)
+        {
+            try
+            {
+                if (FrmLightListView.OccupiedComList.Any(sp => sp.PortName == lightParam.Port))
+                    throw new Exception("不同品牌的光源不能共用同一个串口！");
+                // 找对应串口的句柄
+                ComHandle = FrmLightListView.Com2HandleList.FirstOrDefault(item => item.ComPort == lightParam.Port).Handle;
+                if (ComHandle == 0 || ComHandle == null)
+                    Connenct();
+                else
+                    IsComOpen = true;
+                DevName = lightParam.LightName;
+                UserDefinedName = DevName;
+                LightParam = lightParam;
+                RseeDeviceType = lightParam.RseeDeviceType;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
 
@@ -144,7 +139,7 @@ namespace YTVisionPro.Hardware.Light
                 {
                     IsComOpen = true;
                     var item = new ComHandle(LightParam.Port, ComHandle);
-                    Com2HandleList.Add(item);
+                    FrmLightListView.Com2HandleList.Add(item);
                 }
             }
             catch (Exception ex)
@@ -165,7 +160,7 @@ namespace YTVisionPro.Hardware.Light
             
             // 移除占用的串口
             ComHandle toRemove = null;
-            foreach (var item in Com2HandleList)
+            foreach (var item in FrmLightListView.Com2HandleList)
             {
                 if (item.ComPort == LightParam.Port)
                 {
@@ -173,7 +168,7 @@ namespace YTVisionPro.Hardware.Light
                     break;
                 }
             }
-            Com2HandleList.Remove(toRemove);
+            FrmLightListView.Com2HandleList.Remove(toRemove);
         }
 
         /// <summary>
@@ -314,4 +309,28 @@ namespace YTVisionPro.Hardware.Light
         [DllImport(@"RseeController.dll", EntryPoint = "RseeController_MDPS_24W75_BRTSetChannel", CallingConvention = CallingConvention.Cdecl)]
         extern static int RseeController_MDPS_24W75_BRTSetChannel(int com, int channel, int range);
     }
+
+    /// <summary>
+    /// 串口号对应的锐视句柄
+    /// </summary>
+    internal class ComHandle
+    {
+        public string ComPort;
+        public int Handle;
+        public ComHandle(string comPort, int handle)
+        {
+            ComPort = comPort;
+            Handle = handle;
+        }
+    }
+
+    /// <summary>
+    /// 锐视光源型号
+    /// </summary>
+    public enum RseeDeviceType
+    {
+        PM_D,
+        P_MDPS_24W75
+    }
+
 }

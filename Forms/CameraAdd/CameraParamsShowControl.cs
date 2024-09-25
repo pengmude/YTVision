@@ -11,7 +11,14 @@ namespace YTVisionPro.Forms.CameraAdd
         public CameraParamsShowControl(ICamera camera)
         {
             InitializeComponent();
-            camera.PublishImageEvent += Camera_PublishImageEvent;
+            if(camera is CameraHik hik)
+            {
+                hik.PublishImageEvent += Camera_PublishImageEvent;
+            }else if(camera is CameraBasler basler)
+            {
+                basler.PublishImageEvent += Camera_PublishImageEvent;
+            }
+            //camera.PublishImageEvent += Camera_PublishImageEvent;
             _camera = camera;
             FrmCameraListView.OnCameraListViewClosed += FrmCameraListView_OnCameraListViewClosed;
         }

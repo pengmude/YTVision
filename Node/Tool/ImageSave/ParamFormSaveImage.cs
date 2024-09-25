@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.ImageRead;
 
 namespace YTVisionPro.Node.Tool.ImageSave
 {
@@ -167,6 +169,17 @@ namespace YTVisionPro.Node.Tool.ImageSave
 
             Params = savaImageParam;
             Hide();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamSaveImage param)
+            {
+
+            }
         }
     }
 }

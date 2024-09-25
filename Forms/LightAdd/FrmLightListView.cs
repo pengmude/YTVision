@@ -12,10 +12,14 @@ namespace YTVisionPro.Forms.LightAdd
         FrmLightNew frmLightNew = new FrmLightNew();
 
         /// <summary>
-        /// 已添加的光源所占用的Com列表
+        /// 已添加的磐鑫光源所占用的Com列表
         /// 作用：解决相同COM号多个通道连接光源的问题
         /// </summary>
         public static HashSet<SerialPort> OccupiedComList = new HashSet<SerialPort>();
+        /// <summary>
+        /// 已添加的锐视光源占用的串口
+        /// </summary>
+        public static List<ComHandle> Com2HandleList = new List<ComHandle>();
 
         public FrmLightListView()
         {
@@ -36,11 +40,11 @@ namespace YTVisionPro.Forms.LightAdd
             if (e.IsSelected)
                 panel1.Controls.Remove(e.LightParamsShowControl);
             
+            //然后移除掉方案中的全局光源
+            Solution.Instance.AllDevices.Remove(e.Light);
+
             // 移除光源实例
             e.Light.Disconnect();
-
-            //然后移除掉方案中的全局光源
-            Solution.Instance.Devices.Remove(e.Light);
 
             //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);

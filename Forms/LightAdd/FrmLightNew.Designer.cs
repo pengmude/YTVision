@@ -47,13 +47,13 @@
             this.label8 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.comboBoxBrand = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBoxConnectType = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.comboBoxRseeType = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox3.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -174,7 +174,7 @@
             "无",
             "奇",
             "偶"});
-            this.comboBox6.Location = new System.Drawing.Point(224, 369);
+            this.comboBox6.Location = new System.Drawing.Point(224, 366);
             this.comboBox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox6.Name = "comboBox6";
             this.comboBox6.Size = new System.Drawing.Size(216, 32);
@@ -190,8 +190,10 @@
             "4800",
             "9600",
             "19200",
-            "38400"});
-            this.comboBox3.Location = new System.Drawing.Point(224, 114);
+            "38400",
+            "57600",
+            "115200"});
+            this.comboBox3.Location = new System.Drawing.Point(224, 111);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(216, 32);
@@ -220,7 +222,7 @@
             "6",
             "7",
             "8"});
-            this.comboBox4.Location = new System.Drawing.Point(224, 199);
+            this.comboBox4.Location = new System.Drawing.Point(224, 196);
             this.comboBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox4.Name = "comboBox4";
             this.comboBox4.Size = new System.Drawing.Size(216, 32);
@@ -236,7 +238,7 @@
             "1",
             "1.5",
             "2"});
-            this.comboBox5.Location = new System.Drawing.Point(224, 284);
+            this.comboBox5.Location = new System.Drawing.Point(224, 281);
             this.comboBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox5.Name = "comboBox5";
             this.comboBox5.Size = new System.Drawing.Size(216, 32);
@@ -277,7 +279,7 @@
             "2",
             "3",
             "4"});
-            this.comboBoxChannel.Location = new System.Drawing.Point(225, 284);
+            this.comboBoxChannel.Location = new System.Drawing.Point(225, 281);
             this.comboBoxChannel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxChannel.Name = "comboBoxChannel";
             this.comboBoxChannel.Size = new System.Drawing.Size(216, 32);
@@ -336,18 +338,6 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(444, 425);
             this.tableLayoutPanel2.TabIndex = 12;
             // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("宋体", 12F);
-            this.label1.Location = new System.Drawing.Point(3, 30);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(216, 24);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "品牌";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // comboBoxBrand
             // 
             this.comboBoxBrand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -396,7 +386,7 @@
             this.comboBoxConnectType.FormattingEnabled = true;
             this.comboBoxConnectType.Items.AddRange(new object[] {
             "串口"});
-            this.comboBoxConnectType.Location = new System.Drawing.Point(225, 199);
+            this.comboBoxConnectType.Location = new System.Drawing.Point(225, 196);
             this.comboBoxConnectType.Name = "comboBoxConnectType";
             this.comboBoxConnectType.Size = new System.Drawing.Size(216, 32);
             this.comboBoxConnectType.TabIndex = 13;
@@ -423,10 +413,22 @@
             this.comboBoxRseeType.Items.AddRange(new object[] {
             "PM_D",
             "P_MDPS_24W75"});
-            this.comboBoxRseeType.Location = new System.Drawing.Point(225, 114);
+            this.comboBoxRseeType.Location = new System.Drawing.Point(225, 111);
             this.comboBoxRseeType.Name = "comboBoxRseeType";
             this.comboBoxRseeType.Size = new System.Drawing.Size(216, 32);
             this.comboBoxRseeType.TabIndex = 13;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("宋体", 12F);
+            this.label1.Location = new System.Drawing.Point(3, 30);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(216, 24);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "品牌";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
             // 

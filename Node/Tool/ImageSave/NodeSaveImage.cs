@@ -14,7 +14,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
 {
     internal class NodeImageSave : NodeBase
     {
-        public NodeImageSave(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType) 
+        public NodeImageSave(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormImageSave();
             ParamForm.SetNodeBelong(this);

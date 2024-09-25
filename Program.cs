@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
-using YTVisionPro.Forms.测试窗口;
 
 namespace YTVisionPro
 {
@@ -21,6 +22,20 @@ namespace YTVisionPro
             //Application.Run(new FrmImgeView());
 
             //Application.Run(new FormNewProcessWizard());
+        }
+    }
+}
+
+namespace VersionInfo
+{
+    class VersionInfo
+    {
+        public static string GetExeVer()
+        {
+            // 获取当前程序集的信息
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            return assembly.GetName().Version.ToString();
         }
     }
 }

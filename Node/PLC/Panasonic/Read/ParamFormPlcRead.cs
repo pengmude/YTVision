@@ -3,6 +3,8 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
@@ -133,6 +135,17 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBox3.Enabled = comboBox2.Text == "字符串类型" ? true : false;
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamPlcRead param)
+            {
+
+            }
         }
     }
 }

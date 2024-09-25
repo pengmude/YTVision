@@ -3,6 +3,8 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.PLC.Panasonic.Read;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Wirte
 {
@@ -133,6 +135,17 @@ namespace YTVisionPro.Node.PLC.Panasonic.Wirte
         {
             textBox3.Enabled = (comboBox2.Text == "字符串类型" || comboBox2.Text  == "整数类型" )? true : false;
             comboBox3.Enabled = comboBox2.Text == "布尔类型"? true : false;
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamPlcWrite param)
+            {
+
+            }
         }
     }
 }

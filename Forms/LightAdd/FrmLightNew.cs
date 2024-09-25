@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
+using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 
@@ -68,7 +69,7 @@ namespace YTVisionPro.Forms.LightAdd
                 LightParam lightParam = new LightParam();
                 try
                 {
-                    lightParam.Brand = this.comboBoxBrand.Text == "磐鑫" ? LightBrand.PPX : this.comboBoxBrand.Text == "锐视" ? LightBrand.RSEE : LightBrand.UNKNOW;
+                    lightParam.Brand = this.comboBoxBrand.Text == "磐鑫" ? DeviceBrand.PPX : this.comboBoxBrand.Text == "锐视" ? DeviceBrand.Rsee: DeviceBrand.Unknow;
                     lightParam.RseeDeviceType = comboBoxRseeType.SelectedIndex == 0 ? RseeDeviceType.PM_D : RseeDeviceType.P_MDPS_24W75;
                     lightParam.Channel = byte.Parse(comboBoxChannel.Text);
                     lightParam.LightName = this.textBoxLightName.Text;

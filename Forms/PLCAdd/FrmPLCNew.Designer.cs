@@ -183,7 +183,9 @@
             "4800",
             "9600",
             "19200",
-            "38400"});
+            "38400",
+            "57600",
+            "115200"});
             this.comboBox3.Location = new System.Drawing.Point(195, 107);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(186, 32);

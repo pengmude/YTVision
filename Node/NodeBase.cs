@@ -27,7 +27,6 @@ namespace YTVisionPro.Node
         /// 节点的类别
         /// </summary>
         public NodeType NodeType;
-
         /// <summary>
         /// 因为是控件类，提供无参构造函数让设计器可以显示出来
         /// </summary>
@@ -35,18 +34,18 @@ namespace YTVisionPro.Node
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
-            _id = ++Solution.NodeCount;
+            _id = ++Solution.Instance.NodeCount;
         }
 
         /// <summary>
         /// 实际只使用这个有参构造函数创建控件
         /// </summary>
         /// <param name="paramForm"></param>
-        public NodeBase(string nodeName, Process process, NodeType nodeType)
+        public NodeBase(int nodeId, string nodeName, Process process, NodeType nodeType)
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
-            _id = ++Solution.NodeCount;
+            _id = nodeId;
             _nodeName = nodeName;
             label1.Text = $"{ID}.{_nodeName}";
             Process = process;
@@ -175,7 +174,7 @@ namespace YTVisionPro.Node
             #region 测试节点删除前代码
 
             //string str0 = "";
-            //foreach (var node in Solution.Nodes)
+            //foreach (var node in Solution.Instance.Nodes)
             //{
             //    str0 += node.NodeName + "\n";
             //}
@@ -192,7 +191,7 @@ namespace YTVisionPro.Node
 
             if (Selected)
             {
-                Solution.Nodes.Remove(this);
+                Solution.Instance.Nodes.Remove(this);
                 Process.Nodes.Remove(this);
                 NodeDeletedEvent.Invoke(this, this);
             }
@@ -200,7 +199,7 @@ namespace YTVisionPro.Node
             #region 测试节点删除后代码
 
             //string str2 = "";
-            //foreach (var node in Solution.Nodes)
+            //foreach (var node in Solution.Instance.Nodes)
             //{
             //    str2 += node.NodeName + "\n";
             //}
@@ -304,7 +303,7 @@ namespace YTVisionPro.Node
         private void label1_MouseClick(object sender, MouseEventArgs e)
         {
             //清空全部选中状态
-            foreach (var node in Solution.Nodes)
+            foreach (var node in Solution.Instance.Nodes)
             {
                 node.Selected = false;
             }

@@ -13,6 +13,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -73,6 +73,15 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>桌面图.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Basler.Pylon, Version=1.2.0.0, Culture=neutral, PublicKeyToken=e389355f398382ab, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -81,6 +90,9 @@
     <Reference Include="HslCommunication, Version=10.2.2.0, Culture=neutral, PublicKeyToken=cdb2261fa039ed67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\HslCommunication.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonSubTypes, Version=2.0.1.0, Culture=neutral, PublicKeyToken=ee75fc290dbc1176, processorArchitecture=MSIL">
+      <HintPath>packages\JsonSubTypes.2.0.1\lib\net47\JsonSubTypes.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualBasic" />
@@ -119,6 +131,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigHelper.cs" />
     <Compile Include="Forms\CameraAdd\CameraParamsShowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -249,6 +262,7 @@
     <Compile Include="Hardware\Camera\CameraBasler.cs" />
     <Compile Include="Hardware\Camera\CameraHik.cs" />
     <Compile Include="Hardware\Camera\ICamera.cs" />
+    <Compile Include="Hardware\IDevice.cs" />
     <Compile Include="Hardware\Light\LightRsee.cs" />
     <Compile Include="Node\AI\HTAI\BitmapConvert.cs" />
     <Compile Include="Node\AI\HTAI\HtAiDemo.cs" />
@@ -311,12 +325,6 @@
     <Compile Include="Node\NodeComboBox.Designer.cs">
       <DependentUpon>NodeComboBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\测试窗口\Form2.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\测试窗口\Form2.Designer.cs">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -329,25 +337,6 @@
     <Compile Include="Forms\ResultView\FrmResultView.Designer.cs">
       <DependentUpon>FrmResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\测试窗口\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\测试窗口\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\测试窗口\Form3.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\测试窗口\Form3.Designer.cs">
-      <DependentUpon>Form3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\测试窗口\Form4.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\测试窗口\Form4.Designer.cs">
-      <DependentUpon>Form4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Hardware\IDevice.cs" />
     <Compile Include="Hardware\Light\ILight.cs" />
     <Compile Include="Hardware\Light\LightPPX.cs" />
     <Compile Include="Forms\Logger\FrmLogger.cs">
@@ -480,7 +469,7 @@
     </Compile>
     <Compile Include="Node\Tool\SleepTool\NodeParamSleepTool.cs" />
     <Compile Include="Node\Tool\SleepTool\NodeResultSleepTool.cs" />
-    <Compile Include="Node\Tool\SleepTool\SleepTool.cs">
+    <Compile Include="Node\Tool\SleepTool\NodeSleepTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Process.cs" />
@@ -492,7 +481,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Solution.cs" />
-    <Compile Include="YTUtils.cs" />
     <EmbeddedResource Include="Forms\CameraAdd\CameraParamsShowControl.resx">
       <DependentUpon>CameraParamsShowControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -578,23 +566,11 @@
     <EmbeddedResource Include="Node\NodeComboBox.resx">
       <DependentUpon>NodeComboBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\测试窗口\Form2.resx">
-      <DependentUpon>Form2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ResultView\FrmResultView.resx">
       <DependentUpon>FrmResultView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\测试窗口\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\测试窗口\Form3.resx">
-      <DependentUpon>Form3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\测试窗口\Form4.resx">
-      <DependentUpon>Form4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Logger\FrmLogger.resx">
       <DependentUpon>FrmLogger.cs</DependentUpon>
@@ -680,8 +656,11 @@
     <Content Include="dll\Basler.Pylon.dll" />
     <Content Include="dll\HslCommunication.dll" />
     <Content Include="dll\MvCameraControl.Net.dll" />
+    <None Include="Icon\Logo\桌面图.ico" />
     <Content Include="Icon\保存项目.png" />
     <Content Include="Icon\停止执行.png" />
+    <None Include="Resources\AppIcon.bmp" />
+    <Content Include="桌面图.ico" />
     <None Include="Icon\光源.png" />
     <Content Include="Icon\单次执行.png" />
     <None Include="Icon\循环执行.png" />

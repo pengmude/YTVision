@@ -1,9 +1,13 @@
-﻿using System;
+﻿//using MvCameraControl;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
@@ -18,24 +22,16 @@ namespace YTVisionPro
 
         private static readonly Lazy<Solution> _lazy = new Lazy<Solution>(() => new Solution());
 
-        private Solution() { }
+        private Solution() 
+        {
+            AllDevices = new List<IDevice>();
+        }
 
         public static Solution Instance => _lazy.Value;
 
         #endregion
 
         #region 私有字段、属性
-
-        /// <summary>
-        /// 方案包含的所有流程
-        /// </summary>
-        private List<Process> _allProcesses = new List<Process>();
-
-        /// <summary>
-        /// 方案设备（光源、相机、plc）
-        /// </summary>
-        private readonly object _deviceLock = new object();
-        private List<IDevice> _devices = new List<IDevice>();
 
         /// <summary>
         /// 方案运行取消源，通过它控制方案的停止
@@ -47,44 +43,48 @@ namespace YTVisionPro
         #region 公有字段、属性
 
         /// <summary>
+        /// 方案包含的所有流程
+        /// </summary>
+        public List<Process> AllProcesses = new List<Process>();
+
+        /// <summary>
         /// 方案添加的设备总数
         /// </summary>
-        public static int DeviceCount = 0;
+        public int DeviceCount => AllDevices.Count;
 
         /// <summary>
         /// 方案已经添加的流程总数
         /// </summary>
-        public static int ProcessCount = 0;
+        public int ProcessCount = 0;
 
         /// <summary>
         /// 方案节点统计（包含删除的节点）
         /// </summary>
-        public static int NodeCount = 0;
+        public int NodeCount = 0;
 
         /// <summary>
         /// 方案已经添加的节点
         /// </summary>
-        public static List<NodeBase> Nodes = new List<NodeBase>();
+        public List<NodeBase> Nodes = new List<NodeBase>();
 
         /// <summary>
         /// 所有设备
         /// </summary>
-        public List<IDevice> Devices => _devices;
-
+        public List<IDevice> AllDevices { get; set; }
         /// <summary>
         /// 光源设备
         /// </summary>
-        public List<ILight> LightDevices => _devices.OfType<ILight>().ToList();
+        public List<ILight> LightDevices => AllDevices.OfType<ILight>().ToList();
 
         /// <summary>
         /// 相机设备
         /// </summary>
-        public List<ICamera> CameraDevices => _devices.OfType<ICamera>().ToList();
+        public List<ICamera> CameraDevices => AllDevices.OfType<ICamera>().ToList();
 
         /// <summary>
         /// Plc设备
         /// </summary>
-        public List<IPlc> PlcDevices => _devices.OfType<IPlc>().ToList();
+        public List<IPlc> PlcDevices => AllDevices.OfType<IPlc>().ToList();
 
         /// <summary>
         /// 方案是否正在运行
@@ -95,11 +95,6 @@ namespace YTVisionPro
         /// 方案被修改
         /// </summary>
         public bool IsModify { get; set; } = false;
-
-        /// <summary>
-        /// 方案运行间隔时间(ms)
-        /// </summary>
-        public int Interval { get; set; } = 100;
 
         /// <summary>
         /// 方案文件名
@@ -126,35 +121,6 @@ namespace YTVisionPro
 
         #region 公有方法
 
-        #region 设备添加、删除、访问设备列表
-        public void AddDevice(IDevice device)
-        {
-            lock (_deviceLock)
-            {
-                _devices.Add(device);
-            }
-        }
-
-        public void AddDeviceList(List<IDevice> devices)
-        {
-            lock (_deviceLock)
-            {
-                foreach (var dev in devices)
-                {
-                    _devices.Add(dev);
-                }
-            }
-        }
-        public void RemoveDevice(IDevice device)
-        {
-            lock (_deviceLock)
-            {
-                _devices.Remove(device);
-            }
-        }
-
-        #endregion
-
         #region 流程相关操作
 
         /// <summary>
@@ -163,7 +129,7 @@ namespace YTVisionPro
         /// <param name="process"></param>
         public void AddProcess(Process process)
         {
-            _allProcesses.Add(process);
+            AllProcesses.Add(process);
         }
 
         /// <summary>
@@ -172,11 +138,11 @@ namespace YTVisionPro
         /// <param name="process"></param>
         public void RemoveProcess(Process process)
         {
-            _allProcesses.Remove(process);
+            AllProcesses.Remove(process);
 
             foreach (var node in process.Nodes)
             {
-                Solution.Nodes.Remove(node);
+                Solution.Instance.Nodes.Remove(node);
             }
         }
 
@@ -187,16 +153,16 @@ namespace YTVisionPro
         public void RemoveProcess(string processName)
         {
             // 查找名称匹配的流程
-            Process processToRemove = _allProcesses.Find(p => p.ProcessName == processName);
+            Process processToRemove = AllProcesses.Find(p => p.ProcessName == processName);
 
             if (processToRemove != null)
             {
                 // 从列表中移除流程
-                _allProcesses.Remove(processToRemove);
+                AllProcesses.Remove(processToRemove);
 
                 foreach (var node in processToRemove.Nodes)
                 {
-                    Solution.Nodes.Remove(node);
+                    Solution.Instance.Nodes.Remove(node);
                 }
             }
         }
@@ -208,7 +174,7 @@ namespace YTVisionPro
         public List<string> GetAllProcessName()
         {
             List<string> result = new List<string>();
-            foreach (var process in _allProcesses)
+            foreach (var process in AllProcesses)
             {
                 result.Add(process.ProcessName);
             }
@@ -217,7 +183,7 @@ namespace YTVisionPro
 
         #endregion
 
-        #region 方案相关操作
+        #region 方案运行/停止、配置加载/保存等相关操作
 
         /// <summary>
         /// 方案运行
@@ -233,7 +199,7 @@ namespace YTVisionPro
 
                 // 启动所有流程
                 var tasks = new List<Task>();
-                foreach (var process in _allProcesses)
+                foreach (var process in AllProcesses)
                 {
                     tasks.Add(process.Run(isCyclical, _cancellationTokenSource.Token));
                 }
@@ -258,18 +224,38 @@ namespace YTVisionPro
         /// 方案加载
         /// </summary>
         /// <returns></returns>
-        public ErrorCode Load()
+        public void Load(string configFile)
         {
-
-            return ErrorCode.LOAD_SOL_FAIL;
+            try
+            {
+                if (File.Exists(configFile))
+                {
+                    ConfigHelper.SolLoad(configFile);
+                }
+                else
+                {
+                    throw new Exception("方案文件不存在！");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"反序列化异常!原因：{ex.Message}");
+            }
         }
 
         /// <summary>
         /// 方案保存
         /// </summary>
-        public void Save()
+        public void Save(string solFile)
         {
-
+            try
+            {
+                ConfigHelper.SolSave(solFile);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         #endregion

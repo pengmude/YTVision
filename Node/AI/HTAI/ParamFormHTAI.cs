@@ -1,4 +1,5 @@
 ﻿using Logger;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,45 +18,56 @@ namespace YTVisionPro.Node.AI.HTAI
 {
     internal partial class ParamFormHTAI : Form, INodeParamForm
     {
-
-        // 模型句柄
+        private NodeBase _node = new NodeBase();
+        const int path_len = 256;
+        /// <summary>
+        /// 模型句柄
+        /// </summary>
         IntPtr TreePredictHandle = IntPtr.Zero;
-        // 选择节点数
+        /// <summary>
+        /// 选择节点数
+        /// </summary>
         int TestNum;
-        // 选择初始化的节点信息
+        /// <summary>
+        /// 选择初始化的节点信息
+        /// </summary>
         List<NodeInfo> node_info_choose = new List<NodeInfo>();
-        // 包含所有配置信息
+        /// <summary>
+        /// 包含所有配置信息
+        /// </summary>
         private List<NGTypeConfig> _allNgConfigs = new List<NGTypeConfig>();
-
         /// <summary>
         /// 节点参数
         /// </summary>
         public INodeParam Params { get; set; }
 
+        NodeParamHTAI nodeParamHTAI = new NodeParamHTAI();
+
         public ParamFormHTAI()
         {
             InitializeComponent();
             NodeBase.NodeDeletedEvent += NodeHTAI_NodeDeletedEvent;
-            // 图像显示窗口名称
-            WindowNameList.Items.Add("[未设置]");
-            for (int i = 0; i < FrmImageViewer.CurWindowsNum; i++)
-            {
-                WindowNameList.Items.Add($"图像窗口{i + 1}");
-            }
+            UpdateWinNameList(FrmImageViewer.CurWindowsNum);
             WindowNameList.SelectedIndex = 0;
             CanvasSet.WindowNumChangeEvent += CanvasSet_WindowNumChangeEvent;
         }
 
         private void CanvasSet_WindowNumChangeEvent(object sender, int e)
         {
+            UpdateWinNameList(e);
+            WindowNameList.SelectedIndex = 0;
+        }
+
+        private void UpdateWinNameList(int num)
+        {
             WindowNameList.Items.Clear();
             WindowNameList.Items.Add("[未设置]");
-            for (int i = 0; i < e; i++)
+            for (int i = 0; i < num; i++)
             {
                 WindowNameList.Items.Add($"图像窗口{i + 1}");
             }
-            WindowNameList.SelectedIndex = 0;
         }
+
         /// <summary>
         /// AI节点删除时候要释放句柄
         /// </summary>
@@ -74,6 +86,7 @@ namespace YTVisionPro.Node.AI.HTAI
         public void SetNodeBelong(NodeBase node)
         {
             nodeSubscription1.Init(node);
+            _node = node;
         }
 
         /// <summary>
@@ -113,7 +126,7 @@ namespace YTVisionPro.Node.AI.HTAI
         }
 
         // 将.tree文件的节点名称填入树节点
-        private void InitNodeNamesToTreeView(string config)
+        private void InitNodeNamesToTreeView(string config, bool isDeserialize = false)
         {
  
             treeView1.Nodes.Clear();
@@ -122,10 +135,19 @@ namespace YTVisionPro.Node.AI.HTAI
             foreach (var item in str.NodeInfo)
             {
                 TreeNode node = treeView1.Nodes.Add(item.NodeName);
-            }
-            foreach (TreeNode node in treeView1.Nodes)
-            {
-                node.Checked = true;
+                // 不是反序列化时初始化的树节点就默认设置选中
+                // 如果是反序列化的话就要根据反序列化的配置去设置选中状态
+                if(!isDeserialize)
+                    node.Checked = true;
+                else
+                {
+                    if(Params is NodeParamHTAI param)
+                    {
+                        // 加载的配置是选中的才选中
+                        if(param.ModelInitParams.NodeNames.Contains(item.NodeName))
+                            node.Checked = true;
+                    }
+                }
             }
         }
 
@@ -138,8 +160,6 @@ namespace YTVisionPro.Node.AI.HTAI
                 LogHelper.AddLog(MsgLevel.Warn, "未选择tree文件！", true);
                 return;
             }
-            
-            //ReleaseAIHandle();
 
             // 项目模型配置文件
             string config = this.tbTreeFlie.Text;
@@ -153,7 +173,33 @@ namespace YTVisionPro.Node.AI.HTAI
                 return;
             }
             // 节点名称数组格式的转换，转换成char[][256]的数组结构
-            const int path_len = 256;
+            byte[] byteArray_name = StringList2ByteArr(test_node_names);
+            // 指定GPU
+            string device = "GPU";
+            // 指定GPU的ID,可参照任务管理器中的ID号
+            int device_id = 0;
+            int iRet = -1;
+            nodeParamHTAI.ModelInitParams = new ModelInitParams(config, test_node_names, TestNum, device, device_id);
+            iRet = HTAPI.InitTreeModel(ref TreePredictHandle, config, byteArray_name, TestNum, device, device_id);
+            if (iRet != 0)
+            {
+                MessageBox.Show($"节点({_node.NodeName})加载模型出现错误!错误码: " + iRet);
+                LogHelper.AddLog(MsgLevel.Exception, "加载模型出现错误!错误码:" + iRet, true);
+                return;
+            }
+            LogHelper.AddLog(MsgLevel.Info, $"节点({_node.NodeName})模型加载成功!", true);
+            // 读取Tree文件里面的节点配置
+            node_info_choose = new List<NodeInfo>();
+            GetNodeInfoChoose(config, test_node_names);
+            cbNodes.Items.Clear();
+            cbNodes.Items.AddRange(node_info_choose.ConvertAll(n => n.NodeName).ToArray());
+            cbNodes.SelectedIndex = 0; // 默认选中第一个节点
+            cbClasses.DataSource = node_info_choose[0].ClassNames;
+            InitializeNGConfigs();
+        }
+
+        private byte[] StringList2ByteArr(List<string> test_node_names)
+        {
             byte[] byteArray_name = Enumerable.Repeat((byte)0x00, TestNum * path_len).ToArray();
             for (int i = 0; i < TestNum; i++)
             {
@@ -163,28 +209,7 @@ namespace YTVisionPro.Node.AI.HTAI
                     byteArray_name[j + i * path_len] = name_byte[j];
                 }
             }
-            // 指定GPU
-            string device = "GPU";
-            // 指定GPU的ID,可参照任务管理器中的ID号
-            int device_id = 0;
-            int iRet = -1;
-            iRet = HTAPI.InitTreeModel(ref TreePredictHandle, config, byteArray_name, TestNum, device, device_id);
-            if (iRet != 0)
-            {
-                MessageBox.Show("加载模型出现错误,错误码: " + iRet);
-                LogHelper.AddLog(MsgLevel.Warn, "加载模型出现错误,错误码:" + iRet, true);
-                return;
-            }
-            MessageBox.Show("模型加载成功");
-            LogHelper.AddLog(MsgLevel.Info, "模型加载成功", true);
-            // 读取Tree文件里面的节点配置
-            node_info_choose = new List<NodeInfo>();
-            GetNodeInfoChoose(config, test_node_names);
-            cbNodes.Items.Clear();
-            cbNodes.Items.AddRange(node_info_choose.ConvertAll(n => n.NodeName).ToArray());
-            cbNodes.SelectedIndex = 0; // 默认选中第一个节点
-            cbClasses.DataSource = node_info_choose[0].ClassNames;
-            InitializeNGConfigs();
+            return byteArray_name;
         }
 
         // 得到选择的检测节点名称
@@ -199,6 +224,38 @@ namespace YTVisionPro.Node.AI.HTAI
                 }
             }
             return node_names;
+        }
+
+        /// <summary>
+        /// 根据节点名字节数组转为节点字符串列表
+        /// </summary>
+        /// <param name="byteArray_name"></param>
+        /// <param name="TestNum"></param>
+        /// <param name="path_len"></param>
+        /// <returns></returns>
+        private List<string> ConvertByteArrayToList(byte[] byteArray_name, int TestNum, int path_len)
+        {
+            List<string> test_node_names = new List<string>();
+
+            for (int i = 0; i < TestNum; i++)
+            {
+                // 提取当前字符串的字节数组
+                byte[] name_byte = new byte[path_len];
+                Array.Copy(byteArray_name, i * path_len, name_byte, 0, path_len);
+
+                // 找到第一个空字符的位置，以确定实际字符串长度
+                int nullIndex = Array.IndexOf(name_byte, (byte)0x00);
+                if (nullIndex == -1)
+                {
+                    nullIndex = path_len; // 如果没有找到空字符，则使用整个路径长度
+                }
+
+                // 将字节数组转换为字符串
+                string nodeName = Encoding.Default.GetString(name_byte, 0, nullIndex);
+                test_node_names.Add(nodeName);
+            }
+
+            return test_node_names;
         }
 
         // 获取选中的节点信息
@@ -368,18 +425,87 @@ namespace YTVisionPro.Node.AI.HTAI
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if(TreePredictHandle == null)
+            if(nodeSubscription1.GetText1().IsNullOrEmpty() || nodeSubscription1.GetText2().IsNullOrEmpty())
+            {
+                MessageBox.Show("尚未订阅图像！");
+                return;
+            }
+            if (TreePredictHandle == IntPtr.Zero)
             {
                 MessageBox.Show("模型尚未初始化！");
                 return;
             }
-            NodeParamHTAI nodeParamHTAI = new NodeParamHTAI();
+            
             nodeParamHTAI.TreePredictHandle = TreePredictHandle;
+            nodeParamHTAI.Text1 = nodeSubscription1.GetText1().Split('.')[1];
+            nodeParamHTAI.Text2 = nodeSubscription1.GetText2();
+            nodeParamHTAI.TreePath = tbTreeFlie.Text;
             nodeParamHTAI.AllNgConfigs = _allNgConfigs;
             nodeParamHTAI.TestNum = TestNum;
             nodeParamHTAI.WindowName = WindowNameList.Text;
             Params = nodeParamHTAI;
             Hide();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamHTAI param)
+            {
+                // 还原界面显示
+                nodeSubscription1.SetText1(param.Text1);  // TODO:这里设置订阅的文本不成功
+                nodeSubscription1.SetText2(param.Text2);
+                tbTreeFlie.Text = param.TreePath;
+                InitNodeNamesToTreeView(param.TreePath, true);
+                UpdateWinNameList(FrmImageViewer.CurWindowsNum);
+                WindowNameList.Text = param.WindowName;
+
+                // 还原私有成员或序列化忽略的属性
+                nodeParamHTAI = param;
+                TestNum = param.TestNum;
+                _allNgConfigs = param.AllNgConfigs;
+                //采取非阻塞方式加载模型（加载模型耗时长）
+                Task.Run(() =>
+                {
+                    TreePredictHandle = InitModel(param.ModelInitParams.TreePath, param.ModelInitParams.NodeNames,
+                                        param.ModelInitParams.TestNodeNum, param.ModelInitParams.DeviceType, param.ModelInitParams.DeviceID);
+                    param.TreePredictHandle = TreePredictHandle;
+                });
+
+            }
+        }
+
+        private IntPtr InitModel(string treePath, List<string> byteArray_name, int testNum, string deviceType, int deviceID)
+        {
+            int iRet = HTAPI.InitTreeModel(ref TreePredictHandle, treePath, StringList2ByteArr(byteArray_name), testNum, deviceType, deviceID);
+            if (iRet != 0)
+            {
+                MessageBox.Show($"节点({_node.ID}.{_node.NodeName})加载模型出现错误!错误码: " + iRet);
+                LogHelper.AddLog(MsgLevel.Exception, $"节点({_node.ID}.{_node.NodeName})加载模型出现错误!错误码:" + iRet, true);
+                return IntPtr.Zero;
+            }
+            LogHelper.AddLog(MsgLevel.Info, $"节点({_node.ID}.{_node.NodeName})模型加载成功!", true);
+
+            // 读取Tree文件里面的节点配置
+            node_info_choose = new List<NodeInfo>();
+            GetNodeInfoChoose(treePath, byteArray_name);
+
+            // 更新节点名称和类别名称下拉框
+            try
+            {
+                cbNodes.Items.Clear();
+                cbNodes.Items.AddRange(node_info_choose.ConvertAll(n => n.NodeName).ToArray());
+                cbNodes.SelectedIndex = 0; // 默认选中第一个节点
+                cbClasses.DataSource = node_info_choose[0].ClassNames;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Fatal, $"节点({_node.ID}.{_node.NodeName})设置参数失败！请手动加载模型！原因：{ex.Message}");
+            }
+
+            return TreePredictHandle;
         }
     }
 }

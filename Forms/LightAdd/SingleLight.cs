@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
 using YTVisionPro.Forms.PLCAdd;
+using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Node.Light;
 
@@ -69,11 +70,13 @@ namespace YTVisionPro.Forms.LightAdd
             try
             {
                 //创建光源设备并添加到方案中
-                if (Parms.Brand == LightBrand.PPX)
+                if (Parms.Brand == DeviceBrand.PPX)
                     Light = new LightPPX(Parms);
-                else
+                else if (Parms.Brand == DeviceBrand.Rsee)
                     Light = new LightRsee(Parms);
-                Solution.Instance.AddDevice(Light);
+                else
+                    throw new Exception("暂时不支持的光源品牌！");
+                Solution.Instance.AllDevices.Add(Light);
                 //给光源绑定参数界面
                 LightParamsShowControl = new LightParamsShowControl(Parms);
                 // 保存所有的实例
@@ -81,7 +84,7 @@ namespace YTVisionPro.Forms.LightAdd
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
         }
 
@@ -170,7 +173,7 @@ namespace YTVisionPro.Forms.LightAdd
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // 移除设备需要判断当前是否有节点使用该设备
-            foreach (var node in Solution.Nodes)
+            foreach (var node in Solution.Instance.Nodes)
             {
                 if (node is NodeLight lightNode
                     && lightNode.ParamForm.Params is NodeParamLight paramLight

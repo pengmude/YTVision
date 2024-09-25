@@ -33,10 +33,6 @@ namespace YTVisionPro
         /// </summary>
         Forms.PLCAdd.FrmPLCListView FrmPLCAdd= new Forms.PLCAdd.FrmPLCListView();
         /// <summary>
-        /// PLC信号监听设置
-        /// </summary>
-        //FrmSignalMonitor FrmSignalMonitor = new FrmSignalMonitor();
-        /// <summary>
         /// 图像显示栏
         /// </summary>
         static FrmImageViewer FrmImgeDlg = new FrmImageViewer();
@@ -80,15 +76,6 @@ namespace YTVisionPro
         public FormMain()
         {
             InitializeComponent();
-
-            #region 测试代码
-            //var lights = new List<IDevice>() { new LightPPX("光源1", "COM1"), new LightPPX("光源2", "COM2"), new LightPPX("光源3", "COM3") };
-            //var camers = new List<IDevice>() { new CameraHik("相机1"), new CameraHik("相机2"), new CameraHik("相机3") };
-            //var plcs = new List<IDevice>() { new PlcPanasonic("PLC1"), new PlcPanasonic("PLC2"), new PlcPanasonic("PLC3") };
-            //Solution.Instance.AddDeviceList(lights);
-            //Solution.Instance.AddDeviceList(camers);
-            //Solution.Instance.AddDeviceList(plcs);
-            #endregion
         }
         /// <summary>
         /// 主窗口加载
@@ -99,6 +86,9 @@ namespace YTVisionPro
         {
             // 初始化主窗口布局
             InitDockPanel();
+
+            // 设置主窗口标题
+            Text = $"鹰眼智检系统 V{Solution.Instance.SolVersion}";
 
             // 初始化海康相机SDK
             CameraHik.InitSDK();
@@ -138,7 +128,7 @@ namespace YTVisionPro
             }
 
             // 释放AI节点的内存
-            foreach (var node in Solution.Nodes)
+            foreach (var node in Solution.Instance.Nodes)
             {
                 if(node is NodeHTAI nodeAi)
                 {
@@ -148,22 +138,16 @@ namespace YTVisionPro
             }
 
             // 释放硬件资源（光源、相机、PLC）
-            foreach (var dev in Solution.Instance.Devices)
+            foreach (var dev in Solution.Instance.AllDevices)
             {
                 if(dev is ILight light)
-                {
                     light.Disconnect();
-                }
-                else if(dev is ICamera camera)
-                {
+                if(dev is ICamera camera)
                     camera.Dispose();
-                }
-                else if(dev is IPlc plc)
-                {
+                if(dev is IPlc plc)
                     plc.Disconnect();
-                }
             }
-
+            
             // 海康相机SDK反序列化
             CameraHik.Finalize();
 
@@ -225,6 +209,39 @@ namespace YTVisionPro
             else
                 return null;
         }
+        private void 文件ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem item)
+            {
+                switch (item.Text)
+                {
+                    case "新建方案":
+                        新建方案ToolStripMenuItem_Click(sender, e);
+                        break;
+                    case "打开方案":
+                        打开方案ToolStripMenuItem_Click(sender, e);
+                        break;
+                    case "保存方案":
+                        保存方案ToolStripMenuItem_Click(sender, e);
+                        break;
+                    case "另存方案":
+                        另存方案ToolStripMenuItem_Click(sender, e);
+                        break;
+                    case "退出":
+                        if (MessageBox.Show("确认退出？") == DialogResult.OK)
+                            Close();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void 另存方案ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         /// <summary>
         /// 点击工具栏的工具
         /// </summary>
@@ -348,12 +365,27 @@ namespace YTVisionPro
         }
         private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("保存方案");
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    Solution.Instance.SolFileName = saveFileDialog1.FileName;
+                    Solution.Instance.Save(saveFileDialog1.FileName);
+                    MessageBox.Show("方案保存成功！");
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show($"方案保存失败！原因：{ex.Message}");
+                }
+            }
         }
 
         private void 打开方案ToolStripMenuItem_Click(object value1, object value2)
         {
-            MessageBox.Show("打开方案");
+            if(openFileDialog1.ShowDialog()  == DialogResult.OK)
+            {
+                Solution.Instance.Load(openFileDialog1.FileName);
+            }
         }
 
         /// <summary>
@@ -365,13 +397,7 @@ namespace YTVisionPro
         {
             if (MessageBox.Show("是否保存当前方案的修改？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                // TODO:保存方案
-                MessageBox.Show("方案已保存！");
-            }
 
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                File.Create(saveFileDialog1.FileName).Close();
             }
         }
 
@@ -468,6 +494,7 @@ namespace YTVisionPro
             else if (frmLogger != null)
                 运行日志ToolStripMenuItem.Checked = frmLogger.Visible;
         }
+
     }
 
 

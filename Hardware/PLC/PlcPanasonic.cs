@@ -1,66 +1,110 @@
 ﻿using HslCommunication;
 using HslCommunication.Profinet.Panasonic;
+using JsonSubTypes;
+using Newtonsoft.Json;
 using System;
-using System.Text;
+using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Hardware.PLC
 {
     internal class PlcPanasonic : IPlc
     {
         /// <summary>
-        /// 连接状态改变事件
-        /// </summary>
-        public event EventHandler<bool> ConnectStatusEvent;
-        public PLCParms PLCParms { get; set; } = new PLCParms();
-
-        /// <summary>
         /// 串口plc对象
         /// </summary>
-        PanasonicMewtocol _panasonicMewtocol = null;
+        private PanasonicMewtocol _panasonicMewtocol = null;
 
         /// <summary>
         /// 网口plc对象
         /// </summary>
-        PanasonicMcNet _panasonicMcNet = null;
-
-        private bool _isOpen { get; set; }
-        private int _id;
-
-        public int ID { get =>_id; }
+        private PanasonicMcNet _panasonicMcNet = null;
+        /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        public event EventHandler<bool> ConnectStatusEvent;
+        /// <summary>
+        /// PLC连接参数
+        /// </summary>
+        public PLCParms PLCParms { get; set; } = new PLCParms();
+        /// <summary>
+        /// PLC连接状态
+        /// </summary>
+        public bool IsConnect { get; set; }
+        /// <summary>
+        /// 设备名称
+        /// </summary>
         public string DevName { get ; set ; }
+        /// <summary>
+        /// 用户自定义名称
+        /// </summary>
         public string UserDefinedName { get; set; }
+        /// <summary>
+        /// 设备类型
+        /// </summary>
+        public DevType DevType { get; set; } = DevType.PLC;
 
-        public DevType DevType { get; } = DevType.PLC;
+        /// <summary>
+        /// 设备品牌
+        /// </summary>
+        public DeviceBrand Brand { get; set; } = DeviceBrand.Panasonic;
+
+        #region 反序列化专用函数
+
+        /// <summary>
+        /// 指定反序列化的构造函数
+        /// </summary>
+        [JsonConstructor]
+        public PlcPanasonic() { }
+
+        public void CreateDevice()
+        {
+            try
+            {
+                if (PLCParms.PlcConType == PlcConType.COM)
+                {
+                    _panasonicMewtocol = new PanasonicMewtocol();
+                    if (PLCParms.SerialParms.PortName == null)
+                    {
+                        throw new Exception("PLC串口连接参数为空！");
+                    }
+                    _panasonicMewtocol.SerialPortInni(sp =>
+                    {
+                        sp.PortName = PLCParms.SerialParms.PortName;
+                        sp.BaudRate = PLCParms.SerialParms.BaudRate;
+                        sp.DataBits = PLCParms.SerialParms.DataBits;
+                        sp.StopBits = PLCParms.SerialParms.StopBits;
+                        sp.Parity = PLCParms.SerialParms.Parity;
+                    });
+                }
+                else if (PLCParms.PlcConType == PlcConType.ETHERNET)
+                {
+                    _panasonicMcNet = new PanasonicMcNet();
+                    if (PLCParms.EthernetParms.IP == null)
+                    {
+                        throw new Exception("PLC网口连接参数为空！");
+                    }
+                    _panasonicMcNet.IpAddress = PLCParms.EthernetParms.IP;
+                    _panasonicMcNet.Port = PLCParms.EthernetParms.Port;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #endregion
+
 
         public PlcPanasonic(PLCParms parms)
         {
-            _id = ++Solution.DeviceCount;
             PLCParms = parms;
             DevName = parms.UserDefinedName;
             UserDefinedName = parms.UserDefinedName;
             if (PLCParms.PlcConType == PlcConType.COM)
+            {
                 _panasonicMewtocol = new PanasonicMewtocol();
-            else if(PLCParms.PlcConType == PlcConType.ETHERNET)
-                _panasonicMcNet = new PanasonicMcNet();
-        }
-
-        public bool Connect()
-        {
-            if (PLCParms.PlcConType == PlcConType.ETHERNET)
-            {
-                if (PLCParms.EthernetParms.IP == null)
-                {
-                    throw new Exception("PLC网口连接参数为空！");
-                }
-                _panasonicMcNet.IpAddress = PLCParms.EthernetParms.IP;
-                _panasonicMcNet.Port = PLCParms.EthernetParms.Port;
-                //_panasonicMcNet.ConnectServer();
-                _isOpen = _panasonicMcNet.ConnectServer().IsSuccess;
-                ConnectStatusEvent?.Invoke(this, _isOpen);
-                return _isOpen;
-            }
-            else 
-            {
                 if (PLCParms.SerialParms.PortName == null)
                 {
                     throw new Exception("PLC串口连接参数为空！");
@@ -73,34 +117,58 @@ namespace YTVisionPro.Hardware.PLC
                     sp.StopBits = PLCParms.SerialParms.StopBits;
                     sp.Parity = PLCParms.SerialParms.Parity;
                 });
-
-                if (_panasonicMewtocol.IsOpen())
-                    return true;
-                _isOpen = _panasonicMewtocol.Open().IsSuccess;
-                ConnectStatusEvent?.Invoke(this, _isOpen);
-                return _isOpen;
+            }
+            else if(PLCParms.PlcConType == PlcConType.ETHERNET)
+            {
+                _panasonicMcNet = new PanasonicMcNet();
+                if (PLCParms.EthernetParms.IP == null)
+                {
+                    throw new Exception("PLC网口连接参数为空！");
+                }
+                _panasonicMcNet.IpAddress = PLCParms.EthernetParms.IP;
+                _panasonicMcNet.Port = PLCParms.EthernetParms.Port;
             }
         }
 
-        public bool IsOpen()
+        public bool Connect()
         {
-            return _isOpen;
+            try
+            {
+                if (PLCParms.PlcConType == PlcConType.ETHERNET)
+                {
+                    IsConnect = _panasonicMcNet.ConnectServer().IsSuccess;
+                    ConnectStatusEvent?.Invoke(this, IsConnect);
+                    return IsConnect;
+                }
+                else
+                {
+                    if (_panasonicMewtocol.IsOpen())
+                        return true;
+                    IsConnect = _panasonicMewtocol.Open().IsSuccess;
+                    ConnectStatusEvent?.Invoke(this, IsConnect);
+                    return IsConnect;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public void Disconnect()
         {
-            if (!_isOpen) { return; }
+            if (!IsConnect) { return; }
 
             if(PLCParms.PlcConType == PlcConType.COM)
             {
                 _panasonicMewtocol.Close();
-                _isOpen = false;
+                IsConnect = false;
             }
             else
             {
-                _isOpen = !_panasonicMcNet.ConnectClose().IsSuccess;
+                IsConnect = !_panasonicMcNet.ConnectClose().IsSuccess;
             }
-            ConnectStatusEvent?.Invoke(this, _isOpen);
+            ConnectStatusEvent?.Invoke(this, IsConnect);
         }
 
         public void Release()

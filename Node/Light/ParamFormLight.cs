@@ -3,6 +3,8 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 
 namespace YTVisionPro.Node.Light
 {
@@ -95,6 +97,17 @@ namespace YTVisionPro.Node.Light
         private void ParamFormLight_Shown(object sender, EventArgs e)
         {
             InitLightComboBox();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamLight param)
+            {
+
+            }
         }
     }
 }

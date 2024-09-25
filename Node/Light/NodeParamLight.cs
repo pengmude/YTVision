@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using JsonSubTypes;
+using Newtonsoft.Json;
 using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Node.Light
@@ -15,6 +12,7 @@ namespace YTVisionPro.Node.Light
             this.Brightness = brightness;
             this.Time = time;
         }
+        [JsonConverter(typeof(PolyConverter))]
         public ILight Light { get; set; }
         public int Brightness { get; set; } //光源值
         public int Time { get; set; } //打开时长

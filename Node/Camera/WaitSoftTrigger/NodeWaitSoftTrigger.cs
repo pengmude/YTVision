@@ -14,7 +14,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
 {
     internal class NodeWaitSoftTrigger : NodeBase
     {
-        public NodeWaitSoftTrigger(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeWaitSoftTrigger(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormWaitSoftTrigger();
             Result = new NodeResultWaitSoftTrigger();
@@ -40,7 +40,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is ParamFormPlcRead form)
+            if (ParamForm is ParamFormWaitSoftTrigger form)
             {
                 if (form.Params is NodeParamWaitSoftTrigger param)
                 {

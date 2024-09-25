@@ -51,7 +51,7 @@ namespace YTVisionPro.Forms.PLCAdd
             var plc = new PlcPanasonic(parms);
             plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
             Plc = plc;
-            Solution.Instance.AddDevice(Plc);
+            Solution.Instance.AllDevices.Add(Plc);
             if (ConType == PlcConType.COM)
             {
                 SerialParamsControl = new SerialParamsControl(parms);
@@ -129,7 +129,7 @@ namespace YTVisionPro.Forms.PLCAdd
                 }
                 else
                 {
-                    if (Plc.IsOpen())
+                    if (Plc.IsConnect)
                     {
                         Plc.Disconnect();
                         LogHelper.AddLog(MsgLevel.Info, $"{Plc.UserDefinedName}关闭", true);
@@ -143,7 +143,7 @@ namespace YTVisionPro.Forms.PLCAdd
                 uiSwitch1.Active = false;
                 //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
                 this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
-                LogHelper.AddLog(MsgLevel.Exception, $"{Plc.UserDefinedName}" + e.Message, true);
+                LogHelper.AddLog(MsgLevel.Exception, $"{((Hardware.IDevice)Plc).UserDefinedName}" + e.Message, true);
             }
         }
 

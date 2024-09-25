@@ -2,6 +2,8 @@
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
+using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Tool.DataShow;
 
 namespace YTVisionPro.Node.ImageRead
 {
@@ -57,6 +59,17 @@ namespace YTVisionPro.Node.ImageRead
             nodeParamReadImage.WindowName = WindowNameList.Text;
             Params = nodeParamReadImage;
             Hide();
+        }
+        /// <summary>
+        /// 反序列化需要设置参数给回界面
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public void SetParam2Form()
+        {
+            if (Params is NodeParamImageRead param)
+            {
+
+            }
         }
     }
 }

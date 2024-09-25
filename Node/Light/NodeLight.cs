@@ -12,7 +12,7 @@ namespace YTVisionPro.Node.Light
         /// 创建一个指定名称的节点
         /// </summary>
         /// <param name="nodeText"></param>
-        public NodeLight(string nodeName, Process process, NodeType nodeType) : base(nodeName, process, nodeType)
+        public NodeLight(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormLight(nodeName, process);
             Result = new NodeResultLight();

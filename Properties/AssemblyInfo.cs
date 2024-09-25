@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("YTVision")]
+[assembly: AssemblyTitle("鹰眼视觉检测系统")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("东莞市云田视觉科技有限公司")]
-[assembly: AssemblyProduct("YTVision")]
-[assembly: AssemblyCopyright("Copyright ©  2024")]
+[assembly: AssemblyProduct("鹰眼视觉检测系统")]
+[assembly: AssemblyCopyright("东莞市云田视觉科技有限公司 Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -51,7 +51,7 @@ namespace YTVisionPro.Forms.CameraAdd
             _mapHik.Clear();
             _mapBasler.Clear();
             foreach (var info in infoListHik)
-                _mapHik[CameraHik.GetDevName(info)] = info;
+                _mapHik[CameraHik.GetDevNameByDevInfo(info)] = info;
             foreach (var info in infoListBasler)
                 _mapBasler[info[CameraInfoKey.ModelName]] = info;
             Shown += FrmCaFrmCameraInfo_Shown;
@@ -72,7 +72,7 @@ namespace YTVisionPro.Forms.CameraAdd
             if (brandIndex == 0)
             {
                 foreach (var info in infoListHik)
-                    comboBoxCameraList.Items.Add(CameraHik.GetDevName(info));
+                    comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
             }
             else if (brandIndex == 1) 
             { 
@@ -108,7 +108,7 @@ namespace YTVisionPro.Forms.CameraAdd
             _mapHik.Clear();
             _mapBasler.Clear();
             foreach (var info in infoListHik)
-                _mapHik[CameraHik.GetDevName(info)] = info;
+                _mapHik[CameraHik.GetDevNameByDevInfo(info)] = info;
             foreach (var info in infoListBasler)
                 _mapBasler[info[CameraInfoKey.ModelName]] = info;
 
@@ -119,7 +119,7 @@ namespace YTVisionPro.Forms.CameraAdd
             if (comboBoxCameraBrand.SelectedIndex == 0)
             {
                 foreach (var info in infoListHik)
-                    comboBoxCameraList.Items.Add(CameraHik.GetDevName(info));
+                    comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
             }
             else if (comboBoxCameraBrand.SelectedIndex == 1)
             {

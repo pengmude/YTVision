@@ -96,36 +96,40 @@
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
             this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.文件ToolStripMenuItem.Text = "文件";
+            this.文件ToolStripMenuItem.Click += new System.EventHandler(this.文件ToolStripMenuItem_Click);
             // 
             // 新建方案ToolStripMenuItem
             // 
             this.新建方案ToolStripMenuItem.Name = "新建方案ToolStripMenuItem";
-            this.新建方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.新建方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.新建方案ToolStripMenuItem.Text = "新建方案";
             this.新建方案ToolStripMenuItem.Click += new System.EventHandler(this.新建方案ToolStripMenuItem_Click);
             // 
             // 打开方案ToolStripMenuItem
             // 
             this.打开方案ToolStripMenuItem.Name = "打开方案ToolStripMenuItem";
-            this.打开方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.打开方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.打开方案ToolStripMenuItem.Text = "打开方案";
+            this.打开方案ToolStripMenuItem.Click += new System.EventHandler(this.打开方案ToolStripMenuItem_Click);
             // 
             // 保存方案ToolStripMenuItem
             // 
             this.保存方案ToolStripMenuItem.Name = "保存方案ToolStripMenuItem";
-            this.保存方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.保存方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.保存方案ToolStripMenuItem.Text = "保存方案";
+            this.保存方案ToolStripMenuItem.Click += new System.EventHandler(this.保存方案ToolStripMenuItem_Click);
             // 
             // 另存方案ToolStripMenuItem
             // 
             this.另存方案ToolStripMenuItem.Name = "另存方案ToolStripMenuItem";
-            this.另存方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.另存方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.另存方案ToolStripMenuItem.Text = "另存方案";
+            this.另存方案ToolStripMenuItem.Click += new System.EventHandler(this.另存方案ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
             this.退出ToolStripMenuItem.Text = "退出";
             // 
             // 视图ToolStripMenuItem
@@ -425,7 +429,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximumSize = new System.Drawing.Size(2560, 1540);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "YTVisionPro V1.0.0";

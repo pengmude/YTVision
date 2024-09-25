@@ -1,8 +1,10 @@
 ﻿using Logger;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
@@ -37,11 +39,27 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         public Button SelectedNode { get; set; } = null;
 
-        public ProcessEditPanel(string processName = "")
+        /// <summary>
+        /// 反序列化使用的构造函数
+        /// </summary>
+        /// <param name="processName"></param>
+        public ProcessEditPanel(string processName, ProcessConfig processConfig = null)
         {
             InitializeComponent();
             _process = new Process(processName);
             Solution.Instance.AddProcess(_process);
+
+            // 反序列化需要执行以下逻辑
+            if(processConfig != null)
+            {
+                _stack.Clear();
+                label1.Text = $"节点数:0";
+                LogHelper.AddLog(MsgLevel.Debug, $"=================================================正在加载流程（{_process.ProcessName}）=================================================", true);
+                // 阻塞UI去创建流程
+                CreateProcess(processConfig);
+                uiSwitchEnable.Active = processConfig.Enable;
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================流程（{_process.ProcessName}）已加载完成================================================\n", true);
+            }
         }
 
         /// <summary>
@@ -70,72 +88,127 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             if (e.Data.GetDataPresent(DragDataFormat))
             {
-
-                #region 根据text创建对应类型的节点
-
                 DragData data = (DragData)e.Data.GetData(DragDataFormat);
-
-                NodeBase node = null;
-                switch (data.NodeType)
+                try
                 {
-                    case NodeType.LightSourceControl:
-                        node = new NodeLight(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.CameraShot:
-                        node = new NodeCamera(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.LocalPicture:
-                        node = new NodeImageRead(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.PLCRead:
-                        node = new NodePlcRead(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.PLCWrite:
-                        node = new NodePlcWrite(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.PLCHTAIResultSend:
-                        node = new NodeHTAISendSignal(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.AIHT:
-                        node = new NodeHTAI(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.ImageSave:
-                        node = new NodeImageSave(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.SleepTool:
-                        node = new SleepTool(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.WaitSoftTrigger:
-                        node = new NodeWaitSoftTrigger(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.DetectResultShow:
-                        node = new NodeDataShow(data.Text, _process, data.NodeType);
-                        break;
-                    case NodeType.Summarize:
-                        node = new NodeSummarize(data.Text, _process, data.NodeType);
-                        break;
-                    default:
-                        break;
+                    CreateNode(data.NodeType, data.Text);
                 }
-                if(node == null)
+                catch (Exception ex)
                 {
-                    MessageBox.Show("当前节点类型创建失败！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogHelper.AddLog(MsgLevel.Exception, "当前节点类型创建失败！", true);
-                    return;
+                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
                 }
-                node.Size = new Size(this.Size.Width - 5, 42);
-                node.Dock = DockStyle.Top;
-                NodeBase.NodeDeletedEvent += NewNode_NodeDeletedEvent;
-                _stack.Push(node);
-                Solution.Nodes.Add(node);
-                _process.AddNode(node);
-                UpdateNode();
-
-                #endregion
-
-                //更新节点数量到界面
-                label1.Text = $"节点数:{_stack.Count}";
             }
+        }
+
+        /// <summary>
+        /// 用于反序列化创建流程中的所有节点
+        /// </summary>
+        /// <param name="processConfig"></param>
+        private delegate void SetParamDelegate();
+        private void CreateProcess(ProcessConfig processConfig)
+        {
+            foreach (var nodeInfo in processConfig.NodeInfos)
+            {
+                NodeBase nodeBase = null;
+                try
+                {
+                    // 1.还原节点
+                    nodeBase = CreateNode(nodeInfo.NodeType, nodeInfo.NodeName, nodeInfo.ID);
+                    // 2.还原节点的参数
+                    nodeBase.ParamForm.Params = nodeInfo.NodeParam;
+                    // 3.节点参数到参数设置界面
+                    nodeBase.ParamForm.SetParam2Form();
+                    LogHelper.AddLog(MsgLevel.Info, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）已加载", true);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogHelper.AddLog(MsgLevel.Exception, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）加载失败！原因：{ex.Message}", true);
+                    continue;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 创建一个对应派生类型的节点，id参数只有反序列化需要传入
+        /// </summary>
+        /// <param name="nodeType"></param>
+        /// <param name="nodeName"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private NodeBase CreateNode(NodeType nodeType, string nodeName, int id = -1)
+        {
+
+            NodeBase node = null;
+
+            // 反序列化节点时使用原来的id
+            // 而正常创建节点使用新id
+            int nodeId = id;
+            if (id == -1)
+                nodeId = Solution.Instance.NodeCount++;
+
+            #region 根据text创建对应类型的节点
+
+            switch (nodeType)
+            {
+                case NodeType.LightSourceControl:
+                    node = new NodeLight(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.CameraShot:
+                    node = new NodeCamera(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.LocalPicture:
+                    node = new NodeImageRead(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.PLCRead:
+                    node = new NodePlcRead(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.PLCWrite:
+                    node = new NodePlcWrite(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.PLCHTAIResultSend:
+                    node = new NodeHTAISendSignal(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.AIHT:
+                    node = new NodeHTAI(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ImageSave:
+                    node = new NodeImageSave(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.SleepTool:
+                    node = new NodeSleepTool(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.WaitSoftTrigger:
+                    node = new NodeWaitSoftTrigger(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.DetectResultShow:
+                    node = new NodeDataShow(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.Summarize:
+                    node = new NodeSummarize(nodeId, nodeName, _process, nodeType);
+                    break;
+                default:
+                    break;
+            }
+            if (node == null)
+            {
+                throw new Exception("当前节点类型创建失败！");
+            }
+            node.Size = new Size(this.Size.Width - 5, 42);
+            node.Dock = DockStyle.Top;
+            NodeBase.NodeDeletedEvent += NewNode_NodeDeletedEvent;
+            _stack.Push(node);
+            Solution.Instance.Nodes.Add(node);
+            _process.AddNode(node);
+            UpdateNode();
+
+            #endregion
+
+            //更新节点数量到界面
+            label1.Text = $"节点数:{_stack.Count}";
+
+            return node;
         }
 
         /// <summary>

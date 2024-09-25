@@ -33,7 +33,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 panel1.Controls.Remove(e.CameraParamsShowControl);
 
             //然后移除掉方案中的全局相机并释放相机内存
-            Solution.Instance.Devices.Remove(e.Camera);
+            Solution.Instance.AllDevices.Remove(e.Camera);
             e.Camera.Dispose();
 
             //最后移除掉单个相机控件
