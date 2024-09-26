@@ -46,6 +46,7 @@ namespace Logger
             this.tabPageFatal = new System.Windows.Forms.TabPage();
             this.listBoxFatal = new System.Windows.Forms.ListBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.打开日志目录ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.pageAll.SuspendLayout();
@@ -60,16 +61,17 @@ namespace Logger
             // 
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnClear});
+            this.btnClear,
+            this.打开日志目录ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(119, 36);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 101);
             // 
             // btnClear
             // 
             this.btnClear.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(118, 32);
-            this.btnClear.Text = "清空";
+            this.btnClear.Size = new System.Drawing.Size(240, 32);
+            this.btnClear.Text = "清空显示";
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // listBoxAll
@@ -271,6 +273,14 @@ namespace Logger
             this.imageList1.Images.SetKeyName(4, "致命.png");
             this.imageList1.Images.SetKeyName(5, "异常.png");
             // 
+            // 打开日志目录ToolStripMenuItem
+            // 
+            this.打开日志目录ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold);
+            this.打开日志目录ToolStripMenuItem.Name = "打开日志目录ToolStripMenuItem";
+            this.打开日志目录ToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
+            this.打开日志目录ToolStripMenuItem.Text = "打开日志目录";
+            this.打开日志目录ToolStripMenuItem.Click += new System.EventHandler(this.打开日志目录ToolStripMenuItem_Click);
+            // 
             // LogHelper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
@@ -308,5 +318,6 @@ namespace Logger
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.TabPage tabPageFatal;
         public System.Windows.Forms.ListBox listBoxFatal;
+        private System.Windows.Forms.ToolStripMenuItem 打开日志目录ToolStripMenuItem;
     }
 }

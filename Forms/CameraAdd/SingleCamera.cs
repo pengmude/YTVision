@@ -1,29 +1,12 @@
 ﻿using Basler.Pylon;
 using Logger;
-using Sunny.UI;
-using Sunny.UI.Win32;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO.Ports;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Windows.Forms;
-using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -36,10 +19,6 @@ namespace YTVisionPro.Forms.CameraAdd
         /// 相机对象
         /// </summary>
         public Hardware.Camera.ICamera Camera;
-        /// <summary>
-        /// 相机参数
-        /// </summary>
-        public CameraParam Params;
         /// <summary>
         /// 是否被选中
         /// </summary>
@@ -65,23 +44,53 @@ namespace YTVisionPro.Forms.CameraAdd
         /// </summary>
         public static List<SingleCamera> SingleCameraList = new List<SingleCamera>();
 
+        /// <summary>
+        /// 反序列化用
+        /// </summary>
+        /// <param name="camera"></param>
+        public SingleCamera(Hardware.Camera.ICamera camera)
+        {
+            InitializeComponent();
+            Camera = camera;
+            this.label1.Text = camera.UserDefinedName;
+            Solution.Instance.AllDevices.Add(Camera);
+            //绑定图像显示控件界面
+            CameraParamsShowControl = new CameraParamsShowControl(Camera);
+            // 保存所有的实例
+            SingleCameraList.Add(this);
+            if(camera.IsOpen)
+            {
+                try
+                {
+                    Camera.Open();
+                    Camera.SetTriggerMode(false);
+                    Camera.StartGrabbing();
+                    LogHelper.AddLog(MsgLevel.Info, $"成功打开相机（{Camera.UserDefinedName}）！", true);
+                    uiSwitch1.Active = true;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public SingleCamera(CameraParam parms)
         {
             InitializeComponent();
 
-            this.label1.Text =  parms.UserDefineName;
-            Params = parms;
+            this.label1.Text =  parms.UserDefinedName;
 
             try
             {
                 //创建相机设备并添加到方案中
                 if (parms.Brand == CameraBrand.HiKVision)
                 {
-                    Camera = new CameraHik(parms.DevInfo.Hik, parms.UserDefineName);
+                    Camera = new CameraHik(parms.DevInfo.Hik, parms.UserDefinedName);
                 }
                 else if (parms.Brand == CameraBrand.Basler)
                 {
-                    Camera = new CameraBasler(parms.DevInfo.Basler, parms.UserDefineName);
+                    Camera = new CameraBasler(parms.DevInfo.Basler, parms.UserDefinedName);
                 }
                 Solution.Instance.AllDevices.Add(Camera);
 
@@ -144,17 +153,15 @@ namespace YTVisionPro.Forms.CameraAdd
                         Camera.SetTriggerMode(false);
                         Camera.StartGrabbing();
                     });
-                    LogHelper.AddLog(MsgLevel.Info, $"{Params.UserDefineName}已打开！", true);
+                    LogHelper.AddLog(MsgLevel.Info, $"{Camera.UserDefinedName}已打开！", true);
                 }
                 catch (Exception e)
                 {
                     //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
                     this.uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
-                    MessageBox.Show(e.Message);
-                    LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
                     uiSwitch1.Active = false;
                     this.uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
-                    LogHelper.AddLog(MsgLevel.Fatal, $"{Params.UserDefineName}打开失败！", true);
+                    LogHelper.AddLog(MsgLevel.Fatal, $"{Camera.UserDefinedName}打开失败！原因：{e.Message}", true);
                 }
             }
             else
@@ -162,17 +169,15 @@ namespace YTVisionPro.Forms.CameraAdd
                 try
                 {
                     Camera.Close();
-                    LogHelper.AddLog(MsgLevel.Info, $"{Params.UserDefineName}已关闭！", true);
+                    LogHelper.AddLog(MsgLevel.Info, $"{Camera.UserDefinedName}已关闭！", true);
                 }
                 catch (Exception e)
                 {
                     //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
                     this.uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
-                    MessageBox.Show(e.Message);
-                    LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
                     uiSwitch1.Active = true;
                     this.uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
-                    LogHelper.AddLog(MsgLevel.Fatal, $"{Params.UserDefineName}关闭失败！", true);
+                    LogHelper.AddLog(MsgLevel.Fatal, $"{Camera.UserDefinedName}关闭失败！", true);
                 }
             }
             
@@ -196,8 +201,8 @@ namespace YTVisionPro.Forms.CameraAdd
                     return;
                 }
             }
-            SingleCameraList.Remove(this);
-            SingleCameraRemoveEvent?.Invoke(this, this);
+            if (IsSelected)
+                SingleCameraRemoveEvent?.Invoke(this, this);
         }
     }
 }

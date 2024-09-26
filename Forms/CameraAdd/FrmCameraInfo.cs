@@ -176,7 +176,7 @@ namespace YTVisionPro.Forms.CameraAdd
                     info.DevInfo = new CameraDevInfo(_mapHik[comboBoxCameraList.Text], null);
                 else if(comboBoxCameraBrand.SelectedIndex == 1)
                     info.DevInfo = new CameraDevInfo(null, _mapBasler[comboBoxCameraList.Text]);
-                info.UserDefineName = textBoxUserName.Text;
+                info.UserDefinedName = textBoxUserName.Text;
 
                 AddCameraDevEvent?.Invoke(this, info);
                 if (info.Brand == CameraBrand.HiKVision)
@@ -209,6 +209,6 @@ namespace YTVisionPro.Forms.CameraAdd
     {
         public CameraBrand Brand;
         public CameraDevInfo DevInfo;
-        public string UserDefineName;
+        public string UserDefinedName;
     }
 }

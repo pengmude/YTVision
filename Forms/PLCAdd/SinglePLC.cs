@@ -1,9 +1,11 @@
-﻿using Logger;
+﻿using Basler.Pylon;
+using Logger;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Hardware.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
@@ -43,6 +45,39 @@ namespace YTVisionPro.Forms.PLCAdd
         /// </summary>
         public static List<SinglePLC> SinglePLCs = new List<SinglePLC>();
 
+        /// <summary>
+        /// 反序列化用
+        /// </summary>
+        /// <param name="plc"></param>
+        public SinglePLC(IPlc plc)
+        {
+            InitializeComponent();
+            ConType = plc.PLCParms.PlcConType;
+            this.label1.Text = plc.UserDefinedName;
+            Plc = plc;
+            Solution.Instance.AllDevices.Add(Plc);
+            if (ConType == PlcConType.COM)
+            {
+                SerialParamsControl = new SerialParamsControl(Plc.PLCParms);
+            }
+            else if (ConType == PlcConType.ETHERNET)
+                EthernetParamsControl = new EthernetParamsControl();
+            SinglePLCs.Add(this);
+            if (plc.IsConnect)
+            {
+                try
+                {
+                    plc.Connect();
+                    uiSwitch1.Active = true;
+                    ((PlcPanasonic)plc).ConnectStatusEvent += Plc_ConnectStatusEvent;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public SinglePLC(PLCParms parms)
         {
             InitializeComponent();
@@ -76,14 +111,28 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <param name="e"></param>
         private void SinglePLCInfo_MouseClick(object sender, MouseEventArgs e)
         {
+            SetSelected();
             SelectedChange?.Invoke(this, this);
+        }
 
+        /// <summary>
+        /// 设置控件选中状态
+        /// </summary>
+        /// <param name="flag"></param>
+        private void SetSelected()
+        {
             //先清除所有选中状态
             foreach (var item in SinglePLCs)
-                item.SetSelectedStatus(false);
+            {
+                item.tableLayoutPanel1.BackColor = Color.LightSteelBlue;
+                item.label1.BackColor = Color.LightSteelBlue;
+                IsSelected = false;
+            }
 
-            // 设置当前实例为选中样式
-            SetSelectedStatus(true);
+            // 设置当前选中的样式
+            this.tableLayoutPanel1.BackColor = Color.CornflowerBlue;
+            this.label1.BackColor = Color.CornflowerBlue;
+            IsSelected = true;
         }
 
         /// <summary>
@@ -154,13 +203,8 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <param name="e"></param>
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //判断当前pLC是否正在监听
-            //if (SignalConfig.StartPlcs.Contains(Plc.UserDefinedName))
-            //{
-            //    MessageBox.Show("当前PLC已经启动监听，若要移除设备请先关闭监听！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //    return;
-            //}
-            SinglePLCRemoveEvent?.Invoke(this, this);
+            if(IsSelected)
+                SinglePLCRemoveEvent?.Invoke(this, this);
         }
     }
 }

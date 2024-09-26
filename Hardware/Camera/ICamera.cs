@@ -23,6 +23,14 @@ namespace YTVisionPro.Hardware.Camera
     internal interface ICamera : IDevice
     {
         /// <summary>
+        /// 硬件硬件名称
+        /// </summary>
+        string DevName { get; set; }
+        /// <summary>
+        /// 用户自定义设备名
+        /// </summary>
+        string UserDefinedName { get; set; }
+        /// <summary>
         /// 抓取图片事件
         /// </summary>
         event EventHandler<Bitmap> PublishImageEvent;
@@ -42,6 +50,7 @@ namespace YTVisionPro.Hardware.Camera
         /// 设备类型
         /// </summary>
         DevType DevType { get; set; }
+        string ClassName { get; set; }
         /// <summary>
         /// 创建设备，反序列化用
         /// </summary>

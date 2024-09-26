@@ -54,11 +54,11 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 _stack.Clear();
                 label1.Text = $"节点数:0";
-                LogHelper.AddLog(MsgLevel.Debug, $"=================================================正在加载流程（{_process.ProcessName}）=================================================", true);
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载流程（{_process.ProcessName}）=================================================", true);
                 // 阻塞UI去创建流程
                 CreateProcess(processConfig);
                 uiSwitchEnable.Active = processConfig.Enable;
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================流程（{_process.ProcessName}）已加载完成================================================", true);
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================ 流程（{_process.ProcessName}）已加载完成 ================================================", true);
             }
         }
 

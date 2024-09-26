@@ -20,24 +20,8 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void Deserialization(object sender, EventArgs e)
         {
-            // 遍历所有流程节点，释放特定节点的内存资源
-            foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)
-            {
-                foreach (var nodeInfo in processInfo.NodeInfos)
-                {
-                    if(nodeInfo.NodeType == NodeType.AIHT && nodeInfo.NodeParam is NodeParamHTAI paramAI)
-                    {
-                        paramAI.Dispose(true);
-                    }
-                }
-            }
-
-            // 方案重置
+            // 清空流程控件
             tabControl1.Controls.Clear();
-            Solution.Instance.ProcessCount = 0;
-            Solution.Instance.AllProcesses.Clear();
-            Solution.Instance.NodeCount = 0;
-            Solution.Instance.Nodes.Clear();
 
             // 根据加载的配置重新添加流程控件
             foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)

@@ -26,6 +26,10 @@ namespace YTVisionPro.Hardware
         [JsonConverter(typeof(StringEnumConverter))]
         DeviceBrand Brand { get; set; }
         /// <summary>
+        /// 类型名称，用于反序列化标识
+        /// </summary>
+        string ClassName {  get; set; }
+        /// <summary>
         /// 创建设备，反序列化用
         /// </summary>
         void CreateDevice();

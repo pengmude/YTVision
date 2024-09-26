@@ -1,4 +1,5 @@
 ﻿//using MvCameraControl;
+using Logger;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,11 @@ namespace YTVisionPro
         /// 方案是否正在运行
         /// </summary>
         public bool IsRunning { get; set; } = false;
+        
+        /// <summary>
+        /// 方案总耗时
+        /// </summary>
+        public long RunTime {  get; set; } = -1;
 
         /// <summary>
         /// 方案被修改
@@ -192,11 +198,11 @@ namespace YTVisionPro
         /// <returns></returns>
         public async Task Run(bool isCyclical = false)
         {
+            IsRunning = true;
+            DateTime startTime = DateTime.Now;
+            _cancellationTokenSource = new CancellationTokenSource();
             try
             {
-                IsRunning = true;
-                _cancellationTokenSource = new CancellationTokenSource();
-
                 // 启动所有流程
                 var tasks = new List<Task>();
                 foreach (var process in AllProcesses)
@@ -205,10 +211,14 @@ namespace YTVisionPro
                 }
                 // 等待所有流程完成
                 await Task.WhenAll(tasks);
+
             }
             catch (OperationCanceledException ex) { }
             catch (Exception ex) { }
 
+            // 方案总耗时计算
+            RunTime = (long)(DateTime.Now - startTime).TotalMilliseconds;
+            //LogHelper.AddLog(MsgLevel.Info, $"方案总耗时：{RunTime} ms", true);
             IsRunning = false;
         }
 

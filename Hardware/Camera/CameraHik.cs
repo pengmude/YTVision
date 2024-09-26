@@ -45,6 +45,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <summary>
         /// 设备类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.CAMERA;
 
         /// <summary>
@@ -55,6 +56,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <summary>
         /// 相机品牌
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.HikVision;
 
         /// <summary>
@@ -66,6 +68,7 @@ namespace YTVisionPro.Hardware.Camera
         /// 用户定义名称
         /// </summary>
         public string UserDefinedName { get; set; }
+        public string ClassName { get; set; } = typeof(CameraHik).FullName;
 
 
         #region 反序列化相关函数
@@ -198,12 +201,13 @@ namespace YTVisionPro.Hardware.Camera
         public bool Open()
         {
             int nRet = 0;
-            nRet = device.Open();
-
-            if (MvError.MV_OK != nRet)
+            try
             {
-                LogHelper.AddLog(MsgLevel.Fatal, "打开相机失败！", true);
-                MessageBox.Show("打开相机失败！");
+                nRet = device.Open();
+            }
+            catch (Exception e)
+            {
+                LogHelper.AddLog(MsgLevel.Fatal, $"相机（{UserDefinedName}）打开失败！原因：{e.Message}", true);
                 return false;
             }
             IsOpen = true;

@@ -42,19 +42,6 @@ namespace YTVisionPro.Node.AI.HTAI
         /// 显示渲染图窗口名称
         /// </summary>
         public string WindowName {  get; set; }
-
-        /// <summary>
-        /// 释放AI节点模型资源
-        /// </summary>
-        /// <param name="disposing"></param>
-        public void Dispose(bool disposing)
-        {
-            if (disposing && (TreePredictHandle != IntPtr.Zero))
-            {
-                HTAPI.ReleaseTree(TreePredictHandle);
-                TreePredictHandle = IntPtr.Zero;
-            }
-        }
     }
     /// <summary>
     /// 加载模型的参数

@@ -32,11 +32,13 @@ namespace YTVisionPro.Hardware.Camera
         /// <summary>
         /// 品牌名称
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.Basler;
 
         /// <summary>
         /// 设备类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.CAMERA;
 
         /// <summary>
@@ -53,6 +55,7 @@ namespace YTVisionPro.Hardware.Camera
         /// 用户定义名称
         /// </summary>
         public string UserDefinedName { get; set; }
+        public string ClassName { get; set; } = typeof(CameraBasler).FullName;
 
 
         #region 反序列化专用函数

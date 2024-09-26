@@ -35,11 +35,13 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 设备类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.LIGHT;
 
         /// <summary>
         /// 光源品牌-磐鑫
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.PPX;
 
         /// <summary>
@@ -56,6 +58,7 @@ namespace YTVisionPro.Hardware.Light
         /// 光源亮度值
         /// </summary>
         public int Brightness { get; set; }
+        public string ClassName { get; set; } = typeof(LightPPX).FullName;
 
         /// <summary>
         /// 光源所连接的串口对象

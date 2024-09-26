@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using Basler.Pylon;
+using Logger;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,35 @@ namespace YTVisionPro.Forms.LightAdd
         /// 保存所有的当前类实例
         /// </summary>
         public static List<SingleLight> SingleLights = new List<SingleLight>();
+
+        /// <summary>
+        /// 反序列化用
+        /// </summary>
+        /// <param name="light"></param>
+        public SingleLight(ILight light)
+        {
+            InitializeComponent();
+            this.label1.Text = light.UserDefinedName;
+            Light = light;
+            Parms = light.LightParam;
+            Solution.Instance.AllDevices.Add(Light);
+            //给光源绑定参数界面
+            LightParamsShowControl = new LightParamsShowControl(Parms);
+            // 保存所有的实例
+            SingleLights.Add(this);
+            if (light.IsOpen)
+            {
+                try
+                {
+                    light.TurnOn(light.Brightness);
+                    uiSwitch1.Active = true;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
         public SingleLight(LightParam parms)
         {
@@ -183,8 +213,8 @@ namespace YTVisionPro.Forms.LightAdd
                     return;
                 }
             }
-            SingleLights.Remove(this);
-            SingleLightRemoveEvent?.Invoke(this, this);
+            if(IsSelected)
+                SingleLightRemoveEvent?.Invoke(this, this);
         }
     }
 }

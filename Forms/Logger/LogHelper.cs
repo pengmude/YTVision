@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -11,6 +12,7 @@ namespace Logger
     {
         static readonly string LogDictory = Environment.CurrentDirectory + @"\Logs\";
         static event EventHandler<LevelAndInfo> LogAddEvent;
+        private static readonly object _logFileLocker = new object();
 
         #region 日志等级和日志内容结构体
         struct LevelAndInfo
@@ -190,7 +192,10 @@ namespace Logger
             SingleLog singleLog = new SingleLog();
             singleLog.MakeLog(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), $"{level}", logInfo, filePath, memberName, $"{lineNumber}");
             // 写入本地文件Log
-            WriteLog(singleLog);
+            lock (_logFileLocker)
+            {
+                WriteLog(singleLog);
+            }
             // 显示到界面的Log
             if (isDisplay)
             {
@@ -272,6 +277,18 @@ namespace Logger
                 myLogDetail.Show();
             }
 
+        }
+
+        private void 打开日志目录ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // 使用 Process.Start 运行文件管理器打开日志文件夹
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "explorer.exe",
+                Arguments = LogDictory,
+                UseShellExecute = true
+            };
+            Process.Start(startInfo);
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Timers;
 using YTVisionPro.Forms.LightAdd;
 using System.Linq;
+using YTVisionPro.Hardware.Camera;
 
 namespace YTVisionPro.Hardware.Light
 {
@@ -21,11 +22,13 @@ namespace YTVisionPro.Hardware.Light
         /// <summary>
         /// 光源品牌-锐视
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.Rsee;
 
         /// <summary>
         /// 设备类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.LIGHT;
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace YTVisionPro.Hardware.Light
         /// 光源串口是否打开
         /// </summary>
         public bool IsComOpen { get; set; }
+        public string ClassName { get; set; } = typeof(LightRsee).FullName;
 
         /// <summary>
         /// 串口通信句柄

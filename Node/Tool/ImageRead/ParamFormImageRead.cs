@@ -68,6 +68,15 @@ namespace YTVisionPro.Node.ImageRead
         {
             if (Params is NodeParamImageRead param)
             {
+                textBox1.Text = param.ImagePath;
+                for (int i = 0; i < WindowNameList.Items.Count; i++)
+                {
+                    if (WindowNameList.Items[i].ToString() == param.WindowName)
+                    {
+                        WindowNameList.SelectedIndex = i;
+                        break;
+                    }
+                }
 
             }
         }

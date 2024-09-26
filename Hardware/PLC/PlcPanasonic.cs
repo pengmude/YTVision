@@ -2,8 +2,10 @@
 using HslCommunication.Profinet.Panasonic;
 using JsonSubTypes;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Hardware.PLC
@@ -42,12 +44,15 @@ namespace YTVisionPro.Hardware.PLC
         /// <summary>
         /// 设备类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.PLC;
 
         /// <summary>
         /// 设备品牌
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.Panasonic;
+        public string ClassName { get; set; } = typeof(PlcPanasonic).FullName;
 
         #region 反序列化专用函数
 
@@ -57,6 +62,9 @@ namespace YTVisionPro.Hardware.PLC
         [JsonConstructor]
         public PlcPanasonic() { }
 
+        /// <summary>
+        /// 反序列化PLC必须调用
+        /// </summary>
         public void CreateDevice()
         {
             try

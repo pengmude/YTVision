@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MvCameraControl;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
@@ -6,11 +7,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.ImageViewer;
+using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node;
+using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Node.Camera.HiK;
 
 namespace YTVisionPro
@@ -83,35 +87,76 @@ namespace YTVisionPro
                 string json = File.ReadAllText(solFile);
                 SolConfig = JsonConvert.DeserializeObject<SolConfig>(json);
 
-                // 测试反序列化后的设备是否可用
-                foreach (var dev in SolConfig.Devices)
+                if (SolConfig == null)
+                    throw new Exception("方案配置文件已损坏！");
+
+                #region 清理旧方案设备和流程节点
+
+                // 释放旧方案的硬件资源（光源、相机、PLC）
+                foreach (var dev in Solution.Instance.AllDevices)
                 {
-                    if (dev is ICamera hik)
+                    if (dev is ILight light)
+                        light.Disconnect();
+                    if (dev is ICamera camera)
+                        camera.Dispose();
+                    if (dev is IPlc plc)
+                        plc.Disconnect();
+                }
+
+                // 清空设备
+                SingleLight.SingleLights.Clear();
+                SingleCamera.SingleCameraList.Clear();
+                Solution.Instance.AllDevices.Clear();
+
+                // 释放AI节点的内存
+                foreach (var node in Solution.Instance.Nodes)
+                {
+                    if (node is NodeHTAI nodeAi)
                     {
-                        // 反序列化完必须调用CreateDevice才能还原相机对象
-                        hik.CreateDevice();
-
-                        Solution.Instance.CameraDevices[0] = hik;
-
-                        hik.Open();
-
-                        MessageBox.Show($"相机是否打开：{hik.IsOpen}\n 设备类型：{hik.DevType}\n SN：{hik.SN}\n 品牌：{hik.Brand}\n" +
-                            $"设备名称：{hik.DevName}\n 用户自定义名称：{hik.UserDefinedName}");
-
-                    }
-                    else if(dev is ILight light)
-                    {
-                        light.CreateDevice();
-                        MessageBox.Show($"光源是否打开：{light.IsOpen}\n 设备类型：{light.DevType}\n 品牌：{light.Brand}\n" +
-                            $"设备名称：{light.DevName}\n 用户自定义名称：{light.UserDefinedName}");
-                    }
-                    else if(dev is IPlc plc)
-                    {
-                        plc.CreateDevice();
-                        MessageBox.Show($"PLC是否连接：{plc.IsConnect}\n 设备类型：{plc.DevType}\n 品牌：{plc.Brand}\n" +
-                            $"设备名称：{plc.DevName}\n 用户自定义名称：{plc.UserDefinedName}");
+                        nodeAi.ReleaseAIResult();
+                        ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
                     }
                 }
+
+                // 清空流程和节点
+                Solution.Instance.ProcessCount = 0;
+                Solution.Instance.AllProcesses.Clear();
+                Solution.Instance.NodeCount = 0;
+                Solution.Instance.Nodes.Clear();
+
+                #endregion
+
+                #region 测试代码
+
+                // 测试反序列化后的设备是否可用
+                //foreach (var dev in SolConfig.Devices)
+                //{
+                //    if (dev is ICamera hik)
+                //    {
+                //        // 反序列化完必须调用CreateDevice才能还原相机对象
+                //        hik.CreateDevice();
+
+                //        Solution.Instance.CameraDevices[0] = hik;
+
+                //        hik.Open();
+
+                //        MessageBox.Show($"相机是否打开：{hik.IsOpen}\n 设备类型：{hik.DevType}\n SN：{hik.SN}\n 品牌：{hik.Brand}\n" +
+                //            $"设备名称：{hik.DevName}\n 用户自定义名称：{hik.UserDefinedName}");
+
+                //    }
+                //    else if(dev is ILight light)
+                //    {
+                //        light.CreateDevice();
+                //        MessageBox.Show($"光源是否打开：{light.IsOpen}\n 设备类型：{light.DevType}\n 品牌：{light.Brand}\n" +
+                //            $"设备名称：{light.DevName}\n 用户自定义名称：{light.UserDefinedName}");
+                //    }
+                //    else if(dev is IPlc plc)
+                //    {
+                //        plc.CreateDevice();
+                //        MessageBox.Show($"PLC是否连接：{plc.IsConnect}\n 设备类型：{plc.DevType}\n 品牌：{plc.Brand}\n" +
+                //            $"设备名称：{plc.DevName}\n 用户自定义名称：{plc.UserDefinedName}");
+                //    }
+                //}
 
                 // 打印反序列化节点结果
                 //foreach (var processConfig in SolConfig.ProcessInfos)
@@ -124,10 +169,15 @@ namespace YTVisionPro
                 //    MessageBox.Show(ss);
                 //}
 
+                #endregion
+
                 // 发送反序列化完成事件
+                // 目的：
+                // 1.移除旧方案的流程节点控件
+                // 2.移除旧方案的设备管理窗口的设备控件
+                // 3.重新根据配置加载流程、创建设备
                 DeserializationCompletionEvent?.Invoke(null,EventArgs.Empty);
 
-                //MessageBox.Show($"反序列化完成！");
             }
             catch (Exception ex)
             {
@@ -253,7 +303,7 @@ namespace YTVisionPro
             List<T> values = new List<T>();
             foreach (var item in jObject.Properties())
             {
-                Type type = Type.GetType(item.Name);
+                Type type = Type.GetType((string)item.Value["ClassName"]);
                 var value = item.Value.ToObject(type);
                 values.Add((T)value);
             }
@@ -265,7 +315,7 @@ namespace YTVisionPro
             JObject jObject = new JObject();
             foreach (var item in values)
             {
-                jObject.Add(item?.GetType().FullName, JToken.FromObject(item));
+                jObject.Add(((Hardware.IDevice)item).UserDefinedName, JToken.FromObject(item));
             }
             var p = jObject.Properties();
             //foreach (var item in p)

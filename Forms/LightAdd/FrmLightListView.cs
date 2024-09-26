@@ -1,8 +1,10 @@
-﻿using Logger;
+﻿using Basler.Pylon;
+using Logger;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
+using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Forms.LightAdd
@@ -27,6 +29,42 @@ namespace YTVisionPro.Forms.LightAdd
             frmLightNew.LightAddEvent += FrmLightNew_LightAddEvent;
             SingleLight.SelectedChange += SingleLight_SelectedChange;
             SingleLight.SingleLightRemoveEvent += SingleLight_SinglePLCRemoveEvent;
+            ConfigHelper.DeserializationCompletionEvent += Deserialization;
+        }
+
+        /// <summary>
+        /// 反序列化光源设备
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Deserialization(object sender, EventArgs e)
+        {
+            // 先移除旧方案的光源控件
+            flowLayoutPanel1.Controls.Clear();
+
+            // 添加新的光源
+            SingleLight singleLight = null;
+            LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【光源设备列表】=================================================", true);
+            foreach (var dev in ConfigHelper.SolConfig.Devices)
+            {
+                if (dev is ILight light)
+                {
+                    try
+                    {
+                        light.CreateDevice(); // 创建光源，必要的
+                        singleLight = new SingleLight(light);
+                        singleLight.Anchor = AnchorStyles.Left;
+                        singleLight.Anchor = AnchorStyles.Right;
+                        flowLayoutPanel1.Controls.Add(singleLight);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"光源（{light.UserDefinedName}）打开失败，请检查光源状态！原因：{ex.Message}");
+                        continue;
+                    }
+                }
+            }
+            LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
         }
 
         /// <summary>
@@ -36,16 +74,13 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void SingleLight_SinglePLCRemoveEvent(object sender, SingleLight e)
         {
-            //移除的是被选中的则要清除它参数显示控件
-            if (e.IsSelected)
-                panel1.Controls.Remove(e.LightParamsShowControl);
-            
+
+            SingleLight.SingleLights.Remove(e);
+            panel1.Controls.Remove(e.LightParamsShowControl);
             //然后移除掉方案中的全局光源
             Solution.Instance.AllDevices.Remove(e.Light);
-
-            // 移除光源实例
+            // 释放光源资源
             e.Light.Disconnect();
-
             //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);
         }
