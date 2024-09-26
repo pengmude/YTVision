@@ -58,7 +58,7 @@ namespace YTVisionPro.Forms.ProcessNew
                 // 阻塞UI去创建流程
                 CreateProcess(processConfig);
                 uiSwitchEnable.Active = processConfig.Enable;
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================流程（{_process.ProcessName}）已加载完成================================================\n", true);
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================流程（{_process.ProcessName}）已加载完成================================================", true);
             }
         }
 
@@ -117,7 +117,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     nodeBase = CreateNode(nodeInfo.NodeType, nodeInfo.NodeName, nodeInfo.ID);
                     // 2.还原节点的参数
                     nodeBase.ParamForm.Params = nodeInfo.NodeParam;
-                    // 3.节点参数到参数设置界面
+                    // 3.还原带订阅控件的参数设置界面的下拉框数据
+                    nodeBase.ParamForm.SetNodeBelong(nodeBase);
+                    // 4.节点参数到参数设置界面
                     nodeBase.ParamForm.SetParam2Form();
                     LogHelper.AddLog(MsgLevel.Info, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）已加载", true);
                 }
@@ -146,7 +148,7 @@ namespace YTVisionPro.Forms.ProcessNew
             // 而正常创建节点使用新id
             int nodeId = id;
             if (id == -1)
-                nodeId = Solution.Instance.NodeCount++;
+                nodeId = ++Solution.Instance.NodeCount;
 
             #region 根据text创建对应类型的节点
 

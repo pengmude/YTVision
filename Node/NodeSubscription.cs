@@ -143,14 +143,25 @@ namespace YTVisionPro.Node
         {
             return comboBox2.Text;
         }
-        public void SetText1(string text1)
-        {
-            comboBox1.Text = text1;
-        }
 
-        public void SetText2(string text2)
+        public void SetText(string text1, string text2)
         {
-            comboBox2.Text = text2;
+            for (int i = 0; i < comboBox1.Items.Count; i++)
+            {
+                if(text1 == comboBox1.Items[i].ToString())
+                {
+                    comboBox1.SelectedIndex = i;
+                    break;
+                }
+            }
+            for (int i = 0;i < comboBox2.Items.Count; i++)
+            {
+                if (text2 == comboBox2.Items[i].ToString())
+                {
+                    comboBox2.SelectedIndex = i;
+                    break;
+                }
+            }
         }
     }
 }

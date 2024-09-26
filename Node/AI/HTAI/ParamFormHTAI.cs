@@ -437,7 +437,7 @@ namespace YTVisionPro.Node.AI.HTAI
             }
             
             nodeParamHTAI.TreePredictHandle = TreePredictHandle;
-            nodeParamHTAI.Text1 = nodeSubscription1.GetText1().Split('.')[1];
+            nodeParamHTAI.Text1 = nodeSubscription1.GetText1();
             nodeParamHTAI.Text2 = nodeSubscription1.GetText2();
             nodeParamHTAI.TreePath = tbTreeFlie.Text;
             nodeParamHTAI.AllNgConfigs = _allNgConfigs;
@@ -455,8 +455,7 @@ namespace YTVisionPro.Node.AI.HTAI
             if (Params is NodeParamHTAI param)
             {
                 // 还原界面显示
-                nodeSubscription1.SetText1(param.Text1);  // TODO:这里设置订阅的文本不成功
-                nodeSubscription1.SetText2(param.Text2);
+                nodeSubscription1.SetText(param.Text1, param.Text2);
                 tbTreeFlie.Text = param.TreePath;
                 InitNodeNamesToTreeView(param.TreePath, true);
                 UpdateWinNameList(FrmImageViewer.CurWindowsNum);
