@@ -5,17 +5,13 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
 
 namespace YTVisionPro
 {
@@ -173,9 +169,10 @@ namespace YTVisionPro
 
                 // 发送反序列化完成事件
                 // 目的：
-                // 1.移除旧方案的流程节点控件
-                // 2.移除旧方案的设备管理窗口的设备控件
-                // 3.重新根据配置加载流程、创建设备
+                // 1.先触发光源管理窗口还原所有光源，还原完成触发光源完成事件
+                // 2.相机管理窗口订阅光源完成事件进行相机还原，完成后触发相机完成事件 移除旧方案的设备管理窗口的设备控件
+                // 3.PLC管理窗口订阅相机完成事件进行PLC还原 完成后触发PLC完成事件，
+                // 4.流程管理窗口订阅PLC完成事件进行流程还原，因为流程还原需要用到设备，这样保证了在还原流程时设备可用
                 DeserializationCompletionEvent?.Invoke(null,EventArgs.Empty);
 
             }
@@ -317,11 +314,6 @@ namespace YTVisionPro
             {
                 jObject.Add(((Hardware.IDevice)item).UserDefinedName, JToken.FromObject(item));
             }
-            var p = jObject.Properties();
-            //foreach (var item in p)
-            //{
-            //    Debug.Log(item.Name);
-            //}
             serializer.Serialize(writer, jObject);
         }
         #pragma warning restore CS8603 // 可能返回 null 引用。

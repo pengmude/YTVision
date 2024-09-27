@@ -12,7 +12,10 @@ namespace YTVisionPro.Forms.LightAdd
     internal partial class FrmLightListView : Form
     {
         FrmLightNew frmLightNew = new FrmLightNew();
-
+        /// <summary>
+        /// 光源反序列化完成事件
+        /// </summary>
+        public static event EventHandler OnLightDeserializationCompletionEvent;
         /// <summary>
         /// 已添加的磐鑫光源所占用的Com列表
         /// 作用：解决相同COM号多个通道连接光源的问题
@@ -65,6 +68,7 @@ namespace YTVisionPro.Forms.LightAdd
                 }
             }
             LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
+            OnLightDeserializationCompletionEvent?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

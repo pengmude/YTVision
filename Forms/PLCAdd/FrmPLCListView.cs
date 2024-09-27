@@ -20,14 +20,17 @@ namespace YTVisionPro.Forms.PLCAdd
     internal partial class FrmPLCListView : Form
     {
         FrmPLCNew _frmAdd = new FrmPLCNew();
-
+        /// <summary>
+        /// PLC反序列化完成事件
+        /// </summary>
+        public static event EventHandler OnPLCDeserializationCompletionEvent;
         public FrmPLCListView()
         {
             InitializeComponent();
             FrmPLCNew.PLCAddEvent += FrmAdd_PLCAddEvent;
             SinglePLC.SelectedChange += SinglePLC_SelectedChange;
             SinglePLC.SinglePLCRemoveEvent += SinglePLC_SinglePLCRemoveEvent;
-            ConfigHelper.DeserializationCompletionEvent += Deserialization;
+            FrmCameraListView.OnCameraDeserializationCompletionEvent += Deserialization;
         }
 
         /// <summary>
@@ -63,6 +66,7 @@ namespace YTVisionPro.Forms.PLCAdd
                 }
             }
             LogHelper.AddLog(MsgLevel.Debug, $"================================================【PLC设备列表】已加载完成 ================================================", true);
+            OnPLCDeserializationCompletionEvent?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

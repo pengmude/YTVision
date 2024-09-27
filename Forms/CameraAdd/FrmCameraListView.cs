@@ -3,12 +3,14 @@ using System;
 using System.Windows.Forms;
 using Logger;
 using System.Diagnostics;
+using YTVisionPro.Forms.LightAdd;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
     internal partial class FrmCameraListView : Form
     {
         public static event EventHandler OnCameraListViewClosed;
+        public static event EventHandler OnCameraDeserializationCompletionEvent;
         /// <summary>
         /// 设备信息弹窗
         /// </summary>
@@ -20,7 +22,7 @@ namespace YTVisionPro.Forms.CameraAdd
             FrmCameraInfo.AddCameraDevEvent += FrmCameraInfo_AddCameraDevEvent;
             SingleCamera.SelectedChange += SingleCamera_SingleCameraSelectedChanged;
             SingleCamera.SingleCameraRemoveEvent += SingleCamera_SingleCameraRemoveEvent;
-            ConfigHelper.DeserializationCompletionEvent += Deserialization;
+            FrmLightListView.OnLightDeserializationCompletionEvent += Deserialization;
         }
 
         /// <summary>
@@ -57,6 +59,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 
             }
             LogHelper.AddLog(MsgLevel.Debug, $"================================================【相机设备列表】已加载完成 ================================================", true);
+            OnCameraDeserializationCompletionEvent?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -130,7 +133,8 @@ namespace YTVisionPro.Forms.CameraAdd
         {
             foreach (var item in Solution.Instance.CameraDevices)
             {
-                item.SetTriggerMode(true);
+                if(item.IsOpen)
+                    item.SetTriggerMode(true);
             }
         }
     }

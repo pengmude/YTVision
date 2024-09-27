@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Node;
-using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -11,7 +11,7 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             InitializeComponent();
             InitNodeComboBox();
-            ConfigHelper.DeserializationCompletionEvent += Deserialization;
+            FrmPLCListView.OnPLCDeserializationCompletionEvent += Deserialization;
         }
         /// <summary>
         /// 反序列化
