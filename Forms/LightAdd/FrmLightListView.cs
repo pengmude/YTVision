@@ -81,10 +81,10 @@ namespace YTVisionPro.Forms.LightAdd
 
             SingleLight.SingleLights.Remove(e);
             panel1.Controls.Remove(e.LightParamsShowControl);
-            //然后移除掉方案中的全局光源
-            Solution.Instance.AllDevices.Remove(e.Light);
             // 释放光源资源
             e.Light.Disconnect();
+            //然后移除掉方案中的全局光源
+            Solution.Instance.AllDevices.Remove(e.Light);
             //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);
         }

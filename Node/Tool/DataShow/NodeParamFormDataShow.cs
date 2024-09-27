@@ -38,7 +38,10 @@ namespace YTVisionPro.Node.Tool.DataShow
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Params = new NodeParamDataShow();
+            var param = new NodeParamDataShow();
+            param.Text1 = nodeSubscription1.GetText1();
+            param.Text2 = nodeSubscription1.GetText2();
+            Params = param;
             Hide();
         }
         /// <summary>
@@ -49,7 +52,8 @@ namespace YTVisionPro.Node.Tool.DataShow
         {
             if (Params is NodeParamDataShow param)
             {
-
+                // 还原界面显示
+                nodeSubscription1.SetText(param.Text1, param.Text2);
             }
         }
     }

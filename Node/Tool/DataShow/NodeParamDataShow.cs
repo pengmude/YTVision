@@ -5,6 +5,8 @@ namespace YTVisionPro.Node.Tool.DataShow
     internal class NodeParamDataShow : INodeParam
     {
         public AiResult AiResultData;
+        public string Text1;
+        public string Text2;
     }
 
     internal class DatashowData

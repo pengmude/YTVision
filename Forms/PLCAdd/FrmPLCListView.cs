@@ -78,8 +78,8 @@ namespace YTVisionPro.Forms.PLCAdd
         {
             SinglePLC.SinglePLCs.Remove(e);
             panel1.Controls.Remove(e.SerialParamsControl);
-            Solution.Instance.AllDevices.Remove(e.Plc);
             e.Plc.Disconnect();
+            Solution.Instance.AllDevices.Remove(e.Plc);
             flowLayoutPanel1.Controls.Remove(e);
         }
 

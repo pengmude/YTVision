@@ -53,6 +53,7 @@ namespace YTVisionPro.Forms.CameraAdd
                     catch (Exception ex)
                     {
                         MessageBox.Show($"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}");
+                        LogHelper.AddLog(MsgLevel.Exception, $"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}", true);
                         continue;
                     }
                 }
@@ -71,9 +72,9 @@ namespace YTVisionPro.Forms.CameraAdd
         {
             SingleCamera.SingleCameraList.Remove(e);
             panel1.Controls.Remove(e.CameraParamsShowControl);
+            e.Camera.Dispose();
             //然后移除掉方案中的全局相机并释放相机内存
             Solution.Instance.AllDevices.Remove(e.Camera);
-            e.Camera.Dispose();
             //最后移除掉单个相机控件
             flowLayoutPanel1.Controls.Remove(e);
         }

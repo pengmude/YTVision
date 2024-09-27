@@ -109,15 +109,22 @@ namespace YTVisionPro.Hardware.Light
                 if (FrmLightListView.OccupiedComList.Any(sp => sp.PortName == lightParam.Port))
                     throw new Exception("不同品牌的光源不能共用同一个串口！");
                 // 找对应串口的句柄
-                ComHandle = FrmLightListView.Com2HandleList.FirstOrDefault(item => item.ComPort == lightParam.Port).Handle;
-                if (ComHandle == 0 || ComHandle == null)
+                foreach (var item in FrmLightListView.Com2HandleList)
+                {
+                    if(item.ComPort == LightParam.Port)
+                    {
+                        ComHandle = item.Handle;
+                        break;
+                    }
+                }
+                LightParam = lightParam;
+                DevName = lightParam.LightName;
+                UserDefinedName = DevName;
+                RseeDeviceType = lightParam.RseeDeviceType;
+                if (ComHandle == 0)
                     Connenct();
                 else
                     IsComOpen = true;
-                DevName = lightParam.LightName;
-                UserDefinedName = DevName;
-                LightParam = lightParam;
-                RseeDeviceType = lightParam.RseeDeviceType;
             }
             catch (Exception ex)
             {
