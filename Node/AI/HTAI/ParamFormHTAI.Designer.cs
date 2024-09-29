@@ -478,8 +478,8 @@
             // 
             // nodeSubscription1
             // 
-            this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.SetColumnSpan(this.nodeSubscription1, 2);
+            this.nodeSubscription1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription1.Location = new System.Drawing.Point(208, 3);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
             this.nodeSubscription1.Name = "nodeSubscription1";

@@ -278,16 +278,16 @@
     <Compile Include="Node\AI\HTAI\ParamFormHTAI.Designer.cs">
       <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\Camera\HiK\NodeCamera.cs">
+    <Compile Include="Node\Camera\Shot\NodeShot.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\Camera\HiK\NodeParamCamera.cs" />
-    <Compile Include="Node\Camera\HiK\NodeResultCamera.cs" />
-    <Compile Include="Node\Camera\HiK\ParamFormCamera.cs">
+    <Compile Include="Node\Camera\Shot\NodeParamShot.cs" />
+    <Compile Include="Node\Camera\Shot\NodeResultShot.cs" />
+    <Compile Include="Node\Camera\Shot\ParamFormShot.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\Camera\HiK\ParamFormCamera.Designer.cs">
-      <DependentUpon>ParamFormCamera.cs</DependentUpon>
+    <Compile Include="Node\Camera\Shot\ParamFormShot.Designer.cs">
+      <DependentUpon>ParamFormShot.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\FrmNodeRename.cs">
       <SubType>Form</SubType>
@@ -548,8 +548,8 @@
     <EmbeddedResource Include="Node\AI\HTAI\ParamFormHTAI.resx">
       <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\Camera\HiK\ParamFormCamera.resx">
-      <DependentUpon>ParamFormCamera.cs</DependentUpon>
+    <EmbeddedResource Include="Node\Camera\Shot\ParamFormShot.resx">
+      <DependentUpon>ParamFormShot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
@@ -660,6 +660,7 @@
     <Content Include="Icon\保存项目.png" />
     <Content Include="Icon\停止执行.png" />
     <None Include="Resources\AppIcon.bmp" />
+    <None Include="Icon\另存为.png" />
     <Content Include="桌面图.ico" />
     <None Include="Icon\光源.png" />
     <Content Include="Icon\单次执行.png" />

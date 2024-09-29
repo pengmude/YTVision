@@ -22,7 +22,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// <summary>
         /// AI检测结果
         /// </summary>
-        public AiResult AiResult;
+        public ResultViewData ResultViewData;
         /// <summary>
         /// 图片是否是以条码命名
         /// </summary>
@@ -51,6 +51,35 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// 压缩阈值
         /// </summary>
         public ushort CompressValue;
+
+        #region 反序列化还原参数设置界面用
+
+        /// <summary>
+        /// 图像订阅节点的文本1
+        /// </summary>
+        public string ImgSubText1;
+        /// <summary>
+        /// 图像订阅控件的文本2
+        /// </summary>
+        public string ImgSubText2;
+        /// <summary>
+        /// AI检测结果订阅控件的文本1
+        /// </summary>
+        public string AiResSubText1;
+        /// <summary>
+        /// AI检测结果订阅控件的文本2
+        /// </summary>
+        public string AiResSubText2;
+        /// <summary>
+        /// 条码订阅控件的文本1
+        /// </summary>
+        public string BarCodeSubText1;
+        /// <summary>
+        /// 条码订阅控件的文本2
+        /// </summary>
+        public string BarCodeSubText2;
+
+        #endregion
     }
 
     public struct AllNGResult

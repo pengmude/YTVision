@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Camera.Shot;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -62,17 +62,22 @@ namespace YTVisionPro.Forms.CameraAdd
             {
                 try
                 {
+                    Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
                     Camera.Open();
                     Camera.SetTriggerMode(false);
                     Camera.StartGrabbing();
                     LogHelper.AddLog(MsgLevel.Info, $"成功打开相机（{Camera.UserDefinedName}）！", true);
-                    uiSwitch1.Active = true;
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
             }
+        }
+
+        private void Camera_ConnectStatusEvent(object sender, bool e)
+        {
+            uiSwitch1.Active = e;
         }
 
         public SingleCamera(CameraParam parms)
@@ -92,6 +97,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 {
                     Camera = new CameraBasler(parms.DevInfo.Basler, parms.UserDefinedName);
                 }
+                Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
                 Solution.Instance.AllDevices.Add(Camera);
 
                 //绑定图像显示控件界面
@@ -157,10 +163,6 @@ namespace YTVisionPro.Forms.CameraAdd
                 }
                 catch (Exception e)
                 {
-                    //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                    this.uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
-                    uiSwitch1.Active = false;
-                    this.uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Camera.UserDefinedName}打开失败！原因：{e.Message}", true);
                 }
             }
@@ -173,10 +175,6 @@ namespace YTVisionPro.Forms.CameraAdd
                 }
                 catch (Exception e)
                 {
-                    //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                    this.uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
-                    uiSwitch1.Active = true;
-                    this.uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Camera.UserDefinedName}关闭失败！", true);
                 }
             }
@@ -193,8 +191,8 @@ namespace YTVisionPro.Forms.CameraAdd
             // 移除设备需要判断当前是否有节点使用该设备
             foreach (var node in Solution.Instance.Nodes)
             {
-                if (node is NodeCamera cameraNode
-                    && cameraNode.ParamForm.Params is NodeParamCamera paramCamera
+                if (node is NodeShot cameraNode
+                    && cameraNode.ParamForm.Params is NodeParamShot paramCamera
                     && Camera.UserDefinedName == paramCamera.Camera.UserDefinedName)
                 {
                     MessageBox.Show("当前方案的节点正在使用该相机，无法删除相机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);

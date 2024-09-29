@@ -6,18 +6,22 @@ using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node.AI.HTAI;
 
-namespace YTVisionPro.Node.Camera.HiK
+namespace YTVisionPro.Node.Camera.Shot
 {
     /// <summary>
     /// 相机节点参数
     /// </summary>
-    internal class NodeParamCamera : INodeParam
+    internal class NodeParamShot : INodeParam
     {
         /// <summary>
         /// 使用的相机
         /// </summary>
         [JsonIgnore]
         public ICamera Camera { get; set; }
+        /// <summary>
+        /// 使用的相机名称
+        /// </summary>
+        public string CameraName {  get; set; }
         /// <summary>
         /// 触发方式
         /// </summary>

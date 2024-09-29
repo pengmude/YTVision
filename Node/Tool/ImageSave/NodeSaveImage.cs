@@ -58,7 +58,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
                                 throw new Exception($"获取条码结果失败！");
                         }
                         if (param.NeedOkNg)
-                            param.AiResult = form.GetAiResult();
+                            param.ResultViewData = form.GetAiResult();
                         param.Image = form.GetImage();
 
                         // 参数合法性判断
@@ -101,6 +101,8 @@ namespace YTVisionPro.Node.Tool.ImageSave
 
             // 3.图片名称
             string imageName = param.IsBarCode ? param.Barcode : time.ToString("yyyy-MM-dd HH-mm-ss");
+            if (param.NeedCompress)
+                imageName += "(压缩图)";
 
             // 4.存图路径拼接
             List<string> paths = new List<string>();
@@ -115,16 +117,16 @@ namespace YTVisionPro.Node.Tool.ImageSave
             //区分OK/NG
             if (param.NeedOkNg)
             {
-                if (param.AiResult == null)
+                if (param.ResultViewData == null)
                     throw new Exception($"无法获取/解析AI检测结果！");
 
 
-                string okNg = param.AiResult.IsAllOk ? "OK" : "NG";
+                string okNg = param.ResultViewData.IsAllOk ? "OK" : "NG";
                 imageSavePath = Path.Combine(imageSavePath, okNg);
 
-                if (!param.AiResult.IsAllOk)
+                if (!param.ResultViewData.IsAllOk)
                 {
-                    foreach (var res in param.AiResult.DeepStudyResult)
+                    foreach (var res in param.ResultViewData.SingleRowDataList)
                     {
                         // 默认只保存NG结果
                         if (!res.IsOk)
@@ -168,29 +170,6 @@ namespace YTVisionPro.Node.Tool.ImageSave
             TimeSpan dayStartTime = daydateTime.TimeOfDay;
             TimeSpan nightStartTime = nightdataTime.TimeOfDay;
             return time >= dayStartTime && time < nightStartTime;
-        }
-
-
-        // 保存图片
-        private void Save(Bitmap bitmap, string savePath, string imageName, string subFolder, List<string> ALLNGList, bool isCompress, long compressValue = 100)
-        {
-            if (subFolder == "OK")
-            {
-                Directory.CreateDirectory(savePath); // 如果目录已存在，CreateDirectory 不会抛异常
-                string imagePath = GetFileName(savePath, imageName);
-                SaveWithCompress(bitmap, imagePath, isCompress, compressValue);
-            }
-            else
-            {
-                foreach (var item in ALLNGList)
-                {
-                    string itemSavePath = Path.Combine(savePath, item);
-                    Directory.CreateDirectory(itemSavePath); // 如果目录已存在，CreateDirectory 不会抛异常
-                    string imagePath = GetFileName(itemSavePath, imageName);
-                    SaveWithCompress(bitmap, imagePath, isCompress, compressValue);
-                }
-            }
-
         }
 
         private string GetFileName(string filePath, string fileName)

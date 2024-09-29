@@ -67,9 +67,8 @@ namespace YTVisionPro.Forms.PLCAdd
             {
                 try
                 {
+                    plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
                     plc.Connect();
-                    uiSwitch1.Active = true;
-                    ((PlcPanasonic)plc).ConnectStatusEvent += Plc_ConnectStatusEvent;
                 }
                 catch (Exception ex)
                 {
@@ -169,10 +168,6 @@ namespace YTVisionPro.Forms.PLCAdd
                         LogHelper.AddLog(MsgLevel.Info, $"{Plc.UserDefinedName}打开", true);
                     else
                     {
-                        //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                        this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
-                        uiSwitch1.Active = false;
-                        this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
                         LogHelper.AddLog(MsgLevel.Exception, $"{Plc.UserDefinedName}连接失败！请检查参数设置是否为无效值或与其他通信设置冲突！", true);
                     }
                 }
@@ -187,11 +182,6 @@ namespace YTVisionPro.Forms.PLCAdd
             }
             catch(Exception e)
             {
-                //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
-                uiSwitch1.Active = false;
-                //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
                 LogHelper.AddLog(MsgLevel.Exception, $"{((Hardware.IDevice)Plc).UserDefinedName}" + e.Message, true);
             }
         }

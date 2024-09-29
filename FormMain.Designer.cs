@@ -52,6 +52,7 @@
             this.tsbt_SolSettings = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolNew = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolOpen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolSave = new System.Windows.Forms.ToolStripButton();
             this.tsbt_ProcessManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_LightManager = new System.Windows.Forms.ToolStripButton();
@@ -101,35 +102,35 @@
             // 新建方案ToolStripMenuItem
             // 
             this.新建方案ToolStripMenuItem.Name = "新建方案ToolStripMenuItem";
-            this.新建方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.新建方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.新建方案ToolStripMenuItem.Text = "新建方案";
             this.新建方案ToolStripMenuItem.Click += new System.EventHandler(this.新建方案ToolStripMenuItem_Click);
             // 
             // 打开方案ToolStripMenuItem
             // 
             this.打开方案ToolStripMenuItem.Name = "打开方案ToolStripMenuItem";
-            this.打开方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.打开方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.打开方案ToolStripMenuItem.Text = "打开方案";
             this.打开方案ToolStripMenuItem.Click += new System.EventHandler(this.打开方案ToolStripMenuItem_Click);
             // 
             // 保存方案ToolStripMenuItem
             // 
             this.保存方案ToolStripMenuItem.Name = "保存方案ToolStripMenuItem";
-            this.保存方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.保存方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.保存方案ToolStripMenuItem.Text = "保存方案";
             this.保存方案ToolStripMenuItem.Click += new System.EventHandler(this.保存方案ToolStripMenuItem_Click);
             // 
             // 另存方案ToolStripMenuItem
             // 
             this.另存方案ToolStripMenuItem.Name = "另存方案ToolStripMenuItem";
-            this.另存方案ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.另存方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.另存方案ToolStripMenuItem.Text = "另存方案";
             this.另存方案ToolStripMenuItem.Click += new System.EventHandler(this.另存方案ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.退出ToolStripMenuItem.Text = "退出";
             // 
             // 视图ToolStripMenuItem
@@ -243,6 +244,7 @@
             this.tsbt_SolSettings,
             this.tsbt_SolNew,
             this.tsbt_SolOpen,
+            this.toolStripButton1,
             this.tsbt_SolSave,
             this.tsbt_ProcessManager,
             this.tsbt_LightManager,
@@ -290,6 +292,17 @@
             this.tsbt_SolOpen.Text = "打开方案";
             this.tsbt_SolOpen.ToolTipText = "打开方案";
             this.tsbt_SolOpen.Click += new System.EventHandler(this.ToolStripButton_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::YTVisionPro.Properties.Resources.另存为;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButton1.Text = "另存方案";
+            this.toolStripButton1.ToolTipText = "另存方案";
+            this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_SolSave
             // 
@@ -483,6 +496,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripButton tsbt_LightManager;
         private System.Windows.Forms.ToolStripButton tsbt_SolRunLoop;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 

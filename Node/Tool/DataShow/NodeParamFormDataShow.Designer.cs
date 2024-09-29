@@ -51,23 +51,23 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 69F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(471, 177);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(577, 212);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // nodeSubscription1
             // 
-            this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription1.Location = new System.Drawing.Point(191, 22);
+            this.nodeSubscription1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nodeSubscription1.Location = new System.Drawing.Point(217, 3);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(264, 63);
+            this.nodeSubscription1.Size = new System.Drawing.Size(357, 137);
             this.nodeSubscription1.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 45);
+            this.label1.Location = new System.Drawing.Point(44, 62);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(125, 18);
             this.label1.TabIndex = 2;
@@ -76,7 +76,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.button1.Location = new System.Drawing.Point(178, 117);
+            this.button1.Location = new System.Drawing.Point(217, 152);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(99, 51);
             this.button1.TabIndex = 3;
@@ -88,7 +88,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(471, 177);
+            this.ClientSize = new System.Drawing.Size(577, 212);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NodeParamFormDataShow";

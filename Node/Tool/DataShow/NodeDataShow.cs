@@ -50,7 +50,7 @@ namespace YTVisionPro.Node.Tool.DataShow
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    AiResult aiResult = form.GetAiResult();
+                    ResultViewData aiResult = form.GetAiResult();
                     DataShow?.Invoke(this,new DatashowData(ID.ToString()+NodeName, aiResult));
 
                     long time = SetRunResult(startTime, NodeStatus.Successful);

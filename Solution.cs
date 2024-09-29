@@ -228,6 +228,7 @@ namespace YTVisionPro
         public void Stop()
         {
             _cancellationTokenSource.Cancel();
+            IsRunning = false;
         }
 
         /// <summary>

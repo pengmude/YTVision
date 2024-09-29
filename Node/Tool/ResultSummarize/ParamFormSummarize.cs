@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Tool.ImageSave;
 
 namespace YTVisionPro.Node.Tool.ResultSummarize
 {
@@ -33,10 +25,10 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
         /// 获取AI结果
         /// </summary>
         /// <returns></returns>
-        public AiResult GetAiResult()
+        public ResultViewData GetAiResult()
         {
-            //return nodeSubscription1.GetValue<AiResult>();
-            AiResult result = new AiResult();
+#if DEBUG
+            ResultViewData result = new ResultViewData();
             List<SingleResultViewData> singleResultViewDatas = new List<SingleResultViewData>();
             SingleResultViewData singleResultViewData = new SingleResultViewData();
             singleResultViewData.NodeName = "a";
@@ -44,34 +36,57 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
             singleResultViewData.DetectResult = "c";
             singleResultViewData.IsOk = true;
             singleResultViewDatas.Add(singleResultViewData);
-            result.DeepStudyResult = singleResultViewDatas;
+            result.SingleRowDataList = singleResultViewDatas;
             return result;
+#else
+            return nodeSubscription1.GetValue<ResultViewData>();
+#endif
         }
 
         /// <summary>
         /// 获取传统算法的结果
         /// </summary>
         /// <returns></returns>
-        public AiResult GetDetectResult()
+        public ResultViewData GetDetectResult()
         {
-            //return nodeSubscription2.GetValue<AiResult>();
-            AiResult result = new AiResult();
+#if DEBUG
+            ResultViewData result = new ResultViewData();
             List<SingleResultViewData> singleResultViewDatas = new List<SingleResultViewData>();
             SingleResultViewData singleResultViewData = new SingleResultViewData();
             singleResultViewData.DetectName = "1";
             singleResultViewData.DetectResult = "2";
             singleResultViewData.IsOk = false;
             singleResultViewDatas.Add(singleResultViewData);
-            result.DeepStudyResult = singleResultViewDatas;
+            result.SingleRowDataList = singleResultViewDatas;
             return result;
+#else
+            return nodeSubscription2.GetValue<ResultViewData>();
+#endif
         }
-
+        /// <summary>
+        /// 点击保存
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            NodeParamSummarize nodeParamSummarize = new NodeParamSummarize();
-            nodeParamSummarize.AiResult = GetAiResult();
-            nodeParamSummarize.DetectResult = GetDetectResult();
-            Params = nodeParamSummarize;
+#if DEBUG
+            NodeParamSummarize param = new NodeParamSummarize();
+            param.AiResult = GetAiResult();
+            param.NonAiResult = GetDetectResult();
+            param.AiText1 = nodeSubscription1.GetText1();
+            param.AiText2 = nodeSubscription1.GetText2();
+            param.NonAiText1 = nodeSubscription2.GetText1();
+            param.NonAiText2 = nodeSubscription2.GetText2();
+            Params = param;
+#else
+            NodeParamSummarize param = new NodeParamSummarize();
+            param.AiText1 = nodeSubscription1.GetText1();
+            param.AiText2 = nodeSubscription1.GetText2();
+            param.NonAiText1 = nodeSubscription2.GetText1();
+            param.NonAiText2 = nodeSubscription2.GetText2();
+            Params = new NodeParamSummarize();
+#endif
             Hide();
         }
         /// <summary>
@@ -82,7 +97,8 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
         {
             if (Params is NodeParamSummarize param)
             {
-
+                nodeSubscription1.SetText(param.AiText1, param.AiText2);
+                nodeSubscription2.SetText(param.NonAiText1, param.NonAiText2);
             }
         }
     }

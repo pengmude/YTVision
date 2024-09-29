@@ -47,7 +47,7 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
                         base.Run(token);
 
                         param.AiResult = form.GetAiResult();
-                        param.DetectResult = form.GetDetectResult();
+                        param.NonAiResult = form.GetDetectResult();
                         ResultSummarize(param);
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -80,13 +80,13 @@ namespace YTVisionPro.Node.Tool.ResultSummarize
             // 检查 param 是否为 null
             if (param == null)
                 throw new ArgumentNullException("无法获取/解析检测结果！");
-            if (param.AiResult == null || param.DetectResult == null)
+            if (param.AiResult == null || param.NonAiResult == null)
                 throw new Exception($"无法获取/解析检测结果！");
             if (Result is NodeResultSummarize res)
             {
-                AiResult aiResult = new AiResult();
-                aiResult.DeepStudyResult = param.AiResult.DeepStudyResult.Concat(param.DetectResult.DeepStudyResult).ToList();
-                res.AllResult = aiResult;
+                ResultViewData aiResult = new ResultViewData();
+                aiResult.SingleRowDataList = param.AiResult.SingleRowDataList.Concat(param.NonAiResult.SingleRowDataList).ToList();
+                res.SummaryResult = aiResult;
                 Result = res;
             }
             else

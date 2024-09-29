@@ -20,6 +20,11 @@ namespace YTVisionPro.Hardware.Camera
         private Basler.Pylon.Camera _camera;
 
         /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        public event EventHandler<bool> ConnectStatusEvent;
+
+        /// <summary>
         /// 抓取图片事件
         /// </summary>
         public event EventHandler<Bitmap> PublishImageEvent;
@@ -124,6 +129,7 @@ namespace YTVisionPro.Hardware.Camera
                 return false;
             }
             IsOpen = true;
+            ConnectStatusEvent?.Invoke(this, true);
             return true;
         }
 
@@ -370,6 +376,7 @@ namespace YTVisionPro.Hardware.Camera
             _camera.StreamGrabber.Stop();
             _camera.Close();
             IsOpen = false;
+            ConnectStatusEvent?.Invoke(this, false);
         }
 
         /// <summary>

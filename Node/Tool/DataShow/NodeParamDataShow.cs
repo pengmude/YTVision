@@ -4,7 +4,7 @@ namespace YTVisionPro.Node.Tool.DataShow
 {
     internal class NodeParamDataShow : INodeParam
     {
-        public AiResult AiResultData;
+        public ResultViewData AiResultData;
         public string Text1;
         public string Text2;
     }
@@ -12,8 +12,8 @@ namespace YTVisionPro.Node.Tool.DataShow
     internal class DatashowData
     {
         public string TabPageName;
-        public AiResult AiResultData;
-        public DatashowData(string nodename, AiResult airesult)
+        public ResultViewData AiResultData;
+        public DatashowData(string nodename, ResultViewData airesult)
         {
             TabPageName = nodename;
             AiResultData = airesult;

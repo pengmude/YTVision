@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node.PLC.Panasonic.Read
+namespace YTVisionPro.Node.Camera.WaitSoftTrigger
 {
     internal class NodeResultWaitSoftTrigger : INodeResult
     {

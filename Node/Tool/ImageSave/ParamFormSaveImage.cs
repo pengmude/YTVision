@@ -1,12 +1,8 @@
 ﻿using Logger;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.ImageRead;
 
 namespace YTVisionPro.Node.Tool.ImageSave
 {
@@ -26,11 +22,11 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// 用于节点参数界面需要订阅结果的情况调用
         /// </summary>
         /// <param name="node"></param>
-        void INodeParamForm.SetNodeBelong(NodeBase node)
+        public void SetNodeBelong(NodeBase node)
         {
-            nodeSubscription1.Init(node);
-            nodeSubscription2.Init(node);
-            nodeSubscription3.Init(node);
+            nodeSubscriptionImg2Save.Init(node);
+            nodeSubscriptionBarCode.Init(node);
+            nodeSubscriptionAiRes.Init(node);
         }
 
         /// <summary>
@@ -92,7 +88,7 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// <returns></returns>
         public Bitmap GetImage()
         {
-            return nodeSubscription1.GetValue<Bitmap>();
+            return nodeSubscriptionImg2Save.GetValue<Bitmap>();
         }
 
         /// <summary>
@@ -101,15 +97,15 @@ namespace YTVisionPro.Node.Tool.ImageSave
         /// <returns></returns>
         public string GetBarCode()
         {
-            return nodeSubscription2.GetValue<string>();
+            return nodeSubscriptionBarCode.GetValue<string>();
         }
 
         /// <summary>
         /// 获取AI结果订阅控件的值
         /// </summary>
-        public AiResult GetAiResult()
+        public ResultViewData GetAiResult()
         {
-            return nodeSubscription3.GetValue<AiResult>();
+            return nodeSubscriptionAiRes.GetValue<ResultViewData>();
         }
 
         /// <summary>
@@ -134,21 +130,17 @@ namespace YTVisionPro.Node.Tool.ImageSave
 
             NodeParamSaveImage savaImageParam = new NodeParamSaveImage();
             savaImageParam.SavePath = textBox1.Text;
-
-            #region 测试数据
-
-            //AllNGResult allNGResult;
-            //allNGResult.AINGList = new List<string>();
-            //allNGResult.AINGList.Add("缺陷");
-            //allNGResult.GeneralNGList = new List<string>();
-            //savaImageParam.AllNGResult = allNGResult;
-
-            #endregion
+            savaImageParam.ImgSubText1 = nodeSubscriptionImg2Save.GetText1();
+            savaImageParam.ImgSubText2 = nodeSubscriptionImg2Save.GetText2();
+            savaImageParam.AiResSubText1 = nodeSubscriptionAiRes.GetText1();
+            savaImageParam.AiResSubText2 = nodeSubscriptionAiRes.GetText2();
+            savaImageParam.BarCodeSubText1 = nodeSubscriptionBarCode.GetText1();
+            savaImageParam.BarCodeSubText2 = nodeSubscriptionBarCode.GetText2();
 
             // 二维码命名
-            savaImageParam.IsBarCode = checkBoxBarCode.Checked ? true : false;
+            savaImageParam.IsBarCode = checkBoxBarCode.Checked;
             //是否需要区分OkNg子目录
-            savaImageParam.NeedOkNg = checkBoxSaveWithNG.Checked ? true : false;
+            savaImageParam.NeedOkNg = checkBoxSaveWithNG.Checked;
             // 早晚班存图
             if (checkBoxDayNight.Checked)
             {
@@ -178,7 +170,17 @@ namespace YTVisionPro.Node.Tool.ImageSave
         {
             if (Params is NodeParamSaveImage param)
             {
-
+                textBox1.Text = param.SavePath;
+                nodeSubscriptionImg2Save.SetText(param.ImgSubText1, param.ImgSubText2);
+                checkBoxBarCode.Checked = param.IsBarCode;
+                checkBoxSaveWithNG.Checked = param.NeedOkNg;
+                checkBoxDayNight.Checked = param.IsDayNight;
+                checkBoxCompress.Checked = param.NeedCompress;
+                nodeSubscriptionAiRes.SetText(param.AiResSubText1, param.AiResSubText2);
+                dateTimePicker1.Value = param.DayDataTime;
+                dateTimePicker2.Value = param.NightDataTime;
+                numericUpDown1.Value = param.CompressValue;
+                nodeSubscriptionBarCode.SetText(param.BarCodeSubText1, param.BarCodeSubText2);
             }
         }
     }

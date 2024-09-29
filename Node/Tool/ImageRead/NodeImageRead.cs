@@ -1,14 +1,9 @@
 ﻿using Logger;
-using Microsoft.VisualBasic.Devices;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
 
 namespace YTVisionPro.Node.ImageRead
 {

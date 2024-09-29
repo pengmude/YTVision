@@ -1,6 +1,7 @@
 ﻿using JsonSubTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.IO.Ports;
 using YTVisionPro.Hardware.Light;
 
@@ -8,6 +9,10 @@ namespace YTVisionPro.Hardware.PLC
 {
     internal interface IPlc : IDevice
     {
+        /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        event EventHandler<bool> ConnectStatusEvent;
         /// <summary>
         /// PLC参数
         /// </summary>

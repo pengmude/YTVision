@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Node.PLC.Panasonic.Read
+﻿namespace YTVisionPro.Node.Camera.WaitSoftTrigger
 {
     partial class ParamFormWaitSoftTrigger
     {

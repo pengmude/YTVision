@@ -84,6 +84,8 @@ namespace YTVisionPro.Node.AI.HTAI
                             // 转换为汇图图像
                             ImageHt Frame = BitmapConvert.BitmapToImageHt(srcImg);
                             Bitmap renderImg = null;
+                            if (param.TreePredictHandle == IntPtr.Zero)
+                                throw new Exception("AI模型句柄尚未加载完成！");
                             PredictResult = DeepLearningDetection(param.TreePredictHandle, ref Frame, param.TestNum, out renderImg);
                             res.ResultData = DeepStudyResult_Judge(PredictResult, param.AllNgConfigs, param.TestNum);
                             res.RenderImage = renderImg;
@@ -138,9 +140,9 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <param name="allNgConfigs"></param>
         /// <param name="testNum"></param>
         /// <returns></returns>
-        private AiResult DeepStudyResult_Judge(NodeResult[] pstNodeRst, List<NGTypeConfig> allNgConfigs, int testNum)
+        private ResultViewData DeepStudyResult_Judge(NodeResult[] pstNodeRst, List<NGTypeConfig> allNgConfigs, int testNum)
         {
-            AiResult aiResult = new AiResult();
+            ResultViewData aiResult = new ResultViewData();
             List<AiClassResult>  ResList = SaveResult(pstNodeRst, testNum);
 
             //// 检测结果个数为0的情况分两种：有定位节点和无定位节点的模型
@@ -198,7 +200,7 @@ namespace YTVisionPro.Node.AI.HTAI
                 
                 // 添加一条类别结果
                 result.DetectResult = tmp;
-                aiResult.DeepStudyResult.Add(result);
+                aiResult.SingleRowDataList.Add(result);
             }
 
             #endregion
@@ -208,7 +210,7 @@ namespace YTVisionPro.Node.AI.HTAI
             List<SingleResultViewData> okRes = new List<SingleResultViewData>();
             foreach (var ngConfig in allNgConfigs)
             {
-                var isExist = aiResult.DeepStudyResult.Exists(r => r.NodeName == ngConfig.NodeName && r.ClassName == ngConfig.ClassName);
+                var isExist = aiResult.SingleRowDataList.Exists(r => r.NodeName == ngConfig.NodeName && r.ClassName == ngConfig.ClassName);
                 if(!isExist)
                 {
                     SingleResultViewData data = new SingleResultViewData();
@@ -217,7 +219,7 @@ namespace YTVisionPro.Node.AI.HTAI
                     data.DetectName = "";
                     data.NodeName = ngConfig.NodeName;
                     data.ClassName = ngConfig.ClassName;
-                    aiResult.DeepStudyResult.Add(data);
+                    aiResult.SingleRowDataList.Add(data);
                 }
             }
 

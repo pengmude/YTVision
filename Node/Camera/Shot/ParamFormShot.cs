@@ -6,14 +6,15 @@ using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Node.AI.HTAI;
 
-namespace YTVisionPro.Node.Camera.HiK
+namespace YTVisionPro.Node.Camera.Shot
 {
-    internal partial class ParamFormCamera : Form, INodeParamForm
+    internal partial class ParamFormShot : Form, INodeParamForm
     {
         public INodeParam Params { get; set; }
-        public ParamFormCamera()
+        public ParamFormShot()
         {
             InitializeComponent();
+            InitCameraList();
             Shown += ParamFormCamera_Shown;
             //触发方式
             comboBoxType.SelectedIndex = 0;
@@ -43,15 +44,15 @@ namespace YTVisionPro.Node.Camera.HiK
 
         private void ParamFormCamera_Shown(object sender, EventArgs e)
         {
-            InitNodeData();
+            InitCameraList();
         }
 
         /// <summary>
-        /// 初始化数据
+        /// 初始化相机列表
         /// </summary>
         /// <param name="process"></param>
         /// <param name="node"></param>
-        private void InitNodeData()
+        private void InitCameraList()
         {
             // 相机自定义名
             string text1 = comboBoxCamera.Text;
@@ -119,7 +120,7 @@ namespace YTVisionPro.Node.Camera.HiK
 
             #endregion
 
-            NodeParamCamera nodeParamCamera = new NodeParamCamera();
+            NodeParamShot nodeParamCamera = new NodeParamShot();
 
             #region 参数赋值
 
@@ -131,6 +132,8 @@ namespace YTVisionPro.Node.Camera.HiK
                     nodeParamCamera.Camera = camera;
                 }
             }
+            // 保存相机名称参与序列化
+            nodeParamCamera.CameraName = comboBoxCamera.Text;
 
             //设置相机
             switch (comboBoxType.Text)
@@ -223,9 +226,29 @@ namespace YTVisionPro.Node.Camera.HiK
         /// <exception cref="NotImplementedException"></exception>
         public void SetParam2Form()
         {
-            if (Params is NodeParamCamera param)
+            if (Params is NodeParamShot param)
             {
-
+                // 还原选中的相机 
+                int index = comboBoxCamera.Items.IndexOf(param.CameraName);
+                comboBoxCamera.SelectedIndex = index == -1 ? 0 : index;
+                // 还原选中的触发源
+                comboBoxType.Text = param.TriggerSource.ToString();
+                // 硬触发沿
+                comboBoxTriggerEdge.Text = param.TriggerEdge.ToString();
+                // 设置延迟、曝光、增益
+                textBox3.Text = param.TriggerDelay.ToString();
+                textBox1.Text = param.ExposureTime.ToString();
+                textBox2.Text = param.Gain.ToString();
+                // 还原选中的图像显示窗口
+                WindowNameList.Text = param.WindowName;
+                // 还原节点使用的相机
+                foreach (var camera in Solution.Instance.CameraDevices)
+                {
+                    if (camera.UserDefinedName == param.CameraName)
+                    {
+                        param.Camera = camera;
+                    }
+                }
             }
         }
     }

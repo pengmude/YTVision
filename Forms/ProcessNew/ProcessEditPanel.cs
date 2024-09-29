@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Camera.Shot;
+using YTVisionPro.Node.Camera.WaitSoftTrigger;
 using YTVisionPro.Node.ImageRead;
 using YTVisionPro.Node.Light;
 using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
@@ -40,7 +41,7 @@ namespace YTVisionPro.Forms.ProcessNew
         public Button SelectedNode { get; set; } = null;
 
         /// <summary>
-        /// 反序列化使用的构造函数
+        /// 流程编辑面板构造函数
         /// </summary>
         /// <param name="processName"></param>
         public ProcessEditPanel(string processName, ProcessConfig processConfig = null)
@@ -115,11 +116,11 @@ namespace YTVisionPro.Forms.ProcessNew
                 {
                     // 1.还原节点
                     nodeBase = CreateNode(nodeInfo.NodeType, nodeInfo.NodeName, nodeInfo.ID);
+                    nodeBase.Selected = nodeInfo.Selected;
+                    nodeBase.Active = nodeInfo.Active;
                     // 2.还原节点的参数
                     nodeBase.ParamForm.Params = nodeInfo.NodeParam;
-                    // 3.还原带订阅控件的参数设置界面的下拉框数据
-                    nodeBase.ParamForm.SetNodeBelong(nodeBase);
-                    // 4.节点参数到参数设置界面
+                    // 3.节点参数到参数设置界面
                     nodeBase.ParamForm.SetParam2Form();
                     LogHelper.AddLog(MsgLevel.Info, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）已加载", true);
                 }
@@ -158,7 +159,7 @@ namespace YTVisionPro.Forms.ProcessNew
                     node = new NodeLight(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.CameraShot:
-                    node = new NodeCamera(nodeId, nodeName, _process, nodeType);
+                    node = new NodeShot(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.LocalPicture:
                     node = new NodeImageRead(nodeId, nodeName, _process, nodeType);

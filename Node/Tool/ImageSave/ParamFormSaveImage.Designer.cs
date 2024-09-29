@@ -39,7 +39,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
-            this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
+            this.nodeSubscriptionImg2Save = new YTVisionPro.Node.NodeSubscription();
             this.checkBoxBarCode = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -55,11 +55,11 @@
             this.label10 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.tableLayoutPanelNG = new System.Windows.Forms.TableLayoutPanel();
-            this.nodeSubscription3 = new YTVisionPro.Node.NodeSubscription();
+            this.nodeSubscriptionAiRes = new YTVisionPro.Node.NodeSubscription();
             this.tableLayoutPanelDayNight = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelCompress = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanelBarCode = new System.Windows.Forms.TableLayoutPanel();
-            this.nodeSubscription2 = new YTVisionPro.Node.NodeSubscription();
+            this.nodeSubscriptionBarCode = new YTVisionPro.Node.NodeSubscription();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
@@ -175,7 +175,7 @@
             this.tableLayoutPanel1.Controls.Add(this.textBox1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.button1, 5, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.nodeSubscription1, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.nodeSubscriptionImg2Save, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxBarCode, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label7, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.label11, 0, 4);
@@ -206,16 +206,16 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "【图片命名】";
             // 
-            // nodeSubscription1
+            // nodeSubscriptionImg2Save
             // 
-            this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.tableLayoutPanel1.SetColumnSpan(this.nodeSubscription1, 3);
-            this.nodeSubscription1.Location = new System.Drawing.Point(280, 107);
-            this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
-            this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(373, 62);
-            this.nodeSubscription1.TabIndex = 3;
+            this.tableLayoutPanel1.SetColumnSpan(this.nodeSubscriptionImg2Save, 3);
+            this.nodeSubscriptionImg2Save.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nodeSubscriptionImg2Save.Location = new System.Drawing.Point(192, 94);
+            this.nodeSubscriptionImg2Save.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.nodeSubscriptionImg2Save.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscriptionImg2Save.Name = "nodeSubscriptionImg2Save";
+            this.nodeSubscriptionImg2Save.Size = new System.Drawing.Size(550, 88);
+            this.nodeSubscriptionImg2Save.TabIndex = 3;
             // 
             // checkBoxBarCode
             // 
@@ -375,7 +375,7 @@
             this.tableLayoutPanelNG.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanelNG.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanelNG.Controls.Add(this.label6, 0, 0);
-            this.tableLayoutPanelNG.Controls.Add(this.nodeSubscription3, 1, 0);
+            this.tableLayoutPanelNG.Controls.Add(this.nodeSubscriptionAiRes, 1, 0);
             this.tableLayoutPanelNG.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanelNG.Location = new System.Drawing.Point(0, 464);
             this.tableLayoutPanelNG.Name = "tableLayoutPanelNG";
@@ -385,15 +385,16 @@
             this.tableLayoutPanelNG.TabIndex = 10;
             this.tableLayoutPanelNG.Visible = false;
             // 
-            // nodeSubscription3
+            // nodeSubscriptionAiRes
             // 
-            this.nodeSubscription3.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription3.Location = new System.Drawing.Point(225, 21);
-            this.nodeSubscription3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription3.MinimumSize = new System.Drawing.Size(260, 60);
-            this.nodeSubscription3.Name = "nodeSubscription3";
-            this.nodeSubscription3.Size = new System.Drawing.Size(260, 62);
-            this.nodeSubscription3.TabIndex = 8;
+            this.tableLayoutPanelNG.SetColumnSpan(this.nodeSubscriptionAiRes, 2);
+            this.nodeSubscriptionAiRes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nodeSubscriptionAiRes.Location = new System.Drawing.Point(225, 2);
+            this.nodeSubscriptionAiRes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.nodeSubscriptionAiRes.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscriptionAiRes.Name = "nodeSubscriptionAiRes";
+            this.nodeSubscriptionAiRes.Size = new System.Drawing.Size(438, 101);
+            this.nodeSubscriptionAiRes.TabIndex = 8;
             // 
             // tableLayoutPanelDayNight
             // 
@@ -444,7 +445,7 @@
             this.tableLayoutPanelBarCode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanelBarCode.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanelBarCode.Controls.Add(this.label4, 0, 0);
-            this.tableLayoutPanelBarCode.Controls.Add(this.nodeSubscription2, 1, 0);
+            this.tableLayoutPanelBarCode.Controls.Add(this.nodeSubscriptionBarCode, 1, 0);
             this.tableLayoutPanelBarCode.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanelBarCode.Location = new System.Drawing.Point(0, 779);
             this.tableLayoutPanelBarCode.Name = "tableLayoutPanelBarCode";
@@ -455,15 +456,16 @@
             this.tableLayoutPanelBarCode.TabIndex = 10;
             this.tableLayoutPanelBarCode.Visible = false;
             // 
-            // nodeSubscription2
+            // nodeSubscriptionBarCode
             // 
-            this.nodeSubscription2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription2.Location = new System.Drawing.Point(225, 21);
-            this.nodeSubscription2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription2.MinimumSize = new System.Drawing.Size(260, 60);
-            this.nodeSubscription2.Name = "nodeSubscription2";
-            this.nodeSubscription2.Size = new System.Drawing.Size(260, 62);
-            this.nodeSubscription2.TabIndex = 7;
+            this.tableLayoutPanelBarCode.SetColumnSpan(this.nodeSubscriptionBarCode, 2);
+            this.nodeSubscriptionBarCode.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nodeSubscriptionBarCode.Location = new System.Drawing.Point(225, 2);
+            this.nodeSubscriptionBarCode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.nodeSubscriptionBarCode.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscriptionBarCode.Name = "nodeSubscriptionBarCode";
+            this.nodeSubscriptionBarCode.Size = new System.Drawing.Size(438, 101);
+            this.nodeSubscriptionBarCode.TabIndex = 7;
             // 
             // tableLayoutPanel2
             // 
@@ -523,12 +525,12 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private NodeSubscription nodeSubscription1;
+        private NodeSubscription nodeSubscriptionImg2Save;
         private System.Windows.Forms.CheckBox checkBoxCompress;
         private System.Windows.Forms.Button button2;
-        private NodeSubscription nodeSubscription2;
+        private NodeSubscription nodeSubscriptionBarCode;
         private System.Windows.Forms.Label label4;
-        private NodeSubscription nodeSubscription3;
+        private NodeSubscription nodeSubscriptionAiRes;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;

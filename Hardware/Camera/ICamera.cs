@@ -23,6 +23,10 @@ namespace YTVisionPro.Hardware.Camera
     internal interface ICamera : IDevice
     {
         /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        event EventHandler<bool> ConnectStatusEvent;
+        /// <summary>
         /// 硬件硬件名称
         /// </summary>
         string DevName { get; set; }

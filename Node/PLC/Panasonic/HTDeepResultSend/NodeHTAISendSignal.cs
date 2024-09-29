@@ -54,7 +54,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    AiResult aiResult = form.GetAiResult();
+                    ResultViewData aiResult = form.GetAiResult();
 
                     List<SignalRowData> allMatchingRows = new List<SignalRowData>();
 
@@ -75,7 +75,7 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                     }
                     else
                     {
-                        foreach (var item in aiResult.DeepStudyResult)
+                        foreach (var item in aiResult.SingleRowDataList)
                         {
                             if (item.IsOk)
                                 continue;

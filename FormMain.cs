@@ -15,6 +15,7 @@ using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
 using System.Threading.Tasks;
+using Sunny.UI;
 
 namespace YTVisionPro
 {
@@ -221,11 +222,11 @@ namespace YTVisionPro
                     case "打开方案":
                         打开方案ToolStripMenuItem_Click(sender, e);
                         break;
-                    case "保存方案":
-                        保存方案ToolStripMenuItem_Click(sender, e);
-                        break;
                     case "另存方案":
                         另存方案ToolStripMenuItem_Click(sender, e);
+                        break;
+                    case "保存方案":
+                        保存方案ToolStripMenuItem_Click(sender, e);
                         break;
                     case "退出":
                         if (MessageBox.Show("确认退出？") == DialogResult.OK)
@@ -235,11 +236,6 @@ namespace YTVisionPro
                         break;
                 }
             }
-        }
-
-        private void 另存方案ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         /// <summary>
@@ -260,6 +256,9 @@ namespace YTVisionPro
                     break;
                 case "打开方案":
                     打开方案ToolStripMenuItem_Click(null, null);
+                    break;
+                case "另存方案":
+                    另存方案ToolStripMenuItem_Click(null, null);
                     break;
                 case "保存方案":
                     保存方案ToolStripMenuItem_Click(null, null);
@@ -363,20 +362,40 @@ namespace YTVisionPro
         {
             FrmLightAdd.ShowDialog();
         }
-        private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
+
+        private void 另存方案ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            saveFileDialog1.Title = "方案另存为";
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    Solution.Instance.SolFileName = saveFileDialog1.FileName;
                     Solution.Instance.Save(saveFileDialog1.FileName);
-                    MessageBox.Show("方案保存成功！");
+                    LogHelper.AddLog(MsgLevel.Info, $"方案另存成功！路径：{saveFileDialog1.FileName}", true);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show($"方案保存失败！原因：{ex.Message}");
                 }
+            }
+        }
+
+        private void 保存方案ToolStripMenuItem_Click(object value1, object value2)
+        {
+            if (Solution.Instance.SolFileName.IsNullOrEmpty())
+            {
+                saveFileDialog1.Title = "请选择方案保存路径";
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    Solution.Instance.SolFileName = saveFileDialog1.FileName;
+            }
+            try
+            {
+                Solution.Instance.Save(Solution.Instance.SolFileName);
+                LogHelper.AddLog(MsgLevel.Info, $"方案保存成功！路径：{saveFileDialog1.FileName}", true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"方案保存失败！原因：{ex.Message}");
             }
         }
 
@@ -397,7 +416,13 @@ namespace YTVisionPro
         {
             if (MessageBox.Show("是否保存当前方案的修改？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-
+                保存方案ToolStripMenuItem_Click(null, null);
+            }
+            saveFileDialog1.Title = "请选择新方案的保存路径";
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Solution.Instance.SolFileName = saveFileDialog1 .FileName;
+                // TODO: 新建方案需要清空原有方案的设备列表、流程节点、以及释放占用的内存资源
             }
         }
 

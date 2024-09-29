@@ -81,14 +81,19 @@ namespace YTVisionPro.Forms.LightAdd
             {
                 try
                 {
+                    light.ConnectStatusEvent += Light_ConnectStatusEvent;
                     light.TurnOn(light.Brightness);
-                    uiSwitch1.Active = true;
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
             }
+        }
+
+        private void Light_ConnectStatusEvent(object sender, bool e)
+        {
+            uiSwitch1.Active = e;
         }
 
         public SingleLight(LightParam parms)
@@ -165,12 +170,6 @@ namespace YTVisionPro.Forms.LightAdd
                 }
                 catch (Exception e)
                 {
-                    //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                    this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
-                    MessageBox.Show(e.Message);
-                    LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
-                    uiSwitch1.Active = false;
-                    this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Parms.LightName}(串口号：{Parms.Port}，通道：{Parms.Channel})打开失败！", true);
                 }
             }
@@ -183,12 +182,6 @@ namespace YTVisionPro.Forms.LightAdd
                 }
                 catch (Exception e)
                 {
-                    //为了防止在给uiSwitch1.Active赋值时事件循环触发，要先取消订阅
-                    this.uiSwitch1.ValueChanged -= new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
-                    MessageBox.Show(e.Message);
-                    LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
-                    uiSwitch1.Active = true;
-                    this.uiSwitch1.ValueChanged += new UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Parms.LightName}(串口号：{Parms.Port}，通道：{Parms.Channel})无法关闭！", true);
                 }
             }

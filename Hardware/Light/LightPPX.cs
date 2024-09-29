@@ -18,6 +18,10 @@ namespace YTVisionPro.Hardware.Light
     internal class LightPPX : ILight
     {
         /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        public event EventHandler<bool> ConnectStatusEvent;
+        /// <summary>
         /// 光源设置参数
         /// </summary>
         public LightParam LightParam { get; set; }
@@ -197,8 +201,8 @@ namespace YTVisionPro.Hardware.Light
                     Connenct();
                 SetValue(value);
                 IsOpen = true;
-
-                if(time == -1)
+                ConnectStatusEvent?.Invoke(this, true);
+                if (time == -1)
                     return;
                 if (_timer != null)
                 {
@@ -233,6 +237,7 @@ namespace YTVisionPro.Hardware.Light
                     Connenct();
                 SetValue(0);
                 IsOpen = false;
+                ConnectStatusEvent?.Invoke(this, false);
             }
             catch (Exception ex)
             {

@@ -2,8 +2,6 @@
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Tool.DataShow;
 
 namespace YTVisionPro.Node.ImageRead
 {

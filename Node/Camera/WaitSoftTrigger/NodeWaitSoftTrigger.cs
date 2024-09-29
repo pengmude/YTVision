@@ -8,9 +8,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Hardware.PLC;
-using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 
-namespace YTVisionPro.Node.PLC.Panasonic.Read
+namespace YTVisionPro.Node.Camera.WaitSoftTrigger
 {
     internal class NodeWaitSoftTrigger : NodeBase
     {

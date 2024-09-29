@@ -3,10 +3,8 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.PLC;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
 
-namespace YTVisionPro.Node.PLC.Panasonic.Read
+namespace YTVisionPro.Node.Camera.WaitSoftTrigger
 {
     internal partial class ParamFormWaitSoftTrigger : Form, INodeParamForm
     {
@@ -15,6 +13,12 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
         public ParamFormWaitSoftTrigger()
         {
             InitializeComponent();
+            Shown += ParamFormWaitSoftTrigger_Shown;
+            InitPLCComboBox();
+        }
+
+        private void ParamFormWaitSoftTrigger_Shown(object sender, EventArgs e)
+        {
             InitPLCComboBox();
         }
 
@@ -73,11 +77,11 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                 }
             }
 
-            //把设置好的参数传给PLC节点NodePlcDataRead去更新结果
-            NodeParamWaitSoftTrigger nodeParamRead = new NodeParamWaitSoftTrigger();
-            nodeParamRead.Plc = plc;
-            nodeParamRead.Address = this.textBox1.Text;
-            Params = nodeParamRead;
+            NodeParamWaitSoftTrigger param = new NodeParamWaitSoftTrigger();
+            param.Plc = plc;
+            param.PlcName = comboBox1.Text;
+            param.Address = this.textBox1.Text;
+            Params = param;
             Hide();
         }
 
@@ -98,7 +102,17 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
         {
             if (Params is NodeParamWaitSoftTrigger param)
             {
-
+                int index = comboBox1.Items.IndexOf(param.PlcName);
+                comboBox1.SelectedIndex = index == -1 ? 0 : index;
+                textBox1.Text = param.Address;
+                foreach (var plc in Solution.Instance.PlcDevices)
+                {
+                    if(plc.UserDefinedName == param.PlcName)
+                    {
+                        param.Plc = plc;
+                        break;
+                    }
+                }
             }
         }
     }

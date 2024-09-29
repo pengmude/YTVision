@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
 {
@@ -46,9 +40,9 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
         /// 获取订阅的结果
         /// </summary>
         /// <returns></returns>
-        public AiResult GetAiResult()
+        public ResultViewData GetAiResult()
         {
-            return nodeSubscription1.GetValue<AiResult>();
+            return nodeSubscription1.GetValue<ResultViewData>();
         }
 
         private void InitComboBox()

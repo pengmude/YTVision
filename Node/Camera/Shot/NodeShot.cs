@@ -5,10 +5,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Node;
 
-namespace YTVisionPro.Node.Camera.HiK
+namespace YTVisionPro.Node.Camera.Shot
 {
-    internal class NodeCamera : NodeBase
+    internal class NodeShot : NodeBase
     {
         /// <summary>
         /// 自动重置事件，用于确保软触发或者硬触发
@@ -20,11 +21,11 @@ namespace YTVisionPro.Node.Camera.HiK
         /// </summary>
         public static event EventHandler<Paramsa> ImageShowChanged;
 
-        public NodeCamera(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
+        public NodeShot(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormCamera();
+            ParamForm = new ParamFormShot();
             ParamForm.SetNodeBelong(this);
-            Result = new NodeResultCamera();
+            Result = new NodeResultShot();
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace YTVisionPro.Node.Camera.HiK
         /// <param name="e"></param>
         private async void Camera_PublishImageEvent(object sender, Bitmap e)
         {
-            ((NodeResultCamera)Result).Bitmap = e;
+            ((NodeResultShot)Result).Bitmap = e;
             _autoResetEvent.Set();
         }
         /// <summary>
@@ -56,9 +57,9 @@ namespace YTVisionPro.Node.Camera.HiK
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is ParamFormCamera form)
+            if (ParamForm is ParamFormShot form)
             {
-                if (form.Params is NodeParamCamera param)
+                if (form.Params is NodeParamShot param)
                 {
                     try
                     {
@@ -101,7 +102,7 @@ namespace YTVisionPro.Node.Camera.HiK
                         //await Task.Run(() =>
                         //{
                             // 发送采集到的图像
-                            ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, ((NodeResultCamera)Result).Bitmap));
+                            ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, ((NodeResultShot)Result).Bitmap));
                         //});
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
@@ -102,6 +103,7 @@ namespace YTVisionPro
                 // 清空设备
                 SingleLight.SingleLights.Clear();
                 SingleCamera.SingleCameraList.Clear();
+                SinglePLC.SinglePLCs.Clear();
                 Solution.Instance.AllDevices.Clear();
 
                 // 释放AI节点的内存

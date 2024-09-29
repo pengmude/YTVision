@@ -3,8 +3,7 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Light;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.Camera.HiK.WaitSoftTrigger;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Node.Light
 {
@@ -18,9 +17,15 @@ namespace YTVisionPro.Node.Light
         public ParamFormLight(string nodeName, Process process)
         {
             InitializeComponent();
+            Shown += ParamFormLight_Shown1;
             InitLightComboBox();
             _nodeName = nodeName;
             _process = process;
+        }
+
+        private void ParamFormLight_Shown1(object sender, EventArgs e)
+        {
+            InitLightComboBox();
         }
 
         /// <summary>
@@ -77,9 +82,13 @@ namespace YTVisionPro.Node.Light
                         break;
                     }
                 }
-
-                NodeParamLight nodeParamLight = new NodeParamLight(light, Convert.ToInt32(numericUpDownValue.Value), Convert.ToInt32(numericUpDownTime.Value));
+                NodeParamLight nodeParamLight = new NodeParamLight();
+                nodeParamLight.Light = light;
+                nodeParamLight.LightName = light.UserDefinedName;
+                nodeParamLight.Brightness = Convert.ToInt32(numericUpDownValue.Value);
+                nodeParamLight.Time = Convert.ToInt32(numericUpDownTime.Value);
                 Params = nodeParamLight;
+                
                 Hide();
             }
             catch (Exception ex)
@@ -106,7 +115,19 @@ namespace YTVisionPro.Node.Light
         {
             if (Params is NodeParamLight param)
             {
-
+                int index = comboBox1.Items.IndexOf(param.LightName);
+                comboBox1.SelectedIndex = index == -1 ? 0 : index;
+                numericUpDownValue.Value = param.Brightness;
+                numericUpDownTime.Value = param.Time;
+                // 还原光源对象
+                foreach (var light in Solution.Instance.LightDevices)
+                {
+                    if(light.UserDefinedName == param.LightName)
+                    {
+                        param.Light = light;
+                        break;
+                    }
+                }
             }
         }
     }

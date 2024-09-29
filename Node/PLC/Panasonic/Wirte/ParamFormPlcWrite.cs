@@ -3,8 +3,6 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.PLC;
-using YTVisionPro.Node.Camera.HiK;
-using YTVisionPro.Node.PLC.Panasonic.Read;
 
 namespace YTVisionPro.Node.PLC.Panasonic.Wirte
 {
@@ -144,7 +142,35 @@ namespace YTVisionPro.Node.PLC.Panasonic.Wirte
         {
             if (Params is NodeParamPlcWrite param)
             {
-
+                int index1 = comboBox1.Items.IndexOf(param.Plc.UserDefinedName);
+                comboBox1.SelectedIndex = index1 == -1 ? 0 : index1;
+                // 反序列化后方案中的PLC设备对象才是完整的，需要赋值给用到PLC的节点参数中
+                foreach (var plc in Solution.Instance.PlcDevices)
+                {
+                    if (plc.UserDefinedName == param.Plc.UserDefinedName)
+                    {
+                        param.Plc = plc;
+                        break;
+                    }
+                }
+                textBox1.Text = param.Address;
+                switch (param.DataType)
+                {
+                    case DataType.INT:
+                        comboBox2.SelectedIndex = 0;
+                        textBox3.Text = param.Value.ToString();
+                        break;
+                    case DataType.BOOL:
+                        comboBox2.SelectedIndex = 1;
+                        comboBox3.SelectedIndex = (bool)param.Value == true ? 0 : 1;
+                        break;
+                    case DataType.STRING:
+                        comboBox2.SelectedIndex = 2;
+                        textBox3.Text = param.Value.ToString();
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

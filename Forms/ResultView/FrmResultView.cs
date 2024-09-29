@@ -48,19 +48,20 @@ namespace YTVisionPro.Forms.ResultView
                 dataGridView.Columns.Add("NodeName", "节点(AI)");
                 dataGridView.Columns.Add("ClassName", "类型(AI)");
                 dataGridView.Columns.Add("DetectName", "检测项");
-                dataGridView.Columns.Add("SingleResult", "单项结果");
-                dataGridView.Columns.Add("DetectResult", "检测结果");
-                dataGridView.Columns.Add("Count", "个数");
+                dataGridView.Columns.Add("SingleResult", "当前判定");
+                dataGridView.Columns.Add("DetectResult", "检出内容");
+                dataGridView.Columns.Add("CountNG", "NG个数");
+                dataGridView.Columns.Add("CountOK", "OK个数");
                 dataGridView.Columns.Add("Total", "总数");
-                dataGridView.Columns.Add("Ratio", "占比");
-                dataGridView.Columns["NodeName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["ClassName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["DetectName"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["SingleResult"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["DetectResult"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["Count"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["Total"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                dataGridView.Columns["Ratio"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataGridView.Columns.Add("Yield", "良率");
+                // 设置列标题的高度
+                dataGridView.ColumnHeadersHeight = 64;
+                // 设置行的高度
+                dataGridView.RowTemplate.Height = 36;
+                foreach (DataGridViewColumn column in dataGridView.Columns)
+                {
+                    column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
 
                 // 将 DataGridView 添加到 TabPage 中
                 tabPage.Controls.Add(dataGridView);
@@ -75,15 +76,13 @@ namespace YTVisionPro.Forms.ResultView
             }
 
             // 遍历 NGList，将内容更新到 DataGridView 中
-            foreach (var SingleDetectResult in e.AiResultData.DeepStudyResult)
+            foreach (var SingleDetectResult in e.AiResultData.SingleRowDataList)
             {
                 // 查找是否已经存在该类型
-                var row = dgv.Rows
-                            .Cast<DataGridViewRow>()
-                            .FirstOrDefault(r =>
-                                r.Cells["NodeName"].Value?.ToString() == SingleDetectResult.NodeName &&
-                                r.Cells["ClassName"].Value?.ToString() == SingleDetectResult.ClassName &&
-                                r.Cells["DetectName"].Value?.ToString() == SingleDetectResult.DetectName);
+                var row = dgv.Rows.Cast<DataGridViewRow>().FirstOrDefault(r =>
+                    r.Cells["NodeName"].Value?.ToString() == SingleDetectResult.NodeName &&
+                    r.Cells["ClassName"].Value?.ToString() == SingleDetectResult.ClassName &&
+                    r.Cells["DetectName"].Value?.ToString() == SingleDetectResult.DetectName);
 
                 if (row == null) // 如果不存在，则添加一行
                 {
@@ -94,23 +93,26 @@ namespace YTVisionPro.Forms.ResultView
                     dgv.Rows[rowIndex].Cells["SingleResult"].Value = SingleDetectResult.IsOk ? "OK" : "NG";
                     dgv.Rows[rowIndex].Cells["SingleResult"].Style.BackColor = SingleDetectResult.IsOk ? Color.Green : Color.Red;
                     dgv.Rows[rowIndex].Cells["DetectResult"].Value = SingleDetectResult.DetectResult;
-                    dgv.Rows[rowIndex].Cells["count"].Value = SingleDetectResult.IsOk ? 0 : 1;
+                    dgv.Rows[rowIndex].Cells["CountNG"].Value = SingleDetectResult.IsOk ? 0 : 1;
+                    dgv.Rows[rowIndex].Cells["CountOK"].Value = SingleDetectResult.IsOk ? 1 : 0;
                     dgv.Rows[rowIndex].Cells["Total"].Value = 1; // 初始总数为1
-                    dgv.Rows[rowIndex].Cells["Ratio"].Value = SingleDetectResult.IsOk ? 0.00 + "%" : 100.00 + "%";// 初始化占比
+                    dgv.Rows[rowIndex].Cells["Yield"].Value = SingleDetectResult.IsOk ? 100.00 + "%" :  0.00 + "%";// 良率
                 } 
                 else // 如果存在，则更新“个数”和其他信息
                 {
-
-                    int currentCount = Convert.ToInt32(row.Cells["Count"].Value);
-                    int TotalNum = Convert.ToInt32(row.Cells["Total"].Value);
-                    if (!SingleDetectResult.IsOk)
-                        row.Cells["Count"].Value = currentCount + 1;
-                    // 更新其他列（总数、面积、分数等）如果需要的话
-                    row.Cells["Total"].Value = TotalNum + 1; // 更新总数
-                    row.Cells["Ratio"].Value = (Convert.ToDouble(row.Cells["Count"].Value) / Convert.ToDouble(row.Cells["Total"].Value) * 100).ToString("F2") + "%";
                     row.Cells["SingleResult"].Value = SingleDetectResult.IsOk ? "OK" : "NG";
                     row.Cells["SingleResult"].Style.BackColor = SingleDetectResult.IsOk ? Color.Green : Color.Red;
                     row.Cells["DetectResult"].Value = SingleDetectResult.DetectResult;
+                    int cNG = Convert.ToInt32(row.Cells["CountNG"].Value);
+                    int cOK = Convert.ToInt32(row.Cells["CountOK"].Value);
+                    int TotalNum = Convert.ToInt32(row.Cells["Total"].Value);
+                    if (SingleDetectResult.IsOk)
+                        row.Cells["CountOK"].Value = cOK + 1;
+                    else
+                        row.Cells["CountNG"].Value = cNG + 1;
+                    // 更新其他列（总数、面积、分数等）如果需要的话
+                    row.Cells["Total"].Value = TotalNum + 1; // 更新总数
+                    row.Cells["Yield"].Value = (Convert.ToDouble(row.Cells["CountOK"].Value) / Convert.ToDouble(row.Cells["Total"].Value) * 100).ToString("F2") + "%";
                 }
             }
         }

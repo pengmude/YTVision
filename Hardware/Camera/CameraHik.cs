@@ -23,6 +23,11 @@ namespace YTVisionPro.Hardware.Camera
         public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
 
         /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        public event EventHandler<bool> ConnectStatusEvent;
+
+        /// <summary>
         /// 抓取图片事件
         /// </summary>
         public event EventHandler<Bitmap> PublishImageEvent;
@@ -211,6 +216,7 @@ namespace YTVisionPro.Hardware.Camera
                 return false;
             }
             IsOpen = true;
+            ConnectStatusEvent?.Invoke(this, true);
             //ch: 判断是否为gige设备 | en: Determine whether it is a GigE device
             if (device is IGigEDevice)
             {
@@ -465,6 +471,7 @@ namespace YTVisionPro.Hardware.Camera
             StopGrabbing();
             device.Close();
             IsOpen = false;
+            ConnectStatusEvent?.Invoke(this, false);
         }
 
         /// <summary>

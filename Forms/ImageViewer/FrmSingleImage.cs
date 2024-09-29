@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.HiK;
+using YTVisionPro.Node.Camera.Shot;
 using YTVisionPro.Node.ImageRead;
 
 namespace YTVisionPro.Forms.ImageViewer
@@ -21,7 +21,7 @@ namespace YTVisionPro.Forms.ImageViewer
         {
             InitializeComponent();
             this.Text = $"图像窗口{++i}";
-            NodeCamera.ImageShowChanged += NodeImageShow_ImageShowChanged;
+            NodeShot.ImageShowChanged += NodeImageShow_ImageShowChanged;
             NodeImageRead.ImageShowChanged += NodeImageShow_ImageShowChanged;
             NodeHTAI.ImageShowChanged += NodeImageShow_ImageShowChanged;
         }

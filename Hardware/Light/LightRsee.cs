@@ -15,6 +15,10 @@ namespace YTVisionPro.Hardware.Light
     internal class LightRsee : ILight
     {
         /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        public event EventHandler<bool> ConnectStatusEvent;
+        /// <summary>
         /// 光源设置参数
         /// </summary>
         public LightParam LightParam { get; set; }
@@ -138,7 +142,7 @@ namespace YTVisionPro.Hardware.Light
         /// </summary>
         public void Connenct()
         {
-            if (IsComOpen) { return; }
+            if (IsComOpen && ComHandle != 0) { return; }
             try
             {
                 ComHandle = RseeController_OpenCom(LightParam.Port, LightParam.BaudRate, true);
@@ -193,7 +197,7 @@ namespace YTVisionPro.Hardware.Light
                     Connenct();
                 SetValue(value);
                 IsOpen = true;
-
+                ConnectStatusEvent?.Invoke(this, true);
                 // -1为常亮
 
                 if (time == -1)
@@ -231,6 +235,7 @@ namespace YTVisionPro.Hardware.Light
                     Connenct();
                 SetValue(0);
                 IsOpen = false;
+                ConnectStatusEvent?.Invoke(this, false);
             }
             catch (Exception ex)
             {

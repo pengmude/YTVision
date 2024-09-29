@@ -1,6 +1,6 @@
-﻿namespace YTVisionPro.Node.Camera.HiK
+﻿namespace YTVisionPro.Node.Camera.Shot
 {
-    partial class ParamFormCamera
+    partial class ParamFormShot
     {
         /// <summary>
         /// Required designer variable.

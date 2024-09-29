@@ -13,6 +13,10 @@ namespace YTVisionPro.Hardware.Light
     internal interface ILight : IDevice
     {
         /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        event EventHandler<bool> ConnectStatusEvent;
+        /// <summary>
         /// 光源是否打开
         /// </summary>
         bool IsOpen { get; set; }

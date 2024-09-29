@@ -18,16 +18,19 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <summary>
         /// AI检测结果数据
         /// </summary>
-        public AiResult ResultData { get; set; }
+        public ResultViewData ResultData { get; set; }
         /// <summary>
         /// 渲染图
         /// </summary>
         public Bitmap RenderImage { get; set; }
     }
 
-    internal class AiResult
+    /// <summary>
+    /// AI/传统算法检出结果
+    /// </summary>
+    internal class ResultViewData
     {
-        public bool IsAllOk { get { return DeepStudyResult.TrueForAll(sr => sr.IsOk); } }
-        public List<SingleResultViewData> DeepStudyResult = new List<SingleResultViewData>();
+        public bool IsAllOk { get { return SingleRowDataList.TrueForAll(sr => sr.IsOk); } }
+        public List<SingleResultViewData> SingleRowDataList = new List<SingleResultViewData>();
     }
 }

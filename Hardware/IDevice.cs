@@ -1,12 +1,17 @@
 ﻿using JsonSubTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using YTVisionPro.Hardware.Light;
 
 namespace YTVisionPro.Hardware
 {
     internal interface IDevice
     {
+        /// <summary>
+        /// 连接状态改变事件
+        /// </summary>
+        event EventHandler<bool> ConnectStatusEvent;
         /// <summary>
         /// 硬件硬件名称
         /// </summary>
