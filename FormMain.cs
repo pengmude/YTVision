@@ -16,6 +16,7 @@ using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
 using System.Threading.Tasks;
 using Sunny.UI;
+using YTVisionPro.Properties;
 
 namespace YTVisionPro
 {
@@ -62,9 +63,9 @@ namespace YTVisionPro
         /// </summary>
         static FrmAbout frmAbout = new FrmAbout();
         /// <summary>
-        /// 用户登录界面
+        /// 软件操作锁定
         /// </summary>
-        static FrmLogin frmLogin = new FrmLogin();
+        static FrmOperatorLocker frmLocker = new FrmOperatorLocker();
         /// <summary>
         /// 窗口布局配置
         /// </summary>
@@ -104,6 +105,44 @@ namespace YTVisionPro
             FrmImgeDlg.HideChangedEvent += HideChangedEvent;
             FrmResultDlg.HideChangedEvent += HideChangedEvent;
             FrmLoggerDlg.HideChangedEvent += HideChangedEvent;
+
+            // 界面锁事件
+            frmLocker.OperatorLockerChanged += FrmOperatorLocker_OperatorLockerChanged;
+
+            // 保存快捷键事件处理
+            FrmNewProcessWizard.OnShotKeySavePressed += OnShotKeySavePressed;
+            FrmLightAdd.OnShotKeySavePressed += OnShotKeySavePressed;
+            FrmCameraAdd.OnShotKeySavePressed += OnShotKeySavePressed;
+            FrmPLCAdd.OnShotKeySavePressed += OnShotKeySavePressed;
+        }
+
+        /// <summary>
+        /// 按下快捷键事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnShotKeySavePressed(object sender, EventArgs e)
+        {
+            保存方案ToolStripMenuItem_Click(null, null);
+        }
+
+        private void FrmOperatorLocker_OperatorLockerChanged(object sender, bool e)
+        {
+            SetLockStatus(!e);
+        }
+
+        /// <summary>
+        /// 界面锁住状态
+        /// </summary>
+        private void SetLockStatus(bool isLock)
+        {
+            toolStrip1.Enabled = !isLock;
+            文件ToolStripMenuItem.Enabled = !isLock;
+            设置ToolStripMenuItem.Enabled = !isLock;
+            if (!isLock)
+                锁定ToolStripMenuItem.Image = Resources.锁定;
+            else
+                锁定ToolStripMenuItem.Image = Resources.解锁;
         }
 
         /// <summary>
@@ -128,10 +167,25 @@ namespace YTVisionPro
                 return;
             }
 
+            // 释放方案资源
+            ReleaseSol();
+
+            // 海康相机SDK反序列化
+            CameraHik.Finalize();
+
+            // 保存主窗口布局
+            this.dockPanel1.SaveAsXml(DockPanelConfig);
+        }
+
+        /// <summary>
+        /// 释放方案
+        /// </summary>
+        private void ReleaseSol()
+        {
             // 释放AI节点的内存
             foreach (var node in Solution.Instance.Nodes)
             {
-                if(node is NodeHTAI nodeAi)
+                if (node is NodeHTAI nodeAi)
                 {
                     nodeAi.ReleaseAIResult();
                     ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
@@ -141,19 +195,13 @@ namespace YTVisionPro
             // 释放硬件资源（光源、相机、PLC）
             foreach (var dev in Solution.Instance.AllDevices)
             {
-                if(dev is ILight light)
+                if (dev is ILight light)
                     light.Disconnect();
-                if(dev is ICamera camera)
+                if (dev is ICamera camera)
                     camera.Dispose();
-                if(dev is IPlc plc)
+                if (dev is IPlc plc)
                     plc.Disconnect();
             }
-            
-            // 海康相机SDK反序列化
-            CameraHik.Finalize();
-
-            // 保存主窗口布局
-            this.dockPanel1.SaveAsXml(DockPanelConfig);
         }
 
         /// <summary>
@@ -210,6 +258,7 @@ namespace YTVisionPro
             else
                 return null;
         }
+
         private void 文件ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (sender is ToolStripMenuItem item)
@@ -275,9 +324,6 @@ namespace YTVisionPro
                 case "PLC管理":
                     PLC管理ToolStripMenuItem_Click(null, null);
                     break;
-                case "用户登录":
-                    用户登录ToolStripMenuItem_Click(null, null);
-                    break;
                 case "循环运行":
                     循环运行ToolStripMenuItem_Click(null, null);
                     break;
@@ -318,7 +364,7 @@ namespace YTVisionPro
         /// <summary>
         /// 设置运行状态，启用/禁用控件
         /// </summary>
-        /// <param name="isRunning"></param>
+        /// <param name="enable"></param>
         private void SetRunStatus(bool isRunning)
         {
             // 运行和停止按钮
@@ -335,7 +381,6 @@ namespace YTVisionPro
             tsbt_LightManager.Enabled = !isRunning;
             tsbt_CameraManager.Enabled = !isRunning;
             tsbt_PlcManager.Enabled = !isRunning;
-            tsbt_UserLogin.Enabled = !isRunning;
 
             // 文件
             文件ToolStripMenuItem.Enabled = !isRunning;
@@ -344,9 +389,9 @@ namespace YTVisionPro
             帮助ToolStripMenuItem.Enabled = !isRunning;
         }
 
-        private void 用户登录ToolStripMenuItem_Click(object value1, object value2)
+        private void 操作锁定ToolStripMenuItem_Click(object value1, object value2)
         {
-            frmLogin.ShowDialog();
+            frmLocker.ShowDialog();
         }
 
         private void PLC管理ToolStripMenuItem_Click(object value1, object value2)
@@ -387,11 +432,13 @@ namespace YTVisionPro
                 saveFileDialog1.Title = "请选择方案保存路径";
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                     Solution.Instance.SolFileName = saveFileDialog1.FileName;
+                else
+                    return;
             }
             try
             {
                 Solution.Instance.Save(Solution.Instance.SolFileName);
-                LogHelper.AddLog(MsgLevel.Info, $"方案保存成功！路径：{saveFileDialog1.FileName}", true);
+                LogHelper.AddLog(MsgLevel.Info, $"方案保存成功！路径：{Solution.Instance.SolFileName}", true);
             }
             catch (Exception ex)
             {
@@ -401,9 +448,10 @@ namespace YTVisionPro
 
         private void 打开方案ToolStripMenuItem_Click(object value1, object value2)
         {
-            if(openFileDialog1.ShowDialog()  == DialogResult.OK)
+            openFileDialog1.Title = "请选择要打开的方案";
+            if (openFileDialog1.ShowDialog()  == DialogResult.OK)
             {
-                Solution.Instance.Load(openFileDialog1.FileName);
+                Solution.Instance.Load(openFileDialog1.FileName, true);
             }
         }
 
@@ -414,16 +462,11 @@ namespace YTVisionPro
         /// <param name="e"></param>
         private void 新建方案ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("是否保存当前方案的修改？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                保存方案ToolStripMenuItem_Click(null, null);
-            }
-            saveFileDialog1.Title = "请选择新方案的保存路径";
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-                Solution.Instance.SolFileName = saveFileDialog1 .FileName;
-                // TODO: 新建方案需要清空原有方案的设备列表、流程节点、以及释放占用的内存资源
-            }
+            // 释放旧方案
+            ReleaseSol();
+            // 新建方案实际和调用加载空方案一样
+            Solution.Instance.Load(Application.StartupPath + "\\空方案.YtSol", false);
+            LogHelper.AddLog(MsgLevel.Info, $"新建方案成功！", true);
         }
 
         private void 方案设置ToolStripMenuItem_Click(object value1, object value2)
@@ -520,6 +563,10 @@ namespace YTVisionPro
                 运行日志ToolStripMenuItem.Checked = frmLogger.Visible;
         }
 
+        private void 锁定ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            操作锁定ToolStripMenuItem_Click(null, null);
+        }
     }
 
 

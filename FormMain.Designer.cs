@@ -35,7 +35,6 @@
             this.打开方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.保存方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.另存方案ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.视图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.默认视图ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.图像显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,7 +47,11 @@
             this.使用教程ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.联系我们ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.关于YTVisionProToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.锁定ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.vS2015LightTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015LightTheme();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tsbt_SolSettings = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolNew = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolOpen = new System.Windows.Forms.ToolStripButton();
@@ -58,14 +61,15 @@
             this.tsbt_LightManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_CameraManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_PlcManager = new System.Windows.Forms.ToolStripButton();
-            this.tsbt_UserLogin = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunOnce = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunLoop = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStop = new System.Windows.Forms.ToolStripButton();
-            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.vS2015LightTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015LightTheme();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -79,7 +83,8 @@
             this.文件ToolStripMenuItem,
             this.视图ToolStripMenuItem,
             this.设置ToolStripMenuItem,
-            this.帮助ToolStripMenuItem});
+            this.帮助ToolStripMenuItem,
+            this.锁定ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1556, 32);
@@ -92,46 +97,43 @@
             this.新建方案ToolStripMenuItem,
             this.打开方案ToolStripMenuItem,
             this.保存方案ToolStripMenuItem,
-            this.另存方案ToolStripMenuItem,
-            this.退出ToolStripMenuItem});
+            this.另存方案ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
             this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.文件ToolStripMenuItem.Text = "文件";
-            this.文件ToolStripMenuItem.Click += new System.EventHandler(this.文件ToolStripMenuItem_Click);
             // 
             // 新建方案ToolStripMenuItem
             // 
             this.新建方案ToolStripMenuItem.Name = "新建方案ToolStripMenuItem";
-            this.新建方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.新建方案ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.新建方案ToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.新建方案ToolStripMenuItem.Text = "新建方案";
-            this.新建方案ToolStripMenuItem.Click += new System.EventHandler(this.新建方案ToolStripMenuItem_Click);
+            this.新建方案ToolStripMenuItem.Click += new System.EventHandler(this.文件ToolStripMenuItem_Click);
             // 
             // 打开方案ToolStripMenuItem
             // 
             this.打开方案ToolStripMenuItem.Name = "打开方案ToolStripMenuItem";
-            this.打开方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.打开方案ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.打开方案ToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.打开方案ToolStripMenuItem.Text = "打开方案";
-            this.打开方案ToolStripMenuItem.Click += new System.EventHandler(this.打开方案ToolStripMenuItem_Click);
+            this.打开方案ToolStripMenuItem.Click += new System.EventHandler(this.文件ToolStripMenuItem_Click);
             // 
             // 保存方案ToolStripMenuItem
             // 
             this.保存方案ToolStripMenuItem.Name = "保存方案ToolStripMenuItem";
-            this.保存方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.保存方案ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.保存方案ToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.保存方案ToolStripMenuItem.Text = "保存方案";
-            this.保存方案ToolStripMenuItem.Click += new System.EventHandler(this.保存方案ToolStripMenuItem_Click);
+            this.保存方案ToolStripMenuItem.Click += new System.EventHandler(this.文件ToolStripMenuItem_Click);
             // 
             // 另存方案ToolStripMenuItem
             // 
             this.另存方案ToolStripMenuItem.Name = "另存方案ToolStripMenuItem";
-            this.另存方案ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
+            this.另存方案ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.另存方案ToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.另存方案ToolStripMenuItem.Text = "另存方案";
-            this.另存方案ToolStripMenuItem.Click += new System.EventHandler(this.另存方案ToolStripMenuItem_Click);
-            // 
-            // 退出ToolStripMenuItem
-            // 
-            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
-            this.退出ToolStripMenuItem.Text = "退出";
+            this.另存方案ToolStripMenuItem.Click += new System.EventHandler(this.文件ToolStripMenuItem_Click);
             // 
             // 视图ToolStripMenuItem
             // 
@@ -219,46 +221,52 @@
             // 使用教程ToolStripMenuItem
             // 
             this.使用教程ToolStripMenuItem.Name = "使用教程ToolStripMenuItem";
-            this.使用教程ToolStripMenuItem.Size = new System.Drawing.Size(248, 34);
+            this.使用教程ToolStripMenuItem.Size = new System.Drawing.Size(182, 34);
             this.使用教程ToolStripMenuItem.Text = "使用教程";
             // 
             // 联系我们ToolStripMenuItem1
             // 
             this.联系我们ToolStripMenuItem1.Name = "联系我们ToolStripMenuItem1";
-            this.联系我们ToolStripMenuItem1.Size = new System.Drawing.Size(248, 34);
+            this.联系我们ToolStripMenuItem1.Size = new System.Drawing.Size(182, 34);
             this.联系我们ToolStripMenuItem1.Text = "联系我们";
             this.联系我们ToolStripMenuItem1.Click += new System.EventHandler(this.联系我们ToolStripMenuItem_Click);
             // 
             // 关于YTVisionProToolStripMenuItem1
             // 
             this.关于YTVisionProToolStripMenuItem1.Name = "关于YTVisionProToolStripMenuItem1";
-            this.关于YTVisionProToolStripMenuItem1.Size = new System.Drawing.Size(248, 34);
-            this.关于YTVisionProToolStripMenuItem1.Text = "关于YTVisionPro";
+            this.关于YTVisionProToolStripMenuItem1.Size = new System.Drawing.Size(182, 34);
+            this.关于YTVisionProToolStripMenuItem1.Text = "关于";
             this.关于YTVisionProToolStripMenuItem1.Click += new System.EventHandler(this.关于YTVisionProToolStripMenuItem1_Click);
             // 
-            // toolStrip1
+            // 锁定ToolStripMenuItem
             // 
-            this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbt_SolSettings,
-            this.tsbt_SolNew,
-            this.tsbt_SolOpen,
-            this.toolStripButton1,
-            this.tsbt_SolSave,
-            this.tsbt_ProcessManager,
-            this.tsbt_LightManager,
-            this.tsbt_CameraManager,
-            this.tsbt_PlcManager,
-            this.tsbt_UserLogin,
-            this.tsbt_SolRunOnce,
-            this.tsbt_SolRunLoop,
-            this.tsbt_SolRunStop});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 32);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1556, 41);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.锁定ToolStripMenuItem.Image = global::YTVisionPro.Properties.Resources.锁定;
+            this.锁定ToolStripMenuItem.Name = "锁定ToolStripMenuItem";
+            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 28);
+            this.锁定ToolStripMenuItem.ToolTipText = "界面已锁定";
+            this.锁定ToolStripMenuItem.Click += new System.EventHandler(this.锁定ToolStripMenuItem_Click);
+            // 
+            // dockPanel1
+            // 
+            this.dockPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dockPanel1.DockBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(242)))));
+            this.dockPanel1.Location = new System.Drawing.Point(0, 73);
+            this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Padding = new System.Windows.Forms.Padding(6);
+            this.dockPanel1.ShowAutoHideContentOnHover = false;
+            this.dockPanel1.Size = new System.Drawing.Size(1556, 854);
+            this.dockPanel1.TabIndex = 2;
+            this.dockPanel1.Theme = this.vS2015LightTheme1;
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.Filter = "视觉方案文件(*.YtSol)|*.YtSol|所有文件(*.*)|*.*";
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.Filter = "视觉方案文件(*.YtSol)|*.YtSol|所有文件(*.*)|*.*";
             // 
             // tsbt_SolSettings
             // 
@@ -359,17 +367,6 @@
             this.tsbt_PlcManager.ToolTipText = "PLC管理";
             this.tsbt_PlcManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // tsbt_UserLogin
-            // 
-            this.tsbt_UserLogin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_UserLogin.Image = global::YTVisionPro.Properties.Resources.用户登录;
-            this.tsbt_UserLogin.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_UserLogin.Name = "tsbt_UserLogin";
-            this.tsbt_UserLogin.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_UserLogin.Text = "用户登录";
-            this.tsbt_UserLogin.ToolTipText = "用户登录";
-            this.tsbt_UserLogin.Click += new System.EventHandler(this.ToolStripButton_Click);
-            // 
             // tsbt_SolRunOnce
             // 
             this.tsbt_SolRunOnce.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -407,27 +404,64 @@
             this.tsbt_SolRunStop.ToolTipText = "停止运行";
             this.tsbt_SolRunStop.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
-            // dockPanel1
+            // toolStrip1
             // 
-            this.dockPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dockPanel1.DockBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(242)))));
-            this.dockPanel1.Location = new System.Drawing.Point(0, 73);
-            this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Padding = new System.Windows.Forms.Padding(6);
-            this.dockPanel1.ShowAutoHideContentOnHover = false;
-            this.dockPanel1.Size = new System.Drawing.Size(1556, 854);
-            this.dockPanel1.TabIndex = 2;
-            this.dockPanel1.Theme = this.vS2015LightTheme1;
+            this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbt_SolSettings,
+            this.tsbt_SolNew,
+            this.tsbt_SolOpen,
+            this.toolStripButton1,
+            this.tsbt_SolSave,
+            this.tsbt_ProcessManager,
+            this.tsbt_LightManager,
+            this.tsbt_CameraManager,
+            this.tsbt_PlcManager,
+            this.tsbt_SolRunOnce,
+            this.tsbt_SolRunLoop,
+            this.tsbt_SolRunStop});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 32);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1556, 41);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
             // 
-            // saveFileDialog1
+            // BottomToolStripPanel
             // 
-            this.saveFileDialog1.Filter = "视觉方案文件(*.YtSol)|*.YtSol|所有文件(*.*)|*.*";
+            this.BottomToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.BottomToolStripPanel.Name = "BottomToolStripPanel";
+            this.BottomToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.BottomToolStripPanel.Size = new System.Drawing.Size(0, 0);
             // 
-            // openFileDialog1
+            // TopToolStripPanel
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "视觉方案文件(*.YtSol)|*.YtSol|所有文件(*.*)|*.*";
+            this.TopToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.TopToolStripPanel.Name = "TopToolStripPanel";
+            this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // RightToolStripPanel
+            // 
+            this.RightToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.RightToolStripPanel.Name = "RightToolStripPanel";
+            this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.RightToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // LeftToolStripPanel
+            // 
+            this.LeftToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.LeftToolStripPanel.Name = "LeftToolStripPanel";
+            this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+            this.LeftToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            // 
+            // ContentPanel
+            // 
+            this.ContentPanel.Size = new System.Drawing.Size(1556, 771);
             // 
             // FormMain
             // 
@@ -465,21 +499,10 @@
         private System.Windows.Forms.ToolStripMenuItem 视图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 设置ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 帮助ToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton tsbt_SolSettings;
-        private System.Windows.Forms.ToolStripButton tsbt_SolNew;
-        private System.Windows.Forms.ToolStripButton tsbt_SolOpen;
-        private System.Windows.Forms.ToolStripButton tsbt_SolSave;
-        private System.Windows.Forms.ToolStripButton tsbt_CameraManager;
-        private System.Windows.Forms.ToolStripButton tsbt_PlcManager;
-        private System.Windows.Forms.ToolStripButton tsbt_UserLogin;
-        private System.Windows.Forms.ToolStripButton tsbt_SolRunOnce;
-        private System.Windows.Forms.ToolStripButton tsbt_SolRunStop;
         private System.Windows.Forms.ToolStripMenuItem 新建方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 打开方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 保存方案ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 另存方案ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 默认视图ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 检测结果ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 运行日志ToolStripMenuItem;
@@ -491,12 +514,27 @@
         private WeifenLuo.WinFormsUI.Docking.VS2015LightTheme vS2015LightTheme1;
         private System.Windows.Forms.ToolStripMenuItem 联系我们ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem 关于YTVisionProToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripButton tsbt_ProcessManager;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ToolStripButton tsbt_LightManager;
-        private System.Windows.Forms.ToolStripButton tsbt_SolRunLoop;
+        private System.Windows.Forms.ToolStripMenuItem 锁定ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tsbt_SolSettings;
+        private System.Windows.Forms.ToolStripButton tsbt_SolNew;
+        private System.Windows.Forms.ToolStripButton tsbt_SolOpen;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton tsbt_SolSave;
+        private System.Windows.Forms.ToolStripButton tsbt_ProcessManager;
+        private System.Windows.Forms.ToolStripButton tsbt_LightManager;
+        private System.Windows.Forms.ToolStripButton tsbt_CameraManager;
+        private System.Windows.Forms.ToolStripButton tsbt_PlcManager;
+        private System.Windows.Forms.ToolStripButton tsbt_SolRunOnce;
+        private System.Windows.Forms.ToolStripButton tsbt_SolRunLoop;
+        private System.Windows.Forms.ToolStripButton tsbt_SolRunStop;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+        private System.Windows.Forms.ToolStripContentPanel ContentPanel;
     }
 }
 

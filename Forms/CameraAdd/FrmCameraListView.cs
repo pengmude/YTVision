@@ -9,8 +9,18 @@ namespace YTVisionPro.Forms.CameraAdd
 {
     internal partial class FrmCameraListView : Form
     {
+        /// <summary>
+        /// 添加相机时通过快捷键保存方案的事件
+        /// </summary>
+        public event EventHandler OnShotKeySavePressed;
+        /// <summary>
+        /// 相机管理窗口关闭事件
+        /// </summary>
         public static event EventHandler OnCameraListViewClosed;
-        public static event EventHandler OnCameraDeserializationCompletionEvent;
+        /// <summary>
+        /// 反序列化完成相机后开始反序列化PLC
+        /// </summary>
+        public static event EventHandler<bool> OnCameraDeserializationCompletionEvent;
         /// <summary>
         /// 设备信息弹窗
         /// </summary>
@@ -23,6 +33,7 @@ namespace YTVisionPro.Forms.CameraAdd
             SingleCamera.SelectedChange += SingleCamera_SingleCameraSelectedChanged;
             SingleCamera.SingleCameraRemoveEvent += SingleCamera_SingleCameraRemoveEvent;
             FrmLightListView.OnLightDeserializationCompletionEvent += Deserialization;
+            this.KeyPreview = true;
         }
 
         /// <summary>
@@ -30,14 +41,15 @@ namespace YTVisionPro.Forms.CameraAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Deserialization(object sender,  EventArgs e)
+        private void Deserialization(object sender,  bool e)
         {
             // 先移除旧方案的相机控件
             flowLayoutPanel1.Controls.Clear();
 
             // 添加新的相机
             SingleCamera singleCamera = null;
-            LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【相机设备列表】=================================================", true);
+            if(e)
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【相机设备列表】=================================================", true);
             foreach (var dev in ConfigHelper.SolConfig.Devices)
             {
                 if (dev is ICamera camera)
@@ -59,8 +71,23 @@ namespace YTVisionPro.Forms.CameraAdd
                 }
                 
             }
-            LogHelper.AddLog(MsgLevel.Debug, $"================================================【相机设备列表】已加载完成 ================================================", true);
-            OnCameraDeserializationCompletionEvent?.Invoke(this, EventArgs.Empty);
+            if(e)
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================【相机设备列表】已加载完成 ================================================", true);
+            OnCameraDeserializationCompletionEvent?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// 按下保存快捷键
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                // 触发保存方案事件
+                OnShotKeySavePressed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

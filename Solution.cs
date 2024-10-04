@@ -1,5 +1,4 @@
-﻿//using MvCameraControl;
-using Logger;
+﻿using Logger;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,11 +8,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Forms.CameraAdd;
+using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro
 {
@@ -235,13 +238,13 @@ namespace YTVisionPro
         /// 方案加载
         /// </summary>
         /// <returns></returns>
-        public void Load(string configFile)
+        public void Load(string configFile, bool flag)
         {
             try
             {
                 if (File.Exists(configFile))
                 {
-                    ConfigHelper.SolLoad(configFile);
+                    ConfigHelper.SolLoad(configFile, flag);
                 }
                 else
                 {
@@ -283,6 +286,45 @@ namespace YTVisionPro
         }
 
         #endregion
+
+        /// <summary>
+        /// 重置方案
+        /// </summary>
+        public void SolReset()
+        {
+            // 释放旧方案的硬件资源（光源、相机、PLC）
+            foreach (var dev in Solution.Instance.AllDevices)
+            {
+                if (dev is ILight light)
+                    light.Disconnect();
+                if (dev is ICamera camera)
+                    camera.Dispose();
+                if (dev is IPlc plc)
+                    plc.Disconnect();
+            }
+
+            // 清空设备
+            SingleLight.SingleLights.Clear();
+            SingleCamera.SingleCameraList.Clear();
+            SinglePLC.SinglePLCs.Clear();
+            Solution.Instance.AllDevices.Clear();
+
+            // 释放AI节点的内存
+            foreach (var node in Solution.Instance.Nodes)
+            {
+                if (node is NodeHTAI nodeAi)
+                {
+                    nodeAi.ReleaseAIResult();
+                    ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
+                }
+            }
+
+            // 清空流程和节点
+            Solution.Instance.ProcessCount = 0;
+            Solution.Instance.AllProcesses.Clear();
+            Solution.Instance.NodeCount = 0;
+            Solution.Instance.Nodes.Clear();
+        }
 
         #endregion
     }

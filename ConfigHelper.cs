@@ -19,7 +19,7 @@ namespace YTVisionPro
     internal class ConfigHelper
     {
         public static SolConfig SolConfig = new SolConfig();
-        public static EventHandler DeserializationCompletionEvent;
+        public static EventHandler<bool> DeserializationCompletionEvent;
         /// <summary>
         /// 【方案保存】
         /// 只需要保存反序列化后能够还原软件的必要配置
@@ -30,6 +30,7 @@ namespace YTVisionPro
             try
             {
                 SolConfig.SolVer = Solution.Instance.SolVersion;
+                SolConfig.SolName = solFile;
                 SolConfig.Devices = Solution.Instance.AllDevices;
 
                 SolConfig.ProcessInfos = new List<ProcessConfig>();
@@ -53,7 +54,7 @@ namespace YTVisionPro
                     SolConfig.ProcessInfos.Add(processConfig);
                 }
 
-                ////TODO: 除了方案、流程、节点信息，还需要保存其他配置
+                ////TODO: 除了方案、流程、节点信息，可能还需要保存其他配置
 
                 // 配置持久化到本地文件
                 string json = JsonConvert.SerializeObject(SolConfig, Formatting.Indented);
@@ -77,7 +78,7 @@ namespace YTVisionPro
         /// 否则会因为无法解析派生类的Json字符串导致反序列化失败
         /// </summary>
         /// <param name="solFile"></param>
-        public static void SolLoad(string solFile)
+        public static void SolLoad(string solFile, bool flag)
         {
             try
             {
@@ -89,38 +90,7 @@ namespace YTVisionPro
 
                 #region 清理旧方案设备和流程节点
 
-                // 释放旧方案的硬件资源（光源、相机、PLC）
-                foreach (var dev in Solution.Instance.AllDevices)
-                {
-                    if (dev is ILight light)
-                        light.Disconnect();
-                    if (dev is ICamera camera)
-                        camera.Dispose();
-                    if (dev is IPlc plc)
-                        plc.Disconnect();
-                }
-
-                // 清空设备
-                SingleLight.SingleLights.Clear();
-                SingleCamera.SingleCameraList.Clear();
-                SinglePLC.SinglePLCs.Clear();
-                Solution.Instance.AllDevices.Clear();
-
-                // 释放AI节点的内存
-                foreach (var node in Solution.Instance.Nodes)
-                {
-                    if (node is NodeHTAI nodeAi)
-                    {
-                        nodeAi.ReleaseAIResult();
-                        ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
-                    }
-                }
-
-                // 清空流程和节点
-                Solution.Instance.ProcessCount = 0;
-                Solution.Instance.AllProcesses.Clear();
-                Solution.Instance.NodeCount = 0;
-                Solution.Instance.Nodes.Clear();
+                Solution.Instance.SolReset();
 
                 #endregion
 
@@ -169,13 +139,15 @@ namespace YTVisionPro
 
                 #endregion
 
+                Solution.Instance.SolVersion = SolConfig.SolVer;
+                Solution.Instance.SolFileName = SolConfig.SolName;
                 // 发送反序列化完成事件
                 // 目的：
                 // 1.先触发光源管理窗口还原所有光源，还原完成触发光源完成事件
                 // 2.相机管理窗口订阅光源完成事件进行相机还原，完成后触发相机完成事件 移除旧方案的设备管理窗口的设备控件
                 // 3.PLC管理窗口订阅相机完成事件进行PLC还原 完成后触发PLC完成事件，
                 // 4.流程管理窗口订阅PLC完成事件进行流程还原，因为流程还原需要用到设备，这样保证了在还原流程时设备可用
-                DeserializationCompletionEvent?.Invoke(null,EventArgs.Empty);
+                DeserializationCompletionEvent?.Invoke(null, flag);
 
             }
             catch (Exception ex)
@@ -191,6 +163,7 @@ namespace YTVisionPro
         /// 方案版本
         /// </summary>
         public string SolVer;
+        public string SolName;
         /// <summary>
         /// 方案下的所有设备(光源、相机、PLC)
         /// </summary>

@@ -11,11 +11,18 @@ namespace YTVisionPro.Forms.LightAdd
 {
     internal partial class FrmLightListView : Form
     {
+        /// <summary>
+        /// 添加光源时通过快捷键保存方案的事件
+        /// </summary>
+        public event EventHandler OnShotKeySavePressed;
+        /// <summary>
+        /// 光源添加窗口
+        /// </summary>
         FrmLightNew frmLightNew = new FrmLightNew();
         /// <summary>
         /// 光源反序列化完成事件
         /// </summary>
-        public static event EventHandler OnLightDeserializationCompletionEvent;
+        public static event EventHandler<bool> OnLightDeserializationCompletionEvent;
         /// <summary>
         /// 已添加的磐鑫光源所占用的Com列表
         /// 作用：解决相同COM号多个通道连接光源的问题
@@ -33,6 +40,7 @@ namespace YTVisionPro.Forms.LightAdd
             SingleLight.SelectedChange += SingleLight_SelectedChange;
             SingleLight.SingleLightRemoveEvent += SingleLight_SinglePLCRemoveEvent;
             ConfigHelper.DeserializationCompletionEvent += Deserialization;
+            this.KeyPreview = true;
         }
 
         /// <summary>
@@ -40,14 +48,15 @@ namespace YTVisionPro.Forms.LightAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Deserialization(object sender, EventArgs e)
+        private void Deserialization(object sender, bool e)
         {
             // 先移除旧方案的光源控件
             flowLayoutPanel1.Controls.Clear();
 
             // 添加新的光源
             SingleLight singleLight = null;
-            LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【光源设备列表】=================================================", true);
+            if(e)
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【光源设备列表】=================================================", true);
             foreach (var dev in ConfigHelper.SolConfig.Devices)
             {
                 if (dev is ILight light)
@@ -67,8 +76,23 @@ namespace YTVisionPro.Forms.LightAdd
                     }
                 }
             }
-            LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
-            OnLightDeserializationCompletionEvent?.Invoke(this, EventArgs.Empty);
+            if(e)
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
+            OnLightDeserializationCompletionEvent?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// 按下保存快捷键
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                // 触发保存方案事件
+                OnShotKeySavePressed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>

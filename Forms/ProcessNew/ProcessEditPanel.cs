@@ -44,7 +44,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// 流程编辑面板构造函数
         /// </summary>
         /// <param name="processName"></param>
-        public ProcessEditPanel(string processName, ProcessConfig processConfig = null)
+        public ProcessEditPanel(string processName, bool showInfo = true, ProcessConfig processConfig = null)
         {
             InitializeComponent();
             _process = new Process(processName);
@@ -55,11 +55,13 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 _stack.Clear();
                 label1.Text = $"节点数:0";
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载流程（{_process.ProcessName}）=================================================", true);
+                if(showInfo)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载流程（{_process.ProcessName}）=================================================", true);
                 // 阻塞UI去创建流程
-                CreateProcess(processConfig);
+                CreateProcess(processConfig, showInfo);
                 uiSwitchEnable.Active = processConfig.Enable;
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================ 流程（{_process.ProcessName}）已加载完成 ================================================", true);
+                if(showInfo)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================ 流程（{_process.ProcessName}）已加载完成 ================================================", true);
             }
         }
 
@@ -107,7 +109,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         /// <param name="processConfig"></param>
         private delegate void SetParamDelegate();
-        private void CreateProcess(ProcessConfig processConfig)
+        private void CreateProcess(ProcessConfig processConfig, bool showInfo)
         {
             foreach (var nodeInfo in processConfig.NodeInfos)
             {
@@ -122,12 +124,14 @@ namespace YTVisionPro.Forms.ProcessNew
                     nodeBase.ParamForm.Params = nodeInfo.NodeParam;
                     // 3.节点参数到参数设置界面
                     nodeBase.ParamForm.SetParam2Form();
-                    LogHelper.AddLog(MsgLevel.Info, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）已加载", true);
+                    if(showInfo)
+                        LogHelper.AddLog(MsgLevel.Info, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）已加载", true);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    LogHelper.AddLog(MsgLevel.Exception, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）加载失败！原因：{ex.Message}", true);
+                    if(showInfo)
+                        LogHelper.AddLog(MsgLevel.Exception, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）加载失败！原因：{ex.Message}", true);
                     continue;
                 }
             }

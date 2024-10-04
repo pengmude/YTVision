@@ -7,18 +7,22 @@ namespace YTVisionPro.Forms.ProcessNew
 {
     internal partial class FormNewProcessWizard : Form
     {
+        // 编辑流程时通过快捷键保存方案的事件
+        public event EventHandler OnShotKeySavePressed;
+
         public FormNewProcessWizard()
         {
             InitializeComponent();
             InitNodeComboBox();
             FrmPLCListView.OnPLCDeserializationCompletionEvent += Deserialization;
+            this.KeyPreview = true;
         }
         /// <summary>
         /// 反序列化
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Deserialization(object sender, EventArgs e)
+        private void Deserialization(object sender, bool e)
         {
             // 清空流程控件
             tabControl1.Controls.Clear();
@@ -34,7 +38,7 @@ namespace YTVisionPro.Forms.ProcessNew
                 tabPage.Text = processInfo.ProcessName;
                 tabPage.UseVisualStyleBackColor = true;
 
-                ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text, processInfo);
+                ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text, e, processInfo);
                 nodeEditPanel.Dock = DockStyle.Fill;
                 tabPage.Controls.Add(nodeEditPanel);
                 tabControl1.Controls.Add(tabPage);
@@ -67,6 +71,15 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeComboBox5.AddItem("AI检测", NodeType.AIHT);
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                // 触发保存方案事件
+                OnShotKeySavePressed?.Invoke(this, EventArgs.Empty);
+            }
+        }
         /// <summary>
         /// 添加一个流程
         /// </summary>

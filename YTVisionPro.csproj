@@ -156,11 +156,11 @@
     <Compile Include="Forms\CameraAdd\SingleCamera.Designer.cs">
       <DependentUpon>SingleCamera.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FrmLogin.cs">
+    <Compile Include="Forms\FrmOperatorLocker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FrmLogin.Designer.cs">
-      <DependentUpon>FrmLogin.cs</DependentUpon>
+    <Compile Include="Forms\FrmOperatorLocker.Designer.cs">
+      <DependentUpon>FrmOperatorLocker.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Helper\ContactUsFormForm.cs">
       <SubType>Form</SubType>
@@ -494,8 +494,8 @@
     <EmbeddedResource Include="Forms\CameraAdd\SingleCamera.resx">
       <DependentUpon>SingleCamera.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FrmLogin.resx">
-      <DependentUpon>FrmLogin.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\FrmOperatorLocker.resx">
+      <DependentUpon>FrmOperatorLocker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Helper\ContactUsFormForm.resx">
       <DependentUpon>ContactUsFormForm.cs</DependentUpon>
@@ -661,6 +661,8 @@
     <Content Include="Icon\停止执行.png" />
     <None Include="Resources\AppIcon.bmp" />
     <None Include="Icon\另存为.png" />
+    <None Include="Icon\锁定.png" />
+    <None Include="Icon\解锁.png" />
     <Content Include="桌面图.ico" />
     <None Include="Icon\光源.png" />
     <Content Include="Icon\单次执行.png" />

@@ -1,6 +1,6 @@
 ﻿namespace YTVisionPro.Forms
 {
-    partial class FrmLogin
+    partial class FrmOperatorLocker
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLogin));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmOperatorLocker));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -56,8 +56,8 @@
             this.button1.Location = new System.Drawing.Point(356, 48);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(87, 37);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "确定";
+            this.button1.TabIndex = 1;
+            this.button1.Text = "加锁";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -68,9 +68,9 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.PasswordChar = '*';
             this.textBox1.Size = new System.Drawing.Size(234, 28);
-            this.textBox1.TabIndex = 1;
+            this.textBox1.TabIndex = 0;
             // 
-            // FrmLogin
+            // FrmOperatorLocker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -79,9 +79,9 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FrmLogin";
+            this.Name = "FrmOperatorLocker";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "操作码";
+            this.Text = "界面锁定状态";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

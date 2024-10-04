@@ -19,11 +19,18 @@ namespace YTVisionPro.Forms.PLCAdd
 {
     internal partial class FrmPLCListView : Form
     {
+        /// <summary>
+        /// 添加PLC时通过快捷键保存方案的事件
+        /// </summary>
+        public event EventHandler OnShotKeySavePressed;
+        /// <summary>
+        /// 添加PLC窗口
+        /// </summary>
         FrmPLCNew _frmAdd = new FrmPLCNew();
         /// <summary>
         /// PLC反序列化完成事件
         /// </summary>
-        public static event EventHandler OnPLCDeserializationCompletionEvent;
+        public static event EventHandler<bool> OnPLCDeserializationCompletionEvent;
         public FrmPLCListView()
         {
             InitializeComponent();
@@ -31,6 +38,7 @@ namespace YTVisionPro.Forms.PLCAdd
             SinglePLC.SelectedChange += SinglePLC_SelectedChange;
             SinglePLC.SinglePLCRemoveEvent += SinglePLC_SinglePLCRemoveEvent;
             FrmCameraListView.OnCameraDeserializationCompletionEvent += Deserialization;
+            this.KeyPreview = true;
         }
 
         /// <summary>
@@ -38,14 +46,15 @@ namespace YTVisionPro.Forms.PLCAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Deserialization(object sender, EventArgs e)
+        private void Deserialization(object sender, bool e)
         {
             // 先移除旧方案的PLC控件
             flowLayoutPanel1.Controls.Clear();
 
             // 添加新的PLC
             SinglePLC singlePLC = null;
-            LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【PLC设备列表】=================================================", true);
+            if(e)
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【PLC设备列表】=================================================", true);
             foreach (var dev in ConfigHelper.SolConfig.Devices)
             {
                 if (dev is IPlc plc)
@@ -65,8 +74,23 @@ namespace YTVisionPro.Forms.PLCAdd
                     }
                 }
             }
-            LogHelper.AddLog(MsgLevel.Debug, $"================================================【PLC设备列表】已加载完成 ================================================", true);
-            OnPLCDeserializationCompletionEvent?.Invoke(this, EventArgs.Empty);
+            if(e)
+                LogHelper.AddLog(MsgLevel.Debug, $"================================================【PLC设备列表】已加载完成 ================================================", true);
+            OnPLCDeserializationCompletionEvent?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// 按下保存快捷键
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            if (e.Control && e.KeyCode == Keys.S)
+            {
+                // 触发保存方案事件
+                OnShotKeySavePressed?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
