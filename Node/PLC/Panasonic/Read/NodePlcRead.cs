@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using HslCommunication;
+using Logger;
 using Sunny.UI;
 using System;
 using System.Data;
@@ -45,16 +46,16 @@ namespace YTVisionPro.Node.PLC.Panasonic.Read
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    object data = null;
+                    OperateResult data = new OperateResult();
                     await Task.Run(() =>
                     {
                         do
                         {
                             data = param.Plc.ReadPLCData(param.Address, param.DataType, param.Length);
-                        } while (data == null || data.ToString().IsNullOrEmpty());
+                        } while (!data.IsSuccess);
                     });
                     
-                    res.ReadData = data;
+                    res.ReadData = ((OperateResult<object>)data).Content;
                     Result = res;
                     long time = SetRunResult(startTime, NodeStatus.Successful);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);

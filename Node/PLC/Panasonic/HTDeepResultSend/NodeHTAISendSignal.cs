@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using HslCommunication;
+using Logger;
 using Microsoft.VisualBasic.Logging;
 using System;
 using System.Collections.Generic;
@@ -144,16 +145,17 @@ namespace YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend
                 {
                     if (plcTmp.UserDefinedName == dataRow.UserNamePlc)
                     {
+                        OperateResult writeResult;
                         do
                         {
-                            plcTmp.WritePLCData(dataRow.SignalAddress, true);
+                            writeResult = plcTmp.WritePLCData(dataRow.SignalAddress, true);
 
-                        } while (!(bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
+                        } while (!writeResult.IsSuccess);
 
                         do
                         {
-                            plcTmp.WritePLCData(dataRow.SignalAddress, false);
-                        } while ((bool)plcTmp.ReadPLCData(dataRow.SignalAddress, DataType.BOOL));
+                            writeResult = plcTmp.WritePLCData(dataRow.SignalAddress, false);
+                        } while (!writeResult.IsSuccess);
                         LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功!", true);
                         break;
                     }

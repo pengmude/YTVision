@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using HslCommunication;
+using Logger;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
@@ -76,16 +77,17 @@ namespace YTVisionPro.Node.Camera.WaitSoftTrigger
         private void SendSignalToPlc(NodeParamWaitSoftTrigger param)
         {
             bool flag = false;
+            OperateResult readResult, writeResult;
             // 读取拍照信号
             do
             {
-                flag = (bool)param.Plc.ReadPLCData(param.Address, DataType.BOOL);
-            } while (!flag);
+                readResult = param.Plc.ReadPLCData(param.Address, DataType.BOOL);
+            } while (!readResult.IsSuccess || !((OperateResult<bool>)readResult).Content);  // 读取失败或读取不到拍照信号为true均需要重试
             // 重置拍照信号
             do
             {
-                param.Plc.WritePLCData(param.Address, false);
-            } while ((bool)param.Plc.ReadPLCData(param.Address, DataType.BOOL));
+                writeResult = param.Plc.WritePLCData(param.Address, false);
+            } while (!writeResult.IsSuccess);
             LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
         }
 

@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using HslCommunication;
+using Logger;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -79,10 +80,11 @@ namespace YTVisionPro.Node.PLC.Panasonic.Wirte
 
         private void WriteAndVerify<T>(IPlc plc, string address, T value, DataType dataType)
         {
+            OperateResult res = new OperateResult();
             do
             {
-                plc.WritePLCData(address, value);
-            } while (!plc.ReadPLCData(address, dataType).Equals(value));
+                res = plc.WritePLCData(address, value);
+            } while (!res.IsSuccess);
         }
     }
 }

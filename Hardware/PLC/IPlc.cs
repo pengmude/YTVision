@@ -1,4 +1,5 @@
-﻿using JsonSubTypes;
+﻿using HslCommunication;
+using JsonSubTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -68,13 +69,13 @@ namespace YTVisionPro.Hardware.PLC
         /// 读取PLC寄存器
         /// </summary>
         /// <returns></returns>
-        object ReadPLCData(string address, DataType dataType, ushort length = 0);
+        OperateResult ReadPLCData(string address, DataType dataType, ushort length = 0);
 
         /// <summary>
         /// 写入PLC寄存器
         /// </summary>
         /// <returns></returns>
-        void WritePLCData(string address, object value);
+        OperateResult WritePLCData(string address, object value);
 
     }
 

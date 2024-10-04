@@ -191,32 +191,33 @@ namespace YTVisionPro.Hardware.PLC
         /// 读取PLC寄存器
         /// </summary>
         /// <returns></returns>
-        public object ReadPLCData(string address, DataType dataType, ushort length = 0)
+        public OperateResult ReadPLCData(string address, DataType dataType, ushort length = 0)
         {
             switch (dataType)
             {
                 case DataType.BOOL:
-                    return ReadBool(address).Content;
+                    return ReadBool(address);
                 case DataType.INT:
-                    return ReadInt(address).Content;
+                    return ReadInt(address);
                 case DataType.STRING:
-                    return ReadString(address, length).Content;
+                    return ReadString(address, length);
                 case DataType.Bytes:
-                    return ReadBytes(address, length).Content;
+                    return ReadBytes(address, length);
                 default:
                     throw new ArgumentException("不支持的数据类型");
             }
         }
+
         /// <summary>
         /// 写入PLC寄存器
         /// </summary>
         /// <returns></returns>
-        public void WritePLCData(string address, object value)
+        public OperateResult WritePLCData(string address, object value)
         {
             if (value is bool bValue)
-                WriteBool(address, bValue);
+                return WriteBool(address, bValue);
             else if (value is int iValue)
-                WriteInt(address, iValue);
+                return WriteInt(address, iValue);
             else
                 throw new ArgumentException("暂不支持写入的数据类型");
         }
