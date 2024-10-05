@@ -1,5 +1,6 @@
 ﻿using Basler.Pylon;
 using Logger;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -64,7 +65,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 {
                     Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
                     Camera.Open();
-                    Camera.SetTriggerMode(false);
+                    Camera.SetTriggerMode(true);
                     Camera.StartGrabbing();
                     LogHelper.AddLog(MsgLevel.Info, $"成功打开相机（{Camera.UserDefinedName}）！", true);
                 }
@@ -77,7 +78,9 @@ namespace YTVisionPro.Forms.CameraAdd
 
         private void Camera_ConnectStatusEvent(object sender, bool e)
         {
+            uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
             uiSwitch1.Active = e;
+            uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
         }
 
         public SingleCamera(CameraParam parms)

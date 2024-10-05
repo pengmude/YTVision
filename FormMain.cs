@@ -376,6 +376,7 @@ namespace YTVisionPro
             tsbt_SolSettings.Enabled = !isRunning;
             tsbt_SolNew.Enabled = !isRunning;
             tsbt_SolOpen.Enabled = !isRunning;
+            tsbt_SolSaveAs.Enabled = !isRunning;
             tsbt_SolSave.Enabled = !isRunning;
             tsbt_ProcessManager.Enabled = !isRunning;
             tsbt_LightManager.Enabled = !isRunning;

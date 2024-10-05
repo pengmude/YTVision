@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -8,12 +9,11 @@ namespace YTVisionPro.Forms.ImageViewer
 {
     internal partial class YTPictrueBox : UserControl
     {
-        Point _srcDragLoc = new Point();                        // 图像拖动前鼠标按下的位置
-        bool _isMove = false;                                       // 是否拖拽移动
-        int _zoomStep = 100;                                        // 缩放步长
-        Point _srcResizeLoc = new Point();                                // 保存缩放前的位置
-        Size _srcResizeSize = new Size();                                 // 保存缩放前的大小
-
+        Point _srcDragLoc = new Point();                                    // 图像拖动前鼠标按下的位置
+        bool _isMove = false;                                               // 是否拖拽移动
+        int _zoomStep = 100;                                                // 缩放步长
+        Point _srcResizeLoc = new Point();                                  // 保存缩放前的位置
+        Size _srcResizeSize = new Size();                                   // 保存缩放前的大小
 
         public YTPictrueBox()
         {
@@ -29,7 +29,7 @@ namespace YTVisionPro.Forms.ImageViewer
             pictureBox1.MouseUp += pictureBox1_MouseUp;
             pictureBox1.MouseWheel += pictureBox1_MouseWheel;
             // 绑定上下文菜单
-            this.ContextMenuStrip = contextMenuStrip1;  
+            this.ContextMenuStrip = contextMenuStrip1;
         }
 
         /// <summary>
@@ -40,12 +40,18 @@ namespace YTVisionPro.Forms.ImageViewer
             get => pictureBox1.Image;
             set
             {
-                if (pictureBox1.Image != null)
-                    pictureBox1.Image.Dispose();
-                pictureBox1.Image = value;
-                _srcResizeLoc = pictureBox1.Location;
-                _srcResizeSize = pictureBox1.Size;
-                SetLocationCenter();
+                try
+                {
+                    if (pictureBox1.Image != null)
+                        pictureBox1.Image.Dispose();
+                    pictureBox1.Image = value;
+                    _srcResizeLoc = pictureBox1.Location;
+                    _srcResizeSize = pictureBox1.Size;
+                    SetLocationCenter();
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 
@@ -56,26 +62,19 @@ namespace YTVisionPro.Forms.ImageViewer
         {
             if (pictureBox1.InvokeRequired)
             {
-                await Task.Run(() =>
+                // 使用 BeginInvoke 异步地执行设置位置的操作
+                this.BeginInvoke(new MethodInvoker(() =>
                 {
                     try
                     {
-                        // 使用 BeginInvoke 异步地执行设置位置的操作
-                        this.BeginInvoke(new MethodInvoker(() =>
-                        {
-                            int picWidth = pictureBox1.Width;
-                            int picHeight = pictureBox1.Height;
-                            int left = (this.Width - picWidth) / 2;
-                            int top = (this.Height - picHeight) / 2;
-                            pictureBox1.Location = new Point(left, top);
-                        }));
+                        int picWidth = pictureBox1.Width;
+                        int picHeight = pictureBox1.Height;
+                        int left = (this.Width - picWidth) / 2;
+                        int top = (this.Height - picHeight) / 2;
+                        pictureBox1.Location = new Point(left, top);
                     }
-                    catch (Exception)
-                    {
-
-                    }
-                });
-                
+                    catch (Exception ex) { }
+                }));
             }
             else
             {
@@ -147,7 +146,7 @@ namespace YTVisionPro.Forms.ImageViewer
                     pictureBox1.Location = new Point(pictureBox1.Location.X + VX, pictureBox1.Location.Y + VY);
                 }
                 catch (Exception) { }
-                
+
             }
         }
         /// <summary>
@@ -157,14 +156,18 @@ namespace YTVisionPro.Forms.ImageViewer
         /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if(pictureBox1.Image != null)
+            if (pictureBox1.Image != null)
             {
                 if (e.Button == MouseButtons.Left)
                 {
-                    _srcDragLoc.X = Cursor.Position.X; //记录鼠标左键按下时位置
-                    _srcDragLoc.Y = Cursor.Position.Y;
-                    _isMove = true;
-                    pictureBox1.Focus(); //鼠标滚轮事件(缩放时)需要picturebox有焦点
+                    try
+                    {
+                        _srcDragLoc.X = Cursor.Position.X; //记录鼠标左键按下时位置
+                        _srcDragLoc.Y = Cursor.Position.Y;
+                        _isMove = true;
+                        pictureBox1.Focus(); //鼠标滚轮事件(缩放时)需要picturebox有焦点
+                    }
+                    catch (Exception) { }
                 }
             }
         }
@@ -177,19 +180,23 @@ namespace YTVisionPro.Forms.ImageViewer
         {
             if (pictureBox1.Image != null)
             {
-                pictureBox1.Focus(); //鼠标在picturebox上时才有焦点，此时可以缩放
-                if (_isMove)
+                try
                 {
-                    int x, y; //新的pictureBox1.Location(x,y)
-                    int moveX, moveY; //X方向，Y方向移动大小。
-                    moveX = Cursor.Position.X - _srcDragLoc.X;
-                    moveY = Cursor.Position.Y - _srcDragLoc.Y;
-                    x = pictureBox1.Location.X + moveX;
-                    y = pictureBox1.Location.Y + moveY;
-                    pictureBox1.Location = new Point(x, y);
-                    _srcDragLoc.X = Cursor.Position.X;
-                    _srcDragLoc.Y = Cursor.Position.Y;
+                    pictureBox1.Focus(); //鼠标在picturebox上时才有焦点，此时可以缩放
+                    if (_isMove)
+                    {
+                        int x, y; //新的pictureBox1.Location(x,y)
+                        int moveX, moveY; //X方向，Y方向移动大小。
+                        moveX = Cursor.Position.X - _srcDragLoc.X;
+                        moveY = Cursor.Position.Y - _srcDragLoc.Y;
+                        x = pictureBox1.Location.X + moveX;
+                        y = pictureBox1.Location.Y + moveY;
+                        pictureBox1.Location = new Point(x, y);
+                        _srcDragLoc.X = Cursor.Position.X;
+                        _srcDragLoc.Y = Cursor.Position.Y;
+                    }
                 }
+                catch (Exception) { }
             }
         }
         /// <summary>
@@ -240,29 +247,33 @@ namespace YTVisionPro.Forms.ImageViewer
         {
             if (pictureBox1.Image != null)
             {
-                this.Focus(); //鼠标不在picturebox上时焦点给别的控件，此时无法缩放
-                if (_isMove)
+                try
                 {
-                    int x, y; //新的pictureBox1.Location(x,y)
-                    int moveX, moveY; //X方向，Y方向移动大小。
-                    moveX = Cursor.Position.X - _srcDragLoc.X;
-                    moveY = Cursor.Position.Y - _srcDragLoc.Y;
-                    x = pictureBox1.Location.X + moveX;
-                    y = pictureBox1.Location.Y + moveY;
-                    pictureBox1.Location = new Point(x, y);
-                    _srcDragLoc.X = Cursor.Position.X;
-                    _srcDragLoc.Y = Cursor.Position.Y;
+                    this.Focus(); //鼠标不在picturebox上时焦点给别的控件，此时无法缩放
+                    if (_isMove)
+                    {
+                        int x, y; //新的pictureBox1.Location(x,y)
+                        int moveX, moveY; //X方向，Y方向移动大小。
+                        moveX = Cursor.Position.X - _srcDragLoc.X;
+                        moveY = Cursor.Position.Y - _srcDragLoc.Y;
+                        x = pictureBox1.Location.X + moveX;
+                        y = pictureBox1.Location.Y + moveY;
+                        pictureBox1.Location = new Point(x, y);
+                        _srcDragLoc.X = Cursor.Position.X;
+                        _srcDragLoc.Y = Cursor.Position.Y;
+                    }
                 }
+                catch (Exception) { }
             }
         }
 
         private void 保存图片ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    if(pictureBox1.Image != null)
+                    if (pictureBox1.Image != null)
                     {
                         pictureBox1.Image.Save(saveFileDialog1.FileName);
                         YTMessageBox.YTMessageBox yTMessageBox = new YTMessageBox.YTMessageBox("图像保存成功！");
@@ -298,7 +309,7 @@ namespace YTVisionPro.Forms.ImageViewer
 
         private void 清空图像ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(pictureBox1.Image != null)
+            if (pictureBox1.Image != null)
             {
                 pictureBox1.Image.Dispose();
                 pictureBox1.Image = null;

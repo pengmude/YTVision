@@ -205,6 +205,8 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public bool Open()
         {
+            if (device == null) throw new Exception("相机对象为空！");
+
             int nRet = 0;
             try
             {
@@ -246,10 +248,6 @@ namespace YTVisionPro.Hardware.Camera
             {
                 throw new Exception("暂不支持非GigE相机！");
             }
-            // 连续模式
-            device.Parameters.SetEnumValueByString("AcquisitionMode", "Continuous");
-            // 设置触发模式
-            SetTriggerMode(false);
             // 注册回调函数
             device.StreamGrabber.FrameGrabedEvent -= FrameGrabedEventHandler;
             device.StreamGrabber.FrameGrabedEvent += FrameGrabedEventHandler;
@@ -297,6 +295,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="isTrigger"></param>
         public void SetTriggerMode(bool isTrigger)
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("TriggerMode", isTrigger ? 1u : 0u);
         }
 
@@ -308,6 +307,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <exception cref="NotImplementedException"></exception>
         public void SetTriggerSource(TriggerSource triggerSource)
         {
+            if (device == null) throw new Exception("相机对象为空！");
             // ch:触发源选择:0 - Line0; | en:Trigger source select:0 - Line0;
             //           1 - Line1;
             //           2 - Line2;
@@ -341,6 +341,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void SetTriggerEdge(TriggerEdge triggerEdge)
         {
+            if (device == null) throw new Exception("相机对象为空！");
             switch (triggerEdge)
             {
                 case TriggerEdge.Rising:
@@ -367,6 +368,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void GrabOne()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetCommandValue("TriggerSoftware");
         }
 
@@ -375,6 +377,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public float GetExposureTime()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.GetFloatValue("ExposureTime", out IFloatValue exposureTime);
             return exposureTime.CurValue;
         }
@@ -386,6 +389,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <exception cref="NotImplementedException"></exception>
         public float GetGain()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.GetFloatValue("Gain", out IFloatValue gain);
             return gain.CurValue;
         }
@@ -396,6 +400,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public float GetTriggerDelay()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.GetFloatValue("TriggerDelay", out IFloatValue triggerDelay);
             return triggerDelay.CurValue;
         }
@@ -406,6 +411,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="gainValue"></param>
         public void SetGain(float gainValue)
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("GainAuto", 0);
             device.Parameters.SetFloatValue("Gain", gainValue);
         }
@@ -416,6 +422,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="time"></param>
         public void SetExposureTime(float time)
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("ExposureAuto", 0); 
             device.Parameters.SetFloatValue("ExposureTime", time);
         }
@@ -426,6 +433,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="time">单位us</param>
         public void SetTriggerDelay(float time)
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetFloatValue("TriggerDelay", time);
         }
 
@@ -435,6 +443,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void StartGrabbing()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             if (!_isGrabbing)
             {
                 device.StreamGrabber.StartGrabbing();
@@ -448,6 +457,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void StopGrabbing()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             device.StreamGrabber.StopGrabbing();
             _isGrabbing = false;
         }
@@ -458,6 +468,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public bool GetGrabStatus()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             return _isGrabbing;
         }
 
@@ -467,6 +478,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void Close()
         {
+            if (device == null) throw new Exception("相机对象为空！");
             //先停止取流
             StopGrabbing();
             device.Close();
@@ -479,7 +491,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void Dispose()
         {
-            if(device != null)
+            if (device != null)
             {
                 if (device.IsConnected) { device.Close(); }
                 device?.Dispose();

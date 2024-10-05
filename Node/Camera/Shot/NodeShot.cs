@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using Basler.Pylon;
+using Logger;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -16,6 +17,7 @@ namespace YTVisionPro.Node.Camera.Shot
         /// 采集到图像才继续往下执行其他节点
         /// </summary>
         private AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
+        private readonly object _lock = new object();
         /// <summary>
         /// 图像发布事件
         /// </summary>
@@ -68,13 +70,18 @@ namespace YTVisionPro.Node.Camera.Shot
 
                         if (!param.Camera.IsOpen) { throw new Exception("相机尚未连接！"); }
 
-
                         param.Camera.PublishImageEvent += Camera_PublishImageEvent;
-
-                        param.Camera.SetTriggerDelay(param.TriggerDelay);       // 设置触发延迟
-                        param.Camera.SetExposureTime(param.ExposureTime);       // 设置曝光时间
-                        param.Camera.SetGain(param.Gain);                       // 设置增益
-                        param.Camera.SetTriggerSource(param.TriggerSource);     // 设置触发源
+                        
+                        // 频闪才需要每次设置相机参数，不频闪的话在参数界面设置一次即可
+                        if (param.IsStrobing)
+                        {
+                            param.Camera.SetTriggerMode(true);
+                            param.Camera.SetTriggerDelay(param.TriggerDelay);       // 设置触发延迟
+                            param.Camera.SetExposureTime(param.ExposureTime);       // 设置曝光时间
+                            param.Camera.SetGain(param.Gain);                       // 设置增益
+                            param.Camera.SetTriggerSource(param.TriggerSource);     // 设置触发源
+                            param.Camera.SetTriggerEdge(param.TriggerEdge);         // 设置硬触发边沿
+                        }
 
                         bool result = false;
                         switch (param.TriggerSource)
@@ -101,8 +108,8 @@ namespace YTVisionPro.Node.Camera.Shot
 
                         //await Task.Run(() =>
                         //{
-                            // 发送采集到的图像
-                            ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, ((NodeResultShot)Result).Bitmap));
+                        // 发送采集到的图像
+                        ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, ((NodeResultShot)Result).Bitmap));
                         //});
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);

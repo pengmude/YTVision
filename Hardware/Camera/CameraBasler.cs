@@ -117,10 +117,10 @@ namespace YTVisionPro.Hardware.Camera
             try
             {
                 // 打开相机事件绑定
-                _camera.CameraOpened += Configuration.AcquireContinuous;
                 _camera.Open();
 
                 // 相机取流事件绑定
+                _camera.StreamGrabber.ImageGrabbed -= OnImageGrabbed;
                 _camera.StreamGrabber.ImageGrabbed += OnImageGrabbed;
             }
             catch (Exception ex)
@@ -139,14 +139,21 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="triggerMode"></param>
         public void SetTriggerMode(bool triggerMode)
         {
-            if (triggerMode)
+            try
             {
-                _camera.Parameters[PLCamera.TriggerMode].SetValue(PLCamera.TriggerMode.On);
-            }
-            else
-            {
-                _camera.Parameters[PLCamera.TriggerMode].SetValue(PLCamera.TriggerMode.Off);
+                if (triggerMode)
+                {
+                    _camera.Parameters[PLCamera.TriggerMode].SetValue(PLCamera.TriggerMode.On);
+                }
+                else
+                {
+                    _camera.Parameters[PLCamera.TriggerMode].SetValue(PLCamera.TriggerMode.Off);
 
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -156,24 +163,31 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="triggerSource"></param>
         public void SetTriggerSource(TriggerSource triggerSource)
         {
-            switch (triggerSource)
+            try
             {
+                switch (triggerSource)
+                {
 
-                case TriggerSource.SOFT:
-                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Software);
-                    break;
-                case TriggerSource.LINE1:
-                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line1);
-                    break;
-                case TriggerSource.LINE2:
-                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line2);
-                    break;
-                case TriggerSource.LINE3:
-                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line3);
-                    break;
-                case TriggerSource.LINE4:
-                    _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line4);
-                    break;
+                    case TriggerSource.SOFT:
+                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Software);
+                        break;
+                    case TriggerSource.LINE1:
+                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line1);
+                        break;
+                    case TriggerSource.LINE2:
+                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line2);
+                        break;
+                    case TriggerSource.LINE3:
+                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line3);
+                        break;
+                    case TriggerSource.LINE4:
+                        _camera.Parameters[PLCamera.TriggerSource].SetValue(PLCamera.TriggerSource.Line4);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -184,25 +198,33 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void SetTriggerEdge(TriggerEdge triggerEdge)
         {
-            switch (triggerEdge)
+            try
             {
-                case TriggerEdge.Rising:
-                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.RisingEdge);
-                    break;
-                case TriggerEdge.Falling:
-                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.FallingEdge);
-                    break;
-                case TriggerEdge.Any:
-                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.AnyEdge);
-                    break;
-                case TriggerEdge.Hight:
-                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.LevelHigh);
-                    break;
-                case TriggerEdge.Low:
-                    _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.LevelLow);
-                    break;
-                default:
-                    break;
+
+                switch (triggerEdge)
+                {
+                    case TriggerEdge.Rising:
+                        _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.RisingEdge);
+                        break;
+                    case TriggerEdge.Falling:
+                        _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.FallingEdge);
+                        break;
+                    case TriggerEdge.Any:
+                        _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.AnyEdge);
+                        break;
+                    case TriggerEdge.Hight:
+                        _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.LevelHigh);
+                        break;
+                    case TriggerEdge.Low:
+                        _camera.Parameters[PLCamera.TriggerActivation].SetValue(PLCamera.TriggerActivation.LevelLow);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -279,7 +301,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void GrabOne()
         {
-            _camera.ExecuteSoftwareTrigger();
+            try
+            {
+                _camera.ExecuteSoftwareTrigger();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -287,10 +316,17 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void StartGrabbing()
         {
-            if (!_camera.StreamGrabber.IsGrabbing)
+            try
             {
-                // 抓取每一帧图片处理之后继续抓取下一帧，抓取图片循环方式由相机内部自动管理
-                _camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
+                if (!_camera.StreamGrabber.IsGrabbing)
+                {
+                    // 抓取每一帧图片处理之后继续抓取下一帧，抓取图片循环方式由相机内部自动管理
+                    _camera.StreamGrabber.Start(GrabStrategy.OneByOne, GrabLoop.ProvidedByStreamGrabber);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -299,7 +335,14 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void StopGrabbing()
         {
-            _camera.StreamGrabber.Stop();
+            try
+            {
+                _camera.StreamGrabber.Stop();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -308,7 +351,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public bool GetGrabStatus()
         {
-            return _camera.StreamGrabber.IsGrabbing;
+            try
+            {
+                return _camera.StreamGrabber.IsGrabbing;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -318,7 +368,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <exception cref="NotImplementedException"></exception>
         public float GetExposureTime()
         {
-            return (float)_camera.Parameters[PLCamera.ExposureTimeAbs].GetValue();
+            try
+            {
+                return (float)_camera.Parameters[PLCamera.ExposureTimeAbs].GetValue();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -328,7 +385,15 @@ namespace YTVisionPro.Hardware.Camera
         /// <exception cref="NotImplementedException"></exception>
         public float GetGain()
         {
-            return (float)_camera.Parameters[PLCamera.GainRaw].GetValue();
+            try
+            {
+
+                return (float)_camera.Parameters[PLCamera.GainRaw].GetValue();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -337,7 +402,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public float GetTriggerDelay()
         {
-            return (float)_camera.Parameters[PLCamera.TriggerDelayAbs].GetValue();
+            try
+            {
+                return (float)_camera.Parameters[PLCamera.TriggerDelayAbs].GetValue();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -346,7 +418,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="exposureTime"></param>
         public void SetExposureTime(float time)
         {
-            _camera.Parameters[PLCamera.ExposureTimeAbs].SetValue(time);
+            try
+            {
+                _camera.Parameters[PLCamera.ExposureTimeAbs].SetValue(time);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -355,7 +434,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="gain"></param>
         public void SetGain(float gainValue)
         {
-            _camera.Parameters[PLCamera.GainRaw].SetValue((long)gainValue);
+            try
+            {
+                _camera.Parameters[PLCamera.GainRaw].SetValue((long)gainValue);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -364,7 +450,14 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="time">单位：微秒</param>
         public void SetTriggerDelay(float time)
         {
-            _camera.Parameters[PLCamera.TriggerDelayAbs].SetValue(time);
+            try
+            {
+                _camera.Parameters[PLCamera.TriggerDelayAbs].SetValue(time);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -373,10 +466,17 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void Close()
         {
-            _camera.StreamGrabber.Stop();
-            _camera.Close();
-            IsOpen = false;
-            ConnectStatusEvent?.Invoke(this, false);
+            try
+            {
+                _camera.StreamGrabber.Stop();
+                _camera.Close();
+                IsOpen = false;
+                ConnectStatusEvent?.Invoke(this, false);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -384,8 +484,15 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void Dispose()
         {
-            if (_camera.IsOpen) { _camera.Close(); }
-            _camera?.Dispose();
+            try
+            {
+                if (_camera.IsOpen) { _camera.Close(); }
+                _camera?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>

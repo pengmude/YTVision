@@ -20,7 +20,8 @@ namespace YTVisionPro.Node.Camera.Shot
             comboBoxType.SelectedIndex = 0;
             //触发沿
             comboBoxTriggerEdge.SelectedIndex = 0;
-
+            //是否频闪
+            comboBoxStrobing.SelectedIndex = 0;
             // 图像显示窗口名称
             WindowNameList.Items.Add("[未设置]");
             for (int i = 0; i < FrmImageViewer.CurWindowsNum; i++)
@@ -130,6 +131,7 @@ namespace YTVisionPro.Node.Camera.Shot
                 if(camera.UserDefinedName == comboBoxCamera.Text)
                 {
                     nodeParamCamera.Camera = camera;
+                    break;
                 }
             }
             // 保存相机名称参与序列化
@@ -184,14 +186,33 @@ namespace YTVisionPro.Node.Camera.Shot
             //增益设置
             nodeParamCamera.Gain = gain;
 
+            // 是否频闪应用
+            nodeParamCamera.IsStrobing = comboBoxStrobing.Text == "否" ? false : true;
+
             // 窗口名称
             nodeParamCamera.WindowName = WindowNameList.Text;
+
+            // 不是频闪应用可以在参数界面只设置一次,是频闪的话相机需要在节点运行时每次设置
+            if(!nodeParamCamera.IsStrobing)
+                SetCameraParams(nodeParamCamera.Camera, nodeParamCamera.TriggerSource, nodeParamCamera.TriggerEdge, nodeParamCamera.TriggerDelay
+                    , nodeParamCamera.ExposureTime, nodeParamCamera.Gain);
 
             #endregion
 
             Params = nodeParamCamera;
             
             Hide();
+        }
+
+        private void SetCameraParams(ICamera camera, TriggerSource triggerSource, TriggerEdge triggerEdge, int delay, float exposureTime, float gain)
+        {
+            camera.SetTriggerSource(triggerSource);     // 设置触发源
+            camera.SetTriggerEdge(triggerEdge);         // 设置硬触发边沿
+            if(triggerSource != TriggerSource.Auto)
+                camera.SetTriggerMode(true);                // 设置触发模式（除了自动取流外均设置）
+            camera.SetTriggerDelay(delay);              // 设置触发延迟
+            camera.SetExposureTime(exposureTime);       // 设置曝光时间
+            camera.SetGain(gain);                       // 设置增益
         }
         
         /// <summary>
@@ -239,6 +260,9 @@ namespace YTVisionPro.Node.Camera.Shot
                 textBox3.Text = param.TriggerDelay.ToString();
                 textBox1.Text = param.ExposureTime.ToString();
                 textBox2.Text = param.Gain.ToString();
+                // 是否频闪
+                int index1 = comboBoxStrobing.Items.IndexOf(param.IsStrobing ? "是" : "否");
+                comboBoxStrobing.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 还原选中的图像显示窗口
                 WindowNameList.Text = param.WindowName;
                 // 还原节点使用的相机

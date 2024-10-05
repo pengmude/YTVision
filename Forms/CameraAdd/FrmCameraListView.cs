@@ -159,10 +159,17 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void FrmCameraListView_FormClosing(object sender, FormClosingEventArgs e)
         {
-            foreach (var item in Solution.Instance.CameraDevices)
+            try 
             {
-                if(item.IsOpen)
-                    item.SetTriggerMode(true);
+                foreach (var item in Solution.Instance.CameraDevices)
+                {
+                    if (item.IsOpen)
+                        item.SetTriggerMode(true);
+                }
+            } 
+            catch(Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);    
             }
         }
     }

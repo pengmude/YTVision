@@ -45,6 +45,10 @@ namespace YTVisionPro.Node.Camera.Shot
         /// </summary>
         public float Gain { get; set; }
         /// <summary>
+        /// 是否频闪
+        /// </summary>
+        public bool IsStrobing { get; set; }
+        /// <summary>
         /// 图像显示窗口名称
         /// </summary>
         public string WindowName { get; set; }

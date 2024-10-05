@@ -16,12 +16,6 @@ namespace YTVisionPro
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
-            //Application.Run(new YTVisionPro.Forms.ImageViewer.FrmImgeView());
-            //Application.Run(new FormSystemSettings());
-            //Application.Run(new Form2());
-            //Application.Run(new FrmImgeView());
-
-            //Application.Run(new FormNewProcessWizard());
         }
     }
 }
