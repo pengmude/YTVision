@@ -7,7 +7,7 @@
     <ProjectGuid>{60ADDFFF-D34C-48AA-B84D-03EAB7518169}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>YTVisionPro</RootNamespace>
-    <AssemblyName>YTVisionPro</AssemblyName>
+    <AssemblyName>鹰眼智检系统</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -227,6 +227,12 @@
     </Compile>
     <Compile Include="Forms\ProcessNew\SerializableTreeNode.cs" />
     <Compile Include="Forms\ResultView\SingleResultViewData.cs" />
+    <Compile Include="Forms\SystemSetting\FrmSystemSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SystemSetting\FrmSystemSetting.Designer.cs">
+      <DependentUpon>FrmSystemSetting.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\YTMessageBox\YTMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -525,6 +531,9 @@
     <EmbeddedResource Include="Forms\LightAdd\SingleLight.resx">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SystemSetting\FrmSystemSetting.resx">
+      <DependentUpon>FrmSystemSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\YTMessageBox\YTMessageBox.resx">
       <DependentUpon>YTMessageBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -678,6 +687,17 @@
     <None Include="Icon\监听.png" />
     <Content Include="Icon\相机.png" />
     <Content Include="Node\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="IWshRuntimeLibrary">
+      <Guid>{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

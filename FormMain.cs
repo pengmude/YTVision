@@ -17,6 +17,7 @@ using YTVisionPro.Node.AI.HTAI;
 using System.Threading.Tasks;
 using Sunny.UI;
 using YTVisionPro.Properties;
+using YTVisionPro.Forms.SystemSetting;
 
 namespace YTVisionPro
 {
@@ -67,6 +68,10 @@ namespace YTVisionPro
         /// </summary>
         static FrmOperatorLocker frmLocker = new FrmOperatorLocker();
         /// <summary>
+        /// 系统设置窗口
+        /// </summary>
+        private FrmSystemSetting frmSystemSetting = new FrmSystemSetting();
+        /// <summary>
         /// 窗口布局配置
         /// </summary>
         private readonly string DockPanelConfig = Application.StartupPath + "\\DockPanel.config";
@@ -114,6 +119,25 @@ namespace YTVisionPro
             FrmLightAdd.OnShotKeySavePressed += OnShotKeySavePressed;
             FrmCameraAdd.OnShotKeySavePressed += OnShotKeySavePressed;
             FrmPLCAdd.OnShotKeySavePressed += OnShotKeySavePressed;
+
+            // 加载默认方案
+            AutoLoadSolution();
+        }
+
+        // 软件启动是否加载指定方案
+        private void AutoLoadSolution()
+        {
+            if (Settings.Default.IsAutoLoad)
+            {
+                try
+                {
+                    Solution.Instance.Load(Settings.Default.SolutionAddress, true);
+                }
+                catch (Exception)
+                {
+                    LogHelper.AddLog(MsgLevel.Warn, "方案加载失败！", true);
+                }
+            }
         }
 
         /// <summary>
@@ -139,7 +163,7 @@ namespace YTVisionPro
             toolStrip1.Enabled = !isLock;
             文件ToolStripMenuItem.Enabled = !isLock;
             设置ToolStripMenuItem.Enabled = !isLock;
-            if (!isLock)
+            if (isLock)
                 锁定ToolStripMenuItem.Image = Resources.锁定;
             else
                 锁定ToolStripMenuItem.Image = Resources.解锁;
@@ -297,9 +321,6 @@ namespace YTVisionPro
             ToolStripButton tsbt = sender as ToolStripButton;
             switch (tsbt.Text)
             {
-                case "方案设置":
-                    方案设置ToolStripMenuItem_Click(null, null);
-                    break;
                 case "新建方案":
                     新建方案ToolStripMenuItem_Click(null, null);
                     break;
@@ -373,7 +394,6 @@ namespace YTVisionPro
             tsbt_SolRunStop.Enabled = isRunning;
 
             // 其他设置禁用/启用
-            tsbt_SolSettings.Enabled = !isRunning;
             tsbt_SolNew.Enabled = !isRunning;
             tsbt_SolOpen.Enabled = !isRunning;
             tsbt_SolSaveAs.Enabled = !isRunning;
@@ -470,11 +490,6 @@ namespace YTVisionPro
             LogHelper.AddLog(MsgLevel.Info, $"新建方案成功！", true);
         }
 
-        private void 方案设置ToolStripMenuItem_Click(object value1, object value2)
-        {
-            MessageBox.Show("方案设置");
-        }
-
         private void 联系我们ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             contactUsFormForm.ShowDialog();
@@ -567,6 +582,11 @@ namespace YTVisionPro
         private void 锁定ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             操作锁定ToolStripMenuItem_Click(null, null);
+        }
+
+        private void 系统设置ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            frmSystemSetting.ShowDialog();
         }
     }
 

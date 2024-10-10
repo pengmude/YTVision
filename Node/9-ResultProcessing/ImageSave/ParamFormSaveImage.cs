@@ -177,8 +177,10 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                 checkBoxDayNight.Checked = param.IsDayNight;
                 checkBoxCompress.Checked = param.NeedCompress;
                 nodeSubscriptionAiRes.SetText(param.AiResSubText1, param.AiResSubText2);
-                dateTimePicker1.Value = param.DayDataTime;
-                dateTimePicker2.Value = param.NightDataTime;
+                dateTimePicker1.Value = (param.DayDataTime < dateTimePicker1.MinDate || param.DayDataTime > dateTimePicker1.MaxDate) ? 
+                                        dateTimePicker1.MinDate : param.DayDataTime;
+                dateTimePicker2.Value = (param.NightDataTime < dateTimePicker2.MinDate || param.NightDataTime > dateTimePicker2.MaxDate) ?
+                                        dateTimePicker2.MinDate : param.NightDataTime;
                 numericUpDown1.Value = param.CompressValue;
                 nodeSubscriptionBarCode.SetText(param.BarCodeSubText1, param.BarCodeSubText2);
             }

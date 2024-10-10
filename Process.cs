@@ -112,11 +112,10 @@ namespace YTVisionPro
                     LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
 
                 }
-                //// 引入一个异步等待点，避免立即进入下一次循环
-                //if (isCyclical)
-                //{
-                //    await Task.Delay(1, token); // 异步等待 1 毫秒
-                //}
+                if (isCyclical)
+                {
+                    await Task.Delay(Solution.Instance.RunInterval, token);
+                }
             } while (isCyclical && !token.IsCancellationRequested);
         }
     }

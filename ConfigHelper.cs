@@ -31,6 +31,7 @@ namespace YTVisionPro
             {
                 SolConfig.SolVer = Solution.Instance.SolVersion;
                 SolConfig.SolName = solFile;
+                SolConfig.RunInterval = Solution.Instance.RunInterval;
                 SolConfig.Devices = Solution.Instance.AllDevices;
 
                 SolConfig.ProcessInfos = new List<ProcessConfig>();
@@ -141,6 +142,7 @@ namespace YTVisionPro
 
                 Solution.Instance.SolVersion = SolConfig.SolVer;
                 Solution.Instance.SolFileName = SolConfig.SolName;
+                Solution.Instance.RunInterval = SolConfig.RunInterval;
                 // 发送反序列化完成事件
                 // 目的：
                 // 1.先触发光源管理窗口还原所有光源，还原完成触发光源完成事件
@@ -164,6 +166,7 @@ namespace YTVisionPro
         /// </summary>
         public string SolVer;
         public string SolName;
+        public int RunInterval;     // 流程循环运行间隔时间
         /// <summary>
         /// 方案下的所有设备(光源、相机、PLC)
         /// </summary>
