@@ -1,12 +1,7 @@
-﻿using JsonSubTypes;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
 using System.IO.Ports;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.PLC;
-using YTVisionPro.Node.Light;
 
 namespace YTVisionPro.Hardware.Light
 {

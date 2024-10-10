@@ -1,4 +1,8 @@
-﻿using System;
+﻿using gCursorLib;
+using Logger;
+using System;
+using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Node;
@@ -13,10 +17,108 @@ namespace YTVisionPro.Forms.ProcessNew
         public FormNewProcessWizard()
         {
             InitializeComponent();
-            InitNodeComboBox();
             FrmPLCListView.OnPLCDeserializationCompletionEvent += Deserialization;
             this.KeyPreview = true;
+            Init();
+            Shown += FormNewProcessWizard_Shown;
         }
+
+        private void FormNewProcessWizard_Shown(object sender, EventArgs e)
+        {
+            treeView1.ExpandAll();
+        }
+
+        /// <summary>
+        /// 初始化算法工具箱
+        /// </summary>
+        private void Init()
+        {
+            string filePath = "ToolTreeView.xml";
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    TreeViewSerializer.DeserializeTreeView(treeView1, filePath);
+                    treeView1.ImageList = imageList1;
+                    treeView1.ExpandAll();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.AddLog(MsgLevel.Exception, "流程编辑窗口工具箱配置文件ToolTreeView.xml反序列化失败！原因：" + ex.Message, true);
+                }
+            }
+            else
+            {
+                LogHelper.AddLog(MsgLevel.Exception, "流程编辑窗口工具箱配置文件ToolTreeView.xml缺失！", true);
+            }
+        }
+
+        bool m_MouseDown = false;
+        TreeNode nodeToDrag = new TreeNode();
+        private void treeView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                // 获取鼠标点击位置处的节点
+                nodeToDrag = treeView1.GetNodeAt(e.X, e.Y);
+                treeView1.SelectedNode = nodeToDrag;
+
+                if (nodeToDrag != null && nodeToDrag.Level == 1)
+                {
+                    m_MouseDown = true;
+                }
+            }
+        }
+
+        private void treeView1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_MouseDown && nodeToDrag.Tag != null)
+            {
+                DataObject dragData = new DataObject(DragDataFormat, new DragData(nodeToDrag.Text, (NodeType)nodeToDrag.Tag));
+                DoDragDrop(dragData, DragDropEffects.Move);
+                m_MouseDown = false;
+            }
+        }
+
+
+        /// <summary>
+        /// 拖拽的数据
+        /// </summary>
+        internal struct DragData
+        {
+            public string Text;
+            public NodeType NodeType;
+            public DragData(string text, NodeType type)
+            {
+                Text = text;
+                NodeType = type;
+            }
+        }
+
+        /// <summary>
+        /// 自定义的拖拽数据格式
+        /// </summary>
+        internal const string DragDataFormat = "DragData";
+
+        /// <summary>
+        /// 为了拖拽时实时显示效果
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Form1_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            e.UseDefaultCursors = false;
+
+            gCursor1.gText = nodeToDrag.Text;
+            gCursor1.gEffect = gCursor.eEffect.Move;
+            gCursor1.gImage = (Bitmap)imageList1.Images[nodeToDrag.ImageIndex];
+            gCursor1.gImageBox = new Size(22, 22);
+            gCursor1.gTextAlignment = ContentAlignment.TopLeft;
+            gCursor1.gType = gCursor.eType.Both;
+            gCursor1.MakeCursor();
+            Cursor.Current = gCursor1.gCursor;
+        }
+
         /// <summary>
         /// 反序列化
         /// </summary>
@@ -44,33 +146,10 @@ namespace YTVisionPro.Forms.ProcessNew
                 tabControl1.Controls.Add(tabPage);
             }
         }
-
         /// <summary>
-        /// 初始化节点下拉框
+        /// 快捷键保存方案
         /// </summary>
-        private void InitNodeComboBox()
-        {
-            nodeComboBox1.Text = "光源节点";
-            nodeComboBox1.AddItem("光源控制", NodeType.LightSourceControl);
-
-            nodeComboBox2.Text = "图像采集";
-            nodeComboBox2.AddItem("相机拍照", NodeType.CameraShot);
-            nodeComboBox2.AddItem("本地图片", NodeType.LocalPicture);
-
-            nodeComboBox3.Text = "PLC信号";
-            nodeComboBox3.AddItem("AI结果发送", NodeType.PLCHTAIResultSend);
-            nodeComboBox2.AddItem("获取软触发信号", NodeType.WaitSoftTrigger);
-            nodeComboBox3.AddItem("松下寄存器写", NodeType.PLCWrite);
-            nodeComboBox3.AddItem("松下寄存器读", NodeType.PLCRead);
-
-            nodeComboBox5.Text = "工具箱";
-            nodeComboBox5.AddItem("延迟执行", NodeType.SleepTool); 
-            nodeComboBox5.AddItem("结果显示", NodeType.DetectResultShow);
-            nodeComboBox5.AddItem("结果总判断", NodeType.Summarize);
-            nodeComboBox5.AddItem("保存图像", NodeType.ImageSave);
-            nodeComboBox5.AddItem("AI检测", NodeType.AIHT);
-        }
-
+        /// <param name="e"></param>
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);

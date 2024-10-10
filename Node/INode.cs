@@ -82,7 +82,7 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 节点类型
     /// </summary>
-    internal enum NodeType
+    public enum NodeType
     {
         UNKNOWN,
         /// <summary>
@@ -132,6 +132,34 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 结果总判断
         /// </summary>
-        Summarize
+        Summarize,
+        /// <summary>
+        /// 图像裁剪
+        /// </summary>
+        ImageCrop,
+        /// <summary>
+        /// 灰度图像
+        /// </summary>
+        GrayScale,
+        /// <summary>
+        /// 提取ROI
+        /// </summary>
+        ExtractROI,
+        /// <summary>
+        /// 圆查找
+        /// </summary>
+        CircleFind,
+        /// <summary>
+        /// 模板匹配
+        /// </summary>
+        TemplateMatch,
+        /// <summary>
+        /// 长度测量
+        /// </summary>
+        LengthMeasurement,
+        /// <summary>
+        /// 面积测量
+        /// </summary>
+        AreaMeasurement,
     }
 }

@@ -1,26 +1,11 @@
-﻿using Basler.Pylon;
-using Logger;
-using Sunny.UI;
+﻿using Logger;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.IO.Ports;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using System.Windows.Forms;
-using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Light;
-using YTVisionPro.Node.Light;
+using YTVisionPro.Node.LightControl;
 
 namespace YTVisionPro.Forms.LightAdd
 {

@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
-using YTVisionPro.Node.Tool.DataShow;
+using YTVisionPro.Node.ResultProcessing.DataShow;
 
 namespace YTVisionPro.Forms.ResultView
 {

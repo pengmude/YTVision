@@ -30,79 +30,65 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormNewProcessWizard));
+            gCursorLib.TextShadower textShadower1 = new gCursorLib.TextShadower();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.buttonRemove = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.buttonAdd = new System.Windows.Forms.Button();
-            this.nodeComboBox5 = new YTVisionPro.Node.NodeComboBox();
-            this.nodeComboBox3 = new YTVisionPro.Node.NodeComboBox();
-            this.nodeComboBox2 = new YTVisionPro.Node.NodeComboBox();
-            this.nodeComboBox1 = new YTVisionPro.Node.NodeComboBox();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.gCursor1 = new gCursorLib.gCursor(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 0);
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.buttonRemove, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.buttonAdd, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.tabControl1, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.treeView1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1263, 772);
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 80F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1335, 975);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // panel1
+            // treeView1
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.nodeComboBox5);
-            this.panel1.Controls.Add(this.nodeComboBox3);
-            this.panel1.Controls.Add(this.nodeComboBox2);
-            this.panel1.Controls.Add(this.nodeComboBox1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 3);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(372, 766);
-            this.panel1.TabIndex = 0;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tableLayoutPanel2.Controls.Add(this.buttonRemove, 1, 1);
-            this.tableLayoutPanel2.Controls.Add(this.tabControl1, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.buttonAdd, 1, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(381, 3);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(879, 766);
-            this.tableLayoutPanel2.TabIndex = 1;
+            this.treeView1.AllowDrop = true;
+            this.treeView1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.treeView1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.treeView1.Location = new System.Drawing.Point(7, 103);
+            this.treeView1.Name = "treeView1";
+            this.tableLayoutPanel1.SetRowSpan(this.treeView1, 2);
+            this.treeView1.Size = new System.Drawing.Size(385, 865);
+            this.treeView1.TabIndex = 3;
+            this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
+            this.treeView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseMove);
             // 
             // buttonRemove
             // 
             this.buttonRemove.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonRemove.Image = global::YTVisionPro.Properties.Resources.流程删除;
             this.buttonRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonRemove.Location = new System.Drawing.Point(679, 198);
+            this.buttonRemove.Location = new System.Drawing.Point(1077, 117);
             this.buttonRemove.Margin = new System.Windows.Forms.Padding(20);
             this.buttonRemove.Name = "buttonRemove";
-            this.buttonRemove.Size = new System.Drawing.Size(180, 62);
+            this.buttonRemove.Size = new System.Drawing.Size(180, 57);
             this.buttonRemove.TabIndex = 2;
             this.buttonRemove.Text = "删除流程";
             this.buttonRemove.UseVisualStyleBackColor = true;
@@ -111,72 +97,122 @@ namespace YTVisionPro.Forms.ProcessNew
             // tabControl1
             // 
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Location = new System.Drawing.Point(403, 3);
             this.tabControl1.Name = "tabControl1";
-            this.tableLayoutPanel2.SetRowSpan(this.tabControl1, 5);
+            this.tableLayoutPanel1.SetRowSpan(this.tabControl1, 3);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(653, 760);
+            this.tabControl1.Size = new System.Drawing.Size(594, 969);
             this.tabControl1.TabIndex = 1;
             // 
             // buttonAdd
             // 
             this.buttonAdd.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonAdd.Image = global::YTVisionPro.Properties.Resources.流程添加;
             this.buttonAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonAdd.Location = new System.Drawing.Point(679, 45);
+            this.buttonAdd.Location = new System.Drawing.Point(1077, 20);
             this.buttonAdd.Margin = new System.Windows.Forms.Padding(20);
             this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(180, 62);
+            this.buttonAdd.Size = new System.Drawing.Size(180, 57);
             this.buttonAdd.TabIndex = 3;
             this.buttonAdd.Text = "添加流程";
             this.buttonAdd.UseVisualStyleBackColor = true;
             this.buttonAdd.Click += new System.EventHandler(this.button2_Click);
             // 
-            // nodeComboBox5
+            // imageList1
             // 
-            this.nodeComboBox5.AutoSize = true;
-            this.nodeComboBox5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nodeComboBox5.Expanded = true;
-            this.nodeComboBox5.Location = new System.Drawing.Point(0, 225);
-            this.nodeComboBox5.Name = "nodeComboBox5";
-            this.nodeComboBox5.Size = new System.Drawing.Size(372, 75);
-            this.nodeComboBox5.TabIndex = 4;
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "光源控制工具.ico");
+            this.imageList1.Images.SetKeyName(1, "打开光源.png");
+            this.imageList1.Images.SetKeyName(2, "图像采集工具.ico");
+            this.imageList1.Images.SetKeyName(3, "本地图片.png");
+            this.imageList1.Images.SetKeyName(4, "相机拍照.png");
+            this.imageList1.Images.SetKeyName(5, "图像预处理.png");
+            this.imageList1.Images.SetKeyName(6, "图像裁切.png");
+            this.imageList1.Images.SetKeyName(7, "转为灰度图.png");
+            this.imageList1.Images.SetKeyName(8, "提取ROI.png");
+            this.imageList1.Images.SetKeyName(9, "检测识别.png");
+            this.imageList1.Images.SetKeyName(10, "圆查找.png");
+            this.imageList1.Images.SetKeyName(11, "模版匹配.png");
+            this.imageList1.Images.SetKeyName(12, "几何测量.png");
+            this.imageList1.Images.SetKeyName(13, "长度测量.png");
+            this.imageList1.Images.SetKeyName(14, "面积测量.png");
+            this.imageList1.Images.SetKeyName(15, "Ai检测工具.png");
+            this.imageList1.Images.SetKeyName(16, "AI检测.png");
+            this.imageList1.Images.SetKeyName(17, "plc通信工具.png");
+            this.imageList1.Images.SetKeyName(18, "PLC读.png");
+            this.imageList1.Images.SetKeyName(19, "PLC写.png");
+            this.imageList1.Images.SetKeyName(20, "获取软触发信号.png");
+            this.imageList1.Images.SetKeyName(21, "流程控制.png");
+            this.imageList1.Images.SetKeyName(22, "延迟执行.png");
+            this.imageList1.Images.SetKeyName(23, "结果处理.png");
+            this.imageList1.Images.SetKeyName(24, "AI结果发送 .png");
+            this.imageList1.Images.SetKeyName(25, "检测结果显示.png");
+            this.imageList1.Images.SetKeyName(26, "保存图片.png");
+            this.imageList1.Images.SetKeyName(27, "结果汇总.png");
+            this.imageList1.Images.SetKeyName(28, "工具箱.png");
             // 
-            // nodeComboBox3
+            // gCursor1
             // 
-            this.nodeComboBox3.AutoSize = true;
-            this.nodeComboBox3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nodeComboBox3.Expanded = true;
-            this.nodeComboBox3.Location = new System.Drawing.Point(0, 150);
-            this.nodeComboBox3.Name = "nodeComboBox3";
-            this.nodeComboBox3.Size = new System.Drawing.Size(372, 75);
-            this.nodeComboBox3.TabIndex = 2;
+            this.gCursor1.gBlackBitBack = false;
+            this.gCursor1.gBoxShadow = true;
+            this.gCursor1.gCursorImage = ((System.Drawing.Bitmap)(resources.GetObject("gCursor1.gCursorImage")));
+            this.gCursor1.gEffect = gCursorLib.gCursor.eEffect.No;
+            this.gCursor1.gFont = new System.Drawing.Font("Arial", 10F, System.Drawing.FontStyle.Bold);
+            this.gCursor1.gHotSpot = System.Drawing.ContentAlignment.MiddleCenter;
+            this.gCursor1.gIBTransp = 80;
+            this.gCursor1.gImage = null;
+            this.gCursor1.gImageBorderColor = System.Drawing.Color.Black;
+            this.gCursor1.gImageBox = new System.Drawing.Size(75, 56);
+            this.gCursor1.gImageBoxColor = System.Drawing.Color.White;
+            this.gCursor1.gITransp = 0;
+            this.gCursor1.gScrolling = gCursorLib.gCursor.eScrolling.No;
+            this.gCursor1.gShowImageBox = false;
+            this.gCursor1.gShowTextBox = false;
+            this.gCursor1.gTBTransp = 80;
+            this.gCursor1.gText = "";
+            this.gCursor1.gTextAlignment = System.Drawing.ContentAlignment.TopCenter;
+            this.gCursor1.gTextAutoFit = gCursorLib.gCursor.eTextAutoFit.None;
+            this.gCursor1.gTextBorderColor = System.Drawing.Color.Red;
+            this.gCursor1.gTextBox = new System.Drawing.Size(100, 10);
+            this.gCursor1.gTextBoxColor = System.Drawing.Color.Blue;
+            this.gCursor1.gTextColor = System.Drawing.Color.Blue;
+            this.gCursor1.gTextFade = gCursorLib.gCursor.eTextFade.Solid;
+            this.gCursor1.gTextMultiline = false;
+            this.gCursor1.gTextShadow = false;
+            this.gCursor1.gTextShadowColor = System.Drawing.Color.Black;
+            textShadower1.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
+            textShadower1.Blur = 2F;
+            textShadower1.Font = new System.Drawing.Font("Arial", 7F, System.Drawing.FontStyle.Bold);
+            textShadower1.Offset = ((System.Drawing.PointF)(resources.GetObject("textShadower1.Offset")));
+            textShadower1.Padding = new System.Windows.Forms.Padding(0);
+            textShadower1.ShadowColor = System.Drawing.Color.Black;
+            textShadower1.ShadowTransp = 128;
+            textShadower1.Text = "Drop Shadow";
+            textShadower1.TextColor = System.Drawing.Color.Blue;
+            this.gCursor1.gTextShadower = textShadower1;
+            this.gCursor1.gTTransp = 0;
+            this.gCursor1.gType = gCursorLib.gCursor.eType.Text;
             // 
-            // nodeComboBox2
+            // label1
             // 
-            this.nodeComboBox2.AutoSize = true;
-            this.nodeComboBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nodeComboBox2.Expanded = true;
-            this.nodeComboBox2.Location = new System.Drawing.Point(0, 75);
-            this.nodeComboBox2.Name = "nodeComboBox2";
-            this.nodeComboBox2.Size = new System.Drawing.Size(372, 75);
-            this.nodeComboBox2.TabIndex = 1;
-            // 
-            // nodeComboBox1
-            // 
-            this.nodeComboBox1.AutoSize = true;
-            this.nodeComboBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.nodeComboBox1.Expanded = true;
-            this.nodeComboBox1.Location = new System.Drawing.Point(0, 0);
-            this.nodeComboBox1.Name = "nodeComboBox1";
-            this.nodeComboBox1.Size = new System.Drawing.Size(372, 75);
-            this.nodeComboBox1.TabIndex = 0;
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.Font = new System.Drawing.Font("江西拙楷", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.ImageIndex = 28;
+            this.label1.ImageList = this.imageList1;
+            this.label1.Location = new System.Drawing.Point(128, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(144, 48);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "工具箱";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // FormNewProcessWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1263, 772);
+            this.ClientSize = new System.Drawing.Size(1335, 975);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -185,10 +221,8 @@ namespace YTVisionPro.Forms.ProcessNew
             this.Name = "FormNewProcessWizard";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "流程编辑";
+            this.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.Form1_GiveFeedback);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -196,14 +230,12 @@ namespace YTVisionPro.Forms.ProcessNew
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button buttonRemove;
         private System.Windows.Forms.Button buttonAdd;
-        private NodeComboBox nodeComboBox1;
-        private NodeComboBox nodeComboBox3;
-        private NodeComboBox nodeComboBox2;
-        private NodeComboBox nodeComboBox5;
+        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.ImageList imageList1;
+        private gCursorLib.gCursor gCursor1;
+        private System.Windows.Forms.Label label1;
     }
 }
