@@ -38,7 +38,7 @@ namespace YTVisionPro.Node
         public void Init(NodeBase node)
         {
             _node = node;
-            InitNodeIdList();
+            InitNodeIdList(); //把节点id小于当前节点id的节点的节点加入到下拉框中
             NodeBase.NodeDeletedEvent += NodeBase_NodeDeletedEvent;
         }
 
@@ -144,6 +144,7 @@ namespace YTVisionPro.Node
             return comboBox2.Text;
         }
 
+        //反序列化使用
         public void SetText(string text1, string text2)
         {
             for (int i = 0; i < comboBox1.Items.Count; i++)

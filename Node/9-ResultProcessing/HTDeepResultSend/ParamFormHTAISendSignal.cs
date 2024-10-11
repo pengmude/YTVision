@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
@@ -16,6 +17,8 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
         private DataTable dataTable;
 
         List<NodeToClassName> _nodeToClassName;
+
+        NodeParamHTAISendSignal nodeParamSendSignal = new NodeParamHTAISendSignal();
 
         public INodeParam Params { get; set; }
 
@@ -56,6 +59,8 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
             if (comboBox2.Items.Count > 0)
                 comboBox2.SelectedIndex = 0;
             //初始NG等级
+            comboBox4.Items.Clear();
+
             comboBox4.Items.Add(1);
             comboBox4.Items.Add(2);
             comboBox4.Items.Add(3);
@@ -171,9 +176,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
         }
         
         private void UpdateDataTable()
-        { 
-            NodeParamHTAISendSignal nodeParamSendSignal = new NodeParamHTAISendSignal();
-
+        {           
             List<SignalRowData> dataList = new List<SignalRowData>();
             foreach(DataRow row in dataTable.Rows)
             {
@@ -187,7 +190,6 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                 });
             }
             nodeParamSendSignal.Data = dataList;
-            Params = nodeParamSendSignal;
         }
 
 
@@ -251,8 +253,57 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
         {
             if (Params is NodeParamHTAISendSignal param)
             {
+                nodeParamSendSignal = param;
+                nodeSubscription1.SetText(param.Text1, param.Text2);
+                this.textBox3.Text = param.Path;
+                string treefile = File.ReadAllText(this.textBox3.Text);
+                NodeInfos treeNode = Newtonsoft.Json.JsonConvert.DeserializeObject<NodeInfos>(treefile);
+                _nodeToClassName = new List<NodeToClassName>();
 
+                //初始深度学习节点
+                comboBox3.Items.Clear();
+                foreach (var item in treeNode.NodeInfo)
+                {
+                    NodeToClassName nodeToClassName = new NodeToClassName();
+                    nodeToClassName.NodeName = item.NodeName;
+                    comboBox3.Items.Add(item.NodeName);
+                    nodeToClassName.ClassNames = item.ClassNames;
+                    _nodeToClassName.Add(nodeToClassName);
+                }
+
+                comboBox3.SelectedIndex = 0;
+                dataTable.Clear();
+                textBox2.Text = param.OKPLC;
+                textBox1.Text = param.NGPLC;
+
+                //数据的每一行
+                foreach (var item in param.Data)
+                {
+                    DataRow newRow = dataTable.NewRow();
+                    newRow["PLC"] = item.UserNamePlc;
+                    newRow["节点"] = item.NodeName;
+                    newRow["检测项"] = item.ClassName;
+                    newRow["信号等级"] = item.SignalLevel;
+                    newRow["信号地址"] = item.SignalAddress;
+                    dataTable.Rows.Add(newRow);
+                    UpdateDataTable();
+                }            
             }
+        }
+
+        private void ParamFormHTAISendSignal_Load(object sender, EventArgs e)
+        {
+            InitComboBox();
+        }
+
+        private void ParamFormHTAISendSignal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            nodeParamSendSignal.Text1 = nodeSubscription1.GetText1();
+            nodeParamSendSignal.Text2 = nodeSubscription1.GetText2();
+            nodeParamSendSignal.Path = this.textBox3.Text;
+            nodeParamSendSignal.OKPLC = this.textBox2.Text;
+            nodeParamSendSignal.NGPLC = this.textBox1.Text;
+            Params = nodeParamSendSignal;
         }
     }
 }

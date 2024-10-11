@@ -453,6 +453,7 @@ namespace YTVisionPro.Node.AI.HTAI
             {
                 // 还原界面显示
                 nodeSubscription1.SetText(param.Text1, param.Text2);
+                //SetNodeBelong(this);
                 tbTreeFlie.Text = param.TreePath;
                 InitNodeNamesToTreeView(param.TreePath, true);
                 UpdateWinNameList(FrmImageViewer.CurWindowsNum);
