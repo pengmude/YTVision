@@ -199,14 +199,6 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             return saveTask;
         }
 
-        // 保存图片
-        //private void Save(Bitmap bitmap, string savePath, string imageName, bool needCompress, long compressValue = 100)
-        //{
-        //    Directory.CreateDirectory(savePath); // 如果目录已存在，CreateDirectory 不会抛异常
-        //    string fileName = GetFileName(savePath, imageName);
-        //    SaveWithCompress(bitmap, fileName, needCompress, compressValue);
-        //}
-
         /// <summary>
         /// 判断是否早班
         /// </summary>
