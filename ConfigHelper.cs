@@ -183,8 +183,6 @@ namespace YTVisionPro
         /// 方案下所有流程配置
         /// </summary>
         public List<ProcessConfig> ProcessInfos;
-
-        public int NodeCount;
     }
 
     internal class ProcessConfig
