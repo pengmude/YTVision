@@ -1,6 +1,8 @@
 ﻿using Logger;
 using Sunny.UI;
+using Sunny.UI.Win32;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -9,11 +11,14 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static YTVisionPro.Node.ResultProcessing.ImageSave.ImageQueueProcessor;
 
 namespace YTVisionPro.Node.ResultProcessing.ImageSave
 {
     internal class NodeImageSave : NodeBase
     {
+        ImageQueueProcessor processor = new ImageQueueProcessor(4); //默认四条线程处理图片
+
         public NodeImageSave(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormImageSave();
@@ -68,7 +73,10 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                             throw new Exception($"订阅的图片对象为空！");
 
                         // 保存
-                        SaveImage(param);
+                        // 开始处理队列
+                        processor.StartProcessing();
+                        await SaveImage(param);
+                        processor.StopProcessing();
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
@@ -89,7 +97,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             }
         }
 
-        private void SaveImage(NodeParamSaveImage param)
+        private async Task SaveImage(NodeParamSaveImage param)
         {
             DateTime time = DateTime.Now;
             // 1.存图路径（不包含图片名称）
@@ -144,11 +152,42 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
 
             foreach (var path in paths)
             {
-                Save(param.Image, path, imageName, param.NeedCompress, param.CompressValue);
+                SaveImageTask saveImageTask = await Task.Run(() =>
+                {
+                    return QueueImageForSave(param.Image, path, imageName, param.NeedCompress, param.CompressValue);
+                });
+                processor.EnqueueImage(saveImageTask);
             }
-
         }
 
+        /// <summary>
+        /// 生成任务
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="savePath"></param>
+        /// <param name="imageName"></param>
+        /// <param name="needCompress"></param>
+        /// <param name="compressValue"></param>
+        /// <returns></returns>
+        private SaveImageTask QueueImageForSave(Bitmap image, string savePath, string imageName, bool needCompress, long compressValue = 100)
+        {
+            // 生成图片副本
+            Bitmap clonedBitmap = (Bitmap)image.Clone();
+
+            // 生成保存图片的绝对路径
+            string fileName = GetFileName(savePath, imageName);
+
+            // 创建保存任务
+            SaveImageTask saveTask = new SaveImageTask
+            {
+                Image = clonedBitmap,
+                Path = fileName,
+                NeedCompress = needCompress,
+                CompressValue = compressValue
+            };
+
+            return saveTask;
+        }
 
         // 保存图片
         private void Save(Bitmap bitmap, string savePath, string imageName, bool needCompress, long compressValue = 100)
@@ -216,6 +255,108 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                     return encoders[j];
             }
             return null;
+        }
+    }
+
+    internal class ImageQueueProcessor
+    {
+        private readonly BlockingCollection<SaveImageTask> _imageQueue = new BlockingCollection<SaveImageTask>();
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly int _workerCount; // 工作线程的数量
+
+        public struct SaveImageTask
+        {
+            public Bitmap Image { get; set; }
+            public string Path { get; set; }
+            public bool NeedCompress { get; set; } //是否需要压缩
+            public long CompressValue { get; set; } //压缩阈值
+        }
+
+        public ImageQueueProcessor(int workerCount)
+        {
+            if (workerCount <= 0) throw new ArgumentOutOfRangeException(nameof(workerCount), "Worker count must be greater than zero.");
+            _workerCount = workerCount;
+        }
+
+        //开始存图
+        public void StartProcessing()
+        {
+            for (int i = 0; i < _workerCount; i++)
+            {
+                Task.Run(() => ProcessImages(_cancellationTokenSource.Token));
+            }
+        }
+
+        //添加任务
+        public void EnqueueImage(SaveImageTask saveImagedata)
+        {
+            if (saveImagedata.Image == null) throw new ArgumentNullException(nameof(saveImagedata), "Cannot enqueue a null image.");
+            //添加任务(生产者生产数据)
+            _imageQueue.Add(saveImagedata);
+        }
+
+        /// <summary>
+        /// 线程处理图片
+        /// </summary>
+        /// <param name="cancellationToken">令牌，标记线程是否取消执行</param>
+        private void ProcessImages(CancellationToken cancellationToken)
+        {
+            //_imageQueue.GetConsumingEnumerable(cancellationToken):按顺序消费数据，并且可以在取消请求时停止消费。(消费者消费数据)
+            foreach (var saveImagedata in _imageQueue.GetConsumingEnumerable(cancellationToken))
+            {
+                try
+                {
+                    //处理图片(压缩图片)
+                    SaveWithCompress(saveImagedata.Image, saveImagedata.Path, saveImagedata.NeedCompress, saveImagedata.CompressValue);
+                }
+                catch (OperationCanceledException)
+                {
+                    // 如果取消了任务，则忽略这个异常
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing image: {ex.Message}");
+                }
+                finally
+                {
+                    saveImagedata.Image.Dispose();
+                }
+            }
+        }
+
+        // 保存图片并压缩
+        private void SaveWithCompress(Bitmap bitmap, string imagePath, bool isCompress, long compressValue = 100)
+        {
+            if (isCompress)
+            {
+                EncoderParameters encoderParams = new EncoderParameters(1);
+                encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, compressValue);
+                ImageCodecInfo jpegCodec = GetEncoderInfo("image/jpeg");
+                bitmap.Save(imagePath, jpegCodec, encoderParams);
+            }
+            else
+            {
+                bitmap.Save(imagePath);
+            }
+        }
+
+        private ImageCodecInfo GetEncoderInfo(string mimeType)
+        {
+            int j;
+            ImageCodecInfo[] encoders;
+            encoders = ImageCodecInfo.GetImageEncoders();
+            for (j = 0; j < encoders.Length; ++j)
+            {
+                if (encoders[j].MimeType == mimeType)
+                    return encoders[j];
+            }
+            return null;
+        }
+
+        public void StopProcessing()
+        {
+            _imageQueue.CompleteAdding(); // 标记不再添加新的元素
+            _cancellationTokenSource.Cancel(); // 取消所有任务
         }
     }
 }
