@@ -180,6 +180,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// <returns></returns>
         private SaveImageTask QueueImageForSave(Bitmap image, string savePath, string imageName, bool needCompress, long compressValue = 100)
         {
+            Directory.CreateDirectory(savePath);
             // 生成图片副本
             Bitmap clonedBitmap = (Bitmap)image.Clone();
 
