@@ -87,12 +87,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\Basler.Pylon.dll</HintPath>
     </Reference>
+    <Reference Include="HslCommunication, Version=10.6.1.0, Culture=neutral, PublicKeyToken=3d72ad3b6b5ec0e3, processorArchitecture=MSIL">
+      <HintPath>packages\HslCommunication.10.6.1\lib\net451\HslCommunication.dll</HintPath>
+    </Reference>
     <Reference Include="gCursor">
       <HintPath>dll\gCursor.dll</HintPath>
-    </Reference>
-    <Reference Include="HslCommunication, Version=10.2.2.0, Culture=neutral, PublicKeyToken=cdb2261fa039ed67, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>dll\HslCommunication.dll</HintPath>
     </Reference>
     <Reference Include="JsonSubTypes, Version=2.0.1.0, Culture=neutral, PublicKeyToken=ee75fc290dbc1176, processorArchitecture=MSIL">
       <HintPath>packages\JsonSubTypes.2.0.1\lib\net47\JsonSubTypes.dll</HintPath>

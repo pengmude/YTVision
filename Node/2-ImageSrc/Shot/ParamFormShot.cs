@@ -14,7 +14,6 @@ namespace YTVisionPro.Node.ImageSrc.Shot
         public ParamFormShot()
         {
             InitializeComponent();
-            InitCameraList();
             Shown += ParamFormCamera_Shown;
             //触发方式
             comboBoxType.SelectedIndex = 0;

@@ -197,7 +197,7 @@ namespace YTVisionPro.Forms.ProcessNew
             }
             if (node == null)
             {
-                Solution.Instance.NodeCount--;
+                --Solution.Instance.NodeCount;
                 throw new Exception("当前节点类型创建失败！");
             }
             node.Size = new Size(this.Size.Width - 5, 42);

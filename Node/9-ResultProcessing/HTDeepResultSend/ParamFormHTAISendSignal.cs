@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Node.AI.HTAI;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
 {
@@ -25,9 +26,18 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
         public ParamFormHTAISendSignal()
         {
             InitializeComponent();
-            InitComboBox();
             InitializeDataTable();
             AddDeleteButton();
+            Shown += ParamFormHTAISendSignal_Shown;
+        }
+        /// <summary>
+        /// 每次显示界面都会刷新设备下拉框
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ParamFormHTAISendSignal_Shown(object sender, EventArgs e)
+        {
+            InitComboBox();
         }
 
         /// <summary>
@@ -51,16 +61,21 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
         private void InitComboBox()
         {
             //初始PLC
+            string text1 = comboBox2.Text;
             comboBox2.Items.Clear();
+            comboBox2.Items.Add("[未设置]");
             foreach (var plc in Solution.Instance.PlcDevices)
             {
                 comboBox2.Items.Add(plc.UserDefinedName);
             }
-            if (comboBox2.Items.Count > 0)
+            int index1 = comboBox2.Items.IndexOf(text1);
+            if (index1 == -1)
                 comboBox2.SelectedIndex = 0;
+            else
+                comboBox2.SelectedIndex = index1;
+
             //初始NG等级
             comboBox4.Items.Clear();
-
             comboBox4.Items.Add(1);
             comboBox4.Items.Add(2);
             comboBox4.Items.Add(3);
@@ -287,7 +302,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                     newRow["信号地址"] = item.SignalAddress;
                     dataTable.Rows.Add(newRow);
                     UpdateDataTable();
-                }            
+                }
             }
         }
 
