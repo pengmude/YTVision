@@ -11,29 +11,21 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static YTVisionPro.Node.ResultProcessing.ImageSave.ImageQueueProcessor;
 
 namespace YTVisionPro.Node.ResultProcessing.ImageSave
 {
     internal class NodeImageSave : NodeBase
     {
-        private readonly BlockingCollection<SaveImageTask> _imageQueue = new BlockingCollection<SaveImageTask>();
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
-        private readonly int _workerCount = 4; // 工作线程的数量
-
-        public struct SaveImageTask
-        {
-            public Bitmap Image { get; set; }
-            public string Path { get; set; }
-            public bool NeedCompress { get; set; } //是否需要压缩
-            public long CompressValue { get; set; } //压缩阈值
-        }
+        ImageQueueProcessor processor = new ImageQueueProcessor(4);
 
         public NodeImageSave(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormImageSave();
             ParamForm.SetNodeBelong(this);
-            Result = new NodeResultImageSave();
-            StartProcessing();
+            Result = new NodeResultImageSave();;
+            // 开始处理队列
+            processor.StartProcessing();
         }
 
         /// <summary>
@@ -165,7 +157,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                 {
                     return QueueImageForSave(param.Image, path, imageName, param.NeedCompress, param.CompressValue);
                 });
-                EnqueueImage(saveImageTask);
+                processor.EnqueueImage(saveImageTask);
             }
         }
 
@@ -230,6 +222,28 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             }
             return fullPath;
         }
+       
+    }
+
+    internal class ImageQueueProcessor
+    {
+        private readonly BlockingCollection<SaveImageTask> _imageQueue = new BlockingCollection<SaveImageTask>();
+        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly int _workerCount; // 工作线程的数量
+
+        public struct SaveImageTask
+        {
+            public Bitmap Image { get; set; }
+            public string Path { get; set; }
+            public bool NeedCompress { get; set; } //是否需要压缩
+            public long CompressValue { get; set; } //压缩阈值
+        }
+
+        public ImageQueueProcessor(int workerCount)
+        {
+            if (workerCount <= 0) throw new ArgumentOutOfRangeException(nameof(workerCount), "Worker count must be greater than zero.");
+            _workerCount = workerCount;
+        }
 
         //开始存图
         public void StartProcessing()
@@ -238,6 +252,14 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             {
                 Task.Run(() => ProcessImages(_cancellationTokenSource.Token));
             }
+        }
+
+        //添加任务
+        public void EnqueueImage(SaveImageTask saveImagedata)
+        {
+            if (saveImagedata.Image == null) throw new ArgumentNullException(nameof(saveImagedata), "Cannot enqueue a null image.");
+            //添加任务(生产者生产数据)
+            _imageQueue.Add(saveImagedata);
         }
 
         /// <summary>
@@ -251,11 +273,16 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             {
                 try
                 {
+                    //处理图片(压缩图片)
                     SaveWithCompress(saveImagedata.Image, saveImagedata.Path, saveImagedata.NeedCompress, saveImagedata.CompressValue);
+                }
+                catch (OperationCanceledException)
+                {
+                    // 如果取消了任务，则忽略这个异常
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.AddLog(MsgLevel.Exception, $"Error processing image: {ex.Message}");
+                    Console.WriteLine($"Error processing image: {ex.Message}");
                 }
                 finally
                 {
@@ -264,34 +291,19 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             }
         }
 
-        //添加任务
-        public void EnqueueImage(SaveImageTask saveImagedata)
-        {
-            if (saveImagedata.Image == null) throw new ArgumentNullException(nameof(saveImagedata), "Cannot enqueue a null image.");
-            //添加任务(生产者生产数据)
-            _imageQueue.Add(saveImagedata);
-        }
-
         // 保存图片并压缩
         private void SaveWithCompress(Bitmap bitmap, string imagePath, bool isCompress, long compressValue = 100)
         {
-            try
+            if (isCompress)
             {
-                if (isCompress)
-                {
-                    EncoderParameters encoderParams = new EncoderParameters(1);
-                    encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, compressValue);
-                    ImageCodecInfo jpegCodec = GetEncoderInfo("image/jpeg");
-                    bitmap.Save(imagePath, jpegCodec, encoderParams);
-                }
-                else
-                {
-                    bitmap.Save(imagePath);
-                }
+                EncoderParameters encoderParams = new EncoderParameters(1);
+                encoderParams.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, compressValue);
+                ImageCodecInfo jpegCodec = GetEncoderInfo("image/jpeg");
+                bitmap.Save(imagePath, jpegCodec, encoderParams);
             }
-            catch (Exception ex)
+            else
             {
-                LogHelper.AddLog(MsgLevel.Exception, $"Error processing image: {ex.Message}");
+                bitmap.Save(imagePath);
             }
         }
 
