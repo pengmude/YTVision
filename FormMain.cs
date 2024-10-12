@@ -17,6 +17,7 @@ using YTVisionPro.Node.AI.HTAI;
 using System.Threading.Tasks;
 using Sunny.UI;
 using YTVisionPro.Properties;
+using HslCommunication;
 using YTVisionPro.Forms.SystemSetting;
 
 namespace YTVisionPro
