@@ -149,7 +149,7 @@ namespace YTVisionPro.Forms.ProcessNew
             // 反序列化节点时使用原来的id
             // 而正常创建节点使用新id
             int nodeId = id;
-            if (id == -1)
+            if (id == -1) //表示不是反序列化，正常创建对象
                 nodeId = ++Solution.Instance.NodeCount;
 
             #region 根据text创建对应类型的节点

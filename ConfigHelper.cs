@@ -154,6 +154,7 @@ namespace YTVisionPro
                 // 3.PLC管理窗口订阅相机完成事件进行PLC还原 完成后触发PLC完成事件，
                 // 4.流程管理窗口订阅PLC完成事件进行流程还原，因为流程还原需要用到设备，这样保证了在还原流程时设备可用
                 DeserializationCompletionEvent?.Invoke(null, flag);
+                Solution.Instance.NodeCount = SolConfig.NodeCount;
 
             }
             catch (Exception ex)
@@ -182,6 +183,8 @@ namespace YTVisionPro
         /// 方案下所有流程配置
         /// </summary>
         public List<ProcessConfig> ProcessInfos;
+
+        public int NodeCount;
     }
 
     internal class ProcessConfig

@@ -486,7 +486,7 @@ namespace YTVisionPro
         {
             // 释放旧方案
             ReleaseSol();
-            // 新建方案实际和调用加载空方案一样
+            // 新建方案实际和调用加载空方案一样(传入false，表示不需要打印反序列化的信息因为新建方案实际上就是加载一个空的方案)
             Solution.Instance.Load(Application.StartupPath + "\\空方案.YtSol", false);
             LogHelper.AddLog(MsgLevel.Info, $"新建方案成功！", true);
         }

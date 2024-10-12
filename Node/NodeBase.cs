@@ -34,7 +34,7 @@ namespace YTVisionPro.Node
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
-            _id = ++Solution.Instance.NodeCount;
+            //_id = ++Solution.Instance.NodeCount;
         }
 
         /// <summary>
