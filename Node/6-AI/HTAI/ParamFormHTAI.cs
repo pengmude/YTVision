@@ -15,7 +15,7 @@ namespace YTVisionPro.Node.AI.HTAI
 {
     internal partial class ParamFormHTAI : Form, INodeParamForm
     {
-        private NodeBase _node = new NodeBase();
+        private NodeBase _node;
         const int path_len = 256;
         /// <summary>
         /// 模型句柄

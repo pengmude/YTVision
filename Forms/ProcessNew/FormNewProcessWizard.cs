@@ -132,7 +132,6 @@ namespace YTVisionPro.Forms.ProcessNew
             // 根据加载的配置重新添加流程控件
             foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)
             {
-                Solution.Instance.ProcessCount++;
                 TabPage tabPage = new TabPage();
                 tabPage.Name = processInfo.ProcessName;
                 tabPage.Padding = new Padding(3);
