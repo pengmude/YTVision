@@ -1,25 +1,22 @@
 ﻿using Logger;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.Camera.Shot;
-using YTVisionPro.Node.Camera.WaitSoftTrigger;
-using YTVisionPro.Node.ImageRead;
-using YTVisionPro.Node.Light;
-using YTVisionPro.Node.PLC.Panasonic.HTDeepResultSend;
-using YTVisionPro.Node.PLC.Panasonic.Read;
-using YTVisionPro.Node.PLC.Panasonic.Wirte;
-using YTVisionPro.Node.Tool.DataShow;
-using YTVisionPro.Node.Tool.ImageSave;
-using YTVisionPro.Node.Tool.ResultSummarize;
-using YTVisionPro.Node.Tool.SleepTool;
-using static YTVisionPro.Node.NodeComboBox;
+using YTVisionPro.Node.ImageSrc.Shot;
+using YTVisionPro.Node.PLC.WaitSoftTrigger;
+using YTVisionPro.Node.ImageSrc.ImageRead;
+using YTVisionPro.Node.LightControl;
+using YTVisionPro.Node.ResultProcessing.HTDeepResultSend;
+using YTVisionPro.Node.PLC.PanasonicRead;
+using YTVisionPro.Node.PLC.PanasonicWirte;
+using YTVisionPro.Node.ResultProcessing.DataShow;
+using YTVisionPro.Node.ResultProcessing.ImageSave;
+using YTVisionPro.Node.ResultProcessing.ResultSummarize;
+using YTVisionPro.Node.ProcessControl.SleepTool;
+using static YTVisionPro.Forms.ProcessNew.FormNewProcessWizard;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -200,6 +197,7 @@ namespace YTVisionPro.Forms.ProcessNew
             }
             if (node == null)
             {
+                --Solution.Instance.NodeCount;
                 throw new Exception("当前节点类型创建失败！");
             }
             node.Size = new Size(this.Size.Width - 5, 42);

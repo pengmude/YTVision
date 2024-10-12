@@ -22,5 +22,41 @@ namespace YTVisionPro.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsAutoLoad {
+            get {
+                return ((bool)(this["IsAutoLoad"]));
+            }
+            set {
+                this["IsAutoLoad"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string SolutionAddress {
+            get {
+                return ((string)(this["SolutionAddress"]));
+            }
+            set {
+                this["SolutionAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsPowerBoot {
+            get {
+                return ((bool)(this["IsPowerBoot"]));
+            }
+            set {
+                this["IsPowerBoot"] = value;
+            }
+        }
     }
 }

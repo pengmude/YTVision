@@ -52,7 +52,6 @@
             this.vS2015LightTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015LightTheme();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.tsbt_SolSettings = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolNew = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolSaveAs = new System.Windows.Forms.ToolStripButton();
@@ -87,7 +86,7 @@
             this.锁定ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1556, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(1556, 32);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -99,7 +98,7 @@
             this.保存方案ToolStripMenuItem,
             this.另存方案ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 30);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 新建方案ToolStripMenuItem
@@ -143,7 +142,7 @@
             this.检测结果ToolStripMenuItem,
             this.运行日志ToolStripMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
-            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 30);
+            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.视图ToolStripMenuItem.Text = "视图";
             // 
             // 默认视图ToolStripMenuItem
@@ -192,7 +191,7 @@
             this.画布设置ToolStripMenuItem,
             this.系统设置ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 30);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.设置ToolStripMenuItem.Text = "设置";
             // 
             // 画布设置ToolStripMenuItem
@@ -206,7 +205,8 @@
             // 
             this.系统设置ToolStripMenuItem.Name = "系统设置ToolStripMenuItem";
             this.系统设置ToolStripMenuItem.Size = new System.Drawing.Size(218, 34);
-            this.系统设置ToolStripMenuItem.Text = "系统全局设置";
+            this.系统设置ToolStripMenuItem.Text = "系统设置";
+            this.系统设置ToolStripMenuItem.Click += new System.EventHandler(this.系统设置ToolStripMenuItem_Click);
             // 
             // 帮助ToolStripMenuItem
             // 
@@ -215,7 +215,7 @@
             this.联系我们ToolStripMenuItem1,
             this.关于YTVisionProToolStripMenuItem1});
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 30);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // 使用教程ToolStripMenuItem
@@ -240,9 +240,9 @@
             // 
             // 锁定ToolStripMenuItem
             // 
-            this.锁定ToolStripMenuItem.Image = global::YTVisionPro.Properties.Resources.锁定;
+            this.锁定ToolStripMenuItem.Image = global::YTVisionPro.Properties.Resources.解锁;
             this.锁定ToolStripMenuItem.Name = "锁定ToolStripMenuItem";
-            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 30);
+            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 28);
             this.锁定ToolStripMenuItem.ToolTipText = "界面已锁定";
             this.锁定ToolStripMenuItem.Click += new System.EventHandler(this.锁定ToolStripMenuItem_Click);
             // 
@@ -251,11 +251,11 @@
             this.dockPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dockPanel1.DockBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(238)))), ((int)(((byte)(242)))));
-            this.dockPanel1.Location = new System.Drawing.Point(0, 77);
+            this.dockPanel1.Location = new System.Drawing.Point(0, 73);
             this.dockPanel1.Name = "dockPanel1";
             this.dockPanel1.Padding = new System.Windows.Forms.Padding(6);
             this.dockPanel1.ShowAutoHideContentOnHover = false;
-            this.dockPanel1.Size = new System.Drawing.Size(1556, 850);
+            this.dockPanel1.Size = new System.Drawing.Size(1556, 854);
             this.dockPanel1.TabIndex = 2;
             this.dockPanel1.Theme = this.vS2015LightTheme1;
             // 
@@ -267,17 +267,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "视觉方案文件(*.YtSol)|*.YtSol|所有文件(*.*)|*.*";
-            // 
-            // tsbt_SolSettings
-            // 
-            this.tsbt_SolSettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbt_SolSettings.Image = global::YTVisionPro.Properties.Resources.方案设置;
-            this.tsbt_SolSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbt_SolSettings.Name = "tsbt_SolSettings";
-            this.tsbt_SolSettings.Size = new System.Drawing.Size(36, 36);
-            this.tsbt_SolSettings.Text = "方案设置";
-            this.tsbt_SolSettings.ToolTipText = "方案设置";
-            this.tsbt_SolSettings.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // tsbt_SolNew
             // 
@@ -409,7 +398,6 @@
             this.toolStrip1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbt_SolSettings,
             this.tsbt_SolNew,
             this.tsbt_SolOpen,
             this.tsbt_SolSaveAs,
@@ -421,7 +409,7 @@
             this.tsbt_SolRunOnce,
             this.tsbt_SolRunLoop,
             this.tsbt_SolRunStop});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 36);
+            this.toolStrip1.Location = new System.Drawing.Point(0, 32);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1556, 41);
             this.toolStrip1.TabIndex = 1;
@@ -517,7 +505,6 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem 锁定ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton tsbt_SolSettings;
         private System.Windows.Forms.ToolStripButton tsbt_SolNew;
         private System.Windows.Forms.ToolStripButton tsbt_SolOpen;
         private System.Windows.Forms.ToolStripButton tsbt_SolSaveAs;

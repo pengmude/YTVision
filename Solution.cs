@@ -101,6 +101,11 @@ namespace YTVisionPro
         public long RunTime {  get; set; } = -1;
 
         /// <summary>
+        /// 流程运行间隔
+        /// </summary>
+        public int RunInterval { get; set; } = 0;
+
+        /// <summary>
         /// 方案被修改
         /// </summary>
         public bool IsModify { get; set; } = false;

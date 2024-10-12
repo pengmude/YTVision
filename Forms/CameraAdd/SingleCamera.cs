@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Node.Camera.Shot;
+using YTVisionPro.Node.ImageSrc.Shot;
 
 namespace YTVisionPro.Forms.CameraAdd
 {

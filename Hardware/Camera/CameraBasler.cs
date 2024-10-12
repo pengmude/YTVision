@@ -9,6 +9,7 @@ using Basler.Pylon;
 using JsonSubTypes;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using Logger;
 
 namespace YTVisionPro.Hardware.Camera
 {
@@ -114,6 +115,11 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public bool Open()
         {
+            if (_camera == null)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, "相机未初始化，无法启动", true);
+                throw new InvalidOperationException("相机未初始化");
+            }
             try
             {
                 // 打开相机事件绑定
@@ -139,6 +145,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="triggerMode"></param>
         public void SetTriggerMode(bool triggerMode)
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 if (triggerMode)
@@ -163,6 +170,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="triggerSource"></param>
         public void SetTriggerSource(TriggerSource triggerSource)
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 switch (triggerSource)
@@ -198,6 +206,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void SetTriggerEdge(TriggerEdge triggerEdge)
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
 
@@ -301,6 +310,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void GrabOne()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 _camera.ExecuteSoftwareTrigger();
@@ -316,6 +326,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void StartGrabbing()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 if (!_camera.StreamGrabber.IsGrabbing)
@@ -335,6 +346,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void StopGrabbing()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 _camera.StreamGrabber.Stop();
@@ -351,6 +363,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public bool GetGrabStatus()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 return _camera.StreamGrabber.IsGrabbing;
@@ -368,6 +381,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <exception cref="NotImplementedException"></exception>
         public float GetExposureTime()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 return (float)_camera.Parameters[PLCamera.ExposureTimeAbs].GetValue();
@@ -385,6 +399,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <exception cref="NotImplementedException"></exception>
         public float GetGain()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
 
@@ -402,6 +417,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public float GetTriggerDelay()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 return (float)_camera.Parameters[PLCamera.TriggerDelayAbs].GetValue();
@@ -418,6 +434,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="exposureTime"></param>
         public void SetExposureTime(float time)
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 _camera.Parameters[PLCamera.ExposureTimeAbs].SetValue(time);
@@ -434,6 +451,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="gain"></param>
         public void SetGain(float gainValue)
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 _camera.Parameters[PLCamera.GainRaw].SetValue((long)gainValue);
@@ -450,6 +468,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <param name="time">单位：微秒</param>
         public void SetTriggerDelay(float time)
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 _camera.Parameters[PLCamera.TriggerDelayAbs].SetValue(time);
@@ -466,6 +485,7 @@ namespace YTVisionPro.Hardware.Camera
         /// <returns></returns>
         public void Close()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 _camera.StreamGrabber.Stop();
@@ -484,6 +504,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         public void Dispose()
         {
+            if (_camera == null) throw new Exception("相机对象为空！");
             try
             {
                 if (_camera.IsOpen) { _camera.Close(); }
