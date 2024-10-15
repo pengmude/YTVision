@@ -381,7 +381,7 @@ namespace YTVisionPro
             // 确保子窗口可见
             if (!FrmNewProcessWizard.Visible)
             {
-                FrmNewProcessWizard.Show(this);
+                FrmNewProcessWizard.Show();
             }
 
             // 激活子窗口
