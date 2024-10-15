@@ -273,6 +273,28 @@
     <Compile Include="Hardware\Camera\ICamera.cs" />
     <Compile Include="Hardware\IDevice.cs" />
     <Compile Include="Hardware\Light\LightRsee.cs" />
+    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeImageCrop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.Designer.cs">
+      <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamImageCrop.cs" />
+    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeResultImageCrop.cs" />
+    <Compile Include="Node\4-Detection\FindLine\NodeFIndLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\4-Detection\FindLine\NodeParamFindLine.cs" />
+    <Compile Include="Node\4-Detection\FindLine\NodeParamFormFindLine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\4-Detection\FindLine\NodeParamFormFindLine.Designer.cs">
+      <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\4-Detection\FindLine\NodeResultFindLine.cs" />
     <Compile Include="Node\6-AI\HTAI\BitmapConvert.cs" />
     <Compile Include="Node\6-AI\HTAI\HtAiDemo.cs" />
     <Compile Include="Node\6-AI\HTAI\NGTpyePara.cs" />
@@ -298,11 +320,28 @@
     <Compile Include="Node\2-ImageSrc\Shot\ParamFormShot.Designer.cs">
       <DependentUpon>ParamFormShot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\9-ResultProcessing\ImageShow\NodeImageShow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\9-ResultProcessing\ImageShow\NodeParamImageShow.cs" />
+    <Compile Include="Node\9-ResultProcessing\ImageShow\NodeResultImageShow.cs" />
+    <Compile Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.Designer.cs">
+      <DependentUpon>ParamFormImageShow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\FrmNodeRename.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Node\FrmNodeRename.Designer.cs">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\ImageROIEditControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\ImageROIEditControl.Designer.cs">
+      <DependentUpon>ImageROIEditControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\INode.cs" />
     <Compile Include="Node\1-LightControl\NodeLight.cs">
@@ -475,6 +514,8 @@
     <Compile Include="Node\8-ProcessControl\SleepTool\NodeSleepTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Node\ROI.cs" />
+    <Compile Include="Node\ROIManager.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -551,11 +592,20 @@
     <EmbeddedResource Include="Forms\PLCAdd\SinglePLC.resx">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
+      <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\4-Detection\FindLine\NodeParamFormFindLine.resx">
+      <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\6-AI\HTAI\ParamFormHTAI.resx">
       <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\2-ImageSrc\Shot\ParamFormShot.resx">
       <DependentUpon>ParamFormShot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.resx">
+      <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
@@ -583,6 +633,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Logger\LogHelper.resx">
       <DependentUpon>LogHelper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\ImageROIEditControl.resx">
+      <DependentUpon>ImageROIEditControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\NodeBase.resx">
       <DependentUpon>NodeBase.cs</DependentUpon>
@@ -655,8 +708,6 @@
     <None Include="Icon\添加流程.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Node\3-ImagePreprocessing\" />
-    <Folder Include="Node\4-Detection\" />
     <Folder Include="Node\5-Measurement\" />
   </ItemGroup>
   <ItemGroup>

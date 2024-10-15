@@ -239,5 +239,15 @@ namespace YTVisionPro.Forms.ProcessNew
                 #endregion
             }
         }
+
+        private void 全部展开ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeView1.ExpandAll();
+        }
+
+        private void 全部折叠ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            treeView1.CollapseAll();
+        }
     }
 }

@@ -129,7 +129,7 @@ namespace YTVisionPro.Node
             }
             else
             {
-                LogHelper.AddLog(MsgLevel.Fatal, $"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
+                //LogHelper.AddLog(MsgLevel.Fatal, $"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
                 throw new Exception($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
             }
         }

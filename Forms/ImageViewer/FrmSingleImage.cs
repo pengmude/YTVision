@@ -4,6 +4,7 @@ using WeifenLuo.WinFormsUI.Docking;
 using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Node.ImageSrc.Shot;
 using YTVisionPro.Node.ImageSrc.ImageRead;
+using YTVisionPro.Node.Tool.ImageShow;
 
 namespace YTVisionPro.Forms.ImageViewer
 {
@@ -17,9 +18,10 @@ namespace YTVisionPro.Forms.ImageViewer
             NodeShot.ImageShowChanged += NodeImageShow_ImageShowChanged;
             NodeImageRead.ImageShowChanged += NodeImageShow_ImageShowChanged;
             NodeHTAI.ImageShowChanged += NodeImageShow_ImageShowChanged;
+            NodeImageShow.ImageShowChanged += NodeImageShow_ImageShowChanged;
         }
 
-        private void NodeImageShow_ImageShowChanged(object sender, Paramsa e)
+        private void NodeImageShow_ImageShowChanged(object sender, ImageShowPamra e)
         {
             // 确保图像更新在 UI 线程中执行
             if (this.InvokeRequired)
@@ -36,9 +38,9 @@ namespace YTVisionPro.Forms.ImageViewer
         /// 更新 PictureBox 的方法
         /// </summary>
         /// <param name="e"></param>
-        private void UpdatePictureBox(Paramsa e)
+        private void UpdatePictureBox(ImageShowPamra e)
         {
-            if (Text == e.Winname)
+            if (Text == e.WinName)
                 ytPictrueBox1.Image = e.Bitmap;
         }
 
@@ -49,13 +51,13 @@ namespace YTVisionPro.Forms.ImageViewer
             Hide();
         }
     }
-    public class Paramsa
+    public class ImageShowPamra
     {
-        public string Winname;
+        public string WinName;
         public Bitmap Bitmap;
-        public Paramsa(string winname, Bitmap bitmap)
+        public ImageShowPamra(string winname, Bitmap bitmap)
         {
-            Winname = winname;
+            WinName = winname;
             Bitmap = bitmap;
         }
     }

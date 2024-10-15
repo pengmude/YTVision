@@ -21,7 +21,7 @@ namespace YTVisionPro.Node.ImageSrc.Shot
         /// <summary>
         /// 图像发布事件
         /// </summary>
-        public static event EventHandler<Paramsa> ImageShowChanged;
+        public static event EventHandler<ImageShowPamra> ImageShowChanged;
 
         public NodeShot(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -109,7 +109,7 @@ namespace YTVisionPro.Node.ImageSrc.Shot
                         //await Task.Run(() =>
                         //{
                         // 发送采集到的图像
-                        ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, ((NodeResultShot)Result).Bitmap));
+                        ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, ((NodeResultShot)Result).Bitmap));
                         //});
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);

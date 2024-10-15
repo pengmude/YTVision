@@ -1,30 +1,36 @@
 ﻿using Logger;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
 
-namespace YTVisionPro.Node.ImageSrc.ImageRead
+namespace YTVisionPro.Node.Tool.ImageShow
 {
-    internal class NodeImageRead : NodeBase
+    
+    internal partial class NodeImageShow : NodeBase
     {
-        /// <summary>
-        /// 图像发布事件
-        /// </summary>
         public static event EventHandler<ImageShowPamra> ImageShowChanged;
-        // 读写锁保护相同图像文件的多线程访问安全
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        public NodeImageRead(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
+
+        public NodeImageShow(int id, string nodeName, Process process, NodeType nodeType) : base(id, nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormImageRead();
-            Result = new NodeResultImageRead();
+            ParamForm = new ParamFormImageShow();
+            Result = new NodeResultImageShow();
+            ParamForm.SetNodeBelong(this);
         }
 
+        /// <summary>
+        /// 节点运行
+        /// </summary>
         public override async Task Run(CancellationToken token)
         {
-
             DateTime startTime = DateTime.Now;
+            // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
@@ -32,27 +38,24 @@ namespace YTVisionPro.Node.ImageSrc.ImageRead
             }
             if (ParamForm.Params == null)
             {
-                LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行参数未设置或保存！", true);
+                LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
                 SetRunResult(startTime, NodeStatus.Failed);
-                throw new Exception($"节点({ID}.{NodeName})运行参数未设置或保存！");
+                throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if(ParamForm.Params is NodeParamImageRead param)
+            if(ParamForm is ParamFormImageShow form)
             {
-                if (Result is NodeResultImageRead res)
+                if(ParamForm.Params is NodeParamImageShow param)
                 {
                     try
                     {
+                        // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        _lock.EnterReadLock();
-                        Bitmap bitmap = new Bitmap(param.ImagePath);
-                        ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, bitmap));
-                        res.Image = bitmap;
-                        Result = res;
-                        _lock.ExitReadLock();
-
+                        Bitmap image = form.GetImage();
+                        ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, image));
+                        SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
@@ -62,15 +65,14 @@ namespace YTVisionPro.Node.ImageSrc.ImageRead
                         SetRunResult(startTime, NodeStatus.Unexecuted);
                         throw new OperationCanceledException($"节点({ID}.{NodeName})运行取消！");
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！", true);
+                        LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！原因:{ex.Message}", true);
                         SetRunResult(startTime, NodeStatus.Failed);
-                        throw new Exception($"节点({ID}.{NodeName})运行失败！");
+                        throw new Exception($"节点({ID}.{NodeName})运行失败，原因：{ex.Message}");
                     }
                 }
             }
-            
         }
     }
 }

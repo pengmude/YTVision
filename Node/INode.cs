@@ -122,6 +122,10 @@ namespace YTVisionPro.Node
         /// </summary>
         ImageSave,
         /// <summary>
+        /// 图像显示
+        /// </summary>
+        ImageShow,
+        /// <summary>
         /// 延迟工具
         /// </summary>
         SleepTool,
@@ -142,9 +146,13 @@ namespace YTVisionPro.Node
         /// </summary>
         GrayScale,
         /// <summary>
-        /// 提取ROI
+        /// Blob分析
         /// </summary>
-        ExtractROI,
+        BlobAnalysis,
+        /// <summary>
+        /// 直线查找
+        /// </summary>
+        LineFind,
         /// <summary>
         /// 圆查找
         /// </summary>

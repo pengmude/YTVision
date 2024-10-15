@@ -17,6 +17,9 @@ using YTVisionPro.Node.ResultProcessing.ImageSave;
 using YTVisionPro.Node.ResultProcessing.ResultSummarize;
 using YTVisionPro.Node.ProcessControl.SleepTool;
 using static YTVisionPro.Forms.ProcessNew.FormNewProcessWizard;
+using YTVisionPro.Node._4_Detection.FindLine;
+using YTVisionPro.Node.ImagePreprocessing.ImageCrop;
+using YTVisionPro.Node.Tool.ImageShow;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -191,6 +194,15 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.Summarize:
                     node = new NodeSummarize(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.LineFind:
+                    node = new NodeFIndLine(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ImageCrop:
+                    node = new NodeImageCrop(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ImageShow:
+                    node = new NodeImageShow(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

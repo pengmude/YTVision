@@ -20,7 +20,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <summary>
         /// 图像发布事件
         /// </summary>
-        public static event EventHandler<Paramsa> ImageShowChanged;
+        public static event EventHandler<ImageShowPamra> ImageShowChanged;
         public NodeHTAI(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new ParamFormHTAI();
@@ -90,7 +90,7 @@ namespace YTVisionPro.Node.AI.HTAI
                             res.ResultData = DeepStudyResult_Judge(PredictResult, param.AllNgConfigs, param.TestNum);
                             res.RenderImage = renderImg;
                             Result = res;
-                            ImageShowChanged?.Invoke(this, new Paramsa(param.WindowName, renderImg));
+                            ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, renderImg));
                             long time = SetRunResult(startTime, NodeStatus.Successful);
                             LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                         }

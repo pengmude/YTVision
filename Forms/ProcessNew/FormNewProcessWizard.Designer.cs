@@ -34,14 +34,18 @@ namespace YTVisionPro.Forms.ProcessNew
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormNewProcessWizard));
             gCursorLib.TextShadower textShadower1 = new gCursorLib.TextShadower();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.treeView1 = new System.Windows.Forms.TreeView();
             this.buttonRemove = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
             this.buttonAdd = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.全部展开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.全部折叠ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.gCursor1 = new gCursorLib.gCursor(this.components);
-            this.label1 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -68,19 +72,6 @@ namespace YTVisionPro.Forms.ProcessNew
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1335, 975);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // treeView1
-            // 
-            this.treeView1.AllowDrop = true;
-            this.treeView1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.treeView1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.treeView1.Location = new System.Drawing.Point(7, 103);
-            this.treeView1.Name = "treeView1";
-            this.tableLayoutPanel1.SetRowSpan(this.treeView1, 2);
-            this.treeView1.Size = new System.Drawing.Size(385, 865);
-            this.treeView1.TabIndex = 3;
-            this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
-            this.treeView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseMove);
-            // 
             // buttonRemove
             // 
             this.buttonRemove.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -93,16 +84,6 @@ namespace YTVisionPro.Forms.ProcessNew
             this.buttonRemove.Text = "删除流程";
             this.buttonRemove.UseVisualStyleBackColor = true;
             this.buttonRemove.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(403, 3);
-            this.tabControl1.Name = "tabControl1";
-            this.tableLayoutPanel1.SetRowSpan(this.tabControl1, 3);
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(594, 969);
-            this.tabControl1.TabIndex = 1;
             // 
             // buttonAdd
             // 
@@ -117,6 +98,68 @@ namespace YTVisionPro.Forms.ProcessNew
             this.buttonAdd.UseVisualStyleBackColor = true;
             this.buttonAdd.Click += new System.EventHandler(this.button2_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(403, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tableLayoutPanel1.SetRowSpan(this.tabControl1, 3);
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(594, 969);
+            this.tabControl1.TabIndex = 1;
+            // 
+            // treeView1
+            // 
+            this.treeView1.AllowDrop = true;
+            this.treeView1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.treeView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.treeView1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.treeView1.Location = new System.Drawing.Point(7, 103);
+            this.treeView1.Name = "treeView1";
+            this.tableLayoutPanel1.SetRowSpan(this.treeView1, 2);
+            this.treeView1.Size = new System.Drawing.Size(385, 865);
+            this.treeView1.TabIndex = 3;
+            this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
+            this.treeView1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseMove);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.全部展开ToolStripMenuItem,
+            this.全部折叠ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 64);
+            // 
+            // 全部展开ToolStripMenuItem
+            // 
+            this.全部展开ToolStripMenuItem.Name = "全部展开ToolStripMenuItem";
+            this.全部展开ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
+            this.全部展开ToolStripMenuItem.Text = "全部展开";
+            this.全部展开ToolStripMenuItem.Click += new System.EventHandler(this.全部展开ToolStripMenuItem_Click);
+            // 
+            // 全部折叠ToolStripMenuItem
+            // 
+            this.全部折叠ToolStripMenuItem.Name = "全部折叠ToolStripMenuItem";
+            this.全部折叠ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
+            this.全部折叠ToolStripMenuItem.Text = "全部折叠";
+            this.全部折叠ToolStripMenuItem.Click += new System.EventHandler(this.全部折叠ToolStripMenuItem_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.Font = new System.Drawing.Font("江西拙楷", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label1.ImageIndex = 28;
+            this.label1.ImageList = this.imageList1;
+            this.label1.Location = new System.Drawing.Point(128, 24);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(144, 48);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "工具箱";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -127,9 +170,9 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(3, "本地图片.png");
             this.imageList1.Images.SetKeyName(4, "相机拍照.png");
             this.imageList1.Images.SetKeyName(5, "图像预处理.png");
-            this.imageList1.Images.SetKeyName(6, "图像裁切.png");
+            this.imageList1.Images.SetKeyName(6, "图像裁剪.png");
             this.imageList1.Images.SetKeyName(7, "转为灰度图.png");
-            this.imageList1.Images.SetKeyName(8, "提取ROI.png");
+            this.imageList1.Images.SetKeyName(8, "Blob分析.png");
             this.imageList1.Images.SetKeyName(9, "检测识别.png");
             this.imageList1.Images.SetKeyName(10, "圆查找.png");
             this.imageList1.Images.SetKeyName(11, "模版匹配.png");
@@ -150,6 +193,8 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(26, "保存图片.png");
             this.imageList1.Images.SetKeyName(27, "结果汇总.png");
             this.imageList1.Images.SetKeyName(28, "工具箱.png");
+            this.imageList1.Images.SetKeyName(29, "直线查找.png");
+            this.imageList1.Images.SetKeyName(30, "图像显示.png");
             // 
             // gCursor1
             // 
@@ -193,21 +238,6 @@ namespace YTVisionPro.Forms.ProcessNew
             this.gCursor1.gTTransp = 0;
             this.gCursor1.gType = gCursorLib.gCursor.eType.Text;
             // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.Font = new System.Drawing.Font("江西拙楷", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.ImageIndex = 28;
-            this.label1.ImageList = this.imageList1;
-            this.label1.Location = new System.Drawing.Point(128, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 48);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "工具箱";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // FormNewProcessWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -223,6 +253,7 @@ namespace YTVisionPro.Forms.ProcessNew
             this.Text = "流程编辑";
             this.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.Form1_GiveFeedback);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -237,5 +268,8 @@ namespace YTVisionPro.Forms.ProcessNew
         private System.Windows.Forms.ImageList imageList1;
         private gCursorLib.gCursor gCursor1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 全部展开ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 全部折叠ToolStripMenuItem;
     }
 }
