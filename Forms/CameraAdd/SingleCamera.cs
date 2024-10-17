@@ -53,13 +53,7 @@ namespace YTVisionPro.Forms.CameraAdd
         {
             InitializeComponent();
             Camera = camera;
-            this.label1.Text = camera.UserDefinedName;
-            Solution.Instance.AllDevices.Add(Camera);
-            //绑定图像显示控件界面
-            CameraParamsShowControl = new CameraParamsShowControl(Camera);
-            // 保存所有的实例
-            SingleCameraList.Add(this);
-            if(camera.IsOpen)
+            if (camera.IsOpen)
             {
                 try
                 {
@@ -74,6 +68,12 @@ namespace YTVisionPro.Forms.CameraAdd
                     throw ex;
                 }
             }
+            this.label1.Text = camera.UserDefinedName;
+            Solution.Instance.AllDevices.Add(Camera);
+            //绑定图像显示控件界面
+            CameraParamsShowControl = new CameraParamsShowControl(Camera);
+            // 保存所有的实例
+            SingleCameraList.Add(this);
         }
 
         private void Camera_ConnectStatusEvent(object sender, bool e)

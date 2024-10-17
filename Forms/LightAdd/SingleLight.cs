@@ -54,14 +54,6 @@ namespace YTVisionPro.Forms.LightAdd
         public SingleLight(ILight light)
         {
             InitializeComponent();
-            this.label1.Text = light.UserDefinedName;
-            Light = light;
-            Parms = light.LightParam;
-            Solution.Instance.AllDevices.Add(Light);
-            //给光源绑定参数界面
-            LightParamsShowControl = new LightParamsShowControl(Parms);
-            // 保存所有的实例
-            SingleLights.Add(this);
             if (light.IsOpen)
             {
                 try
@@ -74,6 +66,14 @@ namespace YTVisionPro.Forms.LightAdd
                     throw ex;
                 }
             }
+            this.label1.Text = light.UserDefinedName;
+            Light = light;
+            Parms = light.LightParam;
+            Solution.Instance.AllDevices.Add(Light);
+            //给光源绑定参数界面
+            LightParamsShowControl = new LightParamsShowControl(Parms);
+            // 保存所有的实例
+            SingleLights.Add(this);
         }
 
         private void Light_ConnectStatusEvent(object sender, bool e)

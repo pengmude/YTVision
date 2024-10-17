@@ -34,6 +34,7 @@ namespace YTVisionPro.Hardware.Light
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.LIGHT;
+        public string ClassName { get; set; } = typeof(LightRsee).FullName;
 
         /// <summary>
         /// 光源亮度值
@@ -64,7 +65,6 @@ namespace YTVisionPro.Hardware.Light
         /// 光源串口是否打开
         /// </summary>
         public bool IsComOpen { get; set; }
-        public string ClassName { get; set; } = typeof(LightRsee).FullName;
 
         /// <summary>
         /// 串口通信句柄

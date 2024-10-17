@@ -10,10 +10,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Forms.ModbusAdd;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Hardware;
 using YTVisionPro.Hardware.Camera;
 using YTVisionPro.Hardware.Light;
+using YTVisionPro.Hardware.Modbus;
 using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
@@ -89,6 +91,10 @@ namespace YTVisionPro
         /// Plc设备
         /// </summary>
         public List<IPlc> PlcDevices => AllDevices.OfType<IPlc>().ToList();
+        /// <summary>
+        /// Modbus设备
+        /// </summary>
+        public List<ModbusDevice> ModbusDevices => AllDevices.OfType<ModbusDevice>().ToList();
 
         /// <summary>
         /// 方案是否正在运行
@@ -312,6 +318,7 @@ namespace YTVisionPro
             SingleLight.SingleLights.Clear();
             SingleCamera.SingleCameraList.Clear();
             SinglePLC.SinglePLCs.Clear();
+            SingleModbus.SingleModbuss.Clear();
             Solution.Instance.AllDevices.Clear();
 
             // 释放AI节点的内存

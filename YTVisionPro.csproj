@@ -105,6 +105,9 @@
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NModbus4, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NModbus4.2.1.0\lib\net40\NModbus4.dll</HintPath>
+    </Reference>
     <Reference Include="SunnyUI, Version=3.6.8.1, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb, processorArchitecture=MSIL">
       <HintPath>packages\SunnyUI.3.6.8.1\lib\net472\SunnyUI.dll</HintPath>
     </Reference>
@@ -224,6 +227,30 @@
     <Compile Include="Forms\LightAdd\SingleLight.Designer.cs">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ModbusAdd\FrmModbusListView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\FrmModbusListView.Designer.cs">
+      <DependentUpon>FrmModbusListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\FrmModbusNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\FrmModbusNew.Designer.cs">
+      <DependentUpon>FrmModbusNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\ModbusParamsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\ModbusParamsControl.Designer.cs">
+      <DependentUpon>ModbusParamsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\SingleModbus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ModbusAdd\SingleModbus.Designer.cs">
+      <DependentUpon>SingleModbus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ProcessNew\SerializableTreeNode.cs" />
     <Compile Include="Forms\ResultView\SingleResultViewData.cs" />
     <Compile Include="Forms\SystemSetting\FrmSystemSetting.cs">
@@ -273,6 +300,8 @@
     <Compile Include="Hardware\Camera\ICamera.cs" />
     <Compile Include="Hardware\IDevice.cs" />
     <Compile Include="Hardware\Light\LightRsee.cs" />
+    <Compile Include="Hardware\Modbus\Modbus.cs" />
+    <Compile Include="Hardware\Modbus\ModbusParam.cs" />
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeImageCrop.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -571,6 +600,18 @@
     <EmbeddedResource Include="Forms\LightAdd\SingleLight.resx">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModbusAdd\FrmModbusListView.resx">
+      <DependentUpon>FrmModbusListView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModbusAdd\FrmModbusNew.resx">
+      <DependentUpon>FrmModbusNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModbusAdd\ModbusParamsControl.resx">
+      <DependentUpon>ModbusParamsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ModbusAdd\SingleModbus.resx">
+      <DependentUpon>SingleModbus.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SystemSetting\FrmSystemSetting.resx">
       <DependentUpon>FrmSystemSetting.cs</DependentUpon>
     </EmbeddedResource>
@@ -717,6 +758,7 @@
     <None Include="Icon\Logo\桌面图.ico" />
     <None Include="Icon\NodeIcon\图像采集.ico" />
     <None Include="Icon\NodeIcon\光源.ico" />
+    <None Include="Icon\Modbus.png" />
     <Content Include="Icon\保存项目.png" />
     <Content Include="Icon\停止执行.png" />
     <None Include="Icon\另存为.png" />

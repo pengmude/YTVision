@@ -37,6 +37,10 @@ namespace YTVisionPro
         /// </summary>
         Forms.PLCAdd.FrmPLCListView FrmPLCAdd= new Forms.PLCAdd.FrmPLCListView();
         /// <summary>
+        /// Modbus添加窗口
+        /// </summary>
+        Forms.ModbusAdd.FrmModbusListView FrmModbusAdd = new Forms.ModbusAdd.FrmModbusListView();
+        /// <summary>
         /// 图像显示栏
         /// </summary>
         static FrmImageViewer FrmImgeDlg = new FrmImageViewer();
@@ -359,6 +363,9 @@ namespace YTVisionPro
                 case "PLC管理":
                     PLC管理ToolStripMenuItem_Click(null, null);
                     break;
+                case "Modbus设备":
+                    Modbus设备ToolStripMenuItem_Click(null, null);
+                    break;
                 case "循环运行":
                     循环运行ToolStripMenuItem_Click(null, null);
                     break;
@@ -445,6 +452,12 @@ namespace YTVisionPro
         {
             FrmPLCAdd.ShowDialog();
         }
+
+        private void Modbus设备ToolStripMenuItem_Click(object value1, object value2)
+        {
+            FrmModbusAdd.ShowDialog();
+        }
+
         private void 相机管理ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmCameraAdd.ShowDialog();
@@ -613,6 +626,11 @@ namespace YTVisionPro
         private void 系统设置ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             frmSystemSetting.ShowDialog();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

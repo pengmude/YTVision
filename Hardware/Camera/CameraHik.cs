@@ -63,6 +63,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.HikVision;
+        public string ClassName { get; set; } = typeof(CameraHik).FullName;
 
         /// <summary>
         /// 设备名称
@@ -73,7 +74,6 @@ namespace YTVisionPro.Hardware.Camera
         /// 用户定义名称
         /// </summary>
         public string UserDefinedName { get; set; }
-        public string ClassName { get; set; } = typeof(CameraHik).FullName;
 
 
         #region 反序列化相关函数
@@ -208,14 +208,11 @@ namespace YTVisionPro.Hardware.Camera
             if (device == null) throw new Exception("相机对象为空！");
 
             int nRet = 0;
-            try
+            nRet = device.Open();
+            if (nRet != MvError.MV_OK)
             {
-                nRet = device.Open();
-            }
-            catch (Exception e)
-            {
-                LogHelper.AddLog(MsgLevel.Fatal, $"相机（{UserDefinedName}）打开失败！原因：{e.Message}", true);
-                return false;
+                LogHelper.AddLog(MsgLevel.Fatal, $"相机（{UserDefinedName}）打开失败！原因：{nRet}", true);
+                throw new Exception($"相机（{UserDefinedName}）打开失败！");
             }
             IsOpen = true;
             ConnectStatusEvent?.Invoke(this, true);

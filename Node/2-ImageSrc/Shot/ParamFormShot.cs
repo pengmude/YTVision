@@ -249,6 +249,12 @@ namespace YTVisionPro.Node.ImageSrc.Shot
             if (Params is NodeParamShot param)
             {
                 // 还原选中的相机 
+                comboBoxCamera.Items.Clear();
+                comboBoxCamera.Items.Add("[未设置]");
+                foreach (var camera in Solution.Instance.CameraDevices)
+                {
+                    comboBoxCamera.Items.Add(camera.UserDefinedName);
+                }
                 int index = comboBoxCamera.Items.IndexOf(param.CameraName);
                 comboBoxCamera.SelectedIndex = index == -1 ? 0 : index;
                 // 还原选中的触发源

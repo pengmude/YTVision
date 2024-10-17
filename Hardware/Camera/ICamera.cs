@@ -50,11 +50,11 @@ namespace YTVisionPro.Hardware.Camera
         /// 相机品牌
         /// </summary>
         DeviceBrand Brand { get; set; }
+        string ClassName { get; set; }
         /// <summary>
         /// 设备类型
         /// </summary>
         DevType DevType { get; set; }
-        string ClassName { get; set; }
         /// <summary>
         /// 创建设备，反序列化用
         /// </summary>

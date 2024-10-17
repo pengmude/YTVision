@@ -1,104 +1,103 @@
 ﻿using Basler.Pylon;
 using Logger;
+using Microsoft.VisualBasic.Devices;
 using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Hardware;
+using YTVisionPro.Hardware.Light;
+using YTVisionPro.Hardware.Modbus;
 using YTVisionPro.Hardware.PLC;
 
-namespace YTVisionPro.Forms.PLCAdd
+namespace YTVisionPro.Forms.ModbusAdd
 {
     /// <summary>
-    /// 单个PLC
+    /// 单个Modbus
     /// </summary>
-    internal partial class SinglePLC : UserControl
+    internal partial class SingleModbus : UserControl
     {
-        public IPlc Plc = null;
         /// <summary>
-        /// 通信方式
+        /// Modbus设备
         /// </summary>
-        public PlcConType ConType;
+        public ModbusDevice ModbusDevice = null;
+        /// <summary>
+        /// 设备参数
+        /// </summary>
+        public ModbusParam Parms = new ModbusParam();
         /// <summary>
         /// 是否选中
         /// </summary>
         public bool IsSelected;
         /// <summary>
-        /// 串口通信参数控件
-        /// </summary>
-        public SerialParamsControl SerialParamsControl;
-        /// <summary>
-        /// 网口通信参数控件
-        /// </summary>
-        public EthernetParamsControl EthernetParamsControl;
-        /// <summary>
         /// 选中改变事件
         /// </summary>
-        public static event EventHandler<SinglePLC> SelectedChange;
+        public static event EventHandler<SingleModbus> SelectedChange;
         /// <summary>
         /// 移除事件
         /// </summary>
-        public static event EventHandler<SinglePLC> SinglePLCRemoveEvent;
+        public static event EventHandler<SingleModbus> SingleModbusRemoveEvent;
         /// <summary>
         /// 保存所有的当前类实例
         /// </summary>
-        public static List<SinglePLC> SinglePLCs = new List<SinglePLC>();
+        public static List<SingleModbus> SingleModbuss = new List<SingleModbus>();
+        /// <summary>
+        /// Modbus参数显示控件
+        /// </summary>
+        public ModbusParamsControl ModbusParamsControl;
 
         /// <summary>
         /// 反序列化用
         /// </summary>
-        /// <param name="plc"></param>
-        public SinglePLC(IPlc plc)
+        /// <param name="modbus"></param>
+        public SingleModbus(ModbusDevice dev)
         {
             InitializeComponent();
-            if (plc.IsConnect)
+            if (dev.IsConnect)
             {
                 try
                 {
-                    plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
-                    plc.Connect();
+                    dev.ConnectStatusEvent += Modbus_ConnectStatusEvent;
+                    dev.Connect();
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
             }
-            ConType = plc.PLCParms.PlcConType;
-            this.label1.Text = plc.UserDefinedName;
-            Plc = plc;
-            Solution.Instance.AllDevices.Add(Plc);
-            if (ConType == PlcConType.COM)
-            {
-                SerialParamsControl = new SerialParamsControl(Plc.PLCParms);
-            }
-            else if (ConType == PlcConType.ETHERNET)
-                EthernetParamsControl = new EthernetParamsControl();
-            SinglePLCs.Add(this);
+            this.label1.Text = dev.UserDefinedName;
+            ModbusParamsControl = new ModbusParamsControl(dev.ModbusParam);
+            ModbusDevice = dev;
+            Parms = dev.ModbusParam;
+            Solution.Instance.AllDevices.Add(dev);
+            SingleModbuss.Add(this);
         }
 
-        public SinglePLC(PLCParms parms)
+        public SingleModbus(ModbusParam param)
         {
             InitializeComponent();
-            ConType = parms.PlcConType;
-            this.label1.Text = parms.UserDefinedName;
-            var plc = new PlcPanasonic(parms);
-            plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
-            Plc = plc;
-            Solution.Instance.AllDevices.Add(Plc);
-            if (ConType == PlcConType.COM)
+            this.label1.Text = param.UserDefinedName;
+            Parms = param;
+            try
             {
-                SerialParamsControl = new SerialParamsControl(parms);
+                ModbusParamsControl = new ModbusParamsControl(param);
+                ModbusDevice = new ModbusDevice(param);
+                Solution.Instance.AllDevices.Add(ModbusDevice);
+                SingleModbuss.Add(this);
+                ModbusDevice.ConnectStatusEvent += Modbus_ConnectStatusEvent;
             }
-            else if(ConType == PlcConType.ETHERNET)
-                EthernetParamsControl = new EthernetParamsControl();
-            SinglePLCs.Add(this);
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>
-        /// 订阅PLC连接状态
+        /// 订阅Modbus连接状态
         /// </summary>
-        private void Plc_ConnectStatusEvent(object sender, bool e)
+        private void Modbus_ConnectStatusEvent(object sender, bool e)
         {
             uiSwitch1.Active = e;
         }
@@ -108,7 +107,7 @@ namespace YTVisionPro.Forms.PLCAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SinglePLCInfo_MouseClick(object sender, MouseEventArgs e)
+        private void SingleModbusInfo_MouseClick(object sender, MouseEventArgs e)
         {
             SetSelected();
             SelectedChange?.Invoke(this, this);
@@ -121,7 +120,7 @@ namespace YTVisionPro.Forms.PLCAdd
         private void SetSelected()
         {
             //先清除所有选中状态
-            foreach (var item in SinglePLCs)
+            foreach (var item in SingleModbuss)
             {
                 item.tableLayoutPanel1.BackColor = Color.LightSteelBlue;
                 item.label1.BackColor = Color.LightSteelBlue;
@@ -154,7 +153,7 @@ namespace YTVisionPro.Forms.PLCAdd
         }
 
         /// <summary>
-        /// 连接PLC
+        /// 连接Modbus
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="value"></param>
@@ -164,25 +163,21 @@ namespace YTVisionPro.Forms.PLCAdd
             {
                 if (value)
                 {
-                    if (Plc.Connect())
-                        LogHelper.AddLog(MsgLevel.Info, $"{Plc.UserDefinedName}打开", true);
-                    else
-                    {
-                        LogHelper.AddLog(MsgLevel.Exception, $"{Plc.UserDefinedName}连接失败！请检查参数设置是否为无效值或与其他通信设置冲突！", true);
-                    }
+                    ModbusDevice.Connect();
+                    LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{ModbusDevice.DevName}】打开", true);
                 }
                 else
                 {
-                    if (Plc.IsConnect)
+                    if (ModbusDevice.IsConnect)
                     {
-                        Plc.Disconnect();
-                        LogHelper.AddLog(MsgLevel.Info, $"{Plc.UserDefinedName}关闭", true);
+                        ModbusDevice.DisConnect();
+                        LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{ModbusDevice.DevName}】关闭", true);
                     }
                 }
             }
             catch(Exception e)
             {
-                LogHelper.AddLog(MsgLevel.Exception, $"{((Hardware.IDevice)Plc).UserDefinedName}" + e.Message, true);
+                LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
             }
         }
 
@@ -194,7 +189,7 @@ namespace YTVisionPro.Forms.PLCAdd
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if(IsSelected)
-                SinglePLCRemoveEvent?.Invoke(this, this);
+                SingleModbusRemoveEvent?.Invoke(this, this);
         }
     }
 }

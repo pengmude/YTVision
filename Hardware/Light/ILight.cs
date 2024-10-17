@@ -24,11 +24,11 @@ namespace YTVisionPro.Hardware.Light
         /// 设备类型
         /// </summary>
         DevType DevType { get; set; }
+        string ClassName { get; set; }
         /// <summary>
         /// 光源亮度值
         /// </summary>
         int Brightness { get; set; }
-        string ClassName { get; set; }
         /// <summary>
         /// 创建设备，反序列化用
         /// </summary>

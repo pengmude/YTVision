@@ -47,6 +47,7 @@ namespace YTVisionPro.Hardware.Light
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.PPX;
+        public string ClassName { get; set; } = typeof(LightPPX).FullName;
 
         /// <summary>
         /// 光源是否打开
@@ -62,7 +63,6 @@ namespace YTVisionPro.Hardware.Light
         /// 光源亮度值
         /// </summary>
         public int Brightness { get; set; }
-        public string ClassName { get; set; } = typeof(LightPPX).FullName;
 
         /// <summary>
         /// 光源所连接的串口对象

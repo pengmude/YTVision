@@ -47,13 +47,13 @@ namespace YTVisionPro.Hardware.PLC
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.PLC;
+        public string ClassName { get; set; } = typeof(PlcPanasonic).FullName;
 
         /// <summary>
         /// 设备品牌
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.Panasonic;
-        public string ClassName { get; set; } = typeof(PlcPanasonic).FullName;
 
         #region 反序列化专用函数
 

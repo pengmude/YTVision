@@ -46,6 +46,7 @@ namespace YTVisionPro.Hardware.Camera
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.CAMERA;
+        public string ClassName { get; set; } = typeof(CameraBasler).FullName;
 
         /// <summary>
         /// 设备SN
@@ -61,7 +62,6 @@ namespace YTVisionPro.Hardware.Camera
         /// 用户定义名称
         /// </summary>
         public string UserDefinedName { get; set; }
-        public string ClassName { get; set; } = typeof(CameraBasler).FullName;
 
 
         #region 反序列化专用函数
