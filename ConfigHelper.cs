@@ -8,9 +8,9 @@ using System.IO;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Camera;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
 
@@ -177,8 +177,8 @@ namespace YTVisionPro
         /// <summary>
         /// 方案下的所有设备(光源、相机、PLC)
         /// </summary>
-        [JsonConverter(typeof(PolyListConverter<Hardware.IDevice>))]
-        public List<Hardware.IDevice> Devices;
+        [JsonConverter(typeof(PolyListConverter<Device.IDevice>))]
+        public List<Device.IDevice> Devices;
         /// <summary>
         /// 方案下所有流程配置
         /// </summary>
@@ -297,7 +297,7 @@ namespace YTVisionPro
             JObject jObject = new JObject();
             foreach (var item in values)
             {
-                jObject.Add(((Hardware.IDevice)item).UserDefinedName, JToken.FromObject(item));
+                jObject.Add(((Device.IDevice)item).UserDefinedName, JToken.FromObject(item));
             }
             serializer.Serialize(writer, jObject);
         }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Node.PLC.PanasonicRead
 {

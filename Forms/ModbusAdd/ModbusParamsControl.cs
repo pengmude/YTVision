@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using YTVisionPro.Hardware.Modbus;
+﻿using System.Windows.Forms;
+using YTVisionPro.Device.Modbus;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -16,7 +8,10 @@ namespace YTVisionPro.Forms.ModbusAdd
         public ModbusParamsControl(ModbusParam param)
         {
             InitializeComponent();
-            uiLabelIP.Text = param.IP;
+            if (param.DevType == Device.DevType.ModbusSlave)
+                uiLabelIP.Text = "【接受任意IP】";
+            else 
+                uiLabelIP.Text = param.IP;
             uiLabelPort.Text = param.Port.ToString();
         }
     }

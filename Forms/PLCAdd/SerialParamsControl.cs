@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.IO.Ports;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
 {

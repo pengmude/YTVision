@@ -1,4 +1,4 @@
-﻿using YTVisionPro.Hardware.Camera;
+﻿using YTVisionPro.Device.Camera;
 using System;
 using System.Windows.Forms;
 using Logger;
@@ -104,6 +104,7 @@ namespace YTVisionPro.Forms.CameraAdd
             Solution.Instance.AllDevices.Remove(e.Camera);
             //最后移除掉单个相机控件
             flowLayoutPanel1.Controls.Remove(e);
+            LogHelper.AddLog(MsgLevel.Info, $"相机设备（{e.Camera.DevName}）已成功移除！", true);
         }
 
         /// <summary>

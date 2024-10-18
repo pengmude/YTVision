@@ -12,8 +12,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
 {
@@ -105,6 +105,7 @@ namespace YTVisionPro.Forms.PLCAdd
             e.Plc.Disconnect();
             Solution.Instance.AllDevices.Remove(e.Plc);
             flowLayoutPanel1.Controls.Remove(e);
+            LogHelper.AddLog(MsgLevel.Info, $"PLC设备（{e.Plc.DevName}）已成功移除！", true);
         }
 
         /// <summary>

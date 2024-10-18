@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Device.Camera;
 using YTVisionPro.Node.ImageSrc.Shot;
 
 namespace YTVisionPro.Forms.CameraAdd
@@ -19,7 +19,7 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <summary>
         /// 相机对象
         /// </summary>
-        public Hardware.Camera.ICamera Camera;
+        public Device.Camera.ICamera Camera;
         /// <summary>
         /// 是否被选中
         /// </summary>
@@ -49,7 +49,7 @@ namespace YTVisionPro.Forms.CameraAdd
         /// 反序列化用
         /// </summary>
         /// <param name="camera"></param>
-        public SingleCamera(Hardware.Camera.ICamera camera)
+        public SingleCamera(Device.Camera.ICamera camera)
         {
             InitializeComponent();
             Camera = camera;

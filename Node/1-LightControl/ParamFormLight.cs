@@ -2,7 +2,7 @@
 using Sunny.UI;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Light;
+using YTVisionPro.Device.Light;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Node.LightControl

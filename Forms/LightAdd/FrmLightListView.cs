@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Hardware.Light;
+using YTVisionPro.Device.Light;
 
 namespace YTVisionPro.Forms.LightAdd
 {
@@ -38,7 +38,7 @@ namespace YTVisionPro.Forms.LightAdd
             InitializeComponent();
             frmLightNew.LightAddEvent += FrmLightNew_LightAddEvent;
             SingleLight.SelectedChange += SingleLight_SelectedChange;
-            SingleLight.SingleLightRemoveEvent += SingleLight_SinglePLCRemoveEvent;
+            SingleLight.SingleLightRemoveEvent += SingleLight_RemoveEvent;
             ConfigHelper.DeserializationCompletionEvent += Deserialization;
             this.KeyPreview = true;
         }
@@ -100,7 +100,7 @@ namespace YTVisionPro.Forms.LightAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SingleLight_SinglePLCRemoveEvent(object sender, SingleLight e)
+        private void SingleLight_RemoveEvent(object sender, SingleLight e)
         {
 
             SingleLight.SingleLights.Remove(e);
@@ -111,6 +111,7 @@ namespace YTVisionPro.Forms.LightAdd
             Solution.Instance.AllDevices.Remove(e.Light);
             //最后移除掉光源控件和节点
             flowLayoutPanel1.Controls.Remove(e);
+            LogHelper.AddLog(MsgLevel.Info, $"光源设备（{e.Light.DevName}）已成功移除！", true);
         }
 
         /// <summary>

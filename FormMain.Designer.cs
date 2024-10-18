@@ -64,7 +64,8 @@
             this.tsbt_SolRunLoop = new System.Windows.Forms.ToolStripButton();
             this.tsbt_SolRunStop = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_ModbusManager = new System.Windows.Forms.ToolStripButton();
+            this.tsbt_TCPManager = new System.Windows.Forms.ToolStripButton();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -407,7 +408,8 @@
             this.tsbt_LightManager,
             this.tsbt_CameraManager,
             this.tsbt_PlcManager,
-            this.toolStripButton1,
+            this.tsbt_ModbusManager,
+            this.tsbt_TCPManager,
             this.tsbt_SolRunOnce,
             this.tsbt_SolRunLoop,
             this.tsbt_SolRunStop});
@@ -417,15 +419,26 @@
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // tsbt_ModbusManager
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::YTVisionPro.Properties.Resources.Modbus;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButton1.Text = "Modbus设备";
-            this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton_Click);
+            this.tsbt_ModbusManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_ModbusManager.Image = global::YTVisionPro.Properties.Resources.Modbus;
+            this.tsbt_ModbusManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_ModbusManager.Name = "tsbt_ModbusManager";
+            this.tsbt_ModbusManager.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_ModbusManager.Text = "Modbus设备";
+            this.tsbt_ModbusManager.Click += new System.EventHandler(this.ToolStripButton_Click);
+            // 
+            // tsbt_TCPManager
+            // 
+            this.tsbt_TCPManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbt_TCPManager.Image = global::YTVisionPro.Properties.Resources.tcp;
+            this.tsbt_TCPManager.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbt_TCPManager.Name = "tsbt_TCPManager";
+            this.tsbt_TCPManager.Size = new System.Drawing.Size(36, 36);
+            this.tsbt_TCPManager.Text = "TCP设备";
+            this.tsbt_TCPManager.ToolTipText = "TCP设备";
+            this.tsbt_TCPManager.Click += new System.EventHandler(this.ToolStripButton_Click);
             // 
             // BottomToolStripPanel
             // 
@@ -534,7 +547,8 @@
         private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
         private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton tsbt_ModbusManager;
+        private System.Windows.Forms.ToolStripButton tsbt_TCPManager;
     }
 }
 

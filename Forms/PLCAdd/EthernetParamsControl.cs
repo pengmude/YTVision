@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.PLC;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace YTVisionPro.Forms.PLCAdd

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Forms.PLCAdd
 {
@@ -182,7 +182,7 @@ namespace YTVisionPro.Forms.PLCAdd
             }
             catch(Exception e)
             {
-                LogHelper.AddLog(MsgLevel.Exception, $"{((Hardware.IDevice)Plc).UserDefinedName}" + e.Message, true);
+                LogHelper.AddLog(MsgLevel.Exception, $"{((Device.IDevice)Plc).UserDefinedName}" + e.Message, true);
             }
         }
 

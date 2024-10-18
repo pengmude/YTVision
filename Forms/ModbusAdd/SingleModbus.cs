@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Hardware;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.Modbus;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.Modbus;
+using YTVisionPro.Device.PLC;
+using Modbus.Device;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -22,7 +23,7 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// <summary>
         /// Modbus设备
         /// </summary>
-        public ModbusDevice ModbusDevice = null;
+        public IModbus ModbusDevice = null;
         /// <summary>
         /// 设备参数
         /// </summary>
@@ -52,7 +53,7 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// 反序列化用
         /// </summary>
         /// <param name="modbus"></param>
-        public SingleModbus(ModbusDevice dev)
+        public SingleModbus(IModbus dev)
         {
             InitializeComponent();
             if (dev.IsConnect)
@@ -83,7 +84,18 @@ namespace YTVisionPro.Forms.ModbusAdd
             try
             {
                 ModbusParamsControl = new ModbusParamsControl(param);
-                ModbusDevice = new ModbusDevice(param);
+                switch (param.DevType)
+                {
+                    case DevType.ModbusPoll:
+                        ModbusDevice = new ModbusPoll(param);
+                        break;
+                    case DevType.ModbusSlave:
+                        // TODO:实现Modbus从站
+                        throw new NotImplementedException("未实现ModbusSlave类型");
+                        break;
+                    default:
+                        break;
+                }
                 Solution.Instance.AllDevices.Add(ModbusDevice);
                 SingleModbuss.Add(this);
                 ModbusDevice.ConnectStatusEvent += Modbus_ConnectStatusEvent;
@@ -170,7 +182,7 @@ namespace YTVisionPro.Forms.ModbusAdd
                 {
                     if (ModbusDevice.IsConnect)
                     {
-                        ModbusDevice.DisConnect();
+                        ModbusDevice.Disconnect();
                         LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{ModbusDevice.DevName}】关闭", true);
                     }
                 }

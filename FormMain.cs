@@ -8,10 +8,10 @@ using YTVisionPro.Forms;
 using YTVisionPro.Forms.Helper;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Forms.ProcessNew;
-using YTVisionPro.Hardware;
-using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device;
+using YTVisionPro.Device.Camera;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.PLC;
 using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node.AI.HTAI;
 using System.Threading.Tasks;
@@ -40,6 +40,10 @@ namespace YTVisionPro
         /// Modbus添加窗口
         /// </summary>
         Forms.ModbusAdd.FrmModbusListView FrmModbusAdd = new Forms.ModbusAdd.FrmModbusListView();
+        /// <summary>
+        /// TCP添加窗口
+        /// </summary>
+        Forms.TCPAdd.FrmTCPListView FrmTcpAdd = new Forms.TCPAdd.FrmTCPListView();
         /// <summary>
         /// 图像显示栏
         /// </summary>
@@ -366,6 +370,9 @@ namespace YTVisionPro
                 case "Modbus设备":
                     Modbus设备ToolStripMenuItem_Click(null, null);
                     break;
+                case "TCP设备":
+                    TCP设备ToolStripMenuItem_Click(null, null);
+                    break;
                 case "循环运行":
                     循环运行ToolStripMenuItem_Click(null, null);
                     break;
@@ -456,6 +463,11 @@ namespace YTVisionPro
         private void Modbus设备ToolStripMenuItem_Click(object value1, object value2)
         {
             FrmModbusAdd.ShowDialog();
+        }
+        
+        private void TCP设备ToolStripMenuItem_Click(object value1, object value2)
+        {
+            FrmTcpAdd.ShowDialog();
         }
 
         private void 相机管理ToolStripMenuItem_Click(object value1, object value2)

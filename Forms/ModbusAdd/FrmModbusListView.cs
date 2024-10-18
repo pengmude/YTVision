@@ -3,7 +3,7 @@ using System;
 using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Hardware.Modbus;
+using YTVisionPro.Device.Modbus;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -26,7 +26,7 @@ namespace YTVisionPro.Forms.ModbusAdd
             InitializeComponent();
             FrmModbusNew.ModbusAddEvent += FrmAdd_ModbusAddEvent;
             SingleModbus.SelectedChange += SingleModbus_SelectedChange;
-            SingleModbus.SingleModbusRemoveEvent += SingleModbus_SinglePLCRemoveEvent;
+            SingleModbus.SingleModbusRemoveEvent += SingleModbus_RemoveEvent;
             FrmPLCListView.OnPLCDeserializationCompletionEvent += Deserialization;
             this.KeyPreview = true;
         }
@@ -47,7 +47,7 @@ namespace YTVisionPro.Forms.ModbusAdd
                 LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【Modbus设备列表】=================================================", true);
             foreach (var dev in ConfigHelper.SolConfig.Devices)
             {
-                if (dev is ModbusDevice modbus)
+                if (dev is IModbus modbus)
                 {
                     try
                     {
@@ -91,13 +91,14 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SingleModbus_SinglePLCRemoveEvent(object sender, SingleModbus e)
+        private void SingleModbus_RemoveEvent(object sender, SingleModbus e)
         {
             SingleModbus.SingleModbuss.Remove(e);
             panel1.Controls.Remove(e.ModbusParamsControl);
-            e.ModbusDevice.DisConnect();
+            e.ModbusDevice.Disconnect();
             Solution.Instance.AllDevices.Remove(e.ModbusDevice);
             flowLayoutPanel1.Controls.Remove(e);
+            LogHelper.AddLog(MsgLevel.Info, $"Modbus设备（{e.ModbusDevice.DevName}）已成功移除！", true);
         }
 
         /// <summary>

@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
-using YTVisionPro.Hardware;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Forms.LightAdd
 {

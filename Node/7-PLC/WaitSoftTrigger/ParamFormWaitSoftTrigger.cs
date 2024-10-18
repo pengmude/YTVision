@@ -2,7 +2,7 @@
 using Sunny.UI;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Node.PLC.WaitSoftTrigger
 {

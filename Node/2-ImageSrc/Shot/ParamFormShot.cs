@@ -3,7 +3,7 @@ using Sunny.UI;
 using System;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Device.Camera;
 using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ImageSrc.Shot

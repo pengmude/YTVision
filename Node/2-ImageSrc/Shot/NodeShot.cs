@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Device.Camera;
 using YTVisionPro.Node;
 
 namespace YTVisionPro.Node.ImageSrc.Shot

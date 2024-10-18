@@ -2,8 +2,8 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Camera;
+using YTVisionPro.Device.PLC;
 using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ImageSrc.Shot

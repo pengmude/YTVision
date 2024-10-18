@@ -5,9 +5,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Camera;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
 
 namespace YTVisionPro

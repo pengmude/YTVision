@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Hardware;
-using YTVisionPro.Hardware.Light;
+using YTVisionPro.Device;
+using YTVisionPro.Device.Light;
 using YTVisionPro.Node.LightControl;
 
 namespace YTVisionPro.Forms.LightAdd

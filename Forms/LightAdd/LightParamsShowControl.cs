@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Light;
+using YTVisionPro.Device.Light;
 
 namespace YTVisionPro.Forms.LightAdd
 {

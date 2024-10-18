@@ -169,5 +169,13 @@ namespace YTVisionPro.Node
         /// 面积测量
         /// </summary>
         AreaMeasurement,
+        /// <summary>
+        /// ModbusRead读取
+        /// </summary>
+        ModbusRead,
+        /// <summary>
+        /// 写入
+        /// </summary>
+        ModbusWrite,
     }
 }

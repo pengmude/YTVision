@@ -1,6 +1,6 @@
 ﻿using JsonSubTypes;
 using Newtonsoft.Json;
-using YTVisionPro.Hardware.Light;
+using YTVisionPro.Device.Light;
 
 namespace YTVisionPro.Node.LightControl
 {

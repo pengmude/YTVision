@@ -1,6 +1,6 @@
 ﻿using JsonSubTypes;
 using Newtonsoft.Json;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Node.PLC.WaitSoftTrigger
 {

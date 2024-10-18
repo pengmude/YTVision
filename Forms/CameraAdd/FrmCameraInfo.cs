@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Camera;
+using YTVisionPro.Device.Camera;
 
 namespace YTVisionPro.Forms.CameraAdd
 {

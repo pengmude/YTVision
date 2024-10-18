@@ -39,6 +39,8 @@
             this.uiipTextBoxIP = new Sunny.UI.UIIPTextBox();
             this.textBoxPort = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.groupBox2.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -48,7 +50,7 @@
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button1.Font = new System.Drawing.Font("黑体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(335, 223);
+            this.button1.Location = new System.Drawing.Point(335, 316);
             this.button1.Margin = new System.Windows.Forms.Padding(60, 4, 60, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(122, 44);
@@ -61,12 +63,12 @@
             // 
             this.textBoxDevName.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxDevName.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBoxDevName.Location = new System.Drawing.Point(270, 157);
+            this.textBoxDevName.Location = new System.Drawing.Point(270, 245);
             this.textBoxDevName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxDevName.Name = "textBoxDevName";
             this.textBoxDevName.Size = new System.Drawing.Size(252, 35);
             this.textBoxDevName.TabIndex = 0;
-            this.textBoxDevName.Text = "Modbus";
+            this.textBoxDevName.Text = "Modbus主站1";
             this.textBoxDevName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label5
@@ -74,7 +76,7 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.Location = new System.Drawing.Point(3, 23);
+            this.label5.Location = new System.Drawing.Point(3, 100);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(199, 24);
             this.label5.TabIndex = 2;
@@ -86,7 +88,7 @@
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(3, 93);
+            this.label4.Location = new System.Drawing.Point(3, 175);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(199, 24);
             this.label4.TabIndex = 1;
@@ -100,7 +102,7 @@
             this.groupBox2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(593, 314);
+            this.groupBox2.Size = new System.Drawing.Size(593, 410);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "设备信息";
@@ -110,23 +112,26 @@
             this.tableLayoutPanel2.ColumnCount = 2;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.tableLayoutPanel2.Controls.Add(this.label4, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label5, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.textBoxDevName, 1, 2);
-            this.tableLayoutPanel2.Controls.Add(this.button1, 1, 3);
-            this.tableLayoutPanel2.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.uiipTextBoxIP, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.textBoxPort, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.label4, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label5, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.textBoxDevName, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.button1, 1, 4);
+            this.tableLayoutPanel2.Controls.Add(this.label3, 0, 3);
+            this.tableLayoutPanel2.Controls.Add(this.uiipTextBoxIP, 1, 1);
+            this.tableLayoutPanel2.Controls.Add(this.textBoxPort, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.comboBoxType, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 31);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 4;
+            this.tableLayoutPanel2.RowCount = 5;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(587, 280);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(587, 376);
             this.tableLayoutPanel2.TabIndex = 12;
             // 
             // label3
@@ -134,7 +139,7 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(3, 163);
+            this.label3.Location = new System.Drawing.Point(3, 250);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(199, 24);
             this.label3.TabIndex = 11;
@@ -144,9 +149,10 @@
             // uiipTextBoxIP
             // 
             this.uiipTextBoxIP.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.uiipTextBoxIP.Enabled = false;
             this.uiipTextBoxIP.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(243)))), ((int)(((byte)(255)))));
             this.uiipTextBoxIP.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiipTextBoxIP.Location = new System.Drawing.Point(272, 18);
+            this.uiipTextBoxIP.Location = new System.Drawing.Point(272, 95);
             this.uiipTextBoxIP.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.uiipTextBoxIP.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiipTextBoxIP.Name = "uiipTextBoxIP";
@@ -163,7 +169,7 @@
             // 
             this.textBoxPort.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxPort.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBoxPort.Location = new System.Drawing.Point(270, 87);
+            this.textBoxPort.Location = new System.Drawing.Point(270, 170);
             this.textBoxPort.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxPort.Name = "textBoxPort";
             this.textBoxPort.Size = new System.Drawing.Size(252, 35);
@@ -182,14 +188,40 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(599, 320);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(599, 416);
             this.tableLayoutPanel1.TabIndex = 14;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(3, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(199, 24);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "主/从站";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // comboBoxType
+            // 
+            this.comboBoxType.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxType.FormattingEnabled = true;
+            this.comboBoxType.Items.AddRange(new object[] {
+            "作为主站",
+            "作为从站"});
+            this.comboBoxType.Location = new System.Drawing.Point(273, 24);
+            this.comboBoxType.Name = "comboBoxType";
+            this.comboBoxType.Size = new System.Drawing.Size(246, 32);
+            this.comboBoxType.TabIndex = 13;
+            this.comboBoxType.SelectedIndexChanged += new System.EventHandler(this.comboBoxType_SelectedIndexChanged);
             // 
             // FrmModbusNew
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(599, 320);
+            this.ClientSize = new System.Drawing.Size(599, 416);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -217,5 +249,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private Sunny.UI.UIIPTextBox uiipTextBoxIP;
         private System.Windows.Forms.TextBox textBoxPort;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBoxType;
     }
 }

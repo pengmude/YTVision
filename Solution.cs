@@ -12,13 +12,14 @@ using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Forms.ModbusAdd;
 using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Hardware;
-using YTVisionPro.Hardware.Camera;
-using YTVisionPro.Hardware.Light;
-using YTVisionPro.Hardware.Modbus;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device;
+using YTVisionPro.Device.Camera;
+using YTVisionPro.Device.Light;
+using YTVisionPro.Device.Modbus;
+using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
+using YTVisionPro.Device.TCP;
 
 namespace YTVisionPro
 {
@@ -94,7 +95,11 @@ namespace YTVisionPro
         /// <summary>
         /// Modbus设备
         /// </summary>
-        public List<ModbusDevice> ModbusDevices => AllDevices.OfType<ModbusDevice>().ToList();
+        public List<IModbus> ModbusDevices => AllDevices.OfType<IModbus>().ToList();
+        /// <summary>
+        /// TCP设备
+        /// </summary>
+        public List<ITcpDevice> TcpDevices => AllDevices.OfType<ITcpDevice>().ToList();
 
         /// <summary>
         /// 方案是否正在运行

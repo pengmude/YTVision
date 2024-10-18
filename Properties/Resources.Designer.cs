@@ -93,6 +93,16 @@ namespace YTVisionPro.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap tcp {
+            get {
+                object obj = ResourceManager.GetObject("tcp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 保存项目 {
             get {
                 object obj = ResourceManager.GetObject("保存项目", resourceCulture);
