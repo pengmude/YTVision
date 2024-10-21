@@ -308,15 +308,27 @@ namespace YTVisionPro
         /// </summary>
         public void SolReset()
         {
-            // 释放旧方案的硬件资源（光源、相机、PLC）
-            foreach (var dev in Solution.Instance.AllDevices)
+            try
             {
-                if (dev is ILight light)
-                    light.Disconnect();
-                if (dev is ICamera camera)
-                    camera.Dispose();
-                if (dev is IPlc plc)
-                    plc.Disconnect();
+                List<ModbusPoll> devs = new List<ModbusPoll>();
+                // 释放旧方案的硬件资源（光源、相机、PLC）
+                foreach (var dev in Solution.Instance.AllDevices)
+                {
+                    if (dev is ILight light)
+                        light.Disconnect();
+                    if (dev is ICamera camera)
+                        camera.Dispose();
+                    if (dev is IPlc plc)
+                        plc.Disconnect();
+                    if (dev is IModbus modbus)
+                        modbus.Disconnect();
+                    if (dev is ITcpDevice tcpDev)
+                        tcpDev.Disconnect();
+                }
+            }
+            catch (Exception)
+            {
+
             }
 
             // 清空设备

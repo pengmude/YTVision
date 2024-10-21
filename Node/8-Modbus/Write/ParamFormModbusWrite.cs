@@ -2,8 +2,7 @@
 using Sunny.UI;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Modbus;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Modbus;
 using YTVisionPro.Node.Modbus.Read;
 
 namespace YTVisionPro.Node.Modbus.Write
@@ -32,6 +31,9 @@ namespace YTVisionPro.Node.Modbus.Write
             // 初始化Modbus列表,只显示添加的Modbus用户自定义名称
             foreach (var modbus in Solution.Instance.ModbusDevices)
             {
+                // 从站作为服务器不能发起请求
+                if (modbus.ModbusParam.DevType == Device.DevType.ModbusSlave)
+                    continue;
                 comboBoxModbusDev.Items.Add(modbus.UserDefinedName);
             }
             int index1 = comboBoxModbusDev.Items.IndexOf(text1);
@@ -55,7 +57,7 @@ namespace YTVisionPro.Node.Modbus.Write
             try
             {
                 adress = ushort.Parse(this.textBoxAddress.Text);
-                length = ushort.Parse(this.textBoxLength.Text);
+                length = ushort.Parse(this.textBoxData.Text);
                 if(length == 0)
                     throw new Exception("无效的起始地址或读取个数");
             }
@@ -68,7 +70,7 @@ namespace YTVisionPro.Node.Modbus.Write
 
 
             //查找当前选择的Modbus
-            ModbusDevice modbus = null;
+            IModbus modbus = null;
             foreach (var dev in Solution.Instance.ModbusDevices)
             {
                 if(dev.UserDefinedName == comboBoxModbusDev.Text)
@@ -149,7 +151,7 @@ namespace YTVisionPro.Node.Modbus.Write
                     default:
                         break;
                 }
-                textBoxLength.Text = param.Count.ToString();
+                textBoxData.Text = param.Count.ToString();
             }
         }
     }

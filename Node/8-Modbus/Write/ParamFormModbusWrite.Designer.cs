@@ -37,7 +37,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxAddress = new System.Windows.Forms.TextBox();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.textBoxLength = new System.Windows.Forms.TextBox();
+            this.textBoxData = new System.Windows.Forms.TextBox();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +54,7 @@
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.textBoxAddress, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.buttonSave, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.textBoxLength, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxData, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.comboBoxType, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -114,11 +114,11 @@
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(86, 253);
+            this.label4.Location = new System.Drawing.Point(18, 253);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(98, 18);
+            this.label4.Size = new System.Drawing.Size(233, 18);
             this.label4.TabIndex = 0;
-            this.label4.Text = "写入个数：";
+            this.label4.Text = "写入数据(使用“,”分隔)：";
             // 
             // textBoxAddress
             // 
@@ -141,15 +141,16 @@
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.button1_Click);
             // 
-            // textBoxLength
+            // textBoxData
             // 
-            this.textBoxLength.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxLength.Enabled = false;
-            this.textBoxLength.Location = new System.Drawing.Point(310, 248);
-            this.textBoxLength.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxLength.Name = "textBoxLength";
-            this.textBoxLength.Size = new System.Drawing.Size(190, 28);
-            this.textBoxLength.TabIndex = 3;
+            this.textBoxData.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.textBoxData.Enabled = false;
+            this.textBoxData.Location = new System.Drawing.Point(310, 248);
+            this.textBoxData.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxData.Name = "textBoxData";
+            this.textBoxData.Size = new System.Drawing.Size(190, 28);
+            this.textBoxData.TabIndex = 3;
+            this.textBoxData.Text = "1,2,3";
             // 
             // comboBoxType
             // 
@@ -195,7 +196,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBoxAddress;
         private System.Windows.Forms.Button buttonSave;
-        private System.Windows.Forms.TextBox textBoxLength;
+        private System.Windows.Forms.TextBox textBoxData;
         private System.Windows.Forms.ComboBox comboBoxType;
     }
 }

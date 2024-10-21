@@ -1,14 +1,11 @@
-﻿using HslCommunication;
-using Logger;
-using Microsoft.Win32;
-using Sunny.UI;
+﻿using Logger;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Data;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.PLC;
+using System.Xml.Linq;
+using YTVisionPro.Device.Modbus;
 using YTVisionPro.Node.PLC.PanasonicRead;
 
 namespace YTVisionPro.Node.Modbus.Read
@@ -17,8 +14,20 @@ namespace YTVisionPro.Node.Modbus.Read
     {
         public NodeModbusRead(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormModbusRead();
+            var form = new ParamFormModbusRead();
+            form.RunHandler += RunHandler;
+            ParamForm = form;
             Result = new NodeResultModbusRead();
+        }
+        /// <summary>
+        /// 节点界面点击执行Modbus读取
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private async Task RunHandler(object sender, EventArgs e)
+        {
+            await Run(CancellationToken.None);
         }
 
         /// <summary>
@@ -51,36 +60,66 @@ namespace YTVisionPro.Node.Modbus.Read
                 switch (param.DataType)
                 {
                     case RegistersType.Coils:
-                        data = await param.Device.ReadCoilsAsync(param.StartAddress, param.Count);
+                        data = await ((ModbusPoll)param.Device).ReadCoilsAsync(param.StartAddress, param.Count);
                         break;
                     case RegistersType.DiscreteInput:
-                        data = await param.Device.ReadInputsAsync(param.StartAddress, param.Count);
+                        data = await ((ModbusPoll)param.Device).ReadInputsAsync(param.StartAddress, param.Count);
                         break;
                     case RegistersType.InputRegisters:
-                        data = await param.Device.ReadInputRegistersAsync(param.StartAddress, param.Count);
+                        data = await ((ModbusPoll)param.Device).ReadInputRegistersAsync(param.StartAddress, param.Count);
                         break;
                     case RegistersType.HoldingRegisters:
-                        data = await param.Device.ReadHoldingRegistersAsync(param.StartAddress, param.Count);
+                        data = await ((ModbusPoll)param.Device).ReadHoldingRegistersAsync(param.StartAddress, param.Count);
                         break;
                     default:
                         break;
                 }
-                if(data is ushort[] registers)
+
+                #region 数据显示
+                string resultStr = string.Empty;
+                if(ParamForm is ParamFormModbusRead form)
                 {
-                    string ss = "读取到的数据: ";
-                    for (int i = 0; i < registers.Length; i++)
+                    form.SetReadResult("[开始]");
+                    switch (param.DataType)
                     {
-                        ss += $"寄存器 {param.StartAddress + i}: 0x{registers[i]:X4} ";
+                        case RegistersType.Coils:
+                        case RegistersType.DiscreteInput:
+                            if (data is bool[] dataBoolArr)
+                            {
+                                for (int i = 0; i < dataBoolArr.Length; i++)
+                                {
+                                    resultStr += $"[{param.StartAddress + i}: {dataBoolArr[i]}] ";
+                                    form.SetReadResult($"{param.StartAddress + i}: {dataBoolArr[i]} ");
+                                }
+                            }
+                            break;
+                        case RegistersType.InputRegisters:
+                        case RegistersType.HoldingRegisters:
+                            if (data is ushort[] dataUShortArr)
+                            {
+                                for (int i = 0; i < dataUShortArr.Length; i++)
+                                {
+                                    resultStr += $"[{param.StartAddress + i}: 0x{dataUShortArr[i]:X4}] ";
+                                    form.SetReadResult($"{param.StartAddress + i}: 0x{dataUShortArr[i]:X4} ");
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                    MessageBox.Show($"数据{ss}");
+                    form.SetReadResult("[结束]");
+                    form.SetReadResult("-------------------------------");
                 }
-                if(Result is NodeResultPlcRead result)
+
+                #endregion
+
+                if (Result is NodeResultPlcRead result)
                 {
                     result.ReadData = data;
                     Result = result;
                 }
                 long time = SetRunResult(startTime, NodeStatus.Successful);
-                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms, 读取结果：{resultStr})", true);
 
             }
             catch (OperationCanceledException)

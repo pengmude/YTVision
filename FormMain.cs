@@ -19,6 +19,8 @@ using Sunny.UI;
 using YTVisionPro.Properties;
 using HslCommunication;
 using YTVisionPro.Forms.SystemSetting;
+using YTVisionPro.Device.TCP;
+using YTVisionPro.Device.Modbus;
 
 namespace YTVisionPro
 {
@@ -247,6 +249,10 @@ namespace YTVisionPro
                     camera.Dispose();
                 if (dev is IPlc plc)
                     plc.Disconnect();
+                if (dev is IModbus modbus)
+                    modbus.Disconnect();
+                if (dev is ITcpDevice tcpDev)
+                    tcpDev.Disconnect();
             }
         }
 
@@ -442,6 +448,8 @@ namespace YTVisionPro
             tsbt_LightManager.Enabled = !isRunning;
             tsbt_CameraManager.Enabled = !isRunning;
             tsbt_PlcManager.Enabled = !isRunning;
+            tsbt_ModbusManager.Enabled = !isRunning;
+            tsbt_TCPManager.Enabled = !isRunning;
 
             // 文件
             文件ToolStripMenuItem.Enabled = !isRunning;

@@ -14,7 +14,7 @@ namespace YTVisionPro.Device.Modbus
         ModbusParam ModbusParam { get; set; }
 
         bool IsConnect { get; set; }
-
+        
         DevType DevType { get; set; }
         DeviceBrand Brand { get; set; }
         string ClassName { get; set; }

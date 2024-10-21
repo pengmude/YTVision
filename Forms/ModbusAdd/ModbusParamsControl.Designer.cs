@@ -51,39 +51,41 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(599, 216);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(467, 181);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // uiLabel1
             // 
             this.uiLabel1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.uiLabel1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel1.Location = new System.Drawing.Point(36, 41);
+            this.uiLabel1.Location = new System.Drawing.Point(13, 32);
             this.uiLabel1.Name = "uiLabel1";
             this.uiLabel1.Size = new System.Drawing.Size(137, 26);
             this.uiLabel1.TabIndex = 0;
             this.uiLabel1.Text = "IP地址";
+            this.uiLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // uiLabel2
             // 
             this.uiLabel2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.uiLabel2.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabel2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabel2.Location = new System.Drawing.Point(54, 150);
+            this.uiLabel2.Location = new System.Drawing.Point(22, 124);
             this.uiLabel2.Name = "uiLabel2";
-            this.uiLabel2.Size = new System.Drawing.Size(100, 23);
+            this.uiLabel2.Size = new System.Drawing.Size(119, 23);
             this.uiLabel2.TabIndex = 0;
             this.uiLabel2.Text = "端口号";
+            this.uiLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // uiLabelIP
             // 
             this.uiLabelIP.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.uiLabelIP.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabelIP.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabelIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabelIP.Location = new System.Drawing.Point(335, 41);
+            this.uiLabelIP.Location = new System.Drawing.Point(195, 32);
             this.uiLabelIP.Name = "uiLabelIP";
-            this.uiLabelIP.Size = new System.Drawing.Size(137, 26);
+            this.uiLabelIP.Size = new System.Drawing.Size(239, 26);
             this.uiLabelIP.TabIndex = 0;
             this.uiLabelIP.Text = "127.0.0.1";
             this.uiLabelIP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -91,11 +93,11 @@
             // uiLabelPort
             // 
             this.uiLabelPort.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.uiLabelPort.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.uiLabelPort.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabelPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabelPort.Location = new System.Drawing.Point(335, 149);
+            this.uiLabelPort.Location = new System.Drawing.Point(211, 122);
             this.uiLabelPort.Name = "uiLabelPort";
-            this.uiLabelPort.Size = new System.Drawing.Size(137, 26);
+            this.uiLabelPort.Size = new System.Drawing.Size(207, 26);
             this.uiLabelPort.TabIndex = 0;
             this.uiLabelPort.Text = "502";
             this.uiLabelPort.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -106,7 +108,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ModbusParamsControl";
-            this.Size = new System.Drawing.Size(599, 216);
+            this.Size = new System.Drawing.Size(467, 181);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

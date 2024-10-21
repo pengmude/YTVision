@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Hardware.Modbus;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Modbus;
 using YTVisionPro.Node.Modbus.Read;
 
 namespace YTVisionPro.Node.Modbus.Write
@@ -9,7 +8,7 @@ namespace YTVisionPro.Node.Modbus.Write
     internal class NodeParamModbusWrite : INodeParam
     {
         [JsonConverter(typeof(PolyConverter))]
-        public ModbusDevice Device { get; set; }
+        public IModbus Device { get; set; }
         public ushort Count { get; set; } = 0;
         public ushort StartAddress { get; set; }
 

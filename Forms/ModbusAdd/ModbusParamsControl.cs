@@ -9,7 +9,10 @@ namespace YTVisionPro.Forms.ModbusAdd
         {
             InitializeComponent();
             if (param.DevType == Device.DevType.ModbusSlave)
-                uiLabelIP.Text = "【接受任意IP】";
+            {
+                uiLabel1.Text = "监听的IP";
+                uiLabelIP.Text = "[监听所有可用的IP]";
+            }
             else 
                 uiLabelIP.Text = param.IP;
             uiLabelPort.Text = param.Port.ToString();

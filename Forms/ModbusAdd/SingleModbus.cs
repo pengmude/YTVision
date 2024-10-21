@@ -1,17 +1,10 @@
-﻿using Basler.Pylon;
-using Logger;
-using Microsoft.VisualBasic.Devices;
-using Sunny.UI;
+﻿using Logger;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Device;
-using YTVisionPro.Device.Light;
 using YTVisionPro.Device.Modbus;
-using YTVisionPro.Device.PLC;
-using Modbus.Device;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -56,6 +49,8 @@ namespace YTVisionPro.Forms.ModbusAdd
         public SingleModbus(IModbus dev)
         {
             InitializeComponent();
+            ModbusDevice = dev;
+            Parms = dev.ModbusParam;
             if (dev.IsConnect)
             {
                 try
@@ -70,8 +65,6 @@ namespace YTVisionPro.Forms.ModbusAdd
             }
             this.label1.Text = dev.UserDefinedName;
             ModbusParamsControl = new ModbusParamsControl(dev.ModbusParam);
-            ModbusDevice = dev;
-            Parms = dev.ModbusParam;
             Solution.Instance.AllDevices.Add(dev);
             SingleModbuss.Add(this);
         }
@@ -90,8 +83,7 @@ namespace YTVisionPro.Forms.ModbusAdd
                         ModbusDevice = new ModbusPoll(param);
                         break;
                     case DevType.ModbusSlave:
-                        // TODO:实现Modbus从站
-                        throw new NotImplementedException("未实现ModbusSlave类型");
+                        ModbusDevice = new ModbusSlave(param);
                         break;
                     default:
                         break;
@@ -111,7 +103,9 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// </summary>
         private void Modbus_ConnectStatusEvent(object sender, bool e)
         {
+            uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
             uiSwitch1.Active = e;
+            uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
         }
 
         /// <summary>

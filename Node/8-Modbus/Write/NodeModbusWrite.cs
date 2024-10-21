@@ -6,7 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Hardware.PLC;
 using YTVisionPro.Node.Modbus.Read;
 using YTVisionPro.Node.PLC.PanasonicRead;
 
@@ -46,6 +45,7 @@ namespace YTVisionPro.Node.Modbus.Write
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
 
+                throw new NotImplementedException("未实现NodeModbusWrite");
                 object data = null;
                 switch (param.DataType)
                 {

@@ -138,6 +138,7 @@
   <ItemGroup>
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Device\Modbus\IModbus.cs" />
+    <Compile Include="Device\Modbus\ModbusSlave.cs" />
     <Compile Include="Device\TCP\ITcp.cs" />
     <Compile Include="Device\TCP\TCPClient.cs" />
     <Compile Include="Device\TCP\TcpParam.cs" />
@@ -377,6 +378,28 @@
     </Compile>
     <Compile Include="Node\2-ImageSrc\Shot\ParamFormShot.Designer.cs">
       <DependentUpon>ParamFormShot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\8-Modbus\Read\NodeModbusRead.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\8-Modbus\Read\NodeParamModbusRead.cs" />
+    <Compile Include="Node\8-Modbus\Read\NodeResultModbusRead.cs" />
+    <Compile Include="Node\8-Modbus\Read\ParamFormModbusRead.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\8-Modbus\Read\ParamFormModbusRead.Designer.cs">
+      <DependentUpon>ParamFormModbusRead.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\8-Modbus\Write\NodeModbusWrite.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\8-Modbus\Write\NodeParamModbusWrite.cs" />
+    <Compile Include="Node\8-Modbus\Write\NodeResultModbusWrite.cs" />
+    <Compile Include="Node\8-Modbus\Write\ParamFormModbusWrite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\8-Modbus\Write\ParamFormModbusWrite.Designer.cs">
+      <DependentUpon>ParamFormModbusWrite.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\9-ResultProcessing\ImageShow\NodeImageShow.cs">
       <SubType>UserControl</SubType>
@@ -686,6 +709,12 @@
     <EmbeddedResource Include="Node\2-ImageSrc\Shot\ParamFormShot.resx">
       <DependentUpon>ParamFormShot.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\8-Modbus\Read\ParamFormModbusRead.resx">
+      <DependentUpon>ParamFormModbusRead.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\8-Modbus\Write\ParamFormModbusWrite.resx">
+      <DependentUpon>ParamFormModbusWrite.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.resx">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </EmbeddedResource>
@@ -791,6 +820,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Node\5-Measurement\" />
+    <Folder Include="Node\NewFolder1\" />
+    <Folder Include="Node\NewFolder2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dll\Basler.Pylon.dll" />

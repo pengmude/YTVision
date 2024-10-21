@@ -1,14 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Hardware.Modbus;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Modbus;
 
 namespace YTVisionPro.Node.Modbus.Read
 {
     internal class NodeParamModbusRead : INodeParam
     {
         [JsonConverter(typeof(PolyConverter))]
-        public ModbusDevice Device { get; set; }
+        public IModbus Device { get; set; }
         public ushort Count { get; set; } = 0;
         public ushort StartAddress { get; set; }
 

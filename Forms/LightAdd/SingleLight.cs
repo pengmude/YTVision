@@ -78,7 +78,9 @@ namespace YTVisionPro.Forms.LightAdd
 
         private void Light_ConnectStatusEvent(object sender, bool e)
         {
+            uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
             uiSwitch1.Active = e;
+            uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
         }
 
         public SingleLight(LightParam parms)

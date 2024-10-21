@@ -20,6 +20,8 @@ using static YTVisionPro.Forms.ProcessNew.FormNewProcessWizard;
 using YTVisionPro.Node._4_Detection.FindLine;
 using YTVisionPro.Node.ImagePreprocessing.ImageCrop;
 using YTVisionPro.Node.Tool.ImageShow;
+using YTVisionPro.Node.Modbus.Read;
+using YTVisionPro.Node.Modbus.Write;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -203,6 +205,12 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.ImageShow:
                     node = new NodeImageShow(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ModbusRead:
+                    node = new NodeModbusRead(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ModbusWrite:
+                    node = new NodeModbusWrite(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

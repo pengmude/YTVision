@@ -1,8 +1,16 @@
-﻿namespace YTVisionPro.Device.Modbus
+﻿using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+
+namespace YTVisionPro.Device.Modbus
 {
     internal class ModbusParam
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType;
+        /// <summary>
+        /// 站号
+        /// </summary>
+        public byte ID;
         public string IP;
         public int Port;
         public string DevName;

@@ -1,21 +1,34 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Hardware.Modbus;
-using YTVisionPro.Hardware.PLC;
+using YTVisionPro.Device.Modbus;
 
 namespace YTVisionPro.Node.Modbus.Read
 {
     internal partial class ParamFormModbusRead : Form, INodeParamForm
     {
         public INodeParam Params { get; set; }
-        
+
+        // 在 ParamFormModbusRead 类中定义一个新的委托类型
+        public delegate Task AsyncEventHandler<T>(object sender, T e);
+
+        // 定义事件
+        public event AsyncEventHandler<EventArgs> RunHandler;
+
         public ParamFormModbusRead()
         {
             InitializeComponent();
             InitModbusComboBox();
             comboBoxModbusDev.SelectedIndex = 0;
+        }
+
+        public void SetReadResult(string result)
+        {
+            listBox1.Items.Add(result);
+            // 自动滚动到最后一条
+            listBox1.TopIndex = listBox1.Items.Count - 1;
         }
 
         public void SetNodeBelong(NodeBase node) { }
@@ -32,6 +45,9 @@ namespace YTVisionPro.Node.Modbus.Read
             // 初始化Modbus列表,只显示添加的Modbus用户自定义名称
             foreach (var modbus in Solution.Instance.ModbusDevices)
             {
+                // 从站作为服务器不能发起请求
+                if(modbus.ModbusParam.DevType == Device.DevType.ModbusSlave)
+                    continue;
                 comboBoxModbusDev.Items.Add(modbus.UserDefinedName);
             }
             int index1 = comboBoxModbusDev.Items.IndexOf(text1);
@@ -45,6 +61,12 @@ namespace YTVisionPro.Node.Modbus.Read
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
+            SaveParams();
+            Hide();
+        }
+
+        private void SaveParams()
+        {
             if (comboBoxModbusDev.Text.IsNullOrEmpty() || comboBoxModbusDev.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "Modbus不能为空！", true);
@@ -56,7 +78,7 @@ namespace YTVisionPro.Node.Modbus.Read
             {
                 adress = ushort.Parse(this.textBoxAddress.Text);
                 length = ushort.Parse(this.textBoxLength.Text);
-                if(length == 0)
+                if (length == 0)
                     throw new Exception("无效的起始地址或读取个数");
             }
             catch (Exception)
@@ -68,10 +90,10 @@ namespace YTVisionPro.Node.Modbus.Read
 
 
             //查找当前选择的Modbus
-            ModbusDevice modbus = null;
+            IModbus modbus = null;
             foreach (var dev in Solution.Instance.ModbusDevices)
             {
-                if(dev.UserDefinedName == comboBoxModbusDev.Text)
+                if (dev.UserDefinedName == comboBoxModbusDev.Text)
                 {
                     modbus = dev;
                     break;
@@ -100,7 +122,6 @@ namespace YTVisionPro.Node.Modbus.Read
             }
             nodeParamRead.Count = length;
             Params = nodeParamRead;
-            Hide();
         }
 
         /// <summary>
@@ -151,6 +172,17 @@ namespace YTVisionPro.Node.Modbus.Read
                 }
                 textBoxLength.Text = param.Count.ToString();
             }
+        }
+
+        private void buttonRun_Click(object sender, EventArgs e)
+        {
+            SaveParams();
+            RunHandler?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void 清空ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listBox1.Items.Clear();
         }
     }
 }

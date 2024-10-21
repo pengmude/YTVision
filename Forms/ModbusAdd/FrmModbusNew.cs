@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using YTVisionPro.Device.Modbus;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using YTVisionPro.Device.PLC;
+using YTVisionPro.Device;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -42,7 +43,7 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(uiipTextBoxIP.Text) || string.IsNullOrEmpty(textBoxPort.Text) || string.IsNullOrEmpty(this.textBoxDevName.Text))
+            if (string.IsNullOrEmpty(uiipTextBoxIP.Text) || string.IsNullOrEmpty(textBoxSlaveID.Text) || string.IsNullOrEmpty(textBoxPort.Text) || string.IsNullOrEmpty(this.textBoxDevName.Text))
             {
                 MessageBox.Show("参数不能为空！");
                 return;
@@ -51,8 +52,8 @@ namespace YTVisionPro.Forms.ModbusAdd
             // 已添加设备冲突判断
             if (Solution.Instance.ModbusDevices.Exists(modbus => modbus.UserDefinedName == textBoxDevName.Text))
             {
-                MessageBox.Show("Modbus的用户自定义名不能相同！");
-                LogHelper.AddLog(MsgLevel.Warn, "Modbus的用户自定义名不能相同！", true);
+                MessageBox.Show("Modbus设备名称重复！");
+                LogHelper.AddLog(MsgLevel.Warn, "Modbus设备名称重复！", true);
                 return;
             }
 
@@ -61,6 +62,7 @@ namespace YTVisionPro.Forms.ModbusAdd
             try
             {
                 modbusParms.DevType = comboBoxType.SelectedIndex == 0 ? Device.DevType.ModbusPoll : Device.DevType.ModbusSlave;
+                modbusParms.ID = byte.Parse(textBoxSlaveID.Text);
                 modbusParms.IP = uiipTextBoxIP.Text;
                 modbusParms.Port = int.Parse(textBoxPort.Text);
                 modbusParms.DevName = textBoxDevName.Text;

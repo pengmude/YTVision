@@ -94,14 +94,13 @@ namespace YTVisionPro.Device.Modbus
         /// <exception cref="Exception"></exception>
         public void Disconnect()
         {
-            if(!IsConnect) { return; }
             if (_tcpClient != null && _tcpClient.Connected)
             {
                 _tcpClient.Close();
             }
             _tcpClient = null;
             _master = null;
-            ConnectStatusEvent?.Invoke(this, false);
+            IsConnect = false;
         }
 
         #region 读取操作
@@ -109,90 +108,90 @@ namespace YTVisionPro.Device.Modbus
         /// <summary>
         /// 同步读取多个线圈的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public bool[] ReadCoils(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public bool[] ReadCoils(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadCoils(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadCoils(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 异步读取多个线圈的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public Task<bool[]> ReadCoilsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public Task<bool[]> ReadCoilsAsync(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadCoilsAsync(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadCoilsAsync(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 同步读取多个离散量的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public bool[] ReadInputs(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public bool[] ReadInputs(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadInputs(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadInputs(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 异步读取多个离散量的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public Task<bool[]> ReadInputsAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public Task<bool[]> ReadInputsAsync(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadInputsAsync(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadInputsAsync(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 同步读取多个输入寄存器的值（单位字）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public ushort[] ReadInputRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public ushort[] ReadInputRegisters(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadInputRegisters(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadInputRegisters(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 异步读取多个输入寄存器的值（单位字）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public Task<ushort[]> ReadInputRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public Task<ushort[]> ReadInputRegistersAsync(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadInputRegistersAsync(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadInputRegistersAsync(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 同步读取多个保持寄存器的值（单位字）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public ushort[] ReadHoldingRegisters(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public ushort[] ReadHoldingRegisters(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadHoldingRegisters(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadHoldingRegisters(ModbusParam.ID, startAddress, numberOfPoints);
         }
         /// <summary>
         /// 异步读取多个保持寄存器的值（单位字）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="numberOfPoints"></param>
         /// <returns></returns>
-        public Task<ushort[]> ReadHoldingRegistersAsync(byte slaveAddress, ushort startAddress, ushort numberOfPoints)
+        public Task<ushort[]> ReadHoldingRegistersAsync(ushort startAddress, ushort numberOfPoints)
         {
-            return ReadHoldingRegistersAsync(slaveAddress, startAddress, numberOfPoints);
+            return _master.ReadHoldingRegistersAsync(ModbusParam.ID, startAddress, numberOfPoints);
         }
 
         #endregion
@@ -202,99 +201,99 @@ namespace YTVisionPro.Device.Modbus
         /// <summary>
         /// 同步写入单个线圈的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="coilAddress"></param>
         /// <param name="value"></param>
-        public void WriteSingleCoil(byte slaveAddress, ushort coilAddress, bool value)
+        public void WriteSingleCoil(ushort coilAddress, bool value)
         {
-            WriteSingleCoil(slaveAddress, coilAddress, value);
+            _master.WriteSingleCoil(ModbusParam.ID, coilAddress, value);
         }
         /// <summary>
         /// 异步写入单个线圈的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="coilAddress"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Task WriteSingleCoilAsync(byte slaveAddress, ushort coilAddress, bool value) => WriteSingleCoilAsync(slaveAddress, coilAddress, value);
+        public Task WriteSingleCoilAsync(ushort coilAddress, bool value) => _master.WriteSingleCoilAsync(ModbusParam.ID, coilAddress, value);
         /// <summary>
         /// 同步写入单个保存寄存器的值（单位字节）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="registerAddress"></param>
         /// <param name="value"></param>
-        public void WriteSingleRegister(byte slaveAddress, ushort registerAddress, ushort value)
+        public void WriteSingleRegister(ushort registerAddress, ushort value)
         {
-            WriteSingleRegister(slaveAddress, registerAddress, value);
+            _master.WriteSingleRegister(ModbusParam.ID, registerAddress, value);
         }
         /// <summary>
         /// 异步写入单个保持寄存器的值（单位字节）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="registerAddress"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Task WriteSingleRegisterAsync(byte slaveAddress, ushort registerAddress, ushort value) => WriteSingleRegisterAsync(slaveAddress, registerAddress, value);
+        public Task WriteSingleRegisterAsync(ushort registerAddress, ushort value) => _master.WriteSingleRegisterAsync(ModbusParam.ID, registerAddress, value);
         /// <summary>
         /// 同步写入多个连续保持寄存器的值（单位字节）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="data"></param>
-        public void WriteMultipleRegisters(byte slaveAddress, ushort startAddress, ushort[] data)
+        public void WriteMultipleRegisters(ushort startAddress, ushort[] data)
         {
-            WriteMultipleRegisters(slaveAddress, startAddress, data);
+            _master.WriteMultipleRegisters(ModbusParam.ID, startAddress, data);
         }
         /// <summary>
         /// 异步写入多个连续保持寄存器的值（单位字节）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task WriteMultipleRegistersAsync(byte slaveAddress, ushort startAddress, ushort[] data) => WriteMultipleRegistersAsync(slaveAddress, startAddress, data);
+        public Task WriteMultipleRegistersAsync(ushort startAddress, ushort[] data) => _master.WriteMultipleRegistersAsync(ModbusParam.ID, startAddress, data);
         /// <summary>
         /// 同步写入多个连续线圈的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="data"></param>
-        public void WriteMultipleCoils(byte slaveAddress, ushort startAddress, bool[] data)
+        public void WriteMultipleCoils(ushort startAddress, bool[] data)
         {
-            WriteMultipleCoils(slaveAddress, startAddress, data);
+            _master.WriteMultipleCoils(ModbusParam.ID, startAddress, data);
         }
         /// <summary>
         /// 异步写入多个连续线圈的值（单位比特）
         /// </summary>
-        /// <param name="slaveAddress"></param>
+        /// <param name="ModbusParam.ID"></param>
         /// <param name="startAddress"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public Task WriteMultipleCoilsAsync(byte slaveAddress, ushort startAddress, bool[] data) => WriteMultipleCoilsAsync(slaveAddress, startAddress, data);
+        public Task WriteMultipleCoilsAsync(ushort startAddress, bool[] data) => _master.WriteMultipleCoilsAsync(ModbusParam.ID, startAddress, data);
         /// <summary>
         /// 同步先写后读多个寄存器
         /// </summary>
-        /// <param name="slaveAddress">读取值的设备地址</param>
+        /// <param name="ModbusParam.ID">读取值的设备地址</param>
         /// <param name="startReadAddress">开始读取的地址（保持寄存器从0开始寻址）</param>
         /// <param name="numberOfPointsToRead">要读取的寄存器数量</param>
         /// <param name="startWriteAddress">开始写入的地址（保持寄存器从0开始寻址）</param>
         /// <param name="writeData">寄存器要写入的值</param>
         /// <returns></returns>
-        public ushort[] ReadWriteMultipleRegisters(byte slaveAddress, ushort startReadAddress, ushort numberOfPointsToRead, ushort startWriteAddress, ushort[] writeData)
+        public ushort[] ReadWriteMultipleRegisters(ushort startReadAddress, ushort numberOfPointsToRead, ushort startWriteAddress, ushort[] writeData)
         {
-            return ReadWriteMultipleRegisters(slaveAddress, startReadAddress, numberOfPointsToRead, startWriteAddress, writeData);
+            return _master.ReadWriteMultipleRegisters(ModbusParam.ID, startReadAddress, numberOfPointsToRead, startWriteAddress, writeData);
         }
         /// <summary>
         /// 异步先写后读多个寄存器
         /// </summary>
-        /// <param name="slaveAddress">读取值的设备地址</param>
+        /// <param name="ModbusParam.ID">读取值的设备地址</param>
         /// <param name="startReadAddress">开始读取的地址（保持寄存器从0开始寻址）</param>
         /// <param name="numberOfPointsToRead">要读取的寄存器数量</param>
         /// <param name="startWriteAddress">开始写入的地址（保持寄存器从0开始寻址）</param>
         /// <param name="writeData">寄存器要写入的值</param>
         /// <returns></returns>
-        public Task<ushort[]> ReadWriteMultipleRegistersAsync(byte slaveAddress, ushort startReadAddress, ushort numberOfPointsToRead, ushort startWriteAddress, ushort[] writeData)
-                             =>  ReadWriteMultipleRegistersAsync(slaveAddress, startReadAddress, numberOfPointsToRead, startWriteAddress, writeData);
+        public Task<ushort[]> ReadWriteMultipleRegistersAsync(ushort startReadAddress, ushort numberOfPointsToRead, ushort startWriteAddress, ushort[] writeData)
+                             =>  _master.ReadWriteMultipleRegistersAsync(ModbusParam.ID, startReadAddress, numberOfPointsToRead, startWriteAddress, writeData);
 
         #endregion
     }
