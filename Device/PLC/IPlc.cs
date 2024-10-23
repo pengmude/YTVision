@@ -65,18 +65,25 @@ namespace YTVisionPro.Device.PLC
         /// </summary>
         void Release();
 
-        /// <summary>
-        /// 读取PLC寄存器
-        /// </summary>
-        /// <returns></returns>
-        OperateResult ReadPLCData(string address, DataType dataType, ushort length = 0);
+        OperateResult<bool> ReadBool(string address);
 
-        /// <summary>
-        /// 写入PLC寄存器
-        /// </summary>
-        /// <returns></returns>
-        OperateResult WritePLCData(string address, object value);
+        OperateResult<int> ReadInt(string address);
 
+        OperateResult<string> ReadString(string address, ushort length);
+
+        OperateResult<byte[]> ReadBytes(string address, ushort length);
+
+        OperateResult<bool[]> ReadMultipleBool(string[] address, ushort legth = 0);
+
+        OperateResult WriteMultipleBool(string[] address, bool[] value);
+
+        OperateResult WriteBool(string address, bool value);
+
+        OperateResult WriteInt(string address, int value);
+
+        OperateResult WriteString(string address, string value);
+
+        OperateResult WriteBytes(string address, byte[] value);
     }
 
     /// <summary>

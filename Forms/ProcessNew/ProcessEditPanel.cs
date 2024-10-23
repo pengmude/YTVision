@@ -22,6 +22,8 @@ using YTVisionPro.Node.ImagePreprocessing.ImageCrop;
 using YTVisionPro.Node.Tool.ImageShow;
 using YTVisionPro.Node.Modbus.Read;
 using YTVisionPro.Node.Modbus.Write;
+using YTVisionPro.Node.TCP.Client;
+using YTVisionPro.Node.TCP.Server;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -211,6 +213,12 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.ModbusWrite:
                     node = new NodeModbusWrite(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.TCPClientRequest:
+                    node = new NodeTCPClient(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.TCPServerResponse:
+                    node = new NodeTCPServer(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

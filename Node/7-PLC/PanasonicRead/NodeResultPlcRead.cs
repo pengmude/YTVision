@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HslCommunication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
         public NodeStatus Status { get; set; }
         public long RunTime { get; set; }
         public NodeRunStatusCode RunStatusCode { get; set; }
-        public object ReadData { get; set; }
+        public OperateResult<bool, int, string, byte[]> ReadData { get; set; }
     }
 }

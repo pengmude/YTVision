@@ -177,5 +177,13 @@ namespace YTVisionPro.Node
         /// 写入
         /// </summary>
         ModbusWrite,
+        /// <summary>
+        /// TCP客户端请求
+        /// </summary>
+        TCPClientRequest,
+        /// <summary>
+        /// TCP服务器响应
+        /// </summary>
+        TCPServerResponse,
     }
 }

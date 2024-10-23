@@ -57,17 +57,16 @@ namespace YTVisionPro.Forms.CameraAdd
             {
                 try
                 {
-                    Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
                     Camera.Open();
                     Camera.SetTriggerMode(true);
                     Camera.StartGrabbing();
-                    LogHelper.AddLog(MsgLevel.Info, $"成功打开相机（{Camera.UserDefinedName}）！", true);
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    LogHelper.AddLog(MsgLevel.Exception, $"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}", true);
                 }
             }
+            Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
             this.label1.Text = camera.UserDefinedName;
             Solution.Instance.AllDevices.Add(Camera);
             //绑定图像显示控件界面

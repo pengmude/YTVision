@@ -55,14 +55,14 @@ namespace YTVisionPro.Forms.ModbusAdd
             {
                 try
                 {
-                    dev.ConnectStatusEvent += Modbus_ConnectStatusEvent;
                     dev.Connect();
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    LogHelper.AddLog(MsgLevel.Exception, $"设备连接失败！原因：{ex.Message}", true);
                 }
             }
+            dev.ConnectStatusEvent += Modbus_ConnectStatusEvent;
             this.label1.Text = dev.UserDefinedName;
             ModbusParamsControl = new ModbusParamsControl(dev.ModbusParam);
             Solution.Instance.AllDevices.Add(dev);

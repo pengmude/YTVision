@@ -1,8 +1,13 @@
 ﻿using Logger;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,10 +22,13 @@ namespace YTVisionPro.Device.TCP
         public TcpParam TcpParam { get; set; }
         public string DevName { get; set; }
         public string UserDefinedName { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType { get; set; } = DevType.TcpServer;
+        [JsonConverter(typeof(StringEnumConverter))]
         public DeviceBrand Brand { get; set; } = DeviceBrand.Unknow;
         public string ClassName { get; set; } = typeof(TCPServer).FullName;
-
+        [JsonIgnore]
+        public Dictionary<string, TcpClient> Ip2TcpClientDic = new Dictionary<string, TcpClient>();
         public bool IsConnect { get; set; }
 
         public event EventHandler<bool> ConnectStatusEvent;
@@ -63,14 +71,16 @@ namespace YTVisionPro.Device.TCP
             {
                 _server = new TcpListener(IPAddress.Any, TcpParam.Port);
                 _server.Start();
+                LogHelper.AddLog(MsgLevel.Info, $"服务器（{DevName}）已启动！", true);
                 IsConnect = true;
                 ConnectStatusEvent?.Invoke(this, true);
                 Task.Run(() => ListenForClients());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 IsConnect = false;
                 ConnectStatusEvent?.Invoke(this, false);
+                LogHelper.AddLog(MsgLevel.Warn, $"服务器（{DevName}）已停止运行！原因：{ex.Message}", true);
                 throw;
             }
         }
@@ -79,9 +89,16 @@ namespace YTVisionPro.Device.TCP
         /// </summary>
         public void Disconnect()
         {
-            _server.Stop();
-            IsConnect = false;
-            ConnectStatusEvent?.Invoke(this, false);
+            try
+            {
+                _server.Stop();
+                IsConnect = false;
+                ConnectStatusEvent?.Invoke(this, false);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         private async void ListenForClients()
@@ -91,33 +108,42 @@ namespace YTVisionPro.Device.TCP
                 while (IsConnect)
                 {
                     var client = await _server.AcceptTcpClientAsync();
-                    _ = HandleClient(client); // 使用_忽略返回的任务
+                    Ip2TcpClientDic.Add(GetRemoteIP(client), client);
                 }
             }
-            catch (ObjectDisposedException ex)
+            catch (Exception ex)
             {
-                LogHelper.AddLog(MsgLevel.Warn, $"服务器（{DevName}）已停止运行！", true);
+                //throw ex;
             }
         }
-
-        private async Task HandleClient(TcpClient client)
+        /// <summary>
+        /// 响应结果给客户端（发送结果）
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task SendMessge2Client(TcpClient client, string message)
         {
-            using (client)
-            {
-                NetworkStream stream = client.GetStream();
-                byte[] buffer = new byte[1024];
-                int bytesRead;
+            if(client == null) throw new ArgumentNullException("客户端对象为空异常！");
+            NetworkStream stream = client.GetStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            // 返回结果给客户端
+            byte[] msg = Encoding.UTF8.GetBytes(message);
+            await stream.WriteAsync(msg, 0, msg.Length);
+            LogHelper.AddLog(MsgLevel.Info, $"服务器（{UserDefinedName}）[响应]-->“{message}”", true);
+        }
 
-                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) != 0)
-                {
-                    string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                    LogHelper.AddLog(MsgLevel.Info, $"Tcp服务器（{DevName}）接收到请求数据: " + data, true);
+        public string GetRemoteIP(TcpClient cln)
+        {
+            string ip = cln.Client.RemoteEndPoint.ToString().Split(':')[0];
+            return ip;
+        }
 
-                    // Echo back the received data
-                    byte[] msg = Encoding.UTF8.GetBytes(data);
-                    await stream.WriteAsync(msg, 0, msg.Length);
-                }
-            }
+        public int GetRemotePort(TcpClient cln)
+        {
+            string temp = cln.Client.RemoteEndPoint.ToString().Split(':')[1];
+            int port = Convert.ToInt32(temp);
+            return port;
         }
     }
 }

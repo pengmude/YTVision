@@ -1,9 +1,12 @@
 ﻿using HslCommunication;
 using Logger;
+using Newtonsoft.Json.Linq;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,18 +47,33 @@ namespace YTVisionPro.Node.PLC.PanasonicWirte
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
 
+                //如果没有连接则不运行
+                if (!param.Plc.IsConnect)
+                    throw new Exception("设备尚未连接！");
+
+
+                OperateResult res;
                 switch (param.Value)
                 {
                     case bool bValue:
-                        WriteAndVerify(param.Plc, param.Address, bValue, DataType.BOOL);
+                        do
+                        {
+                            res = param.Plc.WriteBool(param.Address, bValue);
+                        } while (!res.IsSuccess);
                         break;
 
                     case int iValue:
-                        WriteAndVerify(param.Plc, param.Address, iValue, DataType.INT);
+                        do
+                        {
+                            res = param.Plc.WriteInt(param.Address, iValue);
+                        } while (!res.IsSuccess);
                         break;
 
                     case string sValue:
-                        WriteAndVerify(param.Plc, param.Address, sValue, DataType.STRING);
+                        do
+                        {
+                            res = param.Plc.WriteString(param.Address, sValue);
+                        } while (!res.IsSuccess);
                         break;
                 }
 
@@ -76,15 +94,6 @@ namespace YTVisionPro.Node.PLC.PanasonicWirte
                 SetRunResult(startTime, NodeStatus.Failed);
                 throw new Exception($"节点({ID}.{NodeName})运行失败！原因:{ex.Message}");
             }
-        }
-
-        private void WriteAndVerify<T>(IPlc plc, string address, T value, DataType dataType)
-        {
-            OperateResult res = new OperateResult();
-            do
-            {
-                res = plc.WritePLCData(address, value);
-            } while (!res.IsSuccess);
         }
     }
 }

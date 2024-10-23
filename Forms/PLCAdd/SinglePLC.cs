@@ -54,16 +54,10 @@ namespace YTVisionPro.Forms.PLCAdd
             InitializeComponent();
             if (plc.IsConnect)
             {
-                try
-                {
-                    plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
-                    plc.Connect();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                if (!plc.Connect())
+                    LogHelper.AddLog(MsgLevel.Exception, $"PLC（{plc.UserDefinedName}）连接失败，请检查PLC通信是否正常！", true);
             }
+            plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
             ConType = plc.PLCParms.PlcConType;
             this.label1.Text = plc.UserDefinedName;
             Plc = plc;
@@ -100,7 +94,9 @@ namespace YTVisionPro.Forms.PLCAdd
         /// </summary>
         private void Plc_ConnectStatusEvent(object sender, bool e)
         {
+            uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
             uiSwitch1.Active = e;
+            uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
         }
 
         /// <summary>

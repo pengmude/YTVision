@@ -49,6 +49,10 @@ namespace YTVisionPro.Node.PLC.WaitSoftTrigger
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
+                        //如果没有连接则不运行
+                        if (!param.Plc.IsConnect)
+                            throw new Exception("设备尚未连接！");
+
                         await Task.Run(() =>
                         {
                             // 监听拍照信号
@@ -76,17 +80,17 @@ namespace YTVisionPro.Node.PLC.WaitSoftTrigger
 
         private void SendSignalToPlc(NodeParamWaitSoftTrigger param)
         {
-            bool flag = false;
-            OperateResult readResult, writeResult;
+            OperateResult<bool> readResult;
+            OperateResult writeResult;
             // 读取拍照信号
             do
             {
-                readResult = param.Plc.ReadPLCData(param.Address, DataType.BOOL);
-            } while (!readResult.IsSuccess || !((OperateResult<bool>)readResult).Content);  // 读取失败或读取不到拍照信号为true均需要重试
+                readResult = param.Plc.ReadBool(param.Address);
+            } while (!readResult.IsSuccess || !readResult.Content);  // 读取失败或读取不到拍照信号为true均需要重试
             // 重置拍照信号
             do
             {
-                writeResult = param.Plc.WritePLCData(param.Address, false);
+                writeResult = param.Plc.WriteBool(param.Address, false);
             } while (!writeResult.IsSuccess);
             LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
         }

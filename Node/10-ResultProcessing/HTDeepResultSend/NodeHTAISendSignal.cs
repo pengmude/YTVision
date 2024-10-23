@@ -142,13 +142,13 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                         OperateResult writeResult;
                         do
                         {
-                            writeResult = plcTmp.WritePLCData(dataRow.SignalAddress, true);
+                            writeResult = plcTmp.WriteBool(dataRow.SignalAddress, true);
 
                         } while (!writeResult.IsSuccess);
 
                         do
                         {
-                            writeResult = plcTmp.WritePLCData(dataRow.SignalAddress, false);
+                            writeResult = plcTmp.WriteBool(dataRow.SignalAddress, false);
                         } while (!writeResult.IsSuccess);
                         LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功!", true);
                         break;

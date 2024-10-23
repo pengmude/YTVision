@@ -202,7 +202,7 @@
             this.comboBoxType.Items.AddRange(new object[] {
             "作为主站",
             "作为从站"});
-            this.comboBoxType.Location = new System.Drawing.Point(275, 26);
+            this.comboBoxType.Location = new System.Drawing.Point(275, 29);
             this.comboBoxType.Name = "comboBoxType";
             this.comboBoxType.Size = new System.Drawing.Size(246, 32);
             this.comboBoxType.TabIndex = 13;

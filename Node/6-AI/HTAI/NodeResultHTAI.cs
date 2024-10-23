@@ -23,6 +23,10 @@ namespace YTVisionPro.Node.AI.HTAI
         /// 渲染图
         /// </summary>
         public Bitmap RenderImage { get; set; }
+        /// <summary>
+        /// 检测及结果是否全部是OK的
+        /// </summary>
+        public bool IsAllOk { get; set; }
     }
 
     /// <summary>

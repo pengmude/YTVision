@@ -92,11 +92,11 @@ namespace YTVisionPro.Device.Light
                         ComHandle = item.Handle;
                         break;
                     }
+                    //if (ComHandle == 0)
+                    //    Connenct();
+                    //else
+                    //    IsComOpen = true;
                 }
-                if (ComHandle == 0)
-                    Connenct();
-                else
-                    IsComOpen = true;
             }
             catch (Exception ex)
             {

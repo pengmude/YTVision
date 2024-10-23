@@ -188,69 +188,7 @@ namespace YTVisionPro.Device.PLC
                 _panasonicMcNet.Dispose();
         }
 
-        /// <summary>
-        /// 读取PLC寄存器
-        /// </summary>
-        /// <returns></returns>
-        public OperateResult ReadPLCData(string address, DataType dataType, ushort length = 0)
-        {
-            switch (dataType)
-            {
-                case DataType.BOOL:
-                    return ReadBool(address);
-                case DataType.INT:
-                    return ReadInt(address);
-                case DataType.STRING:
-                    return ReadString(address, length);
-                case DataType.Bytes:
-                    return ReadBytes(address, length);
-                default:
-                    throw new ArgumentException("不支持的数据类型");
-            }
-        }
-
-        /// <summary>
-        /// 批量读取PLC寄存器
-        /// </summary>
-        /// <returns></returns>
-        public OperateResult ReadPLCAllData(string[] address, DataType dataType, ushort length = 0)
-        {
-            switch (dataType)
-            {
-                case DataType.BOOL:
-                    return ReadAllBool(address, length);
-                default:
-                    throw new ArgumentException("不支持的数据类型");
-            }
-        }
-
-        /// <summary>
-        /// 写入PLC寄存器
-        /// </summary>
-        /// <returns></returns>
-        public OperateResult WritePLCData(string address, object value)
-        {
-            if (value is bool bValue)
-                return WriteBool(address, bValue);
-            else if (value is int iValue)
-                return WriteInt(address, iValue);
-            else
-                throw new ArgumentException("暂不支持写入的数据类型");
-        }
-
-        /// <summary>
-        /// 批量写入PLC寄存器
-        /// </summary>
-        /// <returns></returns>
-        public OperateResult WritePLCAllData(string[] address, object value)
-        {
-            if (value is bool[] bValue)
-                return WriteAllBool(address, bValue);
-            else
-                throw new ArgumentException("暂不支持写入的数据类型");
-        }
-
-        private OperateResult<int> ReadInt(string address)
+        public OperateResult<int> ReadInt(string address)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.ReadInt32(address);
@@ -258,7 +196,7 @@ namespace YTVisionPro.Device.PLC
                 return _panasonicMcNet.ReadInt32(address);
         }
 
-        private OperateResult<bool> ReadBool(string address)
+        public OperateResult<bool> ReadBool(string address)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.ReadBool(address);
@@ -266,7 +204,7 @@ namespace YTVisionPro.Device.PLC
                 return _panasonicMcNet.ReadBool(address);
         }
 
-        private OperateResult<string> ReadString(string address, ushort length)
+        public OperateResult<string> ReadString(string address, ushort length)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.ReadString(address, length);
@@ -275,7 +213,7 @@ namespace YTVisionPro.Device.PLC
 
         }
 
-        private OperateResult<byte[]> ReadBytes(string address, ushort length)
+        public OperateResult<byte[]> ReadBytes(string address, ushort length)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.Read(address, length);
@@ -285,48 +223,64 @@ namespace YTVisionPro.Device.PLC
         }
 
         /// <summary>
-        /// 批量读取
+        /// 读取多个连续地址的bool值
         /// </summary>
-        /// <param name="address">起始地址</param>
-        /// <param name="value">读多少</param>
+        /// <param name="address"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
-        private OperateResult<bool[]> ReadAllBool(string[] address, ushort value = 0)
+        public OperateResult<bool[]> ReadMultipleBool(string[] address, ushort legth = 0)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.ReadBool(address); //串口的批量读可以不连续地址
             else
-                return _panasonicMcNet.ReadBool(address[0], value); //网口的批量读只能连续地址，未测试(无法测试)
-        }
-
-        private OperateResult WriteBool(string address, bool value)
-        {
-            if (PLCParms.PlcConType == PlcConType.COM)
-                return _panasonicMewtocol.Write(address, value);
-            else
-                return _panasonicMcNet.Write(address, value);
-
-        }
-
-        private OperateResult WriteInt(string address, int value)
-        {
-            if (PLCParms.PlcConType == PlcConType.COM)
-                return _panasonicMewtocol.Write(address, value);
-            else
-                return _panasonicMcNet.Write(address, value);
+                return _panasonicMcNet.ReadBool(address[0], legth); //网口的批量读只能连续地址，未测试(无法测试)
         }
 
         /// <summary>
-        /// 批量写入
+        /// 写入多个连续地址的bool值
         /// </summary>
         /// <param name="address">起始地址</param>
         /// <param name="value">数据</param>
         /// <returns></returns>
-        private OperateResult WriteAllBool(string[] address, bool[] value)
+        public OperateResult WriteMultipleBool(string[] address, bool[] value)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
                 return _panasonicMewtocol.Write(address, value); //串口的批量写可以不连续地址
             else
                 return _panasonicMcNet.Write(address[0], value); //网口的批量写只能连续地址，未测试(无法测试)
+        }
+
+        public OperateResult WriteBool(string address, bool value)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
+                return _panasonicMewtocol.Write(address, value);
+            else
+                return _panasonicMcNet.Write(address, value);
+
+        }
+
+        public OperateResult WriteInt(string address, int value)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
+                return _panasonicMewtocol.Write(address, value);
+            else
+                return _panasonicMcNet.Write(address, value);
+        }
+
+        public OperateResult WriteString(string address, string value)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
+                return _panasonicMewtocol.Write(address, value);
+            else
+                return _panasonicMcNet.Write(address, value);
+        }
+
+        public OperateResult WriteBytes(string address, byte[] value)
+        {
+            if (PLCParms.PlcConType == PlcConType.COM)
+                return _panasonicMewtocol.Write(address, value);
+            else
+                return _panasonicMcNet.Write(address, value);
         }
     }
 }

@@ -61,19 +61,13 @@ namespace YTVisionPro.Forms.LightAdd
             {
                 if (dev is ILight light)
                 {
-                    try
-                    {
-                        light.CreateDevice(); // 创建光源，必要的
-                        singleLight = new SingleLight(light);
-                        singleLight.Anchor = AnchorStyles.Left;
-                        singleLight.Anchor = AnchorStyles.Right;
-                        flowLayoutPanel1.Controls.Add(singleLight);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"光源（{light.UserDefinedName}）打开失败，请检查光源状态！原因：{ex.Message}");
-                        continue;
-                    }
+                    light.CreateDevice(); // 创建光源，必要的
+                    singleLight = new SingleLight(light);
+                    singleLight.Anchor = AnchorStyles.Left;
+                    singleLight.Anchor = AnchorStyles.Right;
+                    flowLayoutPanel1.Controls.Add(singleLight);
+                    if (e)
+                        LogHelper.AddLog(MsgLevel.Info, $"光源设备【{light.DevName}】已加载！", true);
                 }
             }
             if(e)

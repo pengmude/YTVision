@@ -3,9 +3,11 @@ using Logger;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ModbusAdd;
 using YTVisionPro.Forms.PLCAdd;
+using YTVisionPro.Forms.TCPAdd;
 using YTVisionPro.Node;
 
 namespace YTVisionPro.Forms.ProcessNew
@@ -18,7 +20,7 @@ namespace YTVisionPro.Forms.ProcessNew
         public FormNewProcessWizard()
         {
             InitializeComponent();
-            FrmModbusListView.OnModbusDeserializationCompletionEvent += Deserialization;
+            FrmTCPListView.OnTCPDeserializationCompletionEvent += Deserialization;
             this.KeyPreview = true;
             Init();
             Shown += FormNewProcessWizard_Shown;

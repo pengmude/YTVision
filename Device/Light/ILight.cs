@@ -15,6 +15,10 @@ namespace YTVisionPro.Device.Light
         /// 光源是否打开
         /// </summary>
         bool IsOpen { get; set; }
+        /// <summary>
+        /// 光源串口是否打开
+        /// </summary>
+        bool IsComOpen { get; set; }
         LightParam LightParam { get; set; }
         /// <summary>
         /// 光源品牌

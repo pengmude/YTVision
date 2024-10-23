@@ -1,6 +1,7 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Device.Modbus;
 using YTVisionPro.Node.Modbus.Read;
@@ -10,14 +11,39 @@ namespace YTVisionPro.Node.Modbus.Write
     internal partial class ParamFormModbusWrite : Form, INodeParamForm
     {
         public INodeParam Params { get; set; }
-        
+
+        // 在 ParamFormModbusRead 类中定义一个新的委托类型
+        public delegate Task AsyncEventHandler<T>(object sender, T e);
+
+        // 定义事件
+        public event AsyncEventHandler<EventArgs> RunHandler;
+
         public ParamFormModbusWrite()
         {
             InitializeComponent();
             InitModbusComboBox();
+            comboBoxType.SelectedIndex = 0;
         }
 
-        public void SetNodeBelong(NodeBase node) { }
+        public void SetNodeBelong(NodeBase node) 
+        {
+            nodeSubscription1.Init(node);
+        }
+
+        /// <summary>
+        /// 获取订阅的bool值
+        /// </summary>
+        public string GetSubValue()
+        {
+            try
+            {
+                return nodeSubscription1.GetValue<bool>() ? "1" : "0";
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         /// <summary>
         /// 初始化Modbus下拉框
@@ -47,24 +73,27 @@ namespace YTVisionPro.Node.Modbus.Write
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
+            SaveParam();
+            Hide();
+        }
+
+        private void SaveParam()
+        {
             if (comboBoxModbusDev.Text.IsNullOrEmpty() || comboBoxModbusDev.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "Modbus不能为空！", true);
                 MessageBox.Show("Modbus不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            ushort adress, length;
+            ushort adress;
             try
             {
                 adress = ushort.Parse(this.textBoxAddress.Text);
-                length = ushort.Parse(this.textBoxData.Text);
-                if(length == 0)
-                    throw new Exception("无效的起始地址或读取个数");
             }
             catch (Exception)
             {
-                LogHelper.AddLog(MsgLevel.Exception, "无效的起始地址或读取个数", true);
-                MessageBox.Show("无效的起始地址或读取个数", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                LogHelper.AddLog(MsgLevel.Exception, "无效的起始地址", true);
+                MessageBox.Show("无效的起始地址", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -73,36 +102,39 @@ namespace YTVisionPro.Node.Modbus.Write
             IModbus modbus = null;
             foreach (var dev in Solution.Instance.ModbusDevices)
             {
-                if(dev.UserDefinedName == comboBoxModbusDev.Text)
+                if (dev.UserDefinedName == comboBoxModbusDev.Text)
                 {
                     modbus = dev;
                     break;
                 }
             }
 
-            NodeParamModbusWrite nodeParamRead = new NodeParamModbusWrite();
-            nodeParamRead.Device = modbus;
-            nodeParamRead.StartAddress = adress;
+            NodeParamModbusWrite nodeParamWrite = new NodeParamModbusWrite();
+            nodeParamWrite.Device = modbus;
+            nodeParamWrite.StartAddress = adress;
             switch (this.comboBoxType.Text)
             {
                 case "线圈":
-                    nodeParamRead.DataType = RegistersType.Coils;
-                    break;
-                case "离散量输入":
-                    nodeParamRead.DataType = RegistersType.DiscreteInput;
-                    break;
-                case "输入寄存器":
-                    nodeParamRead.DataType = RegistersType.InputRegisters;
+                    nodeParamWrite.DataType = RegistersType.Coils;
                     break;
                 case "保持寄存器":
-                    nodeParamRead.DataType = RegistersType.HoldingRegisters;
+                    nodeParamWrite.DataType = RegistersType.HoldingRegisters;
                     break;
                 default:
                     break;
             }
-            nodeParamRead.Count = length;
-            Params = nodeParamRead;
-            Hide();
+            nodeParamWrite.IsAsync = checkBox1.Checked;
+            if (radioButton2.Checked)
+            {
+                nodeParamWrite.IsSubscribed = false;
+                nodeParamWrite.Data = textBoxData.Text;
+            }else
+            {
+                nodeParamWrite.IsSubscribed = true;
+                nodeParamWrite.Text1 = nodeSubscription1.GetText1();
+                nodeParamWrite.Text2 = nodeSubscription1.GetText2();
+            }
+            Params = nodeParamWrite;
         }
 
         /// <summary>
@@ -151,8 +183,32 @@ namespace YTVisionPro.Node.Modbus.Write
                     default:
                         break;
                 }
-                textBoxData.Text = param.Count.ToString();
+                checkBox1.Checked = param.IsAsync;
+                if (param.IsSubscribed)
+                {
+                    radioButton1.Checked = true;
+                    nodeSubscription1.SetText(param.Text1, param.Text2);
+                }
+                else
+                {
+                    radioButton2.Checked = true;
+                    textBoxData.Text = param.Data.ToString();
+                }
             }
+        }
+
+        private void buttonRun_Click(object sender, EventArgs e)
+        {
+            SaveParam();
+            RunHandler?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radioButton1.Checked)
+                tabControl1.SelectedIndex = 0;
+            else
+                tabControl1.SelectedIndex = 1;
         }
     }
 }

@@ -97,7 +97,6 @@ namespace YTVisionPro.Device.Light
                     _serialPort = new SerialPort();
                     FrmLightListView.OccupiedComList.Add(_serialPort);
                 }
-                Connenct();
             }
             catch (Exception ex)
             {

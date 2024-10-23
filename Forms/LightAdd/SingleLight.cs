@@ -58,12 +58,13 @@ namespace YTVisionPro.Forms.LightAdd
             {
                 try
                 {
+                    light.Connenct();
                     light.ConnectStatusEvent += Light_ConnectStatusEvent;
                     light.TurnOn(light.Brightness);
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    LogHelper.AddLog(MsgLevel.Exception, $"光源（{light.UserDefinedName}）打开失败，请检查光源状态！原因：{ex.Message}", true);
                 }
             }
             this.label1.Text = light.UserDefinedName;

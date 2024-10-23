@@ -3,6 +3,7 @@ using System;
 using System.Windows.Forms;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Device.TCP;
+using YTVisionPro.Forms.ModbusAdd;
 
 namespace YTVisionPro.Forms.TCPAdd
 {
@@ -26,7 +27,7 @@ namespace YTVisionPro.Forms.TCPAdd
             FrmTCPNew.TCPAddEvent += FrmAdd_TCPAddEvent;
             SingleTcp.SelectedChange += SingleTCP_SelectedChange;
             SingleTcp.SingleTCPRemoveEvent += SingleTCP_SinglePLCRemoveEvent;
-            FrmPLCListView.OnPLCDeserializationCompletionEvent += Deserialization;
+            FrmModbusListView.OnModbusDeserializationCompletionEvent += Deserialization;
             this.KeyPreview = true;
         }
 
@@ -34,36 +35,27 @@ namespace YTVisionPro.Forms.TCPAdd
         /// 反序列化TCP设备
         /// </summary>
         /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="e">是否是在加载方案</param>
         private void Deserialization(object sender, bool e)
         {
             // 先移除旧方案的TCP控件
             flowLayoutPanel1.Controls.Clear();
 
             // 添加新的TCP
-            SingleTcp singlePLC = null;
+            SingleTcp singleTCP = null;
             if(e)
                 LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【TCP设备列表】=================================================", true);
             foreach (var dev in ConfigHelper.SolConfig.Devices)
             {
-                if (dev is ITcpDevice modbus)
+                if (dev is ITcpDevice tcpDev)
                 {
-                    try
-                    {
-                        modbus.CreateDevice(); // 创建modbus，必要的
-                        singlePLC = new SingleTcp(modbus);
-                        singlePLC.Anchor = AnchorStyles.Left;
-                        singlePLC.Anchor = AnchorStyles.Right;
-                        flowLayoutPanel1.Controls.Add(singlePLC);
-                        if (e)
-                            LogHelper.AddLog(MsgLevel.Info, $"TCP设备【{modbus.DevName}】已成功加载！", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (e)
-                            LogHelper.AddLog(MsgLevel.Exception, $"TCP设备【{modbus.DevName}】连接失败，请检查TCP状态！原因：{ex.Message}", true);
-                        continue;
-                    }
+                    tcpDev.CreateDevice(); // 创建tcpDev，必要的
+                    singleTCP = new SingleTcp(tcpDev);
+                    singleTCP.Anchor = AnchorStyles.Left;
+                    singleTCP.Anchor = AnchorStyles.Right;
+                    flowLayoutPanel1.Controls.Add(singleTCP);
+                    if (e)
+                        LogHelper.AddLog(MsgLevel.Info, $"TCP设备【{tcpDev.DevName}】已加载！", true);
                 }
             }
             if(e)

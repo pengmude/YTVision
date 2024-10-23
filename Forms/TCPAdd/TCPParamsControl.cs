@@ -17,7 +17,13 @@ namespace YTVisionPro.Forms.TCPAdd
         public TcpParamsControl(TcpParam param)
         {
             InitializeComponent();
-            uiLabelIP.Text = param.IP;
+            if (param.DevType == Device.DevType.TcpServer)
+            {
+                uiLabel1.Text = "监听的IP";
+                uiLabelIP.Text = "[监听所有可用的IP]";
+            }
+            else
+                uiLabelIP.Text = param.IP;
             uiLabelPort.Text = param.Port.ToString();
         }
     }

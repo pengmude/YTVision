@@ -49,22 +49,26 @@ namespace YTVisionPro.Forms.TCPAdd
         public SingleTcp(ITcpDevice dev)
         {
             InitializeComponent();
+            TcpDevice = dev;
+            Parms = dev.TcpParam;
+            //保存配置时是连接的，现在要还原连接状态
             if (dev.IsConnect)
             {
                 try
                 {
-                    dev.ConnectStatusEvent += TCP_ConnectStatusEvent;
                     dev.Connect();
+                    uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
+                    uiSwitch1.Active = dev.IsConnect;
+                    uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    LogHelper.AddLog(MsgLevel.Exception, $"TCP设备【{dev.DevName}】连接失败，请检查TCP状态！原因：{ex.Message}", true);
                 }
             }
+            dev.ConnectStatusEvent += TCP_ConnectStatusEvent;
             this.label1.Text = dev.UserDefinedName;
             TcpParamsControl = new TcpParamsControl(dev.TcpParam);
-            TcpDevice = dev;
-            Parms = dev.TcpParam;
             Solution.Instance.AllDevices.Add(dev);
             SingleTCPs.Add(this);
         }
@@ -103,7 +107,9 @@ namespace YTVisionPro.Forms.TCPAdd
         /// </summary>
         private void TCP_ConnectStatusEvent(object sender, bool e)
         {
+            uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
             uiSwitch1.Active = e;
+            uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
         }
 
         /// <summary>
@@ -182,6 +188,10 @@ namespace YTVisionPro.Forms.TCPAdd
             catch(Exception e)
             {
                 LogHelper.AddLog(MsgLevel.Exception, e.Message, true);
+                uiSwitch1.ValueChanged -= uiSwitch1_ValueChanged;
+                uiSwitch1.Active = TcpDevice.IsConnect;
+                uiSwitch1.ValueChanged += uiSwitch1_ValueChanged;
+
             }
         }
 

@@ -1,13 +1,11 @@
-﻿using HslCommunication;
-using Logger;
-using Sunny.UI;
+﻿using Logger;
 using System;
 using System.Data;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using YTVisionPro.Device.Modbus;
 using YTVisionPro.Node.Modbus.Read;
-using YTVisionPro.Node.PLC.PanasonicRead;
 
 namespace YTVisionPro.Node.Modbus.Write
 {
@@ -15,8 +13,16 @@ namespace YTVisionPro.Node.Modbus.Write
     {
         public NodeModbusWrite(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormModbusWrite();
+            var form = new ParamFormModbusWrite();
+            form.RunHandler += RunHandler;
+            form.SetNodeBelong(this);
+            ParamForm = form;
             Result = new NodeResultModbusWrite();
+        }
+
+        private async Task RunHandler(object sender, EventArgs e)
+        {
+            await Run(CancellationToken.None);
         }
 
         /// <summary>
@@ -45,30 +51,36 @@ namespace YTVisionPro.Node.Modbus.Write
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
 
-                throw new NotImplementedException("未实现NodeModbusWrite");
-                object data = null;
+                //如果没有连接则不运行
+                if (!param.Device.IsConnect)
+                    throw new Exception("设备尚未连接！");
+
+                //如果是订阅的数据，需要先获取订阅的值
+                if (param.IsSubscribed)
+                    param.Data = ((ParamFormModbusWrite)ParamForm).GetSubValue();
+
                 switch (param.DataType)
                 {
                     case RegistersType.Coils:
-                        //data = await param.Device.WriteMultipleCoilsAsync(param.StartAddress, param.Count);
-                        break;
-                    case RegistersType.DiscreteInput:
-                        //data = await param.Device.WriteInputsAsync(param.StartAddress, param.Count);
-                        break;
-                    case RegistersType.InputRegisters:
-                        //data = await param.Device.WriteInputRegistersAsync(param.StartAddress, param.Count);
+                        string[] datas = param.Data.Split(',');
+                        bool[] boolArray = datas.Select(part => part.Trim() != "0").ToArray();
+                        if(param.IsAsync)
+                            ((ModbusPoll)param.Device).WriteMultipleCoilsAsync(param.StartAddress, boolArray);
+                        else
+                            ((ModbusPoll)param.Device).WriteMultipleCoils(param.StartAddress, boolArray);
                         break;
                     case RegistersType.HoldingRegisters:
-                        //data = await param.Device.WriteHoldingRegistersAsync(param.StartAddress, param.Count);
+                        string[] parts = param.Data.Split(',');
+                        ushort[] ushortArray = Array.ConvertAll(parts, part => ushort.Parse(part.Trim()));
+                        if (param.IsAsync)
+                            ((ModbusPoll)param.Device).WriteMultipleRegistersAsync(param.StartAddress, ushortArray);
+                        else
+                            ((ModbusPoll)param.Device).WriteMultipleRegisters(param.StartAddress, ushortArray);
                         break;
                     default:
                         break;
                 }
-                if(Result is NodeResultPlcRead result)
-                {
-                    result.ReadData = data;
-                    Result = result;
-                }
+
                 long time = SetRunResult(startTime, NodeStatus.Successful);
                 LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
 

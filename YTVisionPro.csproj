@@ -143,6 +143,12 @@
     <Compile Include="Device\TCP\TCPClient.cs" />
     <Compile Include="Device\TCP\TcpParam.cs" />
     <Compile Include="Device\TCP\TcpServer.cs" />
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CameraAdd\CameraParamsShowControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -232,6 +238,12 @@
     </Compile>
     <Compile Include="Forms\LightAdd\SingleLight.Designer.cs">
       <DependentUpon>SingleLight.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormNewProcessWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
+      <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TCPAdd\FrmTCPListView.cs">
       <SubType>Form</SubType>
@@ -332,6 +344,28 @@
     <Compile Include="Device\Light\LightRsee.cs" />
     <Compile Include="Device\Modbus\ModbusPoll.cs" />
     <Compile Include="Device\Modbus\ModbusParam.cs" />
+    <Compile Include="Node\11-TCP\Client\NodeTCPClient.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\11-TCP\Client\NodeParamTCPClient.cs" />
+    <Compile Include="Node\11-TCP\Client\NodeResultTCPClient.cs" />
+    <Compile Include="Node\11-TCP\Client\ParamFormTCPClient.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\11-TCP\Client\ParamFormTCPClient.Designer.cs">
+      <DependentUpon>ParamFormTCPClient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\11-TCP\Server\NodeParamTCPServer.cs" />
+    <Compile Include="Node\11-TCP\Server\NodeResultTCPServer.cs" />
+    <Compile Include="Node\11-TCP\Server\NodeTCPServer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\11-TCP\Server\ParamFormTCPServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\11-TCP\Server\ParamFormTCPServer.Designer.cs">
+      <DependentUpon>ParamFormTCPServer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeImageCrop.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -401,15 +435,15 @@
     <Compile Include="Node\8-Modbus\Write\ParamFormModbusWrite.Designer.cs">
       <DependentUpon>ParamFormModbusWrite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ImageShow\NodeImageShow.cs">
+    <Compile Include="Node\10-ResultProcessing\ImageShow\NodeImageShow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ImageShow\NodeParamImageShow.cs" />
-    <Compile Include="Node\9-ResultProcessing\ImageShow\NodeResultImageShow.cs" />
-    <Compile Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.cs">
+    <Compile Include="Node\10-ResultProcessing\ImageShow\NodeParamImageShow.cs" />
+    <Compile Include="Node\10-ResultProcessing\ImageShow\NodeResultImageShow.cs" />
+    <Compile Include="Node\10-ResultProcessing\ImageShow\ParamFormImageShow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.Designer.cs">
+    <Compile Include="Node\10-ResultProcessing\ImageShow\ParamFormImageShow.Designer.cs">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\FrmNodeRename.cs">
@@ -436,23 +470,11 @@
     <Compile Include="Node\1-LightControl\ParamFormLight.Designer.cs">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ProcessNew\FormNewProcessWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
-      <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ProcessNew\ProcessEditPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\ProcessNew\ProcessEditPanel.Designer.cs">
       <DependentUpon>ProcessEditPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMain.Designer.cs">
-      <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ResultView\FrmResultView.cs">
       <SubType>Form</SubType>
@@ -495,16 +517,16 @@
     <Compile Include="Node\NodeSubscription.Designer.cs">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\HTDeepResultSend\NodeHTAISendSignal.cs">
+    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeHTAISendSignal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\HTDeepResultSend\NodeInfo.cs" />
-    <Compile Include="Node\9-ResultProcessing\HTDeepResultSend\NodeParamHTAISendSignal.cs" />
-    <Compile Include="Node\9-ResultProcessing\HTDeepResultSend\NodeResultHTAISendSignal.cs" />
-    <Compile Include="Node\9-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.cs">
+    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeInfo.cs" />
+    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeParamHTAISendSignal.cs" />
+    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeResultHTAISendSignal.cs" />
+    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.Designer.cs">
+    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.Designer.cs">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\7-PLC\WaitSoftTrigger\NodeParamWaitSoftTrigger.cs" />
@@ -540,17 +562,17 @@
     <Compile Include="Node\7-PLC\PanasonicWrite\ParamFormPlcWrite.Designer.cs">
       <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\DataShow\NodeDataShow.cs">
+    <Compile Include="Node\10-ResultProcessing\DataShow\NodeDataShow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\DataShow\NodeParamDataShow.cs" />
-    <Compile Include="Node\9-ResultProcessing\DataShow\NodeParamFormDataShow.cs">
+    <Compile Include="Node\10-ResultProcessing\DataShow\NodeParamDataShow.cs" />
+    <Compile Include="Node\10-ResultProcessing\DataShow\NodeParamFormDataShow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\DataShow\NodeParamFormDataShow.Designer.cs">
+    <Compile Include="Node\10-ResultProcessing\DataShow\NodeParamFormDataShow.Designer.cs">
       <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\DataShow\NodeResultDataShow.cs" />
+    <Compile Include="Node\10-ResultProcessing\DataShow\NodeResultDataShow.cs" />
     <Compile Include="Node\2-ImageSrc\ImageRead\NodeParamImageRead.cs" />
     <Compile Include="Node\2-ImageSrc\ImageRead\NodeImageRead.cs">
       <SubType>UserControl</SubType>
@@ -562,37 +584,37 @@
     <Compile Include="Node\2-ImageSrc\ImageRead\ParamFormImageRead.Designer.cs">
       <DependentUpon>ParamFormImageRead.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ImageSave\NodeParamSaveImage.cs" />
-    <Compile Include="Node\9-ResultProcessing\ImageSave\NodeResultSaveImage.cs" />
-    <Compile Include="Node\9-ResultProcessing\ImageSave\NodeSaveImage.cs">
+    <Compile Include="Node\10-ResultProcessing\ImageSave\NodeParamSaveImage.cs" />
+    <Compile Include="Node\10-ResultProcessing\ImageSave\NodeResultSaveImage.cs" />
+    <Compile Include="Node\10-ResultProcessing\ImageSave\NodeSaveImage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ImageSave\ParamFormSaveImage.cs">
+    <Compile Include="Node\10-ResultProcessing\ImageSave\ParamFormSaveImage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ImageSave\ParamFormSaveImage.Designer.cs">
+    <Compile Include="Node\10-ResultProcessing\ImageSave\ParamFormSaveImage.Designer.cs">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ResultSummarize\NodeParamSummarize.cs" />
-    <Compile Include="Node\9-ResultProcessing\ResultSummarize\NodeResultSummarize.cs" />
-    <Compile Include="Node\9-ResultProcessing\ResultSummarize\NodeSummarize.cs">
+    <Compile Include="Node\10-ResultProcessing\ResultSummarize\NodeParamSummarize.cs" />
+    <Compile Include="Node\10-ResultProcessing\ResultSummarize\NodeResultSummarize.cs" />
+    <Compile Include="Node\10-ResultProcessing\ResultSummarize\NodeSummarize.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ResultSummarize\ParamFormSummarize.cs">
+    <Compile Include="Node\10-ResultProcessing\ResultSummarize\ParamFormSummarize.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\9-ResultProcessing\ResultSummarize\ParamFormSummarize.Designer.cs">
+    <Compile Include="Node\10-ResultProcessing\ResultSummarize\ParamFormSummarize.Designer.cs">
       <DependentUpon>ParamFormSummarize.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\8-ProcessControl\SleepTool\NodeParamFormSleepTool.cs">
+    <Compile Include="Node\9-ProcessControl\SleepTool\NodeParamFormSleepTool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\8-ProcessControl\SleepTool\NodeParamFormSleepTool.Designer.cs">
+    <Compile Include="Node\9-ProcessControl\SleepTool\NodeParamFormSleepTool.Designer.cs">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\8-ProcessControl\SleepTool\NodeParamSleepTool.cs" />
-    <Compile Include="Node\8-ProcessControl\SleepTool\NodeResultSleepTool.cs" />
-    <Compile Include="Node\8-ProcessControl\SleepTool\NodeSleepTool.cs">
+    <Compile Include="Node\9-ProcessControl\SleepTool\NodeParamSleepTool.cs" />
+    <Compile Include="Node\9-ProcessControl\SleepTool\NodeResultSleepTool.cs" />
+    <Compile Include="Node\9-ProcessControl\SleepTool\NodeSleepTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Node\ROI.cs" />
@@ -606,6 +628,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Solution.cs" />
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CameraAdd\CameraParamsShowControl.resx">
       <DependentUpon>CameraParamsShowControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -652,6 +677,9 @@
     <EmbeddedResource Include="Forms\LightAdd\SingleLight.resx">
       <DependentUpon>SingleLight.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
+      <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TCPAdd\FrmTCPListView.resx">
       <DependentUpon>FrmTCPListView.cs</DependentUpon>
     </EmbeddedResource>
@@ -697,6 +725,12 @@
     <EmbeddedResource Include="Forms\PLCAdd\SinglePLC.resx">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\11-TCP\Client\ParamFormTCPClient.resx">
+      <DependentUpon>ParamFormTCPClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\11-TCP\Server\ParamFormTCPServer.resx">
+      <DependentUpon>ParamFormTCPServer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
       <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
     </EmbeddedResource>
@@ -715,7 +749,7 @@
     <EmbeddedResource Include="Node\8-Modbus\Write\ParamFormModbusWrite.resx">
       <DependentUpon>ParamFormModbusWrite.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\9-ResultProcessing\ImageShow\ParamFormImageShow.resx">
+    <EmbeddedResource Include="Node\10-ResultProcessing\ImageShow\ParamFormImageShow.resx">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
@@ -724,14 +758,8 @@
     <EmbeddedResource Include="Node\1-LightControl\ParamFormLight.resx">
       <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
-      <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\ProcessEditPanel.resx">
       <DependentUpon>ProcessEditPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
-      <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ResultView\FrmResultView.resx">
       <DependentUpon>FrmResultView.cs</DependentUpon>
@@ -754,7 +782,7 @@
     <EmbeddedResource Include="Node\NodeSubscription.resx">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\9-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.resx">
+    <EmbeddedResource Include="Node\10-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.resx">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\7-PLC\WaitSoftTrigger\ParamFormWaitSoftTrigger.resx">
@@ -766,19 +794,19 @@
     <EmbeddedResource Include="Node\7-PLC\PanasonicWrite\ParamFormPlcWrite.resx">
       <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\9-ResultProcessing\DataShow\NodeParamFormDataShow.resx">
+    <EmbeddedResource Include="Node\10-ResultProcessing\DataShow\NodeParamFormDataShow.resx">
       <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\2-ImageSrc\ImageRead\ParamFormImageRead.resx">
       <DependentUpon>ParamFormImageRead.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\9-ResultProcessing\ImageSave\ParamFormSaveImage.resx">
+    <EmbeddedResource Include="Node\10-ResultProcessing\ImageSave\ParamFormSaveImage.resx">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\9-ResultProcessing\ResultSummarize\ParamFormSummarize.resx">
+    <EmbeddedResource Include="Node\10-ResultProcessing\ResultSummarize\ParamFormSummarize.resx">
       <DependentUpon>ParamFormSummarize.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\8-ProcessControl\SleepTool\NodeParamFormSleepTool.resx">
+    <EmbeddedResource Include="Node\9-ProcessControl\SleepTool\NodeParamFormSleepTool.resx">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -796,6 +824,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="空方案.YtSol">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -820,25 +851,26 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Node\5-Measurement\" />
-    <Folder Include="Node\NewFolder1\" />
-    <Folder Include="Node\NewFolder2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dll\Basler.Pylon.dll" />
     <Content Include="dll\HslCommunication.dll" />
     <Content Include="dll\MvCameraControl.Net.dll" />
+    <Content Include="桌面图.ico" />
     <None Include="Icon\Logo\桌面图.ico" />
     <None Include="Icon\NodeIcon\图像采集.ico" />
     <None Include="Icon\NodeIcon\光源.ico" />
     <None Include="Icon\Modbus.png" />
     <None Include="Icon\tcp.png" />
+    <Content Include="ToolTreeView.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon\保存项目.png" />
     <Content Include="Icon\停止执行.png" />
     <None Include="Icon\另存为.png" />
     <None Include="Icon\锁定.png" />
     <None Include="Icon\解锁.png" />
     <Content Include="Icon\工具箱.png" />
-    <Content Include="桌面图.ico" />
     <None Include="Icon\光源.png" />
     <Content Include="Icon\单次执行.png" />
     <None Include="Icon\循环执行.png" />

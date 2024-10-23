@@ -44,6 +44,10 @@ namespace YTVisionPro.Node.LightControl
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
 
+                //如果没有连接则不运行
+                if (!param.Light.IsComOpen)
+                    throw new Exception("光源串口尚未连接！");
+
                 param.Light.TurnOn(param.Brightness, param.Time);
                 long time = SetRunResult(startTime, NodeStatus.Successful);
                 LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);

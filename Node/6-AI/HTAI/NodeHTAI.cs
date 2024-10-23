@@ -87,7 +87,9 @@ namespace YTVisionPro.Node.AI.HTAI
                             if (param.TreePredictHandle == IntPtr.Zero)
                                 throw new Exception("AI模型句柄尚未加载完成！");
                             PredictResult = DeepLearningDetection(param.TreePredictHandle, ref Frame, param.TestNum, out renderImg);
-                            res.ResultData = DeepStudyResult_Judge(PredictResult, param.AllNgConfigs, param.TestNum);
+                            var data = DeepStudyResult_Judge(PredictResult, param.AllNgConfigs, param.TestNum);
+                            res.ResultData = data;
+                            res.IsAllOk = data.IsAllOk;
                             res.RenderImage = renderImg;
                             Result = res;
                             ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, renderImg));

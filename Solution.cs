@@ -20,6 +20,7 @@ using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
 using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Device.TCP;
+using YTVisionPro.Forms.TCPAdd;
 
 namespace YTVisionPro
 {
@@ -310,8 +311,7 @@ namespace YTVisionPro
         {
             try
             {
-                List<ModbusPoll> devs = new List<ModbusPoll>();
-                // 释放旧方案的硬件资源（光源、相机、PLC）
+                // 释放旧方案的硬件资源（光源、相机、PLC、Modbus、TCP）
                 foreach (var dev in Solution.Instance.AllDevices)
                 {
                     if (dev is ILight light)
@@ -326,9 +326,9 @@ namespace YTVisionPro
                         tcpDev.Disconnect();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
             }
 
             // 清空设备
@@ -336,6 +336,7 @@ namespace YTVisionPro
             SingleCamera.SingleCameraList.Clear();
             SinglePLC.SinglePLCs.Clear();
             SingleModbus.SingleModbuss.Clear();
+            SingleTcp.SingleTCPs.Clear();
             Solution.Instance.AllDevices.Clear();
 
             // 释放AI节点的内存

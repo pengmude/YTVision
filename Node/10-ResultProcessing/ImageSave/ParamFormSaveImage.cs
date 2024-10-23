@@ -1,5 +1,4 @@
-﻿using HslCommunication;
-using Logger;
+﻿using Logger;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -96,13 +95,9 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// 获取二维码订阅控件的的值
         /// </summary>
         /// <returns></returns>
-        static long i = 0;
         public string GetBarCode()
         {
-            var res = nodeSubscriptionBarCode.GetValue<object>();
-            if(res is OperateResult<string> code)
-                return code.Content;
-            return $"读码失败图{++i}";
+            return nodeSubscriptionBarCode.GetValue<string>();
         }
 
         /// <summary>

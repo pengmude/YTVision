@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Device.TCP
 {
@@ -27,6 +24,10 @@ namespace YTVisionPro.Device.TCP
         /// </summary>
         string UserDefinedName { get; set; }
         /// <summary>
+        /// 反序列化用来识别派生类的标记
+        /// </summary>
+        string ClassName { get; set; }
+        /// <summary>
         /// 设备类型
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
@@ -36,8 +37,6 @@ namespace YTVisionPro.Device.TCP
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         DeviceBrand Brand { get; set; }
-
-        string ClassName { get; set; }
 
         bool IsConnect { get; set; }
         /// <summary>

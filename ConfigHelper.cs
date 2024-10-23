@@ -12,7 +12,7 @@ using YTVisionPro.Device.Camera;
 using YTVisionPro.Device.Light;
 using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
-using YTVisionPro.Node.AI.HTAI;
+using Logger;
 
 namespace YTVisionPro
 {
@@ -243,9 +243,9 @@ namespace YTVisionPro
 
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return null;
+                LogHelper.AddLog(MsgLevel.Warn, ex.Message, true);
             }
             return null;
         }
@@ -279,18 +279,28 @@ namespace YTVisionPro
         {
             return true;
         }
+
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var jObject = JObject.Load(reader);
-            List<T> values = new List<T>();
-            foreach (var item in jObject.Properties())
+            try
             {
-                Type type = Type.GetType((string)item.Value["ClassName"]);
-                var value = item.Value.ToObject(type);
-                values.Add((T)value);
+                var jObject = JObject.Load(reader);
+                List<T> values = new List<T>();
+                foreach (var item in jObject.Properties())
+                {
+                    Type type = Type.GetType((string)item.Value["ClassName"]);
+                    var value = item.Value.ToObject(type);
+                    values.Add((T)value);
+                }
+                return values;
             }
-            return values;
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
+            }
+            return null;
         }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var values = (List<T>)value;

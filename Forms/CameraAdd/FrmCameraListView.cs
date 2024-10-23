@@ -54,20 +54,13 @@ namespace YTVisionPro.Forms.CameraAdd
             {
                 if (dev is ICamera camera)
                 {
-                    try
-                    {
-                        camera.CreateDevice(); // 创建相机，必要的
-                        singleCamera = new SingleCamera(camera);
-                        singleCamera.Anchor = AnchorStyles.Left;
-                        singleCamera.Anchor = AnchorStyles.Right;
-                        flowLayoutPanel1.Controls.Add(singleCamera);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}");
-                        LogHelper.AddLog(MsgLevel.Exception, $"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}", true);
-                        continue;
-                    }
+                    camera.CreateDevice(); // 创建相机，必要的
+                    singleCamera = new SingleCamera(camera);
+                    singleCamera.Anchor = AnchorStyles.Left;
+                    singleCamera.Anchor = AnchorStyles.Right;
+                    flowLayoutPanel1.Controls.Add(singleCamera);
+                    if (e)
+                        LogHelper.AddLog(MsgLevel.Info, $"相机设备【{dev.DevName}】已加载！", true);
                 }
                 
             }

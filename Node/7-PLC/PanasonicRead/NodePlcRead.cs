@@ -46,16 +46,38 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    OperateResult data = new OperateResult();
+
+                    //如果没有连接则不运行
+                    if (!param.Plc.IsConnect)
+                        throw new Exception("设备尚未连接！");
+
+                    //object data = new object();
+                    OperateResult<bool, int, string, byte[]> data = new OperateResult<bool, int, string, byte[]>();
                     await Task.Run(() =>
                     {
                         do
                         {
-                            data = param.Plc.ReadPLCData(param.Address, param.DataType, param.Length);
+                            switch (param.DataType)
+                            {
+                                case DataType.BOOL:
+                                    data.Content1 = param.Plc.ReadBool(param.Address).Content;
+                                    break;
+                                case DataType.INT:
+                                    data.Content2 = param.Plc.ReadInt(param.Address).Content;
+                                    break;
+                                case DataType.STRING:
+                                    data.Content3 = param.Plc.ReadString(param.Address, param.Length).Content;
+                                    break;
+                                case DataType.Bytes:
+                                    data.Content4 = param.Plc.ReadBytes(param.Address, param.Length).Content;
+                                    break;
+                                default:
+                                    break;
+                            }
                         } while (!data.IsSuccess);
                     });
                     
-                    res.ReadData = ((OperateResult<object>)data).Content;
+                    res.ReadData = data;
                     Result = res;
                     long time = SetRunResult(startTime, NodeStatus.Successful);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);

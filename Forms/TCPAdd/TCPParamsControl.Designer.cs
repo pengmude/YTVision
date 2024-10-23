@@ -83,9 +83,9 @@
             this.uiLabelIP.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.uiLabelIP.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabelIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabelIP.Location = new System.Drawing.Point(240, 32);
+            this.uiLabelIP.Location = new System.Drawing.Point(196, 32);
             this.uiLabelIP.Name = "uiLabelIP";
-            this.uiLabelIP.Size = new System.Drawing.Size(137, 26);
+            this.uiLabelIP.Size = new System.Drawing.Size(226, 26);
             this.uiLabelIP.TabIndex = 0;
             this.uiLabelIP.Text = "127.0.0.1";
             this.uiLabelIP.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -95,9 +95,9 @@
             this.uiLabelPort.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.uiLabelPort.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiLabelPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
-            this.uiLabelPort.Location = new System.Drawing.Point(240, 124);
+            this.uiLabelPort.Location = new System.Drawing.Point(201, 124);
             this.uiLabelPort.Name = "uiLabelPort";
-            this.uiLabelPort.Size = new System.Drawing.Size(137, 26);
+            this.uiLabelPort.Size = new System.Drawing.Size(215, 26);
             this.uiLabelPort.TabIndex = 0;
             this.uiLabelPort.Text = "502";
             this.uiLabelPort.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

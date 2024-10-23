@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Device.Modbus;
+using YTVisionPro.Device;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -49,22 +50,13 @@ namespace YTVisionPro.Forms.ModbusAdd
             {
                 if (dev is IModbus modbus)
                 {
-                    try
-                    {
-                        modbus.CreateDevice(); // 创建modbus，必要的
-                        singlePLC = new SingleModbus(modbus);
-                        singlePLC.Anchor = AnchorStyles.Left;
-                        singlePLC.Anchor = AnchorStyles.Right;
-                        flowLayoutPanel1.Controls.Add(singlePLC);
-                        if (e)
-                            LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{modbus.DevName}】已成功加载！", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        if (e)
-                            LogHelper.AddLog(MsgLevel.Exception, $"Modbus设备【{modbus.DevName}】连接失败，请检查Modbus状态！原因：{ex.Message}", true);
-                        continue;
-                    }
+                    modbus.CreateDevice(); // 创建modbus，必要的
+                    singlePLC = new SingleModbus(modbus);
+                    singlePLC.Anchor = AnchorStyles.Left;
+                    singlePLC.Anchor = AnchorStyles.Right;
+                    flowLayoutPanel1.Controls.Add(singlePLC);
+                    if (e)
+                        LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{modbus.DevName}】已加载！", true);
                 }
             }
             if(e)

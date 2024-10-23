@@ -3,33 +3,28 @@ using System;
 using System.Net.Sockets;
 using System.Net;
 using Modbus.Data;
-using System.Windows.Forms;
 using Logger;
 using Newtonsoft.Json;
-using static System.Windows.Forms.AxHost;
-using System.Runtime.Remoting.Messaging;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace YTVisionPro.Device.Modbus
 {
     internal class ModbusSlave : IModbus
     {
-        private TcpListener listener;
-        private ModbusTcpSlave slave;
-        private List<IAsyncResult> asyncResults = new List<IAsyncResult>();
-
+        private TcpListener _server;
+        public ModbusParam ModbusParam { get; set; }
         public string DevName { get; set; }
         public string UserDefinedName { get; set; }
-        public ModbusParam ModbusParam { get; set; }
-        public bool IsConnect { get; set; } = false;
         public DevType DevType { get; set; } = DevType.ModbusSlave;
         public DeviceBrand Brand { get; set; } = DeviceBrand.Unknow;
         public string ClassName { get; set; } = typeof(ModbusSlave).FullName;
 
+        public bool IsConnect { get; set; }
+
         public event EventHandler<bool> ConnectStatusEvent;
 
-        #region 反序列化专用函数
+        private ModbusTcpSlave _slave;
+
+        #region 反序列化使用
 
         /// <summary>
         /// 指定反序列化的构造函数
@@ -41,7 +36,7 @@ namespace YTVisionPro.Device.Modbus
         {
             try
             {
-
+                // 初始化设备
             }
             catch (Exception ex)
             {
@@ -49,65 +44,65 @@ namespace YTVisionPro.Device.Modbus
             }
         }
 
+        #endregion  
 
-        #endregion
-
-        public ModbusSlave(ModbusParam param)
+        public ModbusSlave(ModbusParam modbusParam)
         {
-            ModbusParam = param;
-            DevName = param.DevName;
-            UserDefinedName = param.UserDefinedName;
+            ModbusParam = modbusParam;
+            DevName = modbusParam.DevName;
+            UserDefinedName = modbusParam.UserDefinedName;
         }
 
+        /// <summary>
+        /// 从站启动
+        /// </summary>
         public void Connect()
         {
             try
             {
-                listener = new TcpListener(IPAddress.Any, ModbusParam.Port);
-                listener.Start();
-
-                slave = ModbusTcpSlave.CreateTcp(ModbusParam.ID, listener/*, 5000*/);
+                // 创建TCP通信对象以及初始化TCP从站
+                _server = new TcpListener(IPAddress.Any, ModbusParam.Port);
+                _slave = ModbusTcpSlave.CreateTcp(ModbusParam.ID, _server);
                 //创建寄存器存储对象
-                slave.DataStore = DataStoreFactory.CreateDefaultDataStore(100, 100, 100, 100);
+                _slave.DataStore = DataStoreFactory.CreateDefaultDataStore(10, 10, 10, 10);
                 //Modbus命令写入DataStore时发生
-                slave.DataStore.DataStoreWrittenTo += DataStore_DataStoreWrittenTo;
+                _slave.DataStore.DataStoreWrittenTo += DataStore_DataStoreWrittenTo;
                 //当Modbus从站收到请求
-                slave.ModbusSlaveRequestReceived += Slave_ModbusSlaveRequestReceived;
+                _slave.ModbusSlaveRequestReceived += Slave_ModbusSlaveRequestReceived;
                 //当Modbus从站写入完成
-                slave.WriteComplete += Slave_WriteComplete;
-                slave.Listen();
+                _slave.WriteComplete += Slave_WriteComplete;
+                _server.Start();
                 IsConnect = true;
                 ConnectStatusEvent?.Invoke(this, true);
-
-                // 启动异步操作
-                //Task.Run(() =>
-                //{
-                //    StartListeningAsync();
-                //});
+                _slave.Listen();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                IsConnect = false;
+                ConnectStatusEvent?.Invoke(this, false);
+                LogHelper.AddLog(MsgLevel.Exception, $"从站（{DevName}）启动失败: {ex.Message}", true);
+                throw;
             }
         }
 
+        /// <summary>
+        /// 从站停止
+        /// </summary>
         public void Disconnect()
         {
             try
             {
-                if (!IsConnect) return;
+                _slave.Dispose();
+                _server.Stop();
                 IsConnect = false;
-                listener.Stop();
-                slave.Dispose();
-                slave = null;
                 ConnectStatusEvent?.Invoke(this, false);
+                LogHelper.AddLog(MsgLevel.Info, $"从站（{DevName}）已停止运行", true);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                LogHelper.AddLog(MsgLevel.Warn, $"断开异常: {ex.Message}", true);
+
             }
         }
-
         /// <summary>
         /// 从站开始写入数据
         /// </summary>
@@ -115,20 +110,27 @@ namespace YTVisionPro.Device.Modbus
         /// <param name="e"></param>
         private void DataStore_DataStoreWrittenTo(object sender, DataStoreEventArgs e)
         {
-            switch (e.ModbusDataType)
+            try
             {
-                case ModbusDataType.Coil:
-                    ModbusDataCollection<bool> discretes = slave.DataStore.CoilDiscretes;
-                    LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据: " + JsonConvert.SerializeObject(discretes), true);
-                    break;
-                case ModbusDataType.HoldingRegister:
-                    ModbusDataCollection<ushort> holdingRegisters = slave.DataStore.HoldingRegisters;
-                    LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据: " + JsonConvert.SerializeObject(holdingRegisters), true);
-                    break;
-                default:
-                    LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据: " + JsonConvert.SerializeObject(e.Data), true);
-                    break;
+                switch (e.ModbusDataType)
+                {
+                    case ModbusDataType.Coil:
+                        ModbusDataCollection<bool> discretes = _slave.DataStore.CoilDiscretes;
+                        LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据: " + JsonConvert.SerializeObject(discretes), true);
+                        break;
+                    case ModbusDataType.HoldingRegister:
+                        ModbusDataCollection<ushort> holdingRegisters = _slave.DataStore.HoldingRegisters;
+                        LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据: " + JsonConvert.SerializeObject(holdingRegisters), true);
+                        break;
+                    default:
+                        LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据: " + JsonConvert.SerializeObject(e.Data), true);
+                        break;
 
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
             }
 
         }
@@ -140,7 +142,14 @@ namespace YTVisionPro.Device.Modbus
         /// <param name="e"></param>
         private void Slave_ModbusSlaveRequestReceived(object sender, ModbusSlaveRequestEventArgs e)
         {
-            LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})接收请求数据: " + JsonConvert.SerializeObject(e.Message), true);
+            try
+            {
+                LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})接收请求数据: " + JsonConvert.SerializeObject(e.Message), true);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
+            }
         }
 
         /// <summary>
@@ -150,7 +159,16 @@ namespace YTVisionPro.Device.Modbus
         /// <param name="e"></param>
         private void Slave_WriteComplete(object sender, ModbusSlaveRequestEventArgs e)
         {
-            LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据完成: " + JsonConvert.SerializeObject(e.Message), true);
+            try
+            {
+                LogHelper.AddLog(MsgLevel.Info, $"从站({UserDefinedName})写入数据完成: " + JsonConvert.SerializeObject(e.Message), true);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
+            }
         }
+
     }
 }
+

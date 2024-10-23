@@ -59,19 +59,13 @@ namespace YTVisionPro.Forms.PLCAdd
             {
                 if (dev is IPlc plc)
                 {
-                    try
-                    {
-                        plc.CreateDevice(); // 创建PLC，必要的
-                        singlePLC = new SinglePLC(plc);
-                        singlePLC.Anchor = AnchorStyles.Left;
-                        singlePLC.Anchor = AnchorStyles.Right;
-                        flowLayoutPanel1.Controls.Add(singlePLC);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"PLC（{plc.UserDefinedName}）连接失败，请检查PLC状态！原因：{ex.Message}");
-                        continue;
-                    }
+                    plc.CreateDevice(); // 创建PLC，必要的
+                    singlePLC = new SinglePLC(plc);
+                    singlePLC.Anchor = AnchorStyles.Left;
+                    singlePLC.Anchor = AnchorStyles.Right;
+                    flowLayoutPanel1.Controls.Add(singlePLC);
+                    if (e)
+                        LogHelper.AddLog(MsgLevel.Info, $"PLC设备【{dev.DevName}】已加载！", true);
                 }
             }
             if(e)

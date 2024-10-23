@@ -56,6 +56,10 @@ namespace YTVisionPro.Node.Modbus.Read
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.Run(token);
 
+                //如果没有连接则不运行
+                if (!param.Device.IsConnect)
+                    throw new Exception("设备尚未连接！");
+
                 object data = null;
                 switch (param.DataType)
                 {
@@ -113,7 +117,7 @@ namespace YTVisionPro.Node.Modbus.Read
 
                 #endregion
 
-                if (Result is NodeResultPlcRead result)
+                if (Result is NodeResultModbusRead result)
                 {
                     result.ReadData = data;
                     Result = result;
