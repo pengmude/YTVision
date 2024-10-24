@@ -5,11 +5,21 @@ using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Device.Camera;
 using YTVisionPro.Node.AI.HTAI;
+using System.Threading.Tasks;
+using System.Drawing;
 
 namespace YTVisionPro.Node.ImageSrc.Shot
 {
     internal partial class ParamFormShot : Form, INodeParamForm
     {
+        /// <summary>
+        /// 图像发布事件
+        /// </summary>
+        public static event EventHandler<ImageShowPamra> ImageShowChanged;
+        /// <summary>
+        /// 硬触发完成事件
+        /// </summary>
+        public static event EventHandler<HardTriggerResult> HardTriggerCompleted;
         public INodeParam Params { get; set; }
         public ParamFormShot()
         {
@@ -191,16 +201,46 @@ namespace YTVisionPro.Node.ImageSrc.Shot
             // 窗口名称
             nodeParamCamera.WindowName = WindowNameList.Text;
 
+            #endregion
+
             // 不是频闪应用可以在参数界面只设置一次,是频闪的话相机需要在节点运行时每次设置
             if(!nodeParamCamera.IsStrobing)
                 SetCameraParams(nodeParamCamera.Camera, nodeParamCamera.TriggerSource, nodeParamCamera.TriggerEdge, nodeParamCamera.TriggerDelay
                     , nodeParamCamera.ExposureTime, nodeParamCamera.Gain);
-
-            #endregion
+            
+            // 如果是硬触发
+            if (nodeParamCamera.TriggerSource != TriggerSource.Auto || nodeParamCamera.TriggerSource != TriggerSource.SOFT)
+            {
+                // 硬触发在此订阅图像
+                nodeParamCamera.Camera.PublishImageEvent += Camera_PublishImageEvent;
+            }
 
             Params = nodeParamCamera;
             
             Hide();
+        }
+
+        private async void Camera_PublishImageEvent(object sender, Bitmap e)
+        {
+            DateTime startTime = DateTime.Now;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    // 显示图像
+                    ImageShowChanged?.Invoke(this, new ImageShowPamra(WindowNameList.Text, e));
+                    // 更新节点运行状态、耗时
+                    HardTriggerCompleted?.Invoke(this, new HardTriggerResult(startTime, true, e));
+                });
+            }
+            catch (Exception)
+            {
+                await Task.Run(() =>
+                {
+                    // 更新节点运行状态、耗时
+                    HardTriggerCompleted?.Invoke(this, new HardTriggerResult(startTime, false, e));
+                });
+            }
         }
 
         private void SetCameraParams(ICamera camera, TriggerSource triggerSource, TriggerEdge triggerEdge, int delay, float exposureTime, float gain)
@@ -279,6 +319,21 @@ namespace YTVisionPro.Node.ImageSrc.Shot
                     }
                 }
             }
+        }
+    }
+    /// <summary>
+    /// 硬触发结果
+    /// </summary>
+    public struct HardTriggerResult
+    {
+        public DateTime StartTime;
+        public bool IsSuccess;
+        public Bitmap Bitmap;
+        public HardTriggerResult(DateTime StartTime, bool IsSuccess, Bitmap bitmap)
+        {
+            this.StartTime = StartTime;
+            this.IsSuccess = IsSuccess;
+            this.Bitmap = bitmap;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Device.Camera;
 using YTVisionPro.Node;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Node.ImageSrc.Shot
 {
@@ -28,6 +29,23 @@ namespace YTVisionPro.Node.ImageSrc.Shot
             ParamForm = new ParamFormShot();
             ParamForm.SetNodeBelong(this);
             Result = new NodeResultShot();
+            ParamFormShot.HardTriggerCompleted += ParamFormShot_HardTriggerCompleted;
+        }
+        /// <summary>
+        /// 硬触发完成
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private async void ParamFormShot_HardTriggerCompleted(object sender, HardTriggerResult e)
+        {
+            // 设置图像结果
+            ((NodeResultShot)Result).Bitmap = e.Bitmap;
+            // 设置本节点的运行状态
+            long time = SetRunResult(e.StartTime, NodeStatus.Successful);
+            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+            // 继续在该节点往下执行
+            await Process.RunForHardTrigger(this, (long)(DateTime.Now - e.StartTime).TotalMilliseconds);
         }
 
         /// <summary>
@@ -70,6 +88,8 @@ namespace YTVisionPro.Node.ImageSrc.Shot
 
                         if (!param.Camera.IsOpen) { throw new Exception("相机尚未连接！"); }
 
+                        if(param.TriggerSource != TriggerSource.SOFT) { throw new Exception("只有软触发拍照才能手动点击运行！"); }
+
                         param.Camera.PublishImageEvent += Camera_PublishImageEvent;
                         
                         // 频闪才需要每次设置相机参数，不频闪的话在参数界面设置一次即可
@@ -83,34 +103,15 @@ namespace YTVisionPro.Node.ImageSrc.Shot
                             param.Camera.SetTriggerEdge(param.TriggerEdge);         // 设置硬触发边沿
                         }
 
-                        bool result = false;
-                        switch (param.TriggerSource)
-                        {
-                            case TriggerSource.Auto:
-                                // 自动触发
-                                break;
-                            case TriggerSource.SOFT:
-                                // 软触发
-                                param.Camera.GrabOne();                         // 软触发能直接获得图像
-                                result = _autoResetEvent.WaitOne(1000);
-                                break;
-                            default:
-                                // 硬触发LINE0~LINE4
-                                param.Camera.SetTriggerEdge(param.TriggerEdge); // 设置硬触发沿
-                                result = _autoResetEvent.WaitOne(1000);
-                                break;
-                        }
+                        param.Camera.GrabOne(); // 软触发
+                        bool result = _autoResetEvent.WaitOne(1000);
+                        if (!result) { throw new Exception("软触发取图超时！"); }
 
-                        if (!result)
+                        await Task.Run(() =>
                         {
-                            throw new Exception("等待取图超时！");
-                        }
-
-                        //await Task.Run(() =>
-                        //{
-                        // 发送采集到的图像
-                        ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, ((NodeResultShot)Result).Bitmap));
-                        //});
+                            // 发送采集到的图像
+                            ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, ((NodeResultShot)Result).Bitmap));
+                        });
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);

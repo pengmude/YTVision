@@ -12,6 +12,17 @@ using YTVisionPro.Node;
 
 namespace YTVisionPro
 {
+    public struct ProcessRunResult 
+    {
+        public bool IsRunning;
+        public bool IsSuccess;
+        public ProcessRunResult(bool  isRunning, bool isSuccess)
+        {
+            IsRunning = isRunning;
+            IsSuccess = isSuccess;
+        }
+    }
+
     /// <summary>
     /// 检测流程类
     /// 一个方案可以拥有多个流程
@@ -51,6 +62,10 @@ namespace YTVisionPro
         /// 流程是否启用
         /// </summary>
         public bool Enable { get; set; } = true;
+        /// <summary>
+        /// 流程运行完更新流程界面和主界面的运行按钮Enable
+        /// </summary>
+        public static EventHandler<ProcessRunResult> UpdateRunStatus;
 
         /// <summary>
         /// 构造函数
@@ -79,6 +94,9 @@ namespace YTVisionPro
                 RunTime = 0;
                 if (Enable)
                 {
+                    // 界面运行按钮Enable设置为运行中
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+
                     LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
                     IsRuning = true;
                     Success = false;
@@ -95,6 +113,7 @@ namespace YTVisionPro
                             IsRuning = false;
                             RunTime += node.Result.RunTime;
                             LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false)); 
                             throw ex;
                         }
                         catch (Exception ex)
@@ -103,6 +122,7 @@ namespace YTVisionPro
                             IsRuning = false;
                             RunTime += node.Result.RunTime;
                             LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
                             throw ex;
                         }
                     }
@@ -110,13 +130,76 @@ namespace YTVisionPro
                     Success = true;
                     IsRuning = false;
                     LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
                 }
                 if (isCyclical)
                 {
                     await Task.Delay(Solution.Instance.RunInterval, token);
                 }
             } while (isCyclical && !token.IsCancellationRequested);
+            
+            // 重置运行取消令牌
+            Solution.Instance.ResetTokenSource();
+        }
+
+        /// <summary>
+        /// 用于硬触发拍照的流程运行，特点是拍照节点设置为硬触发
+        /// 不需要手动点击运行按钮，流程的运行由硬触发信号给到就执行下去
+        /// 参数传入硬触发的拍照节点对象和它的耗时，用于跳过该节点，只执行之后的节点
+        /// </summary>
+        public async Task RunForHardTrigger(NodeBase nodeShot, long time)
+        {
+            // 重置运行取消令牌
+            Solution.Instance.ResetTokenSource();
+            // 节点数为0不运行
+            if (Nodes.Count == 0)
+                return;
+
+            RunTime = 0;
+            if (Enable)
+            {
+                // 更新运行状态
+                UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+                LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
+                IsRuning = true;
+                Success = false;
+                foreach (var node in _nodes)
+                {
+                    try
+                    {
+                        if (nodeShot == node)
+                        {
+                            RunTime += time;
+                            continue;
+                        }
+                        await node.Run(Solution.Instance.CancellationToken);
+                        RunTime += node.Result.RunTime;
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        Success = false;
+                        IsRuning = false;
+                        RunTime += node.Result.RunTime;
+                        LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false)); 
+                        throw ex;
+                    }
+                    catch (Exception ex)
+                    {
+                        Success = false;
+                        IsRuning = false;
+                        RunTime += node.Result.RunTime;
+                        LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false)); 
+                        throw ex;
+                    }
+                }
+
+                Success = true;
+                IsRuning = false;
+                LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
+                UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
+            }
         }
     }
 }

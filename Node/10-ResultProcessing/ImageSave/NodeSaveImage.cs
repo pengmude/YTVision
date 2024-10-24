@@ -129,23 +129,52 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                 if (param.ResultViewData == null)
                     throw new Exception($"无法获取/解析AI检测结果！");
 
-
+                // 确定要保存哪种图片
                 string okNg = param.ResultViewData.IsAllOk ? "OK" : "NG";
                 imageSavePath = Path.Combine(imageSavePath, okNg);
-
-                if (!param.ResultViewData.IsAllOk)
+                switch (param.ImageTypeToSave)
                 {
-                    foreach (var res in param.ResultViewData.SingleRowDataList)
-                    {
-                        // 默认只保存NG结果
-                        if (!res.IsOk)
-                            paths.Add(Path.Combine(imageSavePath, res.ClassName));
-                    }
+                    case ImageTypeToSave.OkAndNg:
+                        if (param.ResultViewData.IsAllOk)
+                        {
+                            paths.Add(imageSavePath);
+                        }
+                        else
+                        {
+                            foreach (var res in param.ResultViewData.SingleRowDataList)
+                            {
+                                paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                            }
+                        }
+                        break;
+                    case ImageTypeToSave.OnlyOk:
+                        if (param.ResultViewData.IsAllOk)
+                        {
+                            paths.Add(imageSavePath);
+                        }
+                        else
+                        {
+                            foreach (var res in param.ResultViewData.SingleRowDataList)
+                            {
+                                if (res.IsOk)
+                                    paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                            }
+                        }
+                        break;
+                    case ImageTypeToSave.OnlyNg:
+                        if (!param.ResultViewData.IsAllOk)
+                        {
+                            foreach (var res in param.ResultViewData.SingleRowDataList)
+                            {
+                                if (!res.IsOk)
+                                    paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                else
-                {
-                    paths.Add(imageSavePath);
-                }
+                
             }
             else
                 paths.Add(imageSavePath);

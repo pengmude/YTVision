@@ -159,6 +159,10 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             else
                 savaImageParam.NeedCompress = false;
 
+            // 保存什么图
+            savaImageParam.ImageTypeToSave = radioButtonOKAndNG.Checked ? ImageTypeToSave.OkAndNg : 
+                                             (radioButtonOK.Checked ? ImageTypeToSave.OnlyOk : ImageTypeToSave.OnlyNg);
+
             Params = savaImageParam;
             Hide();
         }
@@ -183,6 +187,21 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                                         dateTimePicker2.MinDate : param.NightDataTime;
                 numericUpDown1.Value = param.CompressValue;
                 nodeSubscriptionBarCode.SetText(param.BarCodeSubText1, param.BarCodeSubText2);
+                switch (param.ImageTypeToSave)
+                {
+                    case ImageTypeToSave.OkAndNg:
+                        radioButtonOKAndNG.Checked = true;
+                        break;
+                    case ImageTypeToSave.OnlyOk:
+                        radioButtonOK.Checked = true;
+                        break;
+                    case ImageTypeToSave.OnlyNg:
+                        radioButtonNG.Checked = true;
+                        break;
+                    default:
+                        break;
+                }
+
             }
         }
     }

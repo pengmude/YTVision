@@ -19,6 +19,7 @@ namespace YTVisionPro.Forms.ImageViewer
             NodeImageRead.ImageShowChanged += NodeImageShow_ImageShowChanged;
             NodeHTAI.ImageShowChanged += NodeImageShow_ImageShowChanged;
             NodeImageShow.ImageShowChanged += NodeImageShow_ImageShowChanged;
+            ParamFormShot.ImageShowChanged += NodeImageShow_ImageShowChanged;
         }
 
         private void NodeImageShow_ImageShowChanged(object sender, ImageShowPamra e)

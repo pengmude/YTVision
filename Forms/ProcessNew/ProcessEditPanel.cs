@@ -24,6 +24,7 @@ using YTVisionPro.Node.Modbus.Read;
 using YTVisionPro.Node.Modbus.Write;
 using YTVisionPro.Node.TCP.Client;
 using YTVisionPro.Node.TCP.Server;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -52,6 +53,7 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             InitializeComponent();
             _process = new Process(processName);
+            Process.UpdateRunStatus += RunStatusChange;
             Solution.Instance.AddProcess(_process);
 
             // 反序列化需要执行以下逻辑
@@ -67,6 +69,14 @@ namespace YTVisionPro.Forms.ProcessNew
                 if(showInfo)
                     LogHelper.AddLog(MsgLevel.Debug, $"================================================ 流程（{_process.ProcessName}）已加载完成 ================================================", true);
             }
+        }
+
+        private void RunStatusChange(object sender, ProcessRunResult e)
+        {
+            label2.Text = $"耗时:{_process.RunTime} ms";
+            buttonRun.Enabled = !e.IsRunning;
+            uiSwitchEnable.Enabled = !e.IsRunning;
+            uiLedBulb1.Color = e.IsRunning ? Color.DarkGray : e.IsSuccess ? Color.LawnGreen : Color.Red;
         }
 
         /// <summary>
@@ -290,24 +300,9 @@ namespace YTVisionPro.Forms.ProcessNew
         private async void button1_Click(object sender, EventArgs e)
         {
             //运行流程
-            try
-            {
-                buttonRun.Enabled = false;
-                uiSwitchEnable.Enabled = false;
-                if (Solution.Instance.CancellationToken.IsCancellationRequested)
-                    Solution.Instance.ResetTokenSource();
-                await _process.Run(false, Solution.Instance.CancellationToken);
-
-                SetProcessRunStatus(_process.RunTime, true);
-
-            }
-            catch (Exception)
-            {
-                SetProcessRunStatus(_process.RunTime, false);
-            }
-
-            buttonRun.Enabled = true;
-            uiSwitchEnable.Enabled = true;
+            if (Solution.Instance.CancellationToken.IsCancellationRequested)
+                Solution.Instance.ResetTokenSource();
+            await _process.Run(false, Solution.Instance.CancellationToken);
         }
 
         /// <summary>

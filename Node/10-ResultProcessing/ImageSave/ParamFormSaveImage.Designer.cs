@@ -61,6 +61,9 @@
             this.tableLayoutPanelBarCode = new System.Windows.Forms.TableLayoutPanel();
             this.nodeSubscriptionBarCode = new YTVisionPro.Node.NodeSubscription();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.radioButtonOKAndNG = new System.Windows.Forms.RadioButton();
+            this.radioButtonOK = new System.Windows.Forms.RadioButton();
+            this.radioButtonNG = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tableLayoutPanelNG.SuspendLayout();
@@ -183,6 +186,9 @@
             this.tableLayoutPanel1.Controls.Add(this.checkBoxSaveWithNG, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.checkBoxDayNight, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label12, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.radioButtonOKAndNG, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.radioButtonOK, 3, 4);
+            this.tableLayoutPanel1.Controls.Add(this.radioButtonNG, 4, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -247,7 +253,7 @@
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(116, 18);
             this.label11.TabIndex = 2;
-            this.label11.Text = "【压缩选项】";
+            this.label11.Text = "【其他选项】";
             // 
             // checkBoxSaveWithNG
             // 
@@ -485,6 +491,41 @@
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1114, 81);
             this.tableLayoutPanel2.TabIndex = 11;
             // 
+            // radioButtonOKAndNG
+            // 
+            this.radioButtonOKAndNG.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioButtonOKAndNG.AutoSize = true;
+            this.radioButtonOKAndNG.Checked = true;
+            this.radioButtonOKAndNG.Location = new System.Drawing.Point(387, 405);
+            this.radioButtonOKAndNG.Name = "radioButtonOKAndNG";
+            this.radioButtonOKAndNG.Size = new System.Drawing.Size(159, 22);
+            this.radioButtonOKAndNG.TabIndex = 8;
+            this.radioButtonOKAndNG.TabStop = true;
+            this.radioButtonOKAndNG.Text = "OK和NG图均保存";
+            this.radioButtonOKAndNG.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonOK
+            // 
+            this.radioButtonOK.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioButtonOK.AutoSize = true;
+            this.radioButtonOK.Location = new System.Drawing.Point(589, 405);
+            this.radioButtonOK.Name = "radioButtonOK";
+            this.radioButtonOK.Size = new System.Drawing.Size(123, 22);
+            this.radioButtonOK.TabIndex = 8;
+            this.radioButtonOK.Text = "仅保存OK图";
+            this.radioButtonOK.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonNG
+            // 
+            this.radioButtonNG.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioButtonNG.AutoSize = true;
+            this.radioButtonNG.Location = new System.Drawing.Point(772, 405);
+            this.radioButtonNG.Name = "radioButtonNG";
+            this.radioButtonNG.Size = new System.Drawing.Size(123, 22);
+            this.radioButtonNG.TabIndex = 8;
+            this.radioButtonNG.Text = "仅保存NG图";
+            this.radioButtonNG.UseVisualStyleBackColor = true;
+            // 
             // ParamFormImageSave
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -553,5 +594,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.RadioButton radioButtonOKAndNG;
+        private System.Windows.Forms.RadioButton radioButtonOK;
+        private System.Windows.Forms.RadioButton radioButtonNG;
     }
 }

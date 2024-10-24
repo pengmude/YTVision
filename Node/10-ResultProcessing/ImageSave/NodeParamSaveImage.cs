@@ -51,6 +51,10 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// 压缩阈值
         /// </summary>
         public ushort CompressValue;
+        /// <summary>
+        /// 需要保存什么类型图片
+        /// </summary>
+        public ImageTypeToSave ImageTypeToSave;
 
         #region 反序列化还原参数设置界面用
 
@@ -92,5 +96,14 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// 传统算法NG列表
         /// </summary>
         public List<string> GeneralNGList;
+    }
+    /// <summary>
+    /// 保存什么类型的图片
+    /// </summary>
+    public enum ImageTypeToSave
+    {
+        OkAndNg,
+        OnlyOk,
+        OnlyNg
     }
 }
