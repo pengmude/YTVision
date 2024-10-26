@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static YTVisionPro.Node.ImageROIEditControl;
+using YTVisionPro.Forms.ShapeDraw;
 
 namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
 {

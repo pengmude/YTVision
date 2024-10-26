@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
-using static YTVisionPro.Node.ImageROIEditControl;
+using YTVisionPro.Forms.ShapeDraw;
 
 namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
 {
     internal partial class NodeParamFormImageCrop : Form, INodeParamForm
     {
-        public NodeParamFormImageCrop()
+        private Process process;//所属流程
+        private NodeBase node;//所属节点
+        public NodeParamFormImageCrop(Process process, NodeBase nodeBase)
         {
             InitializeComponent();
-            Shown += NodeParamFormImageCrop_Shown;
-        }
-
-        private void NodeParamFormImageCrop_Shown(object sender, EventArgs e)
-        {
-            UpdataImage();
+            imageROIEditControl1.SetROIType2Draw(ROIType.Rectangle);
+            this.process = process;
+            this.node = nodeBase;
         }
 
         public INodeParam Params { get; set; }
@@ -36,7 +34,8 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
                 nodeSubscription1.SetText(param.Text1, param.Text2);
                 imageROIEditControl1.SetROI(param.ROI);
 
-                // TODO: 必须得显示一下参数窗口再运行截取的图像才是正确的区域，原因未知，估计是和ROI管理类构造需要传入pictrueBox有关
+                // TODO: 修复必须得显示一下参数窗口再运行截取的图像才是正确的区域，
+                // 原因未知，估计是和ROI管理类构造需要传入pictrueBox有关
                 Show();
                 Hide();
             }
@@ -49,6 +48,18 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
         {
             var img = imageROIEditControl1.GetROIImages();
             return img;
+        }
+
+        public Rectangle GetImageROIRect()
+        {
+            try
+            {
+                return imageROIEditControl1.GetImageROIRect();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -89,8 +100,9 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
+            await process.RunForUpdateImages(node);
             UpdataImage();
         }
     }

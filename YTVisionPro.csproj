@@ -245,6 +245,10 @@
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ShapeDraw\CaliperCircle.cs" />
+    <Compile Include="Forms\ShapeDraw\CaliperRect.cs" />
+    <Compile Include="Forms\ShapeDraw\CircleROI.cs" />
+    <Compile Include="Forms\ShapeDraw\RectangleROI.cs" />
     <Compile Include="Forms\TCPAdd\FrmTCPListView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -377,6 +381,17 @@
     </Compile>
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamImageCrop.cs" />
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeResultImageCrop.cs" />
+    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParallelismOf2Lines.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.Designer.cs">
+      <DependentUpon>NodeParamFormParallelismOf2Lines.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParamParallelismOf2Lines.cs" />
+    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeResultParallelismOf2Lines.cs" />
     <Compile Include="Node\4-Detection\FindLine\NodeFIndLine.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -452,10 +467,10 @@
     <Compile Include="Node\FrmNodeRename.Designer.cs">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\ImageROIEditControl.cs">
+    <Compile Include="Forms\ShapeDraw\ImageROIEditControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\ImageROIEditControl.Designer.cs">
+    <Compile Include="Forms\ShapeDraw\ImageROIEditControl.Designer.cs">
       <DependentUpon>ImageROIEditControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\INode.cs" />
@@ -617,8 +632,8 @@
     <Compile Include="Node\9-ProcessControl\SleepTool\NodeSleepTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\ROI.cs" />
-    <Compile Include="Node\ROIManager.cs" />
+    <Compile Include="Forms\ShapeDraw\ROI.cs" />
+    <Compile Include="Forms\ShapeDraw\ROIManager.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -734,6 +749,9 @@
     <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
       <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.resx">
+      <DependentUpon>NodeParamFormParallelismOf2Lines.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\4-Detection\FindLine\NodeParamFormFindLine.resx">
       <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
     </EmbeddedResource>
@@ -773,7 +791,7 @@
     <EmbeddedResource Include="Forms\Logger\LogHelper.resx">
       <DependentUpon>LogHelper.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\ImageROIEditControl.resx">
+    <EmbeddedResource Include="Forms\ShapeDraw\ImageROIEditControl.resx">
       <DependentUpon>ImageROIEditControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\NodeBase.resx">

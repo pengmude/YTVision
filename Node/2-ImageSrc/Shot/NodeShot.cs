@@ -43,9 +43,16 @@ namespace YTVisionPro.Node.ImageSrc.Shot
             ((NodeResultShot)Result).Bitmap = e.Bitmap;
             // 设置本节点的运行状态
             long time = SetRunResult(e.StartTime, NodeStatus.Successful);
+            LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{Process.ProcessName}】（开始）  -----------------------------------------------------", true);
             LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
-            // 继续在该节点往下执行
-            await Process.RunForHardTrigger(this, (long)(DateTime.Now - e.StartTime).TotalMilliseconds);
+            try
+            {
+                // 继续在该节点往下执行
+                await Process.RunForHardTrigger(this, (long)(DateTime.Now - e.StartTime).TotalMilliseconds);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>

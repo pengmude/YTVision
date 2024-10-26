@@ -1,4 +1,6 @@
-﻿namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
+﻿using YTVisionPro.Forms.ShapeDraw;
+
+namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
 {
     partial class NodeParamFormImageCrop
     {
@@ -38,7 +40,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
             this.button2 = new System.Windows.Forms.Button();
-            this.imageROIEditControl1 = new YTVisionPro.Node.ImageROIEditControl();
+            this.imageROIEditControl1 = new YTVisionPro.Forms.ShapeDraw.ImageROIEditControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();

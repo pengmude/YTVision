@@ -14,5 +14,7 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
         public NodeRunStatusCode RunStatusCode { get; set; }
 
         public Bitmap Image { get; set; }
+
+        public Rectangle Rectangle { get; set; }
     }
 }

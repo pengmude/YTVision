@@ -393,19 +393,7 @@ namespace YTVisionPro
 
         private void 流程管理ToolStripMenuItem_Click(object value1, object value2)
         {
-            // 如果子窗口是隐藏状态，则显示它
-            if (FrmNewProcessWizard.WindowState == FormWindowState.Minimized)
-            {
-                FrmNewProcessWizard.WindowState = FormWindowState.Normal;
-            }
-            // 确保子窗口可见
-            if (!FrmNewProcessWizard.Visible)
-            {
-                FrmNewProcessWizard.Show();
-            }
-
-            // 激活子窗口
-            FrmNewProcessWizard.Activate();
+            FrmNewProcessWizard.ShowDialog(this);
         }
 
         private async void 停止运行ToolStripMenuItem_Click(object value1, object value2)

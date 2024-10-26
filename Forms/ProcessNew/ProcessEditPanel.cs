@@ -302,7 +302,13 @@ namespace YTVisionPro.Forms.ProcessNew
             //运行流程
             if (Solution.Instance.CancellationToken.IsCancellationRequested)
                 Solution.Instance.ResetTokenSource();
-            await _process.Run(false, Solution.Instance.CancellationToken);
+            try
+            {
+                await _process.Run(false, Solution.Instance.CancellationToken);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
 
         public NodeImageCrop(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new NodeParamFormImageCrop();
+            ParamForm = new NodeParamFormImageCrop(process, this);
             ParamForm.SetNodeBelong(this);
             Result = new NodeResultImageCrop();
         }
@@ -48,12 +48,18 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
 
                         form.UpdataImage();
                         var roiImg = form.GetROIImage();
+                        if (roiImg == null)
+                        {
+                            throw new Exception("裁切的图像为空，请检查是否超出图像区域！");
+                        }
+                        var rect = form.GetImageROIRect();
                         NodeResultImageCrop nodeResultImageCrop = new NodeResultImageCrop();
                         nodeResultImageCrop.Image = roiImg;
+                        nodeResultImageCrop.Rectangle = rect;
                         Result = nodeResultImageCrop;
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，ROI图像坐标：({rect.X},{rect.Y})，宽：{rect.Width}，高：{rect.Height} )", true);
                     }
                     catch (OperationCanceledException)
                     {
