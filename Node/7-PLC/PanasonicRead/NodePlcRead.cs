@@ -51,7 +51,6 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
                     if (!param.Plc.IsConnect)
                         throw new Exception("设备尚未连接！");
 
-                    //object data = new object();
                     OperateResult<bool, int, string, byte[]> data = new OperateResult<bool, int, string, byte[]>();
                     await Task.Run(() =>
                     {
@@ -60,20 +59,32 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
                             switch (param.DataType)
                             {
                                 case DataType.BOOL:
-                                    data.Content1 = param.Plc.ReadBool(param.Address).Content;
+                                    var res1 = param.Plc.ReadBool(param.Address);
+                                    data.Content1 = res1.Content;
+                                    data.IsSuccess = res1.IsSuccess;
                                     break;
                                 case DataType.INT:
-                                    data.Content2 = param.Plc.ReadInt(param.Address).Content;
+                                    var res2 = param.Plc.ReadInt(param.Address);
+                                    data.Content2 = res2.Content;
+                                    data.IsSuccess = res2.IsSuccess;
                                     break;
                                 case DataType.STRING:
-                                    data.Content3 = param.Plc.ReadString(param.Address, param.Length).Content;
+                                    var res3 = param.Plc.ReadString(param.Address, param.Length);
+                                    data.Content3 = res3.Content;
+                                    data.IsSuccess = res3.IsSuccess;
                                     break;
                                 case DataType.Bytes:
-                                    data.Content4 = param.Plc.ReadBytes(param.Address, param.Length).Content;
+                                    var res4 = param.Plc.ReadBytes(param.Address, param.Length);
+                                    data.Content4 = res4.Content;
+                                    data.IsSuccess = res4.IsSuccess;
                                     break;
                                 default:
                                     break;
                             }
+
+                            long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
+                            if (timeTotal > 5000)
+                                throw new Exception("PLC读取超时！请检查PLC端是否正常！");
                         } while (!data.IsSuccess);
                     });
                     

@@ -8,6 +8,7 @@ using System;
 using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Device.Camera;
 using YTVisionPro.Device.Light;
+using System.IO.Ports;
 
 namespace YTVisionPro.Device.PLC
 {
@@ -253,7 +254,9 @@ namespace YTVisionPro.Device.PLC
         public OperateResult WriteBool(string address, bool value)
         {
             if (PLCParms.PlcConType == PlcConType.COM)
+            {
                 return _panasonicMewtocol.Write(address, value);
+            }
             else
                 return _panasonicMcNet.Write(address, value);
 

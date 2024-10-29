@@ -52,30 +52,29 @@ namespace YTVisionPro.Node.PLC.PanasonicWirte
                     throw new Exception("设备尚未连接！");
 
 
-                OperateResult res;
-                switch (param.Value)
+                OperateResult res = new OperateResult();
+                do
                 {
-                    case bool bValue:
-                        do
-                        {
-                            res = param.Plc.WriteBool(param.Address, bValue);
-                        } while (!res.IsSuccess);
-                        break;
+                    switch (param.Value)
+                    {
+                        case bool bValue:
+                            res.IsSuccess = param.Plc.WriteBool(param.Address, bValue).IsSuccess;
+                            break;
 
-                    case int iValue:
-                        do
-                        {
-                            res = param.Plc.WriteInt(param.Address, iValue);
-                        } while (!res.IsSuccess);
-                        break;
+                        case int iValue:
+                            res.IsSuccess = param.Plc.WriteInt(param.Address, iValue).IsSuccess;
+                            break;
 
-                    case string sValue:
-                        do
-                        {
-                            res = param.Plc.WriteString(param.Address, sValue);
-                        } while (!res.IsSuccess);
-                        break;
-                }
+                        case string sValue:
+                            res.IsSuccess = param.Plc.WriteString(param.Address, sValue).IsSuccess;
+                            break;
+                    }
+
+                    long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
+                    if (timeTotal > 5000)
+                        throw new Exception("PLC写入超时！请检查PLC端是否正常！");
+
+                } while (!res.IsSuccess);
 
                 LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
 

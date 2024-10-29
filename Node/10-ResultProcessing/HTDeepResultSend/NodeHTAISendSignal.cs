@@ -139,19 +139,35 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                 {
                     if (plcTmp.UserDefinedName == dataRow.UserNamePlc)
                     {
-                        OperateResult writeResult;
-                        do
+                        try
                         {
-                            writeResult = plcTmp.WriteBool(dataRow.SignalAddress, true);
+                            OperateResult writeResult;
+                            DateTime startTime = DateTime.Now;
+                            do
+                            {
+                                writeResult = plcTmp.WriteBool(dataRow.SignalAddress, true);
 
-                        } while (!writeResult.IsSuccess);
+                                long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
+                                if (timeTotal > 5000)
+                                    throw new Exception("发送AI检测结果信号存在超时，请检查PLC通信是否正常！");
 
-                        do
+                            } while (!writeResult.IsSuccess);
+
+                            do
+                            {
+                                writeResult = plcTmp.WriteBool(dataRow.SignalAddress, false);
+
+                                long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
+                                if (timeTotal > 5000)
+                                    throw new Exception("重置AI检测结果信号出现超时，请检查PLC通信是否正常！");
+                            } while (!writeResult.IsSuccess);
+                            LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功!", true);
+                            break;
+                        }
+                        catch (Exception)
                         {
-                            writeResult = plcTmp.WriteBool(dataRow.SignalAddress, false);
-                        } while (!writeResult.IsSuccess);
-                        LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功!", true);
-                        break;
+                            throw;
+                        }
                     }
                 }
             }

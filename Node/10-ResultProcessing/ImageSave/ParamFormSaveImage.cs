@@ -1,4 +1,5 @@
-﻿using Logger;
+﻿using HslCommunication;
+using Logger;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -97,7 +98,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// <returns></returns>
         public string GetBarCode()
         {
-            return nodeSubscriptionBarCode.GetValue<string>();
+            return nodeSubscriptionBarCode.GetValue<OperateResult<bool, int, string, byte[]>>().Content3;
         }
 
         /// <summary>
