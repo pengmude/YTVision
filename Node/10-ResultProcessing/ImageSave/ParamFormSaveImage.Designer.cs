@@ -46,6 +46,9 @@
             this.checkBoxSaveWithNG = new System.Windows.Forms.CheckBox();
             this.checkBoxDayNight = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.radioButtonOKAndNG = new System.Windows.Forms.RadioButton();
+            this.radioButtonOK = new System.Windows.Forms.RadioButton();
+            this.radioButtonNG = new System.Windows.Forms.RadioButton();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.label8 = new System.Windows.Forms.Label();
@@ -61,9 +64,6 @@
             this.tableLayoutPanelBarCode = new System.Windows.Forms.TableLayoutPanel();
             this.nodeSubscriptionBarCode = new YTVisionPro.Node.NodeSubscription();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioButtonOKAndNG = new System.Windows.Forms.RadioButton();
-            this.radioButtonOK = new System.Windows.Forms.RadioButton();
-            this.radioButtonNG = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.tableLayoutPanelNG.SuspendLayout();
@@ -290,6 +290,41 @@
             this.label12.TabIndex = 2;
             this.label12.Text = "(注：不勾选默认以当前时间命名)";
             // 
+            // radioButtonOKAndNG
+            // 
+            this.radioButtonOKAndNG.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioButtonOKAndNG.AutoSize = true;
+            this.radioButtonOKAndNG.Checked = true;
+            this.radioButtonOKAndNG.Location = new System.Drawing.Point(387, 405);
+            this.radioButtonOKAndNG.Name = "radioButtonOKAndNG";
+            this.radioButtonOKAndNG.Size = new System.Drawing.Size(159, 22);
+            this.radioButtonOKAndNG.TabIndex = 8;
+            this.radioButtonOKAndNG.TabStop = true;
+            this.radioButtonOKAndNG.Text = "OK和NG图均保存";
+            this.radioButtonOKAndNG.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonOK
+            // 
+            this.radioButtonOK.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioButtonOK.AutoSize = true;
+            this.radioButtonOK.Location = new System.Drawing.Point(589, 405);
+            this.radioButtonOK.Name = "radioButtonOK";
+            this.radioButtonOK.Size = new System.Drawing.Size(123, 22);
+            this.radioButtonOK.TabIndex = 8;
+            this.radioButtonOK.Text = "仅保存OK图";
+            this.radioButtonOK.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonNG
+            // 
+            this.radioButtonNG.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.radioButtonNG.AutoSize = true;
+            this.radioButtonNG.Location = new System.Drawing.Point(772, 405);
+            this.radioButtonNG.Name = "radioButtonNG";
+            this.radioButtonNG.Size = new System.Drawing.Size(123, 22);
+            this.radioButtonNG.TabIndex = 8;
+            this.radioButtonNG.Text = "仅保存NG图";
+            this.radioButtonNG.UseVisualStyleBackColor = true;
+            // 
             // dateTimePicker2
             // 
             this.dateTimePicker2.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -490,41 +525,6 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 105F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(1114, 81);
             this.tableLayoutPanel2.TabIndex = 11;
-            // 
-            // radioButtonOKAndNG
-            // 
-            this.radioButtonOKAndNG.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.radioButtonOKAndNG.AutoSize = true;
-            this.radioButtonOKAndNG.Checked = true;
-            this.radioButtonOKAndNG.Location = new System.Drawing.Point(387, 405);
-            this.radioButtonOKAndNG.Name = "radioButtonOKAndNG";
-            this.radioButtonOKAndNG.Size = new System.Drawing.Size(159, 22);
-            this.radioButtonOKAndNG.TabIndex = 8;
-            this.radioButtonOKAndNG.TabStop = true;
-            this.radioButtonOKAndNG.Text = "OK和NG图均保存";
-            this.radioButtonOKAndNG.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonOK
-            // 
-            this.radioButtonOK.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.radioButtonOK.AutoSize = true;
-            this.radioButtonOK.Location = new System.Drawing.Point(589, 405);
-            this.radioButtonOK.Name = "radioButtonOK";
-            this.radioButtonOK.Size = new System.Drawing.Size(123, 22);
-            this.radioButtonOK.TabIndex = 8;
-            this.radioButtonOK.Text = "仅保存OK图";
-            this.radioButtonOK.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonNG
-            // 
-            this.radioButtonNG.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.radioButtonNG.AutoSize = true;
-            this.radioButtonNG.Location = new System.Drawing.Point(772, 405);
-            this.radioButtonNG.Name = "radioButtonNG";
-            this.radioButtonNG.Size = new System.Drawing.Size(123, 22);
-            this.radioButtonNG.TabIndex = 8;
-            this.radioButtonNG.Text = "仅保存NG图";
-            this.radioButtonNG.UseVisualStyleBackColor = true;
             // 
             // ParamFormImageSave
             // 

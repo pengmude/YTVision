@@ -15,6 +15,7 @@
     <Node Text="图像预处理" ImageIndex="5" Tag="UNKNOWN" SelectedImageIndex="5">
       <Nodes>
         <Node Text="图像裁切" ImageIndex="6" Tag="ImageCrop" SelectedImageIndex="6" />
+        <Node Text="图像旋转" ImageIndex="37" Tag="ImageRotate" SelectedImageIndex="37" />
         <Node Text="灰度图像" ImageIndex="7" Tag="GrayScale" SelectedImageIndex="7" />
         <Node Text="Blob分析" ImageIndex="8" Tag="BlobAnalysis" SelectedImageIndex="8" />
       </Nodes>

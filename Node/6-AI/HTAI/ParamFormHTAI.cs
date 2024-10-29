@@ -177,22 +177,31 @@ namespace YTVisionPro.Node.AI.HTAI
             int device_id = 0;
             int iRet = -1;
             nodeParamHTAI.ModelInitParams = new ModelInitParams(config, test_node_names, TestNum, device, device_id);
-            iRet = HTAPI.InitTreeModel(ref TreePredictHandle, config, byteArray_name, TestNum, device, device_id);
-            if (iRet != 0)
+
+            try
             {
-                MessageBox.Show($"节点({_node.NodeName})加载模型出现错误!错误码: " + iRet);
-                LogHelper.AddLog(MsgLevel.Exception, "加载模型出现错误!错误码:" + iRet, true);
-                return;
+                iRet = HTAPI.InitTreeModel(ref TreePredictHandle, config, byteArray_name, TestNum, device, device_id);
+                if (iRet != 0)
+                {
+                    LogHelper.AddLog(MsgLevel.Exception, "加载模型出现错误!错误码:" + iRet, true);
+                    MessageBox.Show($"节点({_node.NodeName})加载模型出现错误!错误码: " + iRet);
+                    return;
+                }
+                LogHelper.AddLog(MsgLevel.Info, $"节点({_node.NodeName})模型加载成功!", true);
+                // 读取Tree文件里面的节点配置
+                node_info_choose = new List<NodeInfo>();
+                GetNodeInfoChoose(config, test_node_names);
+                cbNodes.Items.Clear();
+                cbNodes.Items.AddRange(node_info_choose.ConvertAll(n => n.NodeName).ToArray());
+                cbNodes.SelectedIndex = 0; // 默认选中第一个节点
+                cbClasses.DataSource = node_info_choose[0].ClassNames;
+                InitializeNGConfigs();
             }
-            LogHelper.AddLog(MsgLevel.Info, $"节点({_node.NodeName})模型加载成功!", true);
-            // 读取Tree文件里面的节点配置
-            node_info_choose = new List<NodeInfo>();
-            GetNodeInfoChoose(config, test_node_names);
-            cbNodes.Items.Clear();
-            cbNodes.Items.AddRange(node_info_choose.ConvertAll(n => n.NodeName).ToArray());
-            cbNodes.SelectedIndex = 0; // 默认选中第一个节点
-            cbClasses.DataSource = node_info_choose[0].ClassNames;
-            InitializeNGConfigs();
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"加载模型出现错误!原因:{ex.Message}", true);
+                MessageBox.Show($"节点({_node.NodeName})加载模型出现错误!原因:{ex.Message}");
+            }
         }
 
         private byte[] StringList2ByteArr(List<string> test_node_names)
@@ -354,6 +363,8 @@ namespace YTVisionPro.Node.AI.HTAI
         // 判别条件修改时更新信息到对应的ngconfig
         private void Tb_TextChanged(object sender, EventArgs e)
         {
+            if (cbNodes.SelectedItem == null || cbClasses.SelectedItem == null)
+                return;
             string nodeName = cbNodes.SelectedItem.ToString();
             string className = cbClasses.SelectedItem.ToString();
 
@@ -407,16 +418,27 @@ namespace YTVisionPro.Node.AI.HTAI
         //判别节点是否设置为OK
         private void cbIsOK_CheckedChanged(object sender, EventArgs e)
         {
-            string nodeName = cbNodes.SelectedItem.ToString();
-            string className = cbClasses.SelectedItem.ToString();
-
-            NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.ClassName == className);
-            if (ngconfig != null)
+            // 判断当前节点是否为NULL
+            if (cbNodes.SelectedItem != null)
             {
-                if(btIsOK.Checked)
-                    ngconfig.ForceOk = true;
-                else
-                    ngconfig.ForceOk = false;
+                string nodeName = cbNodes.SelectedItem.ToString();
+                string className = cbClasses.SelectedItem.ToString();
+                NGTypeConfig ngconfig = _allNgConfigs.Find(c => c.NodeName == nodeName && c.ClassName == className);
+                if (ngconfig != null)
+                {
+                    if (btIsOK.Checked)
+                        ngconfig.ForceOk = true;
+                    else
+                        ngconfig.ForceOk = false;
+                }
+            }
+            else
+            {
+                // 如果当前对象为NULL，则默认没有选中。
+                btIsOK.CheckedChanged -= cbIsOK_CheckedChanged;
+                btIsOK.Checked = false;
+                btIsOK.CheckedChanged += cbIsOK_CheckedChanged;
+                MessageBox.Show("当前节点为空，请初始化模型选中修改节点");
             }
         }
 

@@ -170,6 +170,7 @@
     <Compile Include="ConfigHelper.cs" />
     <Compile Include="Device\Modbus\IModbus.cs" />
     <Compile Include="Device\Modbus\ModbusSlave.cs" />
+    <Compile Include="Device\PLC\PlcResult.cs" />
     <Compile Include="Device\TCP\ITcp.cs" />
     <Compile Include="Device\TCP\TCPClient.cs" />
     <Compile Include="Device\TCP\TcpParam.cs" />
@@ -412,6 +413,17 @@
     </Compile>
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamImageCrop.cs" />
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeResultImageCrop.cs" />
+    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeImageRotate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.Designer.cs">
+      <DependentUpon>NodeParamFormImageRotate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamImageRotate.cs" />
+    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeResultImageRotate.cs" />
     <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParallelismOf2Lines.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -779,6 +791,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
       <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.resx">
+      <DependentUpon>NodeParamFormImageRotate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.resx">
       <DependentUpon>NodeParamFormParallelismOf2Lines.cs</DependentUpon>

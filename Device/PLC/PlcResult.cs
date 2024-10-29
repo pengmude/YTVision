@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace YTVisionPro.Device.PLC
 {
-    internal class OperateResult
+    internal class PlcResult
     {
         /// <summary>
         /// 指示本次操作是否成功。
@@ -18,7 +18,7 @@ namespace YTVisionPro.Device.PLC
         public string ErrorMessage { get; set; }
     }
 
-    internal class OperateResult<T> : OperateResult
+    internal class PlcResult<T> : PlcResult
     {
         /// <summary>
         /// 用户自定义的泛型数据
@@ -27,7 +27,7 @@ namespace YTVisionPro.Device.PLC
     }
 
 
-    internal class OperateResult<T1, T2, T3, T4> : OperateResult
+    internal class PlcResult<T1, T2, T3, T4> : PlcResult
     {
         /// <summary>
         /// 用户自定义的泛型数据1

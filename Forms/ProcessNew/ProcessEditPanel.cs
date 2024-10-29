@@ -25,6 +25,7 @@ using YTVisionPro.Node.Modbus.Write;
 using YTVisionPro.Node.TCP.Client;
 using YTVisionPro.Node.TCP.Server;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using YTVisionPro.Node._3_ImagePreprocessing.ImageRotate;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -229,6 +230,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.TCPServerResponse:
                     node = new NodeTCPServer(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ImageRotate:
+                    node = new NodeImageRotate(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

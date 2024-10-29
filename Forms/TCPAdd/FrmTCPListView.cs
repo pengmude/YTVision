@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Device.TCP;
 using YTVisionPro.Forms.ModbusAdd;
+using System.Linq;
 
 namespace YTVisionPro.Forms.TCPAdd
 {
@@ -41,6 +42,12 @@ namespace YTVisionPro.Forms.TCPAdd
             // 先移除旧方案的TCP控件
             flowLayoutPanel1.Controls.Clear();
 
+            // 没有对应类型设备跳过加载
+            if (ConfigHelper.SolConfig.Devices.Count(device => device is ITcpDevice) == 0)
+            {
+                OnTCPDeserializationCompletionEvent?.Invoke(this, e);
+                return;
+            }
             // 添加新的TCP
             SingleTcp singleTCP = null;
             if(e)

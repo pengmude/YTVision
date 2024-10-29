@@ -51,7 +51,7 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
                     if (!param.Plc.IsConnect)
                         throw new Exception("设备尚未连接！");
 
-                    OperateResult<bool, int, string, byte[]> data = new OperateResult<bool, int, string, byte[]>();
+                    PlcResult<bool, int, string, byte[]> data = new PlcResult<bool, int, string, byte[]>();
                     await Task.Run(() =>
                     {
                         do
@@ -62,21 +62,25 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
                                     var res1 = param.Plc.ReadBool(param.Address);
                                     data.Content1 = res1.Content;
                                     data.IsSuccess = res1.IsSuccess;
+                                    LogHelper.AddLog(MsgLevel.Info, $"bool值为: {data.Content1}", true);
                                     break;
                                 case DataType.INT:
                                     var res2 = param.Plc.ReadInt(param.Address);
                                     data.Content2 = res2.Content;
                                     data.IsSuccess = res2.IsSuccess;
+                                    LogHelper.AddLog(MsgLevel.Info, $"int值为: {data.Content2}", true);
                                     break;
                                 case DataType.STRING:
                                     var res3 = param.Plc.ReadString(param.Address, param.Length);
                                     data.Content3 = res3.Content;
                                     data.IsSuccess = res3.IsSuccess;
+                                    LogHelper.AddLog(MsgLevel.Info, $"string值为: {data.Content3}", true);
                                     break;
                                 case DataType.Bytes:
                                     var res4 = param.Plc.ReadBytes(param.Address, param.Length);
                                     data.Content4 = res4.Content;
                                     data.IsSuccess = res4.IsSuccess;
+                                    LogHelper.AddLog(MsgLevel.Info, $"byte[]值为: {data.Content4}", true);
                                     break;
                                 default:
                                     break;

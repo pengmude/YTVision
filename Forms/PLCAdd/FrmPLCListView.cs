@@ -51,6 +51,12 @@ namespace YTVisionPro.Forms.PLCAdd
             // 先移除旧方案的PLC控件
             flowLayoutPanel1.Controls.Clear();
 
+            // 没有对应类型设备跳过加载
+            if (ConfigHelper.SolConfig.Devices.Count(device => device is IPlc) == 0)
+            {
+                OnPLCDeserializationCompletionEvent?.Invoke(this, e);
+                return;
+            }
             // 添加新的PLC
             SinglePLC singlePLC = null;
             if(e)

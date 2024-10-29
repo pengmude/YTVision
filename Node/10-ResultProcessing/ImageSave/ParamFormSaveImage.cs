@@ -3,6 +3,7 @@ using Logger;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using YTVisionPro.Device.PLC;
 using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ResultProcessing.ImageSave
@@ -98,7 +99,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// <returns></returns>
         public string GetBarCode()
         {
-            return nodeSubscriptionBarCode.GetValue<OperateResult<bool, int, string, byte[]>>().Content3;
+            return nodeSubscriptionBarCode.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
         }
 
         /// <summary>

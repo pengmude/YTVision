@@ -5,6 +5,7 @@ using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Device.Modbus;
 using YTVisionPro.Device;
+using System.Linq;
 
 namespace YTVisionPro.Forms.ModbusAdd
 {
@@ -42,6 +43,12 @@ namespace YTVisionPro.Forms.ModbusAdd
             // 先移除旧方案的Modbus控件
             flowLayoutPanel1.Controls.Clear();
 
+            // 没有对应类型设备跳过加载
+            if (ConfigHelper.SolConfig.Devices.Count(device => device is IModbus) == 0)
+            {
+                OnModbusDeserializationCompletionEvent?.Invoke(this, e);
+                return;
+            }
             // 添加新的Modbus
             SingleModbus singlePLC = null;
             if(e)

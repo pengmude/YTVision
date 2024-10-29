@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Logger;
 using System.Diagnostics;
 using YTVisionPro.Forms.LightAdd;
+using System.Linq;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -46,6 +47,12 @@ namespace YTVisionPro.Forms.CameraAdd
             // 先移除旧方案的相机控件
             flowLayoutPanel1.Controls.Clear();
 
+            // 没有对应类型设备跳过加载
+            if (ConfigHelper.SolConfig.Devices.Count(device => device is ICamera) == 0)
+            {
+                OnCameraDeserializationCompletionEvent?.Invoke(this, e);
+                return;
+            }
             // 添加新的相机
             SingleCamera singleCamera = null;
             if(e)

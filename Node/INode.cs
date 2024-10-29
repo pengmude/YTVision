@@ -185,5 +185,9 @@ namespace YTVisionPro.Node
         /// TCP服务器响应
         /// </summary>
         TCPServerResponse,
+        /// <summary>
+        /// 图像旋转节点
+        /// </summary>
+        ImageRotate,
     }
 }

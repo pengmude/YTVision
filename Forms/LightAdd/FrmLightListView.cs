@@ -6,6 +6,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Device.Light;
+using System.Linq;
 
 namespace YTVisionPro.Forms.LightAdd
 {
@@ -53,6 +54,12 @@ namespace YTVisionPro.Forms.LightAdd
             // 先移除旧方案的光源控件
             flowLayoutPanel1.Controls.Clear();
 
+            // 没有对应类型设备跳过加载
+            if(ConfigHelper.SolConfig.Devices.Count(device => device is ILight) == 0)
+            {
+                OnLightDeserializationCompletionEvent?.Invoke(this, e);
+                return;
+            }
             // 添加新的光源
             SingleLight singleLight = null;
             if(e)
