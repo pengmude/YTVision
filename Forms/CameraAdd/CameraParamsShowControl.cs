@@ -11,8 +11,8 @@ namespace YTVisionPro.Forms.CameraAdd
         public CameraParamsShowControl(ICamera camera)
         {
             InitializeComponent();
-            camera.PublishImageEvent += Camera_PublishImageEvent;
             _camera = camera;
+            camera.PublishImageEvent += Camera_PublishImageEvent;
         }
 
         private void Camera_PublishImageEvent(object sender, Bitmap e)

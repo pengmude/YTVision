@@ -53,6 +53,7 @@ namespace YTVisionPro.Forms.CameraAdd
         {
             InitializeComponent();
             Camera = camera;
+            Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
             if (camera.IsOpen)
             {
                 try
@@ -66,7 +67,6 @@ namespace YTVisionPro.Forms.CameraAdd
                     LogHelper.AddLog(MsgLevel.Exception, $"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}", true);
                 }
             }
-            Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
             this.label1.Text = camera.UserDefinedName;
             Solution.Instance.AllDevices.Add(Camera);
             //绑定图像显示控件界面
@@ -90,15 +90,7 @@ namespace YTVisionPro.Forms.CameraAdd
 
             try
             {
-                //创建相机设备并添加到方案中
-                if (parms.Brand == CameraBrand.HiKVision)
-                {
-                    Camera = new CameraHik(parms.DevInfo.Hik, parms.UserDefinedName);
-                }
-                else if (parms.Brand == CameraBrand.Basler)
-                {
-                    Camera = new CameraBasler(parms.DevInfo.Basler, parms.UserDefinedName);
-                }
+                Camera = new CameraHik(parms.DevInfo.cameraInfo, parms.UserDefinedName);
                 Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
                 Solution.Instance.AllDevices.Add(Camera);
 

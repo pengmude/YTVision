@@ -275,6 +275,16 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                 NodeInfos treeNode = Newtonsoft.Json.JsonConvert.DeserializeObject<NodeInfos>(treefile);
                 _nodeToClassName = new List<NodeToClassName>();
 
+                //初始PLC
+                comboBox2.Items.Clear();
+                comboBox2.Items.Add("[未设置]");
+                foreach (var plc in Solution.Instance.PlcDevices)
+                {
+                    comboBox2.Items.Add(plc.UserDefinedName);
+                }
+                int index1 = comboBox2.Items.IndexOf(param.PlcName);
+                comboBox2.SelectedIndex = index1 == -1 ? 0 : index1;
+
                 //初始深度学习节点
                 comboBox3.Items.Clear();
                 foreach (var item in treeNode.NodeInfo)
@@ -318,6 +328,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
             nodeParamSendSignal.Path = this.textBox3.Text;
             nodeParamSendSignal.OKPLC = this.textBox2.Text;
             nodeParamSendSignal.NGPLC = this.textBox1.Text;
+            nodeParamSendSignal.PlcName = this.comboBox2.Text;
             Params = nodeParamSendSignal;
         }
     }

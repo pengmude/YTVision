@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 using JsonSubTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Sunny.UI.Win32;
+using YTVisionPro.Node.AI.HTAI;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 
 namespace YTVisionPro.Device.Camera
 {
@@ -99,7 +103,7 @@ namespace YTVisionPro.Device.Camera
             {
                 /*只枚举网口类型的相机*/
                 List<IDeviceInfo> devInfoList = null;
-                int ret = DeviceEnumerator.EnumDevicesEx(DeviceTLayerType.MvGigEDevice, "Hikrobot", out devInfoList);
+                int ret = DeviceEnumerator.EnumDevices(DeviceTLayerType.MvGigEDevice, out devInfoList);
                 if (ret == MvError.MV_OK)
                 {
                     foreach (IGigEDeviceInfo devInfo in devInfoList)
@@ -190,7 +194,7 @@ namespace YTVisionPro.Device.Camera
             GC.Collect();
             int nRet;
             List<IDeviceInfo> infoList = null;
-            nRet = DeviceEnumerator.EnumDevicesEx(DeviceTLayerType.MvGigEDevice | DeviceTLayerType.MvUsbDevice, "Hikrobot", out infoList);
+            nRet = DeviceEnumerator.EnumDevices(DeviceTLayerType.MvGigEDevice, out infoList);
             if (MvError.MV_OK != nRet)
             {
                 LogHelper.AddLog(MsgLevel.Exception, "获取相机列表失败", true);
@@ -281,9 +285,19 @@ namespace YTVisionPro.Device.Camera
                 for (int j = 0; j < 256; j++)
                     pal.Entries[j] = Color.FromArgb(j, j, j);
                 inputImage.ToBitmap().Palette = pal;
-            }
 
-            PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
+                PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
+            }
+            else if (nChannelNum == 3)
+            {
+                Mat mat = new Mat((int)inputImage.Height, (int)inputImage.Width, MatType.CV_8UC1);
+                //使用Marshal.Copy将像素数据复制到Mat的数据区域
+                Marshal.Copy(inputImage.PixelData, 0, mat.Data, inputImage.PixelData.Length);
+                Bitmap bitmap = BitmapConverter.ToBitmap(mat);
+                PublishImageEvent?.Invoke(this, bitmap);
+                mat.Dispose();
+                return;
+            }
         }
 
         /// <summary>
@@ -311,25 +325,48 @@ namespace YTVisionPro.Device.Camera
             //           3 - Line3;
             //           4 - Counter;
             //           7 - Software;
-            switch (triggerSource)
+            if (device.DeviceInfo.ManufacturerName == "Basler")
             {
-                case TriggerSource.SOFT:
-                    device.Parameters.SetEnumValue("TriggerSource", 7);
-                    break;
-                case TriggerSource.LINE0:
-                    device.Parameters.SetEnumValue("TriggerSource", 0);
-                    break;
-                case TriggerSource.LINE1:
-                    device.Parameters.SetEnumValue("TriggerSource", 1);
-                    break;
-                case TriggerSource.LINE2:
-                    device.Parameters.SetEnumValue("TriggerSource", 2);
-                    break;
-                case TriggerSource.LINE3:
-                    device.Parameters.SetEnumValue("TriggerSource", 3);
-                    break;
-                default:
-                    break;
+                switch (triggerSource)
+                {
+                    case TriggerSource.SOFT:
+                        device.Parameters.SetEnumValue("TriggerSource", 0);
+                        break;
+                    case TriggerSource.LINE1:
+                        device.Parameters.SetEnumValue("TriggerSource", 1);
+                        break;
+                    case TriggerSource.LINE2:
+                        device.Parameters.SetEnumValue("TriggerSource", 2);
+                        break;
+                    case TriggerSource.LINE3:
+                        device.Parameters.SetEnumValue("TriggerSource", 3);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (triggerSource)
+                {
+                    case TriggerSource.SOFT:
+                        device.Parameters.SetEnumValue("TriggerSource", 7);
+                        break;
+                    case TriggerSource.LINE0:
+                        device.Parameters.SetEnumValue("TriggerSource", 0);
+                        break;
+                    case TriggerSource.LINE1:
+                        device.Parameters.SetEnumValue("TriggerSource", 1);
+                        break;
+                    case TriggerSource.LINE2:
+                        device.Parameters.SetEnumValue("TriggerSource", 2);
+                        break;
+                    case TriggerSource.LINE3:
+                        device.Parameters.SetEnumValue("TriggerSource", 3);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -375,8 +412,16 @@ namespace YTVisionPro.Device.Camera
         public float GetExposureTime()
         {
             if (device == null) throw new Exception("相机对象为空！");
-            device.Parameters.GetFloatValue("ExposureTime", out IFloatValue exposureTime);
-            return exposureTime.CurValue;
+            if (device.DeviceInfo.ManufacturerName == "Basler")
+            {
+                device.Parameters.GetFloatValue("ExposureTimeAbs", out IFloatValue exposureTime);
+                return exposureTime.CurValue;
+            }
+            else
+            {
+                device.Parameters.GetFloatValue("ExposureTime", out IFloatValue exposureTime);
+                return exposureTime.CurValue;
+            }
         }
 
         /// <summary>
@@ -387,8 +432,17 @@ namespace YTVisionPro.Device.Camera
         public float GetGain()
         {
             if (device == null) throw new Exception("相机对象为空！");
-            device.Parameters.GetFloatValue("Gain", out IFloatValue gain);
-            return gain.CurValue;
+
+            if (device.DeviceInfo.ManufacturerName == "Basler")
+            {
+                device.Parameters.GetIntValue("GainRaw", out IIntValue gain);
+                return gain.CurValue;
+            }
+            else
+            {
+                device.Parameters.GetFloatValue("Gain", out IFloatValue gain);
+                return gain.CurValue;
+            }
         }
 
         /// <summary>
@@ -398,8 +452,16 @@ namespace YTVisionPro.Device.Camera
         public float GetTriggerDelay()
         {
             if (device == null) throw new Exception("相机对象为空！");
-            device.Parameters.GetFloatValue("TriggerDelay", out IFloatValue triggerDelay);
-            return triggerDelay.CurValue;
+            if (device.DeviceInfo.ManufacturerName == "Basler")
+            {
+                device.Parameters.GetFloatValue("TriggerDelayAbs", out IFloatValue triggerDelay);
+                return triggerDelay.CurValue;
+            }
+            else
+            {
+                device.Parameters.GetFloatValue("TriggerDelay", out IFloatValue triggerDelay);
+                return triggerDelay.CurValue;
+            }
         }
 
         /// <summary>
@@ -410,7 +472,14 @@ namespace YTVisionPro.Device.Camera
         {
             if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("GainAuto", 0);
-            device.Parameters.SetFloatValue("Gain", gainValue);
+            if (device.DeviceInfo.ManufacturerName == "Basler")
+            {
+                device.Parameters.SetIntValue("GainRaw", (int)gainValue);
+            }
+            else
+            {
+                device.Parameters.SetFloatValue("Gain", gainValue);
+            }
         }
 
         /// <summary>
@@ -420,8 +489,16 @@ namespace YTVisionPro.Device.Camera
         public void SetExposureTime(float time)
         {
             if (device == null) throw new Exception("相机对象为空！");
-            device.Parameters.SetEnumValue("ExposureAuto", 0); 
-            device.Parameters.SetFloatValue("ExposureTime", time);
+            device.Parameters.SetEnumValue("ExposureAuto", 0);
+
+            if (device.DeviceInfo.ManufacturerName == "Basler")
+            {
+                device.Parameters.SetFloatValue("ExposureTimeAbs", time);
+            }
+            else
+            {
+                device.Parameters.SetFloatValue("ExposureTime", time);
+            }
         }
 
         /// <summary>
@@ -431,7 +508,15 @@ namespace YTVisionPro.Device.Camera
         public void SetTriggerDelay(float time)
         {
             if (device == null) throw new Exception("相机对象为空！");
-            device.Parameters.SetFloatValue("TriggerDelay", time);
+
+            if (device.DeviceInfo.ManufacturerName == "Basler")
+            {
+                device.Parameters.SetFloatValue("TriggerDelayAbs", time);
+            }
+            else
+            {
+                device.Parameters.SetFloatValue("TriggerDelay", time);
+            }
         }
 
         /// <summary>
@@ -477,7 +562,10 @@ namespace YTVisionPro.Device.Camera
         {
             if (device == null) throw new Exception("相机对象为空！");
             //先停止取流
-            StopGrabbing();
+            if (_isGrabbing)
+            {
+                StopGrabbing();
+            }
             device.Close();
             IsOpen = false;
             ConnectStatusEvent?.Invoke(this, false);

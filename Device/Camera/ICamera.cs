@@ -151,12 +151,10 @@ namespace YTVisionPro.Device.Camera
     /// </summary>
     public struct CameraDevInfo
     {
-        public IDeviceInfo Hik;
-        public ICameraInfo Basler;
-        public CameraDevInfo(IDeviceInfo hikInfo = null, ICameraInfo baslerInfo = null)
+        public IDeviceInfo cameraInfo;
+        public CameraDevInfo(IDeviceInfo Info)
         {
-            Hik = hikInfo;
-            Basler = baslerInfo;
+            cameraInfo = Info;
         }
     }
 
@@ -214,7 +212,15 @@ namespace YTVisionPro.Device.Camera
         /// <summary>
         /// 巴斯勒
         /// </summary>
-        Basler
+        Basler,
+        /// <summary>
+        /// 大恒相机
+        /// </summary>
+        DaHeng,
+        /// <summary>
+        /// 大华相机
+        /// </summary>
+        DaHua
     }
 
 

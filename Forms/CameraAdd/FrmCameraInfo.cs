@@ -20,64 +20,146 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <summary>
         /// 海康名称计数
         /// </summary>
-        private static int _count1 = 0;
+        private static int _HikCount = 1;
 
         /// <summary>
         /// 巴斯勒名称计数
         /// </summary>
-        private static int _count2 = 0;
+        private static int _Baslercount = 1;
+
+        /// <summary>
+        /// 大恒名称计数
+        /// </summary>
+        private static int _DaHengcount = 1;
+
+        /// <summary>
+        /// 大华名称计数
+        /// </summary>
+        private static int _DaHuacount = 1;
 
         /// <summary>
         /// 相机信息列表
         /// </summary>
-        private List<IDeviceInfo> infoListHik = CameraHik.FindCamera();
-        private List<ICameraInfo> infoListBasler = CameraBasler.FindCamera();
+        private List<IDeviceInfo> infoList = CameraHik.FindCamera();
 
         /// <summary>
         /// 用来保存设备名对应的设备信息
         /// </summary>
-        private Dictionary<string, IDeviceInfo> _mapHik = new Dictionary<string, IDeviceInfo>();
-        private Dictionary<string, ICameraInfo> _mapBasler = new Dictionary<string, ICameraInfo>();
+        private Dictionary<string, IDeviceInfo> _mapCamera = new Dictionary<string, IDeviceInfo>();
 
         public FrmCameraInfo()
         {
             InitializeComponent();
-            comboBoxCameraBrand.SelectedIndex = 0;
-            // 查找相机信息
-            infoListHik = CameraHik.FindCamera();
-            infoListBasler = CameraBasler.FindCamera();
-
-            // 保存各品牌相机信息map
-            _mapHik.Clear();
-            _mapBasler.Clear();
-            foreach (var info in infoListHik)
-                _mapHik[CameraHik.GetDevNameByDevInfo(info)] = info;
-            foreach (var info in infoListBasler)
-                _mapBasler[info[CameraInfoKey.ModelName]] = info;
-            Shown += FrmCaFrmCameraInfo_Shown;
+            infoList = CameraHik.FindCamera();
+            _mapCamera.Clear();
+            foreach (var info in infoList)
+                _mapCamera[CameraHik.GetDevNameByDevInfo(info)] = info;
+            //Shown += FrmCaFrmCameraInfo_Shown;
+        }
+        private void FrmCameraInfo_Load(object sender, EventArgs e)
+        {
+            // 初始化相机品牌
+            InitCameraBrandList();
+            // 初始化相机列表
+            InitCameraList(comboBoxCameraBrand.Text);
         }
 
-        private void FrmCaFrmCameraInfo_Shown(object sender, EventArgs e)
+        //private void FrmCaFrmCameraInfo_Shown(object sender, EventArgs e)
+        //{
+           
+        //}
+
+        /// <summary>
+        /// 初始相机品牌下拉框
+        /// </summary>
+        private void InitCameraBrandList()
         {
-            // 初始化相机列表
-            InitCameraList(comboBoxCameraBrand.SelectedIndex);
+            var addedBrands = new HashSet<string>();
+            comboBoxCameraBrand.Items.Clear();
+            foreach (var info in infoList)
+            {
+                string brand;
+                switch (info.ManufacturerName)
+                {
+                    case "Hikrobot":
+                        brand = "海康";
+                        if (addedBrands.Add(brand))
+                        {
+                            comboBoxCameraBrand.Items.Add(brand);
+                        }
+                        break;
+                    case "Basler":
+                        brand = "巴斯勒";
+                        if (addedBrands.Add(brand))
+                        {
+                            comboBoxCameraBrand.Items.Add(brand);
+                        }
+                        break;
+                    case "Daheng Imaging":
+                        brand = "大恒";
+                        if (addedBrands.Add(brand))
+                        {
+                            comboBoxCameraBrand.Items.Add(brand);
+                        }
+                        break;
+                    case "Dahua Technology":
+                        brand = "大华";
+                        if (addedBrands.Add(brand))
+                        {
+                            comboBoxCameraBrand.Items.Add(brand);
+                        }
+                        break;
+                }
+            }
+
+            if (comboBoxCameraBrand.Items.Count > 0)
+                comboBoxCameraBrand.SelectedIndex = 0;
         }
 
         /// <summary>
         /// 初始化相机下拉框数据
         /// </summary>
-        private void InitCameraList(int brandIndex)
+        private void InitCameraList(string brand)
         {
             comboBoxCameraList.Items.Clear();
-            if (brandIndex == 0)
+            switch (brand)
             {
-                foreach (var info in infoListHik)
-                    comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
-            }
-            else if (brandIndex == 1) 
-            { 
-                foreach (var info in infoListBasler)
-                    comboBoxCameraList.Items.Add(info[CameraInfoKey.ModelName]);
+                case "海康":
+                    foreach (var info in infoList)
+                    {
+                        if (info.ManufacturerName == "Hikrobot")
+                        {
+                            comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
+                        }
+                    }
+                    break;
+                case "巴斯勒":
+                    foreach (var info in infoList)
+                    {
+                        if (info.ManufacturerName == "Basler")
+                        {
+                            comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
+                        }
+                    }
+                    break;
+                case "大恒":
+                    foreach (var info in infoList)
+                    {
+                        if (info.ManufacturerName == "Daheng Imaging")
+                        {
+                            comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
+                        }
+                    }
+                    break;
+                case "大华":
+                    foreach (var info in infoList)
+                    {
+                        if (info.ManufacturerName == "Dahua Technology")
+                        {
+                            comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
+                        }
+                    }
+                    break;
             }
 
             #region 测试代码，测试数据
@@ -100,35 +182,13 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void buttonSearch_Click(object sender, EventArgs e)
         {
-            // 查找相机信息
-            infoListHik = CameraHik.FindCamera();
-            infoListBasler = CameraBasler.FindCamera();
-
-            // 保存各品牌相机信息map
-            _mapHik.Clear();
-            _mapBasler.Clear();
-            foreach (var info in infoListHik)
-                _mapHik[CameraHik.GetDevNameByDevInfo(info)] = info;
-            foreach (var info in infoListBasler)
-                _mapBasler[info[CameraInfoKey.ModelName]] = info;
-
-            // 清空相机下拉框
-            comboBoxCameraList.Items.Clear();
-
-            // 保存
-            if (comboBoxCameraBrand.SelectedIndex == 0)
-            {
-                foreach (var info in infoListHik)
-                    comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
-            }
-            else if (comboBoxCameraBrand.SelectedIndex == 1)
-            {
-                foreach (var info in infoListBasler)
-                    comboBoxCameraList.Items.Add(info[CameraInfoKey.ModelName]);
-
-            }
-            if (comboBoxCameraList.Items.Count > 0)
-                comboBoxCameraList.SelectedIndex = 0;
+            infoList = CameraHik.FindCamera();
+            _mapCamera.Clear();
+            foreach (var info in infoList)
+                _mapCamera[CameraHik.GetDevNameByDevInfo(info)] = info;
+            // 初始化相机品牌和相机设备下拉列表
+            InitCameraBrandList();
+            InitCameraList(comboBoxCameraBrand.Text);
         }
 
         /// <summary>
@@ -138,8 +198,22 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void comboBoxCameraBrand_SelectedIndexChanged(object sender, EventArgs e)
         {
-            InitCameraList(comboBoxCameraBrand.SelectedIndex);
-            textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机" + (comboBoxCameraBrand.SelectedIndex == 0 ? (_count1 + 1) : (_count2 + 1));
+            InitCameraList(comboBoxCameraBrand.Text);
+            switch (comboBoxCameraBrand.Text)
+            {
+                case "海康":
+                    textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机{_HikCount}";
+                    break;
+                case "巴斯勒":
+                    textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机{_Baslercount}";
+                    break;
+                case "大恒":
+                    textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机{_DaHengcount}";
+                    break;
+                case "大华":
+                    textBoxUserName.Text = $"{comboBoxCameraBrand.Text}相机{_DaHuacount}";
+                    break;
+            }
         }
 
         /// <summary>
@@ -171,18 +245,29 @@ namespace YTVisionPro.Forms.CameraAdd
             try
             {
                 //通过事件传递相机参数
-                info.Brand = comboBoxCameraBrand.SelectedIndex == 0 ? CameraBrand.HiKVision : CameraBrand.Basler;
-                if(comboBoxCameraBrand.SelectedIndex == 0)
-                    info.DevInfo = new CameraDevInfo(_mapHik[comboBoxCameraList.Text], null);
-                else if(comboBoxCameraBrand.SelectedIndex == 1)
-                    info.DevInfo = new CameraDevInfo(null, _mapBasler[comboBoxCameraList.Text]);
+                switch (comboBoxCameraBrand.Text)
+                {
+                    case "海康":
+                        info.Brand = CameraBrand.HiKVision;
+                        _HikCount++;
+                        break;
+                    case "巴斯勒":
+                        info.Brand = CameraBrand.Basler;
+                        _Baslercount++;
+                        break;
+                    case "大恒":
+                        info.Brand = CameraBrand.DaHeng;
+                        _DaHengcount++;
+                        break;
+                    case "大华":
+                        info.Brand = CameraBrand.DaHua;
+                        _DaHuacount++;
+                        break;
+                }
+                info.DevInfo = new CameraDevInfo(_mapCamera[comboBoxCameraList.Text]);
                 info.UserDefinedName = textBoxUserName.Text;
 
                 AddCameraDevEvent?.Invoke(this, info);
-                if (info.Brand == CameraBrand.HiKVision)
-                    _count1++;
-                else
-                    _count2++;
                 this.Hide();
             }
             catch (Exception ex)
@@ -200,6 +285,8 @@ namespace YTVisionPro.Forms.CameraAdd
                 #endregion
             }
         }
+
+       
     }
 
     /// <summary>

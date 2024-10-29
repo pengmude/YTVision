@@ -5,6 +5,8 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
     internal class NodeParamHTAISendSignal : INodeParam
     {
         public List<SignalRowData> Data;
+        // PLC名称
+        public string PlcName;
 
         //文件路径
         public string Path;

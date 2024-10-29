@@ -52,12 +52,12 @@ namespace YTVisionPro.Forms.PLCAdd
         public SinglePLC(IPlc plc)
         {
             InitializeComponent();
+            plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
             if (plc.IsConnect)
             {
                 if (!plc.Connect())
                     LogHelper.AddLog(MsgLevel.Exception, $"PLC（{plc.UserDefinedName}）连接失败，请检查PLC通信是否正常！", true);
             }
-            plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
             ConType = plc.PLCParms.PlcConType;
             this.label1.Text = plc.UserDefinedName;
             Plc = plc;
