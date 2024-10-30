@@ -7,8 +7,9 @@ namespace YTVisionPro.Node.Modbus.Write
 {
     internal class NodeParamModbusWrite : INodeParam
     {
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public IModbus Device { get; set; }
+        public string DeviceName { get; set; }
         /// <summary>
         /// 待发送的数据
         /// </summary>

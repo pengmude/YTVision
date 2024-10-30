@@ -111,6 +111,7 @@ namespace YTVisionPro.Node.Modbus.Write
 
             NodeParamModbusWrite nodeParamWrite = new NodeParamModbusWrite();
             nodeParamWrite.Device = modbus;
+            nodeParamWrite.DeviceName = modbus.UserDefinedName;
             nodeParamWrite.StartAddress = adress;
             switch (this.comboBoxType.Text)
             {
@@ -154,12 +155,12 @@ namespace YTVisionPro.Node.Modbus.Write
         {
             if (Params is NodeParamModbusWrite param)
             {
-                int index1 = comboBoxModbusDev.Items.IndexOf(param.Device.UserDefinedName);
+                int index1 = comboBoxModbusDev.Items.IndexOf(param.DeviceName);
                 comboBoxModbusDev.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 反序列化后方案中的Modbus设备对象才是完整的，需要赋值给用到Modbus的节点参数中
                 foreach (var dev in Solution.Instance.ModbusDevices)
                 {
-                    if(dev.UserDefinedName == param.Device.UserDefinedName)
+                    if(dev.UserDefinedName == param.DeviceName)
                     {
                         param.Device = dev;
                         break;

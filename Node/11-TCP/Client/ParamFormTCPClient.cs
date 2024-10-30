@@ -114,6 +114,7 @@ namespace YTVisionPro.Node.TCPClient
 
             NodeParamTCPClient nodeParamTcpClient = new NodeParamTCPClient();
             nodeParamTcpClient.Device = tcpDev;
+            nodeParamTcpClient.DeviceName = tcpDev.DevName;
             nodeParamTcpClient.IsWaitingForResponse = checkBox1.Checked;
             nodeParamTcpClient.NoConditionContent = textBoxNoConditionContent.Text;
             nodeParamTcpClient.NeedsCondition = tabControl1.SelectedIndex == 1 ? true : false;
@@ -133,12 +134,12 @@ namespace YTVisionPro.Node.TCPClient
         {
             if (Params is NodeParamTCPClient param)
             {
-                int index1 = comboBoxTCPDev.Items.IndexOf(param.Device.UserDefinedName);
+                int index1 = comboBoxTCPDev.Items.IndexOf(param.DeviceName);
                 comboBoxTCPDev.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 反序列化后方案中的TCP设备对象才是完整的，需要赋值给用到TCP的节点参数中
                 foreach (var dev in Solution.Instance.TcpDevices)
                 {
-                    if(dev.UserDefinedName == param.Device.UserDefinedName)
+                    if(dev.UserDefinedName == param.DeviceName)
                     {
                         param.Device = dev;
                         break;

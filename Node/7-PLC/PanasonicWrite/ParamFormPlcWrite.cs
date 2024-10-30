@@ -97,6 +97,7 @@ namespace YTVisionPro.Node.PLC.PanasonicWirte
 
             NodeParamPlcWrite nodeParamPlcWrite = new NodeParamPlcWrite();
             nodeParamPlcWrite.Plc = plc;
+            nodeParamPlcWrite.PlcName = plc.UserDefinedName;
             nodeParamPlcWrite.Address = this.textBox1.Text;
             switch(this.comboBox2.Text)
             {
@@ -142,12 +143,12 @@ namespace YTVisionPro.Node.PLC.PanasonicWirte
         {
             if (Params is NodeParamPlcWrite param)
             {
-                int index1 = comboBox1.Items.IndexOf(param.Plc.UserDefinedName);
+                int index1 = comboBox1.Items.IndexOf(param.PlcName);
                 comboBox1.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 反序列化后方案中的PLC设备对象才是完整的，需要赋值给用到PLC的节点参数中
                 foreach (var plc in Solution.Instance.PlcDevices)
                 {
-                    if (plc.UserDefinedName == param.Plc.UserDefinedName)
+                    if (plc.UserDefinedName == param.PlcName)
                     {
                         param.Plc = plc;
                         break;

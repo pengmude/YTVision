@@ -6,8 +6,9 @@ namespace YTVisionPro.Node.Modbus.Read
 {
     internal class NodeParamModbusRead : INodeParam
     {
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public IModbus Device { get; set; }
+        public string DeviceName { get; set; }
         public ushort Count { get; set; } = 0;
         public ushort StartAddress { get; set; }
 

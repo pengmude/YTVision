@@ -35,7 +35,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// </summary>
         public List<NGTypeConfig> AllNgConfigs { get; set; }
         /// <summary>
-        /// 检测出来的节点结果数
+        /// 检测节点数
         /// </summary>
         public int TestNum { get; set; }
         /// <summary>

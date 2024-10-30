@@ -209,7 +209,7 @@ namespace YTVisionPro.Node.ImageSrc.Shot
                     , nodeParamCamera.ExposureTime, nodeParamCamera.Gain);
             
             // 如果是硬触发
-            if (nodeParamCamera.TriggerSource != TriggerSource.Auto || nodeParamCamera.TriggerSource != TriggerSource.SOFT)
+            if (nodeParamCamera.TriggerSource != TriggerSource.Auto && nodeParamCamera.TriggerSource != TriggerSource.SOFT)
             {
                 // 硬触发在此订阅图像
                 nodeParamCamera.Camera.PublishImageEvent += Camera_PublishImageEvent;

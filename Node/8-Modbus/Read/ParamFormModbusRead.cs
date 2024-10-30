@@ -102,6 +102,7 @@ namespace YTVisionPro.Node.Modbus.Read
 
             NodeParamModbusRead nodeParamRead = new NodeParamModbusRead();
             nodeParamRead.Device = modbus;
+            nodeParamRead.DeviceName = modbus.UserDefinedName;
             nodeParamRead.StartAddress = adress;
             switch (this.comboBox2.Text)
             {
@@ -141,12 +142,12 @@ namespace YTVisionPro.Node.Modbus.Read
         {
             if (Params is NodeParamModbusRead param)
             {
-                int index1 = comboBoxModbusDev.Items.IndexOf(param.Device.UserDefinedName);
+                int index1 = comboBoxModbusDev.Items.IndexOf(param.DeviceName);
                 comboBoxModbusDev.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 反序列化后方案中的Modbus设备对象才是完整的，需要赋值给用到Modbus的节点参数中
                 foreach (var dev in Solution.Instance.ModbusDevices)
                 {
-                    if(dev.UserDefinedName == param.Device.UserDefinedName)
+                    if(dev.UserDefinedName == param.DeviceName)
                     {
                         param.Device = dev;
                         break;

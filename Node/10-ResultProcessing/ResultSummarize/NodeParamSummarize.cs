@@ -1,4 +1,5 @@
-﻿using YTVisionPro.Node.AI.HTAI;
+﻿using Newtonsoft.Json;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ResultProcessing.ResultSummarize
 {
@@ -7,10 +8,12 @@ namespace YTVisionPro.Node.ResultProcessing.ResultSummarize
         /// <summary>
         /// AI检测结果数据
         /// </summary>
+        [JsonIgnore]
         public ResultViewData AiResult;
         /// <summary>
         /// 传统算法检测结果数据
         /// </summary>
+        [JsonIgnore]
         public ResultViewData NonAiResult;
         // 反序列化还原界面参数用
         public string AiText1;

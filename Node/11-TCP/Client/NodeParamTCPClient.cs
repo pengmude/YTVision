@@ -7,8 +7,12 @@ namespace YTVisionPro.Node.TCP.Client
 {
     internal class NodeParamTCPClient : INodeParam
     {
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public ITcpDevice Device { get; set; }
+        /// <summary>
+        /// 反序列化用
+        /// </summary>
+        public string DeviceName { get; set; }
         /// <summary>
         /// 是否等待服务器响应
         /// </summary>

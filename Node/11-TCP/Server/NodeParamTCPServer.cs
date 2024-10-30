@@ -7,8 +7,12 @@ namespace YTVisionPro.Node.TCP.Server
 {
     internal class NodeParamTCPServer : INodeParam
     {
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public ITcpDevice Sever { get; set; }
+        /// <summary>
+        /// 服务器名称（反序列化用）
+        /// </summary>
+        public string SeverName { get; set; }
         /// <summary>
         /// 响应的客户端
         /// </summary>

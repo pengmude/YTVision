@@ -6,8 +6,9 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
 {
     internal class NodeParamPlcRead : INodeParam
     {
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public IPlc Plc { get; set; }
+        public string PlcName { get; set; }
         public ushort Length { get; set; } = 0;
         public string Address { get; set; }
 

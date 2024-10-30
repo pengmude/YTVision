@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using YTVisionPro.Node.AI.HTAI;
@@ -11,6 +13,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// 存图路径
         /// </summary>
         public string SavePath = string.Empty;
+        [JsonIgnore]
         /// <summary>
         /// 要保存的图片
         /// </summary>
@@ -19,6 +22,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// 是否需要订阅检测的OK/NG结果来创建子目录
         /// </summary>
         public bool NeedOkNg;
+        [JsonIgnore]
         /// <summary>
         /// AI检测结果
         /// </summary>
@@ -27,6 +31,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// 图片是否是以条码命名
         /// </summary>
         public bool IsBarCode  = false;
+        [JsonIgnore]
         /// <summary>
         /// 条码
         /// </summary>
@@ -54,6 +59,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// <summary>
         /// 需要保存什么类型图片
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public ImageTypeToSave ImageTypeToSave;
 
         #region 反序列化还原参数设置界面用

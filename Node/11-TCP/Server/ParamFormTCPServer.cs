@@ -138,6 +138,7 @@ namespace YTVisionPro.Node.TCP.Server
 
             NodeParamTCPServer nodeParamTcpServer = new NodeParamTCPServer();
             nodeParamTcpServer.Sever = tcpDev;
+            nodeParamTcpServer.SeverName = tcpDev.UserDefinedName;
             nodeParamTcpServer.ClientIP = comboBoxClientIp.Text;
             nodeParamTcpServer.NeedsCondition = tabControl1.SelectedIndex == 1 ? true : false;
             nodeParamTcpServer.NoConditionContent = textBoxNoConditionContent.Text;
@@ -157,12 +158,12 @@ namespace YTVisionPro.Node.TCP.Server
         {
             if (Params is NodeParamTCPServer param)
             {
-                int index1 = comboBoxServer.Items.IndexOf(param.Sever.UserDefinedName);
+                int index1 = comboBoxServer.Items.IndexOf(param.SeverName);
                 comboBoxServer.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 反序列化后方案中的TCP设备对象才是完整的，需要赋值给用到TCP的节点参数中
                 foreach (var dev in Solution.Instance.TcpDevices)
                 {
-                    if(dev.UserDefinedName == param.Sever.UserDefinedName)
+                    if(dev.UserDefinedName == param.SeverName)
                     {
                         param.Sever = dev;
                         break;

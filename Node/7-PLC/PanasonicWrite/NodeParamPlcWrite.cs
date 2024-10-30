@@ -6,8 +6,9 @@ namespace YTVisionPro.Node.PLC.PanasonicWirte
 {
     internal class NodeParamPlcWrite : INodeParam
     {
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public IPlc Plc { get; set; }
+        public string PlcName { get; set; }
         public string Address { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public DataType DataType { get; set; }

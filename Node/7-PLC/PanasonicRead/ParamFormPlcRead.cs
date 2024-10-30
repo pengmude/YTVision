@@ -91,6 +91,7 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
             //把设置好的参数传给PLC节点NodePlcDataRead去更新结果
             NodeParamPlcRead nodeParamRead = new NodeParamPlcRead();
             nodeParamRead.Plc = plc;
+            nodeParamRead.PlcName = plc.UserDefinedName;
             nodeParamRead.Address = this.textBox1.Text;
             switch (this.comboBox2.Text)
             {
@@ -142,12 +143,12 @@ namespace YTVisionPro.Node.PLC.PanasonicRead
         {
             if (Params is NodeParamPlcRead param)
             {
-                int index1 = comboBox1.Items.IndexOf(param.Plc.UserDefinedName);
+                int index1 = comboBox1.Items.IndexOf(param.PlcName);
                 comboBox1.SelectedIndex = index1;
                 // 反序列化后方案中的PLC设备对象才是完整的，需要赋值给用到PLC的节点参数中
                 foreach (var plc in Solution.Instance.PlcDevices)
                 {
-                    if(plc.UserDefinedName == param.Plc.UserDefinedName)
+                    if(plc.UserDefinedName == param.PlcName)
                     {
                         param.Plc = plc;
                         break;

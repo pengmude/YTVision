@@ -137,6 +137,11 @@ namespace YTVisionPro
         /// </summary>
         public CancellationToken CancellationToken => _cancellationTokenSource.Token;
 
+        /// <summary>
+        /// 流程运行完更新流程界面和主界面的运行按钮Enable
+        /// </summary>
+        public EventHandler<ProcessRunResult> UpdateRunStatus;
+
         #endregion
 
         #region 私有方法
@@ -219,7 +224,7 @@ namespace YTVisionPro
         public async Task Run(bool isCyclical = false)
         {
             IsRunning = true;
-            DateTime startTime = DateTime.Now;
+            //DateTime startTime = DateTime.Now;
             _cancellationTokenSource = new CancellationTokenSource();
             try
             {
@@ -231,14 +236,13 @@ namespace YTVisionPro
                 }
                 // 等待所有流程完成
                 await Task.WhenAll(tasks);
-
             }
-            catch (OperationCanceledException ex) { }
             catch (Exception ex) { }
 
             // 方案总耗时计算
-            RunTime = (long)(DateTime.Now - startTime).TotalMilliseconds;
+            //RunTime = (long)(DateTime.Now - startTime).TotalMilliseconds;
             //LogHelper.AddLog(MsgLevel.Info, $"方案总耗时：{RunTime} ms", true);
+
             IsRunning = false;
         }
 

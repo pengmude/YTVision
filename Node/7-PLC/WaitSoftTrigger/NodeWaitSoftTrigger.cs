@@ -56,7 +56,7 @@ namespace YTVisionPro.Node.PLC.WaitSoftTrigger
                         await Task.Run(() =>
                         {
                             // 监听拍照信号
-                            SendSignalToPlc(param);
+                            GetShotSignalFromPlc(param);
                         });
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -78,28 +78,19 @@ namespace YTVisionPro.Node.PLC.WaitSoftTrigger
             }
         }
 
-        private void SendSignalToPlc(NodeParamWaitSoftTrigger param)
+        private void GetShotSignalFromPlc(NodeParamWaitSoftTrigger param)
         {
             OperateResult<bool> readResult;
             OperateResult writeResult;
-            DateTime startTime = DateTime.Now;
             // 读取拍照信号
             do
             {
-                readResult = param.Plc.ReadBool(param.Address); 
-                
-                long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
-                if (timeTotal > 5000)
-                    throw new Exception("获取PLC拍照信号超时，请检查PLC通信是否正常或拍照信号是否给到！");
+                readResult = param.Plc.ReadBool(param.Address);
             } while (!readResult.IsSuccess || !readResult.Content);  // 读取失败或读取不到拍照信号为true均需要重试
             // 重置拍照信号
             do
             {
                 writeResult = param.Plc.WriteBool(param.Address, false);
-
-                long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
-                if (timeTotal > 5000)
-                    throw new Exception("获取PLC拍照信号超时，请检查PLC通信是否正常或拍照信号是否给到！");
             } while (!writeResult.IsSuccess);
             LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
         }

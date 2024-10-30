@@ -42,11 +42,6 @@ namespace YTVisionPro.Forms.ProcessNew
         private Stack<NodeBase> _stack = new Stack<NodeBase>();
 
         /// <summary>
-        /// 选中的节点
-        /// </summary>
-        public Button SelectedNode { get; set; } = null;
-
-        /// <summary>
         /// 流程编辑面板构造函数
         /// </summary>
         /// <param name="processName"></param>
@@ -55,6 +50,7 @@ namespace YTVisionPro.Forms.ProcessNew
             InitializeComponent();
             _process = new Process(processName);
             Process.UpdateRunStatus += RunStatusChange;
+            Solution.Instance.UpdateRunStatus += RunStatusChange;
             Solution.Instance.AddProcess(_process);
 
             // 反序列化需要执行以下逻辑
@@ -118,12 +114,6 @@ namespace YTVisionPro.Forms.ProcessNew
                 }
             }
         }
-
-        /// <summary>
-        /// 用于反序列化创建流程中的所有节点
-        /// </summary>
-        /// <param name="processConfig"></param>
-        private delegate void SetParamDelegate();
         private void CreateProcess(ProcessConfig processConfig, bool showInfo)
         {
             foreach (var nodeInfo in processConfig.NodeInfos)
@@ -310,26 +300,7 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 await _process.Run(false, Solution.Instance.CancellationToken);
             }
-            catch (Exception)
-            {
-            }
-        }
-
-        /// <summary>
-        /// 设置界面的运行状态
-        /// </summary>
-        /// <param name="ok"></param>
-        private void SetProcessRunStatus(long time, bool ok)
-        {
-            if (ok)
-            {
-                uiLedBulb1.Color = Color.LawnGreen;
-            }
-            else
-            {
-                uiLedBulb1.Color = Color.Red;
-            }
-            label2.Text = $"耗时:{time} ms";
+            catch (Exception) { }
         }
 
         /// <summary>

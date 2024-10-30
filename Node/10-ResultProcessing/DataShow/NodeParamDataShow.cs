@@ -1,9 +1,11 @@
-﻿using YTVisionPro.Node.AI.HTAI;
+﻿using Newtonsoft.Json;
+using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ResultProcessing.DataShow
 {
     internal class NodeParamDataShow : INodeParam
     {
+        [JsonIgnore]
         public ResultViewData AiResultData;
         public string Text1;
         public string Text2;
