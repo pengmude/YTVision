@@ -174,6 +174,9 @@ namespace YTVisionPro.Node.AI.HTAI
                 int ngCount = 0;
                 foreach (var item1 in item.Results)
                 {
+                    if (ngconfig.ForceOk)
+                        continue;
+
                     // 获取检测结果的面积、分数个数信息
                     int area = item1.area;
                     float score = item1.score;
@@ -245,9 +248,6 @@ namespace YTVisionPro.Node.AI.HTAI
 
                 for (int j = 0; j < detect_results_num; j++)
                 {
-                    // 缺陷检测节点（节点类型等于0）有效类别结果从1开始，其他节点类型均从0开始
-                    if (nodeType == 0)
-                        continue;
                     string className = ClassNameTostring(pstNodeRst[i].detect_results[j].class_name);
                     AddDetectResult(aiResultList, nodeName, nodeType, className, pstNodeRst[i].detect_results[j]);
                 }
