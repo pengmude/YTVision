@@ -11,6 +11,10 @@ namespace YTVisionPro.Node.AI.HTAI
         /// </summary>
         public string NodeName { get; set; }
         /// <summary>
+        /// 节点类别
+        /// </summary>
+        public int NodeType { get; set; }
+        /// <summary>
         /// 节点名对应的类型
         /// </summary>
         public string ClassName { get; set; }
@@ -52,6 +56,17 @@ namespace YTVisionPro.Node.AI.HTAI
         public string NodeName;
         public int NodeType;
         public string ClassName;
+        public bool IsLocFail;
         public List<DetectResult> Results;
+
+        public AiClassResult() { }
+        public AiClassResult(string nodeName, int nodeType, string className, bool isLocFail, List<DetectResult> results)
+        {
+            NodeName = nodeName;
+            NodeType = nodeType;
+            ClassName = className;
+            IsLocFail = isLocFail;
+            Results = new List<DetectResult>();
+        }
     }
 }

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Forms.ResultView;
+using YTVisionPro.Node.ResultProcessing.ImageSave;
 using static YTVisionPro.Node.AI.HTAI.HTAPI;
 
 namespace YTVisionPro.Node.AI.HTAI
@@ -147,26 +148,80 @@ namespace YTVisionPro.Node.AI.HTAI
             ResultViewData aiResult = new ResultViewData();
             List<AiClassResult>  ResList = SaveResult(pstNodeRst, testNum);
 
-            //// 检测结果个数为0的情况分两种：有定位节点和无定位节点的模型
-            //// 模型有定位节点但是所有检出结果为0，说明了定位都定位不到，可能是图像和模型不一致，也有可能图像被遮挡
-            //// 模型无定位节点但是所有检出结果为0，也就是“添加NG部分结果”没有添加，将会在“添加OK部分结果”中全部当做OK
-            //// 导致一个bug，使用不匹配模型且带定位节点的图像检测，检出的ResList为空，
-            //if (ResList.Count == 0)
-            //    throw new Exception("相机采出来的图像和模型不匹配！");
+            // 存在定位失败的结果直接将所有结果设置成NG
+            var locFailResList = ResList.Where(res => res.IsLocFail).ToList();
+            if(locFailResList.Count != 0)
+            {
+                // 处理定位失败的结果
+                HandleLocationFailure(allNgConfigs, ResList, locFailResList, aiResult);
+            }
+            else
+            {
+                #region 添加NG部分结果
 
-            //TODO : 缺乏考虑图像和模型不一致的情况 2024年9月12日
+                AddNGResult(ResList, allNgConfigs, aiResult);
+                
+                #endregion
+            }
 
-            #region 添加NG部分结果
+            #region 添加OK部分结果(在allNgConfigs所有类别中除了前面添加的NG剩下都当做OK)
 
+            AddOKResult(allNgConfigs, aiResult);
+
+            #endregion
+
+            return aiResult;
+        }
+
+        /// <summary>
+        /// 添加OK部分结果
+        /// 只要没添加到NG的结果都当做OK
+        /// </summary>
+        /// <param name="allNgConfigs"></param>
+        /// <param name="aiResult"></param>
+        private void AddOKResult(List<NGTypeConfig> allNgConfigs, ResultViewData aiResult)
+        {
+            List<SingleResultViewData> okRes = new List<SingleResultViewData>();
+            bool locNodesWithoutResults = false;
+            foreach (var ngConfig in allNgConfigs)
+            {
+                var isExist = aiResult.SingleRowDataList.Exists(r => r.NodeName == ngConfig.NodeName && r.ClassName == ngConfig.ClassName);
+                if (!isExist)
+                {
+                    if (ngConfig.NodeType == 1)
+                    {
+                        locNodesWithoutResults = true;
+                    }
+                    SingleResultViewData data = new SingleResultViewData();
+                    data.IsOk = true;
+                    data.DetectResult = "";
+                    data.DetectName = "";
+                    data.NodeName = ngConfig.NodeName;
+                    data.ClassName = ngConfig.ClassName;
+                    aiResult.SingleRowDataList.Add(data);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 添加NG结果
+        /// </summary>
+        /// <param name="ResList"></param>
+        /// <param name="allNgConfigs"></param>
+        /// <param name="aiResult"></param>
+        private void AddNGResult(List<AiClassResult> ResList, List<NGTypeConfig> allNgConfigs, ResultViewData aiResult)
+        {
             foreach (var item in ResList)
             {
+                // 找到对应节点类别的筛选配置
+                var ngconfig = allNgConfigs.Find(c => c.NodeName == item.NodeName && c.ClassName == item.ClassName);
+                if (ngconfig == null || ngconfig.ForceOk)
+                    continue;
+
                 // 保存要返回的结果
                 SingleResultViewData result = new SingleResultViewData();
                 result.NodeName = item.NodeName;
                 result.ClassName = item.ClassName;
-
-                // 找到对应节点类别的筛选配置
-                var ngconfig = allNgConfigs.Find(c => c.NodeName == item.NodeName && c.ClassName == item.ClassName);
 
                 // 判断当前类别的IsOk
                 result.IsOk = true;
@@ -174,9 +229,6 @@ namespace YTVisionPro.Node.AI.HTAI
                 int ngCount = 0;
                 foreach (var item1 in item.Results)
                 {
-                    if (ngconfig.ForceOk)
-                        continue;
-
                     // 获取检测结果的面积、分数个数信息
                     int area = item1.area;
                     float score = item1.score;
@@ -202,35 +254,67 @@ namespace YTVisionPro.Node.AI.HTAI
 
                 if (ngCount != 0 && item.Results.Count >= ngconfig.MinNum && item.Results.Count < ngconfig.MaxNum)
                     result.IsOk = false;
-                
+
                 // 添加一条类别结果
                 result.DetectResult = tmp;
                 aiResult.SingleRowDataList.Add(result);
             }
+        }
 
-            #endregion
 
-            #region 添加OK部分结果
-
-            List<SingleResultViewData> okRes = new List<SingleResultViewData>();
-            foreach (var ngConfig in allNgConfigs)
+        private void HandleLocationFailure(List<NGTypeConfig> allNgConfigs, List<AiClassResult> ResList, List<AiClassResult> locFailResList, ResultViewData aiResult)
+        {
+            int _count1 = 0, _count2 = 0;
+            foreach (var result in locFailResList)
             {
-                var isExist = aiResult.SingleRowDataList.Exists(r => r.NodeName == ngConfig.NodeName && r.ClassName == ngConfig.ClassName);
-                if(!isExist)
-                {
-                    SingleResultViewData data = new SingleResultViewData();
-                    data.IsOk = true;
-                    data.DetectResult = "";
-                    data.DetectName = "";
-                    data.NodeName = ngConfig.NodeName;
-                    data.ClassName = ngConfig.ClassName;
-                    aiResult.SingleRowDataList.Add(data);
-                }
+                // 统计定位识别类别结果的个数，以及它被设置为强制OK的个数，
+                // 如果相等就说明所有节定位节点结果被禁止了
+                _count1 += allNgConfigs.Count(ng => ng.NodeName == result.NodeName);
+                _count2 += allNgConfigs.Count(ng => ng.NodeName == result.NodeName && ng.ForceOk);
             }
 
-            #endregion
+            // 如果相等说明定位节点每个类别都被强制OK了，此处不需要添加NG
+            if (_count1 == _count2)
+            {
+                AddNGResult(ResList, allNgConfigs, aiResult);
+                AddOKResult(allNgConfigs, aiResult);
+            }
+            else
+            {
+                #region 有定位节点下的类别定位失败时，作为NG添加到结果中
 
-            return aiResult;
+                // 第一种：定位不到时仅仅把定位的结果设置为NG
+                //foreach (var res in locFailResList)
+                //{
+                //    // 找到对应的ClassName,并添加
+                //    var ngconfigList = allNgConfigs.Where(c => c.NodeName == res.NodeName).ToList();
+                //    foreach (var ngConfig in ngconfigList)
+                //    {
+                //        // 保存要返回的结果
+                //        SingleResultViewData result = new SingleResultViewData();
+                //        result.NodeName = ngConfig.NodeName;
+                //        result.ClassName = ngConfig.ClassName;
+                //        result.IsOk = false;
+                //        result.DetectResult = "定位失败";
+                //        aiResult.SingleRowDataList.Add(result);
+                //    }
+                //}
+
+
+                //第二种：定位不到时把所有的结果设置为NG
+                foreach (var ngConfig in allNgConfigs)
+                {
+                    // 保存要返回的结果
+                    SingleResultViewData result = new SingleResultViewData();
+                    result.NodeName = ngConfig.NodeName;
+                    result.ClassName = ngConfig.ClassName;
+                    result.IsOk = false;
+                    result.DetectResult = "定位失败";
+                    aiResult.SingleRowDataList.Add(result);
+                }
+
+                #endregion
+            }
         }
 
         /// <summary>
@@ -245,6 +329,19 @@ namespace YTVisionPro.Node.AI.HTAI
                 string nodeName = ConvertCharArrayToString(pstNodeRst[i].node_name);
                 int nodeType = pstNodeRst[i].node_type;
                 int detect_results_num = pstNodeRst[i].detect_results_num;
+
+                // 如果是定位类型且定位数为0，属于图像被遮挡情况，直接返回当NG处理
+                if(nodeType == 1 && detect_results_num == 0)
+                {
+                    aiResultList.Add(new AiClassResult
+                    {
+                        NodeName = nodeName,
+                        NodeType = nodeType,
+                        ClassName = "",
+                        IsLocFail = true,
+                    });
+                    continue;
+                }
 
                 for (int j = 0; j < detect_results_num; j++)
                 {
@@ -282,6 +379,7 @@ namespace YTVisionPro.Node.AI.HTAI
                     NodeName = nodeName,
                     NodeType = nodeType,
                     ClassName = className,
+                    IsLocFail = false,
                     Results = new List<DetectResult> { detectResult }
                 };
 

@@ -189,5 +189,9 @@ namespace YTVisionPro.Node
         /// 图像旋转节点
         /// </summary>
         ImageRotate,
+        /// <summary>
+        /// 两直线平行度
+        /// </summary>
+        LineParallelism
     }
 }

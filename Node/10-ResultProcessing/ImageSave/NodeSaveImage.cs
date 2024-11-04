@@ -123,7 +123,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                 imageSavePath = Path.Combine(imageSavePath, dayNight);
             }
 
-            //区分OK/NG
+            // 当需要创建OK/NG子目录存图时
             if (param.NeedOkNg)
             {
                 if (param.ResultViewData == null)
@@ -143,7 +143,8 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                         {
                             foreach (var res in param.ResultViewData.SingleRowDataList)
                             {
-                                paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                                if (!res.IsOk)
+                                    paths.Add(Path.Combine(imageSavePath, res.ClassName));
                             }
                         }
                         break;
@@ -151,14 +152,6 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                         if (param.ResultViewData.IsAllOk)
                         {
                             paths.Add(imageSavePath);
-                        }
-                        else
-                        {
-                            foreach (var res in param.ResultViewData.SingleRowDataList)
-                            {
-                                if (res.IsOk)
-                                    paths.Add(Path.Combine(imageSavePath, res.ClassName));
-                            }
                         }
                         break;
                     case ImageTypeToSave.OnlyNg:
@@ -174,10 +167,32 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                     default:
                         break;
                 }
-                
+
             }
             else
-                paths.Add(imageSavePath);
+            {
+                // 当不需要创建OK/NG子目录存图时
+                switch (param.ImageTypeToSave)
+                {
+                    case ImageTypeToSave.OkAndNg:
+                        paths.Add(imageSavePath);
+                        break;
+                    case ImageTypeToSave.OnlyOk:
+                        if (param.ResultViewData.IsAllOk)
+                        {
+                            paths.Add(imageSavePath);
+                        }
+                        break;
+                    case ImageTypeToSave.OnlyNg:
+                        if (!param.ResultViewData.IsAllOk)
+                        {
+                            paths.Add(imageSavePath);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
 
 
             foreach (var path in paths)

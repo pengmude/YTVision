@@ -92,7 +92,7 @@ namespace YTVisionPro.Node.AI.HTAI
         /// <returns></returns>
         public Bitmap GetImage()
         {
-            return nodeSubscription1.GetValue<Bitmap>();
+            return (Bitmap)nodeSubscription1.GetValue<Bitmap>().Clone();
         }
 
         /// <summary>
@@ -297,6 +297,7 @@ namespace YTVisionPro.Node.AI.HTAI
                 {
                     NGTypeConfig nGTypeConfig = new NGTypeConfig();
                     nGTypeConfig.NodeName = item.NodeName;
+                    nGTypeConfig.NodeType = item.NodeType;
                     nGTypeConfig.ClassName = classname;
                     nGTypeConfig.MinArea = 0;
                     nGTypeConfig.MaxArea = 999999999;

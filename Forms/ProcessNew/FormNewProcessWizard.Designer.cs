@@ -202,6 +202,7 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(35, "TCP客户端请求.png");
             this.imageList1.Images.SetKeyName(36, "服务器响应.png");
             this.imageList1.Images.SetKeyName(37, "图像旋转.png");
+            this.imageList1.Images.SetKeyName(38, "两直线平行度.png");
             // 
             // gCursor1
             // 
