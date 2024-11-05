@@ -34,8 +34,6 @@
             this.清除全部ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.矩形ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.圆形ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.直线卡尺ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.圆卡尺ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -62,46 +60,30 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.清除全部ToolStripMenuItem,
             this.矩形ToolStripMenuItem1,
-            this.圆形ToolStripMenuItem1,
-            this.直线卡尺ToolStripMenuItem,
-            this.圆卡尺ToolStripMenuItem});
+            this.圆形ToolStripMenuItem1});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 154);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 127);
             // 
             // 清除全部ToolStripMenuItem
             // 
             this.清除全部ToolStripMenuItem.Name = "清除全部ToolStripMenuItem";
-            this.清除全部ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
+            this.清除全部ToolStripMenuItem.Size = new System.Drawing.Size(240, 30);
             this.清除全部ToolStripMenuItem.Text = "清除";
             this.清除全部ToolStripMenuItem.Click += new System.EventHandler(this.清除全部ToolStripMenuItem_Click);
             // 
             // 矩形ToolStripMenuItem1
             // 
             this.矩形ToolStripMenuItem1.Name = "矩形ToolStripMenuItem1";
-            this.矩形ToolStripMenuItem1.Size = new System.Drawing.Size(152, 30);
+            this.矩形ToolStripMenuItem1.Size = new System.Drawing.Size(240, 30);
             this.矩形ToolStripMenuItem1.Text = "矩形";
             this.矩形ToolStripMenuItem1.Click += new System.EventHandler(this.矩形ToolStripMenuItem1_Click);
             // 
             // 圆形ToolStripMenuItem1
             // 
             this.圆形ToolStripMenuItem1.Name = "圆形ToolStripMenuItem1";
-            this.圆形ToolStripMenuItem1.Size = new System.Drawing.Size(152, 30);
+            this.圆形ToolStripMenuItem1.Size = new System.Drawing.Size(240, 30);
             this.圆形ToolStripMenuItem1.Text = "圆形";
             this.圆形ToolStripMenuItem1.Click += new System.EventHandler(this.圆形ToolStripMenuItem1_Click);
-            // 
-            // 直线卡尺ToolStripMenuItem
-            // 
-            this.直线卡尺ToolStripMenuItem.Name = "直线卡尺ToolStripMenuItem";
-            this.直线卡尺ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
-            this.直线卡尺ToolStripMenuItem.Text = "直线卡尺";
-            this.直线卡尺ToolStripMenuItem.Click += new System.EventHandler(this.直线卡尺ToolStripMenuItem_Click);
-            // 
-            // 圆卡尺ToolStripMenuItem
-            // 
-            this.圆卡尺ToolStripMenuItem.Name = "圆卡尺ToolStripMenuItem";
-            this.圆卡尺ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
-            this.圆卡尺ToolStripMenuItem.Text = "圆卡尺";
-            this.圆卡尺ToolStripMenuItem.Click += new System.EventHandler(this.圆卡尺ToolStripMenuItem_Click);
             // 
             // ImageROIEditControl
             // 
@@ -123,7 +105,5 @@
         private System.Windows.Forms.ToolStripMenuItem 清除全部ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 矩形ToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem 圆形ToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem 直线卡尺ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 圆卡尺ToolStripMenuItem;
     }
 }

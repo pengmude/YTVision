@@ -15,21 +15,13 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// </summary>
         None,
         /// <summary>
-        /// 单纯矩形框
+        /// 矩形
         /// </summary>
         Rectangle,
         /// <summary>
-        /// 单纯一个圆
+        /// 圆形
         /// </summary>
-        Circle,
-        /// <summary>
-        /// 带卡尺的圆
-        /// </summary>
-        CaliperCircle,
-        /// <summary>
-        /// 带卡尺的矩形
-        /// </summary>
-        CaliperRect
+        Circle
     }
     public abstract class ROI
     {

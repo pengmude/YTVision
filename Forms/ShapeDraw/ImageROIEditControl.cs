@@ -58,24 +58,12 @@ namespace YTVisionPro.Forms.ShapeDraw
                     清除全部ToolStripMenuItem.Visible = true;
                     矩形ToolStripMenuItem1.Visible = false;
                     圆形ToolStripMenuItem1.Visible = false;
-                    直线卡尺ToolStripMenuItem.Visible = false;
-                    圆卡尺ToolStripMenuItem.Visible = false;
                     break;
                 case ROIType.Rectangle:
                 case ROIType.Circle:
                     清除全部ToolStripMenuItem.Visible = true;
                     矩形ToolStripMenuItem1.Visible = true;
                     圆形ToolStripMenuItem1.Visible = true;
-                    直线卡尺ToolStripMenuItem.Visible = false;
-                    圆卡尺ToolStripMenuItem.Visible = false;
-                    break;
-                case ROIType.CaliperCircle:
-                case ROIType.CaliperRect:
-                    清除全部ToolStripMenuItem.Visible = true;
-                    矩形ToolStripMenuItem1.Visible = false;
-                    圆形ToolStripMenuItem1.Visible = false;
-                    直线卡尺ToolStripMenuItem.Visible = true;
-                    圆卡尺ToolStripMenuItem.Visible = true;
                     break;
                 default:
                     break;
@@ -315,16 +303,6 @@ namespace YTVisionPro.Forms.ShapeDraw
         private void 圆形ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             selectedROIType = ROIType.Circle;
-        }
-
-        private void 直线卡尺ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            selectedROIType = ROIType.CaliperRect;
-        }
-
-        private void 圆卡尺ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            selectedROIType = ROIType.CaliperCircle;
         }
     }
 }

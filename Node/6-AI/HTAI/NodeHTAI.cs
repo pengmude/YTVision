@@ -268,12 +268,12 @@ namespace YTVisionPro.Node.AI.HTAI
             foreach (var result in locFailResList)
             {
                 // 统计定位识别类别结果的个数，以及它被设置为强制OK的个数，
-                // 如果相等就说明所有节定位节点结果被禁止了
+                // 如果相等就说明所有节定位节点结果被设置为强制OK了，也就忽略掉定位不到的NG
                 _count1 += allNgConfigs.Count(ng => ng.NodeName == result.NodeName);
                 _count2 += allNgConfigs.Count(ng => ng.NodeName == result.NodeName && ng.ForceOk);
             }
 
-            // 如果相等说明定位节点每个类别都被强制OK了，此处不需要添加NG
+            // 如果相等说明定位节点每个类别都被强制OK了
             if (_count1 == _count2)
             {
                 AddNGResult(ResList, allNgConfigs, aiResult);
@@ -304,6 +304,8 @@ namespace YTVisionPro.Node.AI.HTAI
                 //第二种：定位不到时把所有的结果设置为NG
                 foreach (var ngConfig in allNgConfigs)
                 {
+                    if(ngConfig.ForceOk)
+                        continue;
                     // 保存要返回的结果
                     SingleResultViewData result = new SingleResultViewData();
                     result.NodeName = ngConfig.NodeName;

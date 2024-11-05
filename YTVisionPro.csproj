@@ -276,8 +276,6 @@
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ShapeDraw\CaliperCircle.cs" />
-    <Compile Include="Forms\ShapeDraw\CaliperRect.cs" />
     <Compile Include="Forms\ShapeDraw\CircleROI.cs" />
     <Compile Include="Forms\ShapeDraw\RectangleROI.cs" />
     <Compile Include="Forms\TCPAdd\FrmTCPListView.cs">
@@ -423,6 +421,7 @@
     </Compile>
     <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamImageRotate.cs" />
     <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeResultImageRotate.cs" />
+    <Compile Include="Node\4-Detection\FindLine\LineMerger.cs" />
     <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParallelismOf2Lines.cs">
       <SubType>UserControl</SubType>
     </Compile>

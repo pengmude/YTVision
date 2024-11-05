@@ -1,8 +1,12 @@
 ﻿using Logger;
+using OpenCvSharp.Extensions;
+using OpenCvSharp;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Node.ImagePreprocessing.ImageCrop;
+using System.Windows.Forms;
+using System.Drawing;
+using Point = OpenCvSharp.Point;
 
 namespace YTVisionPro.Node._4_Detection.FindLine
 {
@@ -13,8 +17,9 @@ namespace YTVisionPro.Node._4_Detection.FindLine
     {
         public NodeFIndLine(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new NodeParamFormFindLine();
-            ParamForm.SetNodeBelong(this);
+            var form = new NodeParamFormFindLine(process, this);
+            form.SetNodeBelong(this);
+            ParamForm = form;
             Result = new NodeResultFindLine();
         }
 
@@ -47,20 +52,15 @@ namespace YTVisionPro.Node._4_Detection.FindLine
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        // TODO：完善卡尺找直线功能
-                        // 1.从界面类获取ROI图像
-                        // 2.对ROI图像调用你的找直线算法
-                        // 3.s
+                        var (lines, image) = form.DetectLine();
+                        if (lines == null || image == null) { throw new Exception("直线查找失败！"); }
 
-                        //form.UpdataImage();
-                        //var roiImg = form.GetROIImage();
-                        //NodeResultImageCrop nodeResultImageCrop = new NodeResultImageCrop();
-                        //nodeResultImageCrop.Image = roiImg;
-                        //Result = nodeResultImageCrop;
+                        ((NodeResultFindLine)Result).Lines = lines;
+                        ((NodeResultFindLine)Result).OutputImage = image;
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，找到{lines.Count}条直线)", true);
                     }
                     catch (OperationCanceledException)
                     {
