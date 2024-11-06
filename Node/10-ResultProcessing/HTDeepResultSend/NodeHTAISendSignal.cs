@@ -104,7 +104,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                         // 发送信号到对应的PLC
                         foreach (var maxSignalRow in maxSignalRowsByPlc)
                         {
-                            SendSignalToPlc(maxSignalRow);
+                            SendSignalToPlc(maxSignalRow, param.StayTime);
                         }
                     });
                     long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -131,7 +131,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
             return matchingRows;
         }
 
-        private static void SendSignalToPlc(SignalRowData dataRow)
+        private async void SendSignalToPlc(SignalRowData dataRow, double time)
         {
             if (dataRow != null)
             {
@@ -143,9 +143,17 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                         {
                             OperateResult writeResult;
                             DateTime startTime = DateTime.Now;
+
+                            //将信号地址字符串以逗号分隔成信号地址列表
+                            string[] signals = dataRow.SignalAddress.Split(',');
+
+                            // 初始化信号数组
+                            bool[] trueVals = Enumerable.Repeat(true, signals.Length).ToArray();
+                            bool[] falseVals = Enumerable.Repeat(false, signals.Length).ToArray();
+
                             do
                             {
-                                writeResult = plcTmp.WriteBool(dataRow.SignalAddress, true);
+                                writeResult = plcTmp.WriteMultipleBool(signals, trueVals);
 
                                 long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
                                 if (timeTotal > 5000)
@@ -153,9 +161,12 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
 
                             } while (!writeResult.IsSuccess);
 
+                            // 信号保持时间
+                            await ExecuteSleepAsync((int)time);
+
                             do
                             {
-                                writeResult = plcTmp.WriteBool(dataRow.SignalAddress, false);
+                                writeResult = plcTmp.WriteMultipleBool(signals, falseVals);
 
                                 long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
                                 if (timeTotal > 5000)
@@ -171,6 +182,12 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                     }
                 }
             }
+        }
+
+        private async Task ExecuteSleepAsync(int timeInMilliseconds)
+        {
+            // 使用 Task.Delay 在后台线程上执行异步睡眠操作
+            await Task.Delay(timeInMilliseconds);
         }
     }
 }

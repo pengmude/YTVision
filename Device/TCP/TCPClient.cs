@@ -84,7 +84,8 @@ namespace YTVisionPro.Device.TCP
 
         public void Disconnect()
         {
-            _client.Close();
+            if (_client != null)
+                _client.Close();
             IsConnect = false;
             ConnectStatusEvent?.Invoke(this, false);
         }

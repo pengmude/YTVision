@@ -92,8 +92,11 @@ namespace YTVisionPro.Device.Modbus
         {
             try
             {
-                _slave.Dispose();
-                _server.Stop();
+                if(_slave != null && _server != null)
+                {
+                    _slave.Dispose();
+                    _server.Stop();
+                }
                 IsConnect = false;
                 ConnectStatusEvent?.Invoke(this, false);
                 LogHelper.AddLog(MsgLevel.Info, $"从站（{DevName}）已停止运行", true);

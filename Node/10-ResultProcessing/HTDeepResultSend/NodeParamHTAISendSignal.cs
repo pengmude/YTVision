@@ -20,6 +20,10 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
         //保存订阅节点
         public string Text1;
         public string Text2;
+        /// <summary>
+        /// 信号保持时间
+        /// </summary>
+        public double StayTime;
     }
 
     public class SignalRowData

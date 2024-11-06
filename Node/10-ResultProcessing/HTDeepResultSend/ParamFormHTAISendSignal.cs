@@ -300,6 +300,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                 dataTable.Clear();
                 textBox2.Text = param.OKPLC;
                 textBox1.Text = param.NGPLC;
+                textBoxStayTime.Text = param.StayTime.ToString();
 
                 //数据的每一行
                 foreach (var item in param.Data)
@@ -323,13 +324,22 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
 
         private void ParamFormHTAISendSignal_FormClosing(object sender, FormClosingEventArgs e)
         {
-            nodeParamSendSignal.Text1 = nodeSubscription1.GetText1();
-            nodeParamSendSignal.Text2 = nodeSubscription1.GetText2();
-            nodeParamSendSignal.Path = this.textBox3.Text;
-            nodeParamSendSignal.OKPLC = this.textBox2.Text;
-            nodeParamSendSignal.NGPLC = this.textBox1.Text;
-            nodeParamSendSignal.PlcName = this.comboBox2.Text;
-            Params = nodeParamSendSignal;
+            try
+            {
+                nodeParamSendSignal.Text1 = nodeSubscription1.GetText1();
+                nodeParamSendSignal.Text2 = nodeSubscription1.GetText2();
+                nodeParamSendSignal.Path = this.textBox3.Text;
+                nodeParamSendSignal.OKPLC = this.textBox2.Text;
+                nodeParamSendSignal.NGPLC = this.textBox1.Text;
+                nodeParamSendSignal.PlcName = this.comboBox2.Text;
+                nodeParamSendSignal.StayTime = double.Parse(this.textBoxStayTime.Text);
+                Params = nodeParamSendSignal;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("不合法的参数！");
+                e.Cancel = true;
+            }
         }
     }
 }

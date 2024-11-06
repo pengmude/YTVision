@@ -90,7 +90,14 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// <returns></returns>
         public Bitmap GetImage()
         {
-            return nodeSubscriptionImg2Save.GetValue<Bitmap>();
+            try
+            {
+                return (Bitmap)nodeSubscriptionImg2Save.GetValue<Bitmap>().Clone();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -99,7 +106,14 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// <returns></returns>
         public string GetBarCode()
         {
-            return nodeSubscriptionBarCode.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
+            try
+            {
+                return nodeSubscriptionBarCode.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>
@@ -107,7 +121,14 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         /// </summary>
         public ResultViewData GetAiResult()
         {
-            return nodeSubscriptionAiRes.GetValue<ResultViewData>();
+            try
+            {
+                return nodeSubscriptionAiRes.GetValue<ResultViewData>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>

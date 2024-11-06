@@ -91,7 +91,8 @@ namespace YTVisionPro.Device.TCP
         {
             try
             {
-                _server.Stop();
+                if (_server != null)
+                    _server.Stop();
                 IsConnect = false;
                 ConnectStatusEvent?.Invoke(this, false);
             }

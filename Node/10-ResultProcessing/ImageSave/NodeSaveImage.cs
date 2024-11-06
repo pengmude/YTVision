@@ -74,10 +74,8 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                         if (param.Image == null)
                             throw new Exception($"订阅的图片对象为空！");
 
-                        // 保存
-                        // 开始处理队列
-                        SaveImage(param);                      
-                        //processor.StopProcessing();
+                        // 异步队列存图
+                        SaveImage(param);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
@@ -217,8 +215,6 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
         private SaveImageTask QueueImageForSave(Bitmap image, string savePath, string imageName, bool needCompress, long compressValue = 100)
         {
             Directory.CreateDirectory(savePath);
-            // 生成图片副本
-            Bitmap clonedBitmap = (Bitmap)image.Clone();
 
             // 生成保存图片的绝对路径
             string fileName = GetFileName(savePath, imageName);
@@ -226,7 +222,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             // 创建保存任务
             SaveImageTask saveTask = new SaveImageTask
             {
-                Image = clonedBitmap,
+                Image = image,
                 Path = fileName,
                 NeedCompress = needCompress,
                 CompressValue = compressValue
