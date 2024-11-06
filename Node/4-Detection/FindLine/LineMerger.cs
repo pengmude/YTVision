@@ -137,34 +137,6 @@ namespace YTVisionPro.Node._4_Detection.FindLine
             return new LineSegmentPoint(startPoint, endPoint);
         }
 
-
-        //public static List<LineSegmentPoint> MergeLines(List<LineSegmentPoint> lines)
-        //{
-        //    List<LineSegmentPoint> mergedLines = new List<LineSegmentPoint>();
-
-        //    while (lines.Count > 0)
-        //    {
-        //        LineSegmentPoint currentLine = lines[0];
-        //        List<LineSegmentPoint> similarLines = new List<LineSegmentPoint> { currentLine };
-
-        //        for (int i = 1; i < lines.Count; i++)
-        //        {
-        //            if (AreLinesSimilar(currentLine, lines[i]))
-        //            {
-        //                similarLines.Add(lines[i]);
-        //            }
-        //        }
-
-        //        LineSegmentPoint mergedLine = MergeSimilarLines(similarLines);
-        //        mergedLines.Add(mergedLine);
-
-        //        // 移除已经合并的线段
-        //        lines.RemoveAll(line => similarLines.Contains(line));
-        //    }
-
-        //    return mergedLines;
-        //}
-
         private static bool AreLinesSimilar(LineSegmentPoint line1, LineSegmentPoint line2)
         {
             double angle1 = Math.Atan2(line1.P2.Y - line1.P1.Y, line1.P2.X - line1.P1.X);

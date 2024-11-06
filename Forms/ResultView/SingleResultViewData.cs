@@ -23,6 +23,17 @@ namespace YTVisionPro.Forms.ResultView
         /// OK或NG标记
         /// </summary>
         public bool IsOk;
+
+        public SingleResultViewData() { }
+
+        public SingleResultViewData(string nodeName, string className, string detectName, string detectResult, bool isOk) 
+        {
+            NodeName = nodeName;
+            ClassName = className;
+            DetectName = detectName;
+            DetectResult = detectResult;
+            IsOk = isOk;
+        }
     }
 
 }

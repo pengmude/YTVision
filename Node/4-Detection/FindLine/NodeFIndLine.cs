@@ -1,12 +1,8 @@
 ﻿using Logger;
-using OpenCvSharp.Extensions;
-using OpenCvSharp;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Drawing;
-using Point = OpenCvSharp.Point;
+using YTVisionPro.Node._4_Detection.ParallelLines;
 
 namespace YTVisionPro.Node._4_Detection.FindLine
 {
@@ -52,15 +48,15 @@ namespace YTVisionPro.Node._4_Detection.FindLine
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        var (lines, image) = form.DetectLine();
-                        if (lines == null || image == null) { throw new Exception("直线查找失败！"); }
+                        var (line, image) = form.DetectLine();
+                        if (line == null || image == null) { throw new Exception("直线查找失败！"); }
 
-                        ((NodeResultFindLine)Result).Lines = lines;
+                        ((NodeResultFindLine)Result).Line = line;
                         ((NodeResultFindLine)Result).OutputImage = image;
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，找到{lines.Count}条直线)", true);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，直线长度为：{LineUtils.PointDistance(line.P1, line.P2).ToString("F2")} 像素)", true);
                     }
                     catch (OperationCanceledException)
                     {

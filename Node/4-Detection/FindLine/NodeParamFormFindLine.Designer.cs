@@ -459,8 +459,7 @@
             "输出最上面一条",
             "输出最下面一条",
             "输出最左边一条",
-            "输出最右边一条",
-            "所有直线"});
+            "输出最右边一条"});
             this.comboBox1.Location = new System.Drawing.Point(45, 609);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(299, 26);

@@ -422,17 +422,18 @@
     <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamImageRotate.cs" />
     <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeResultImageRotate.cs" />
     <Compile Include="Node\4-Detection\FindLine\LineMerger.cs" />
-    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParallelismOf2Lines.cs">
+    <Compile Include="Node\4-Detection\ParallelLines\LineUtils.cs" />
+    <Compile Include="Node\4-Detection\ParallelLines\NodeParallelLines.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.cs">
+    <Compile Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.Designer.cs">
-      <DependentUpon>NodeParamFormParallelismOf2Lines.cs</DependentUpon>
+    <Compile Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.Designer.cs">
+      <DependentUpon>NodeParamFormParallelLines.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeParamParallelismOf2Lines.cs" />
-    <Compile Include="Node\4-Detection\ParallelismOf2Lines\NodeResultParallelismOf2Lines.cs" />
+    <Compile Include="Node\4-Detection\ParallelLines\NodeParamParallelLines.cs" />
+    <Compile Include="Node\4-Detection\ParallelLines\NodeResultParallelLines.cs" />
     <Compile Include="Node\4-Detection\FindLine\NodeFIndLine.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -793,8 +794,8 @@
     <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.resx">
       <DependentUpon>NodeParamFormImageRotate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\4-Detection\ParallelismOf2Lines\NodeParamFormParallelismOf2Lines.resx">
-      <DependentUpon>NodeParamFormParallelismOf2Lines.cs</DependentUpon>
+    <EmbeddedResource Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.resx">
+      <DependentUpon>NodeParamFormParallelLines.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\4-Detection\FindLine\NodeParamFormFindLine.resx">
       <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>

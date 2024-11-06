@@ -20,8 +20,14 @@ namespace YTVisionPro.Node._4_Detection.FindLine
             InitializeComponent();
             this.process = process;
             this.node = nodeBase;
-            comboBox1.SelectedIndex = 6;
+            comboBox1.SelectedIndex = 0;
             imageROIEditControl1.SetROIType2Draw(Forms.ShapeDraw.ROIType.Rectangle);
+            Shown += NodeParamFormFindLine_Shown;
+        }
+
+        private void NodeParamFormFindLine_Shown(object sender, EventArgs e)
+        {
+            UpdataImage();
         }
 
         public INodeParam Params { get; set; }
@@ -58,9 +64,6 @@ namespace YTVisionPro.Node._4_Detection.FindLine
                         break;
                     case LineSelection.Rightmost:
                         comboBox1.SelectedIndex = 5;
-                        break;
-                    case LineSelection.All:
-                        comboBox1.SelectedIndex = 6;
                         break;
                     default:
                         break;
@@ -181,11 +184,9 @@ namespace YTVisionPro.Node._4_Detection.FindLine
         /// <summary>
         /// 检测直线
         /// </summary>
-        public (List<LineSegmentPoint>, Bitmap) DetectLine()
+        public (LineSegmentPoint, Bitmap) DetectLine()
         {
-            // 输出的直线结果
-            List<LineSegmentPoint> Lines = new List<LineSegmentPoint>();
-
+            LineSegmentPoint line = new LineSegmentPoint();
             try
             {
                 // 更新输入图像和获取ROI图像
@@ -209,7 +210,7 @@ namespace YTVisionPro.Node._4_Detection.FindLine
                 if (image.Channels() != 1)
                 {
                     LogHelper.AddLog(MsgLevel.Exception, $"图像非单通道！", true);
-                    return (Lines, null);
+                    return (line, null);
                 }
 
                 // 应用高斯模糊减少噪点
@@ -242,12 +243,13 @@ namespace YTVisionPro.Node._4_Detection.FindLine
                     randomColor = new Scalar(r, g, b);
                 } while (randomColor == Scalar.Red);
 
+
+                int radius = 5; // 端点半径
                 foreach (var points in lineSegmentPoints)
                 {
                     // 绘制线段
                     Cv2.Line(result, points.P1, points.P2, randomColor, 2);
                     // 在线段的两端绘制红色端点
-                    int radius = 5; // 端点半径
                     Cv2.Circle(result, points.P1, radius, Scalar.Red, -1); // -1 表示填充圆
                     Cv2.Circle(result, points.P2, radius, Scalar.Red, -1);
                 }
@@ -258,38 +260,30 @@ namespace YTVisionPro.Node._4_Detection.FindLine
 
                 #region 绘制筛选后的图像
 
-                // 不输出全部直线的时候
-                if (curLineSelection != LineSelection.All)
-                {
-                    Mat result1 = image.Clone();
-                    Cv2.CvtColor(result1, result1, ColorConversionCodes.BayerBG2BGR);
-                    var singleLine = LineMerger.MergeLines(lineSegmentPoints, curLineSelection);// 合并重合度高的直线并且筛选对应输出的直线
-                    Lines.Add(singleLine);
-                    int radius = 5; // 端点半径
-                    // 绘制线段
-                    Cv2.Line(result1, singleLine.P1, singleLine.P2, randomColor, 2);
-                    Cv2.Circle(result1, singleLine.P1, radius, Scalar.Red, -1); // -1 表示填充圆
-                    Cv2.Circle(result1, singleLine.P2, radius, Scalar.Red, -1);
-                    Cv2.PutText(result1, $"Lenth:{(int)LineMerger.PointDistance(singleLine.P1, singleLine.P2)} px", new Point(40, 40), HersheyFonts.Italic, 1, Scalar.Red);
-                    pictureBoxResult2.Image = BitmapConverter.ToBitmap(result1);
-                }
-                else
-                {
-                    Lines = lineSegmentPoints;
-                }
+                // 加上在原图的偏差值
+                var point = imageROIEditControl1.GetImageROIRect().Location;
+
+                // 绘制直线
+                Mat result1 = image.Clone();
+                Cv2.CvtColor(result1, result1, ColorConversionCodes.BayerBG2BGR);
+                var singleLine = LineMerger.MergeLines(lineSegmentPoints, curLineSelection);// 合并重合度高的直线并且筛选对应输出的直线
+                                // 绘制线段
+                Cv2.Line(result1, singleLine.P1, singleLine.P2, randomColor, 2);
+                Cv2.Circle(result1, singleLine.P1, radius, Scalar.Red, -1); // -1 表示填充圆
+                Cv2.Circle(result1, singleLine.P2, radius, Scalar.Red, -1);
+                Cv2.PutText(result1, $"Lenth:{LineMerger.PointDistance(singleLine.P1, singleLine.P2).ToString("F2")} px", new Point(40, 40), HersheyFonts.Italic, 1, Scalar.Red);
+                pictureBoxResult2.Image = BitmapConverter.ToBitmap(result1);
+                singleLine.Offset((int)point.X, (int)point.Y);
+                line = singleLine;
 
                 #endregion
             }
             catch (Exception ex)
             {
                 LogHelper.AddLog(MsgLevel.Exception, $"检测直线失败，原因：{ex.Message}", true);
-                return (Lines, null);
+                return (line, null);
             }
-
-            if (curLineSelection != LineSelection.All) 
-                return (Lines, (Bitmap)pictureBoxResult2.Image);
-            else
-                return (Lines, (Bitmap)pictureBoxResult1.Image);
+            return (line, (Bitmap)pictureBoxResult2.Image);
         }
         private static byte GetDarkColorValue(Random rand)
         {
@@ -303,8 +297,7 @@ namespace YTVisionPro.Node._4_Detection.FindLine
                                comboBox1.SelectedIndex == 1 ? LineSelection.Shortest :
                                comboBox1.SelectedIndex == 2 ? LineSelection.Topmost :
                                comboBox1.SelectedIndex == 3 ? LineSelection.Bottommost :
-                               comboBox1.SelectedIndex == 4 ? LineSelection.Leftmost :
-                               comboBox1.SelectedIndex == 5 ? LineSelection.Rightmost : LineSelection.All;
+                               comboBox1.SelectedIndex == 4 ? LineSelection.Leftmost : LineSelection.Rightmost;
             }
     }
 }

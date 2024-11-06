@@ -86,10 +86,6 @@ namespace YTVisionPro.Node._4_Detection.FindLine
         /// <summary>
         /// 最右边那条
         /// </summary>
-        Rightmost,
-        /// <summary>
-        /// 所有直线
-        /// </summary>
-        All,
+        Rightmost
     }
 }

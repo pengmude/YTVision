@@ -24,9 +24,8 @@ using YTVisionPro.Node.Modbus.Read;
 using YTVisionPro.Node.Modbus.Write;
 using YTVisionPro.Node.TCP.Client;
 using YTVisionPro.Node.TCP.Server;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 using YTVisionPro.Node._3_ImagePreprocessing.ImageRotate;
-using YTVisionPro.Node._4_Detection.ParallelismOf2Lines;
+using YTVisionPro.Node._4_Detection.ParallelLines;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -226,7 +225,7 @@ namespace YTVisionPro.Forms.ProcessNew
                     node = new NodeImageRotate(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.LineParallelism:
-                    node = new NodeParallelismOf2Lines(nodeId, nodeName, _process, nodeType);
+                    node = new NodeParallelLines(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;
