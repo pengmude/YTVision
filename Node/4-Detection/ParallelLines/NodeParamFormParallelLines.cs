@@ -119,6 +119,10 @@ namespace YTVisionPro.Node._4_Detection.ParallelLines
                 nodeSubscription1.SetText(param.Text1, param.Text2);
                 nodeSubscription2.SetText(param.Text3, param.Text4);
                 nodeSubscription3.SetText(param.Text5, param.Text6);
+                textBox1.Text = param.MaxAngle.ToString();
+                checkBox1.Checked = param.MaxAngleEnable;
+                textBox2.Text = param.MaxDistanceDeviation.ToString();
+                checkBox2.Checked = param.MaxDistanceDeviationEnable;
             }
         }
         /// <summary>

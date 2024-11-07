@@ -1,6 +1,7 @@
 ﻿using Basler.Pylon;
 using MvCameraControl;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace YTVisionPro.Device.Camera
@@ -122,6 +123,46 @@ namespace YTVisionPro.Device.Camera
         float GetTriggerDelay();
 
         /// <summary>
+        /// 获取线路选择器
+        /// </summary>
+        IEnumValue GetLineSelector();
+
+        /// <summary>
+        /// 设置线路选择器
+        /// </summary>
+        void SetLineSelector(string line);
+
+        /// <summary>
+        /// 获取线路模式
+        /// </summary>
+        /// <returns></returns>
+        IEnumValue GetLineMode();
+
+        /// <summary>
+        /// 设置线路模式
+        /// </summary>
+        /// <param name="lineMode"></param>
+        void SetLineMode(string lineMode);
+
+        /// <summary>
+        /// 获取使能
+        /// </summary>
+        /// <returns></returns>
+        bool GetStrobeEnable();
+
+        /// <summary>
+        /// 设置使能
+        /// </summary>
+        /// <param name="enable"></param>
+        void SetStrobeEnable(bool enable);
+
+        /// <summary>
+        /// 设置线路反转
+        /// </summary>
+        /// <param name="inverter"></param>
+        void SetLineInverter(bool inverter);
+
+        /// <summary>
         /// 设置曝光
         /// </summary>
         /// <param name="ExposureTime"></param>
@@ -199,7 +240,6 @@ namespace YTVisionPro.Device.Camera
         Low
     }
 
-
     /// <summary>
     /// 相机品牌
     /// </summary>
@@ -222,6 +262,4 @@ namespace YTVisionPro.Device.Camera
         /// </summary>
         DaHua
     }
-
-
 }

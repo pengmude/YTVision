@@ -61,16 +61,16 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1403, 739);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1217, 747);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.tableLayoutPanel5);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(1106, 3);
+            this.panel1.Location = new System.Drawing.Point(920, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(294, 733);
+            this.panel1.Size = new System.Drawing.Size(294, 741);
             this.panel1.TabIndex = 1;
             // 
             // tableLayoutPanel5
@@ -153,16 +153,16 @@ namespace YTVisionPro.Node.ImagePreprocessing.ImageCrop
             this.imageROIEditControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.imageROIEditControl1.Location = new System.Drawing.Point(3, 3);
             this.imageROIEditControl1.Name = "imageROIEditControl1";
-            this.imageROIEditControl1.Size = new System.Drawing.Size(1097, 733);
+            this.imageROIEditControl1.Size = new System.Drawing.Size(911, 741);
             this.imageROIEditControl1.TabIndex = 2;
             // 
             // NodeParamFormImageCrop
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1403, 739);
+            this.ClientSize = new System.Drawing.Size(1217, 747);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "NodeParamFormImageCrop";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

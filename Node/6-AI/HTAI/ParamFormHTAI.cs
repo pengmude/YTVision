@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Forms.ImageViewer;
-using YTVisionPro.Node.ResultProcessing.HTDeepResultSend;
+using YTVisionPro.Node.ResultProcessing.AIResultSendByPLC;
 
 namespace YTVisionPro.Node.AI.HTAI
 {

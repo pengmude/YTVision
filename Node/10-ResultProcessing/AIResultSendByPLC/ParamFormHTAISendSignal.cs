@@ -4,11 +4,9 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Node.AI.HTAI;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
+namespace YTVisionPro.Node.ResultProcessing.AIResultSendByPLC
 {
     internal partial class ParamFormHTAISendSignal : Form, INodeParamForm
     {
@@ -197,7 +195,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
             {
                 dataList.Add(new SignalRowData
                 {
-                    UserNamePlc = row["PLC"].ToString(),
+                    DevName = row["PLC"].ToString(),
                     NodeName = row["节点"].ToString(),
                     ClassName = row["检测项"].ToString(),
                     SignalLevel = Convert.ToInt32(row["信号等级"]),
@@ -306,7 +304,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
                 foreach (var item in param.Data)
                 {
                     DataRow newRow = dataTable.NewRow();
-                    newRow["PLC"] = item.UserNamePlc;
+                    newRow["PLC"] = item.DevName;
                     newRow["节点"] = item.NodeName;
                     newRow["检测项"] = item.ClassName;
                     newRow["信号等级"] = item.SignalLevel;

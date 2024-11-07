@@ -192,6 +192,14 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 两直线平行度
         /// </summary>
-        LineParallelism
+        LineParallelism,
+        /// <summary>
+        /// Modbus软触发
+        /// </summary>
+        ModbusSoftTrigger,
+        /// <summary>
+        /// Modbus发送AI结果
+        /// </summary>
+        AIResultSendByModbus
     }
 }

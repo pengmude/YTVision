@@ -1,7 +1,7 @@
 ﻿
-namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
+namespace YTVisionPro.Node.Modbus.AIResultSendByModbus
 {
-    internal class NodeResultHTAISendSignal : INodeResult
+    internal class NodeResultSignalSendByModbus : INodeResult
     {
         /// <summary>
         /// 是否成功

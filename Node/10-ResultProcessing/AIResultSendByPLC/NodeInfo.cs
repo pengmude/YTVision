@@ -1,5 +1,5 @@
 ﻿
-namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
+namespace YTVisionPro.Node.ResultProcessing.AIResultSendByPLC
 {
     public class NodeInfo
     {

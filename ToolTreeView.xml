@@ -23,6 +23,7 @@
     <Node Text="检测识别" ImageIndex="9" Tag="UNKNOWN" SelectedImageIndex="9">
       <Nodes>
         <Node Text="直线查找" ImageIndex="29" Tag="LineFind" SelectedImageIndex="29" />
+        <Node Text="两直线平行" ImageIndex="38" Tag="LineParallelism" SelectedImageIndex="38" />
         <Node Text="圆查找" ImageIndex="10" Tag="CircleFind" SelectedImageIndex="10" />
         <Node Text="模版匹配" ImageIndex="11" Tag="TemplateMatch" SelectedImageIndex="11" />
       </Nodes>
@@ -42,7 +43,7 @@
       <Nodes>
         <Node Text="读取PLC数据" ImageIndex="18" Tag="PLCRead" SelectedImageIndex="18" />
         <Node Text="写入PLC数据" ImageIndex="19" Tag="PLCWrite" SelectedImageIndex="19" />
-        <Node Text="获取软触发信号" ImageIndex="20" Tag="WaitSoftTrigger" SelectedImageIndex="20" />
+        <Node Text="PLC软触发" ImageIndex="20" Tag="WaitSoftTrigger" SelectedImageIndex="20" />
       </Nodes>
     </Node>
 	<Node Text="TCP通信" ImageIndex="34" Tag="UNKNOWN" SelectedImageIndex="34">
@@ -55,6 +56,7 @@
       <Nodes>
         <Node Text="Modbus读取" ImageIndex="31" Tag="ModbusRead" SelectedImageIndex="31" />
         <Node Text="Modbus写入" ImageIndex="32" Tag="ModbusWrite" SelectedImageIndex="32" />
+        <Node Text="Modbus软触发" ImageIndex="39" Tag="ModbusSoftTrigger" SelectedImageIndex="39" />
       </Nodes>
     </Node>
     <Node Text="逻辑控制" ImageIndex="21" Tag="UNKNOWN" SelectedImageIndex="21">
@@ -64,7 +66,8 @@
     </Node>
     <Node Text="结果处理" ImageIndex="23" Tag="UNKNOWN" SelectedImageIndex="23">
       <Nodes>
-        <Node Text="AI结果发送" ImageIndex="24" Tag="PLCHTAIResultSend" SelectedImageIndex="24" />
+        <Node Text="PLC发送AI结果" ImageIndex="24" Tag="PLCHTAIResultSend" SelectedImageIndex="24" />
+        <Node Text="Modbus发送AI结果" ImageIndex="40" Tag="PLCHTAIResultSend" SelectedImageIndex="40" />
         <Node Text="检测结果显示" ImageIndex="25" Tag="DetectResultShow" SelectedImageIndex="25" />
         <Node Text="保存图片" ImageIndex="26" Tag="ImageSave" SelectedImageIndex="26" />
         <Node Text="结果汇总" ImageIndex="27" Tag="Summarize" SelectedImageIndex="27" />

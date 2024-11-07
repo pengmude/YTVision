@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Node.AI.HTAI;
 
-namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
+namespace YTVisionPro.Node.ResultProcessing.AIResultSendByPLC
 {
     internal class NodeHTAISendSignal : NodeBase
     {
@@ -90,7 +90,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
 
                     // 按PLC分组，并在每个组中找到信号等级最大的行
                     var maxSignalRowsByPlc = allMatchingRows
-                    .GroupBy(row => row.UserNamePlc)
+                    .GroupBy(row => row.DevName)
                     .Select(group => group.OrderByDescending(row => row.SignalLevel).FirstOrDefault())
                     .ToList();
 
@@ -137,7 +137,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
             {
                 foreach (var plcTmp in Solution.Instance.PlcDevices)
                 {
-                    if (plcTmp.UserDefinedName == dataRow.UserNamePlc)
+                    if (plcTmp.UserDefinedName == dataRow.DevName)
                     {
                         try
                         {

@@ -73,6 +73,10 @@ namespace YTVisionPro.Node._4_Detection.ParallelLines
                                 else
                                     result = "不平行";
                             }
+                            else
+                            {
+                                throw new Exception("没有启用两直线平行的判定标准");
+                            }
 
                             ((NodeResultParallelLines)Result).Result = new ResultViewData();
                             ((NodeResultParallelLines)Result).Image = form.DrawLines(line1, line2, result);

@@ -370,13 +370,23 @@
     <Compile Include="Forms\PLCAdd\SinglePLC.Designer.cs">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </Compile>
-    <Compile Include="Device\Camera\CameraBasler.cs" />
     <Compile Include="Device\Camera\CameraHik.cs" />
     <Compile Include="Device\Camera\ICamera.cs" />
     <Compile Include="Device\IDevice.cs" />
     <Compile Include="Device\Light\LightRsee.cs" />
     <Compile Include="Device\Modbus\ModbusPoll.cs" />
     <Compile Include="Device\Modbus\ModbusParam.cs" />
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\NodeParamSignalSendByModbus.cs" />
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\NodeResultSignalSendByModbus.cs" />
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\NodeSignalSendByModbus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\ParamFormSignalSendByModbus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\ParamFormSignalSendByModbus.Designer.cs">
+      <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\11-TCP\Client\NodeTCPClient.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -398,6 +408,17 @@
     </Compile>
     <Compile Include="Node\11-TCP\Server\ParamFormTCPServer.Designer.cs">
       <DependentUpon>ParamFormTCPServer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\12-IO\CameraIO\NodeCameraIO.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\12-IO\CameraIO\NodeParamCameraIO.cs" />
+    <Compile Include="Node\12-IO\CameraIO\NodeResultCameraIO.cs" />
+    <Compile Include="Node\12-IO\CameraIO\ParamFormCameraIO.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\12-IO\CameraIO\ParamFormCameraIO.Designer.cs">
+      <DependentUpon>ParamFormCameraIO.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeImageCrop.cs">
       <SubType>UserControl</SubType>
@@ -421,6 +442,18 @@
     </Compile>
     <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamImageRotate.cs" />
     <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeResultImageRotate.cs" />
+    <Compile Include="Node\4-Detection\FindCircle\CircleMerger.cs" />
+    <Compile Include="Node\4-Detection\FindCircle\NodeFIndCircle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\4-Detection\FindCircle\NodeParamFindCircle.cs" />
+    <Compile Include="Node\4-Detection\FindCircle\NodeParamFormFindCircle.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\4-Detection\FindCircle\NodeParamFormFindCircle.Designer.cs">
+      <DependentUpon>NodeParamFormFindCircle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\4-Detection\FindCircle\NodeResultFindCircle.cs" />
     <Compile Include="Node\4-Detection\FindLine\LineMerger.cs" />
     <Compile Include="Node\4-Detection\ParallelLines\LineUtils.cs" />
     <Compile Include="Node\4-Detection\ParallelLines\NodeParallelLines.cs">
@@ -469,6 +502,17 @@
     </Compile>
     <Compile Include="Node\2-ImageSrc\Shot\ParamFormShot.Designer.cs">
       <DependentUpon>ParamFormShot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\NodeModbusSoftTrigger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\NodeParamModbusSoftTrigger.cs" />
+    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\NodeReusltModbusSoftTrigger.cs" />
+    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\ParamFormModbusSoftTrigger.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\ParamFormModbusSoftTrigger.Designer.cs">
+      <DependentUpon>ParamFormModbusSoftTrigger.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\8-Modbus\Read\NodeModbusRead.cs">
       <SubType>UserControl</SubType>
@@ -574,16 +618,16 @@
     <Compile Include="Node\NodeSubscription.Designer.cs">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeHTAISendSignal.cs">
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeHTAISendSignal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeInfo.cs" />
-    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeParamHTAISendSignal.cs" />
-    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\NodeResultHTAISendSignal.cs" />
-    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.cs">
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeInfo.cs" />
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeParamHTAISendSignal.cs" />
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeResultHTAISendSignal.cs" />
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\ParamFormHTAISendSignal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.Designer.cs">
+    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\ParamFormHTAISendSignal.Designer.cs">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\7-PLC\WaitSoftTrigger\NodeParamWaitSoftTrigger.cs" />
@@ -782,17 +826,26 @@
     <EmbeddedResource Include="Forms\PLCAdd\SinglePLC.resx">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\10-ResultProcessing\AIResultSendByModbus\ParamFormSignalSendByModbus.resx">
+      <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\11-TCP\Client\ParamFormTCPClient.resx">
       <DependentUpon>ParamFormTCPClient.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\11-TCP\Server\ParamFormTCPServer.resx">
       <DependentUpon>ParamFormTCPServer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\12-IO\CameraIO\ParamFormCameraIO.resx">
+      <DependentUpon>ParamFormCameraIO.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
       <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.resx">
       <DependentUpon>NodeParamFormImageRotate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\4-Detection\FindCircle\NodeParamFormFindCircle.resx">
+      <DependentUpon>NodeParamFormFindCircle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.resx">
       <DependentUpon>NodeParamFormParallelLines.cs</DependentUpon>
@@ -805,6 +858,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\2-ImageSrc\Shot\ParamFormShot.resx">
       <DependentUpon>ParamFormShot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\8-Modbus\ModbusSoftTrigger\ParamFormModbusSoftTrigger.resx">
+      <DependentUpon>ParamFormModbusSoftTrigger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\8-Modbus\Read\ParamFormModbusRead.resx">
       <DependentUpon>ParamFormModbusRead.cs</DependentUpon>
@@ -845,7 +901,7 @@
     <EmbeddedResource Include="Node\NodeSubscription.resx">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\HTDeepResultSend\ParamFormHTAISendSignal.resx">
+    <EmbeddedResource Include="Node\10-ResultProcessing\AIResultSendByPLC\ParamFormHTAISendSignal.resx">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\7-PLC\WaitSoftTrigger\ParamFormWaitSoftTrigger.resx">

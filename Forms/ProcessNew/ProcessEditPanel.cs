@@ -9,7 +9,7 @@ using YTVisionPro.Node.ImageSrc.Shot;
 using YTVisionPro.Node.PLC.WaitSoftTrigger;
 using YTVisionPro.Node.ImageSrc.ImageRead;
 using YTVisionPro.Node.LightControl;
-using YTVisionPro.Node.ResultProcessing.HTDeepResultSend;
+using YTVisionPro.Node.ResultProcessing.AIResultSendByPLC;
 using YTVisionPro.Node.PLC.PanasonicRead;
 using YTVisionPro.Node.PLC.PanasonicWirte;
 using YTVisionPro.Node.ResultProcessing.DataShow;
@@ -26,6 +26,9 @@ using YTVisionPro.Node.TCP.Client;
 using YTVisionPro.Node.TCP.Server;
 using YTVisionPro.Node._3_ImagePreprocessing.ImageRotate;
 using YTVisionPro.Node._4_Detection.ParallelLines;
+using YTVisionPro.Node.Modbus.ModbusSoftTrigger;
+using YTVisionPro.Node.Modbus.AIResultSendByModbus;
+using YTVisionPro.Node._4_Detection.FindCircle;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -203,6 +206,9 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.LineFind:
                     node = new NodeFIndLine(nodeId, nodeName, _process, nodeType);
                     break;
+                case NodeType.CircleFind:
+                    node = new NodeFIndCircle(nodeId, nodeName, _process, nodeType);
+                    break;
                 case NodeType.ImageCrop:
                     node = new NodeImageCrop(nodeId, nodeName, _process, nodeType);
                     break;
@@ -226,6 +232,12 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.LineParallelism:
                     node = new NodeParallelLines(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ModbusSoftTrigger:
+                    node = new NodeModbusSoftTrigger(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.AIResultSendByModbus:
+                    node = new NodeSignalSendByModbus(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

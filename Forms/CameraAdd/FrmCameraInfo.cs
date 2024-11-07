@@ -81,6 +81,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 string brand;
                 switch (info.ManufacturerName)
                 {
+                    case "GEV":
                     case "Hikrobot":
                         brand = "海康";
                         if (addedBrands.Add(brand))
@@ -127,7 +128,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 case "海康":
                     foreach (var info in infoList)
                     {
-                        if (info.ManufacturerName == "Hikrobot")
+                        if (info.ManufacturerName == "Hikrobot" || info.ManufacturerName == "GEV")
                         {
                             comboBoxCameraList.Items.Add(CameraHik.GetDevNameByDevInfo(info));
                         }

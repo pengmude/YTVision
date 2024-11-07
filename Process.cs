@@ -113,8 +113,7 @@ namespace YTVisionPro
                             IsRuning = false;
                             RunTime += node.Result.RunTime;
                             LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false)); 
-                            throw ex;
+                            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
                         }
                         catch (Exception ex)
                         {
@@ -123,7 +122,6 @@ namespace YTVisionPro
                             RunTime += node.Result.RunTime;
                             LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
                             UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                            throw ex;
                         }
                     }
 
@@ -180,8 +178,7 @@ namespace YTVisionPro
                         IsRuning = false;
                         RunTime += node.Result.RunTime;
                         LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false)); 
-                        throw ex;
+                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
                     }
                     catch (Exception ex)
                     {
@@ -189,8 +186,7 @@ namespace YTVisionPro
                         IsRuning = false;
                         RunTime += node.Result.RunTime;
                         LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false)); 
-                        throw ex;
+                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
                     }
                 }
 
@@ -239,7 +235,6 @@ namespace YTVisionPro
                         RunTime += node.Result.RunTime;
                         LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
                         UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
                     }
                     catch (Exception ex)
                     {
@@ -248,7 +243,6 @@ namespace YTVisionPro
                         RunTime += node.Result.RunTime;
                         LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
                         UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
                     }
                 }
 

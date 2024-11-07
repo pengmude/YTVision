@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using Logger;
+using System;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static OpenCvSharp.ML.DTrees;
-using static YTVisionPro.Node.AI.HTAI.HTAPI;
-using YTVisionPro.Node.ImagePreprocessing.ImageCrop;
-using Logger;
-using YTVisionPro.Node._4_Detection.Caliper;
+using YTVisionPro.Device.Modbus;
 
-namespace YTVisionPro.Node._4_Detection.DetectionLineParallelism
+namespace YTVisionPro.Node.Modbus.ModbusSoftTrigger
 {
-    internal class NodeLineParallelism : NodeBase
+    internal class NodeModbusSoftTrigger: NodeBase
     {
-        public NodeLineParallelism(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
+
+        public NodeModbusSoftTrigger(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new NodeParamFormLineParallelism();
-            ParamForm.SetNodeBelong(this);
-            Result = new NodeResultLineParallelism();
+            ParamForm = new ParamFormModbusSoftTrigger();
+            Result = new NodeReusltModbusSoftTrigger();
         }
 
         /// <summary>
@@ -28,7 +22,7 @@ namespace YTVisionPro.Node._4_Detection.DetectionLineParallelism
         public override async Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
-            // 参数合法性校验
+
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
@@ -41,32 +35,26 @@ namespace YTVisionPro.Node._4_Detection.DetectionLineParallelism
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is NodeParamFormLineParallelism form)
+            if (ParamForm is ParamFormModbusSoftTrigger form)
             {
-                if (ParamForm.Params is NodeParamLineParallelism param)
+                if (form.Params is NodeParamModbusSoftTrigger param)
                 {
                     try
                     {
-
-                        // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        param.LinePoint = form.GetLineEndpoints();
-                        form._straightLineAngle = GFraph.AngleOfLine(param.LinePoint);
-                        form._linearDistance = GFraph.StraightLineDistance(param.LinePoint);
-                        if (form._straightLineAngle == 0 || form._linearDistance == 0 )
+                        //如果没有连接则不运行
+                        if (!param.modbus.IsConnect)
+                            throw new Exception("设备尚未连接！");
+
+                        await Task.Run(() =>
                         {
-                            throw new Exception("直线太少");
-                        }
+                            // 监听拍照信号
+                            GetShotSignalFromModbus(param);
+                        });
 
-                        NodeResultLineParallelism nodeResultLineParallelism = new NodeResultLineParallelism();
-                        nodeResultLineParallelism.LinearDistance = form._linearDistance;
-                        nodeResultLineParallelism.StraightLineAngle = form._straightLineAngle; 
-
-                        SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        Result = nodeResultLineParallelism;
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
                     catch (OperationCanceledException)
@@ -83,6 +71,20 @@ namespace YTVisionPro.Node._4_Detection.DetectionLineParallelism
                     }
                 }
             }
+        }
+
+        private void GetShotSignalFromModbus(NodeParamModbusSoftTrigger param)
+        {
+            bool[] readResult;
+            var modbusPoll = param.modbus as ModbusPoll;
+            // 读取拍照信号
+            do
+            {
+                readResult = modbusPoll.ReadCoils(Convert.ToUInt16(param.Address), 1);
+            } while (!readResult.All(b => b == true));  // 读取失败或读取不到拍照信号为true均需要重试
+            // 重置拍照信号
+            modbusPoll.WriteSingleCoil(Convert.ToUInt16(param.Address), false);
+            LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
         }
     }
 }

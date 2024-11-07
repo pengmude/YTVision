@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
+namespace YTVisionPro.Node.ResultProcessing.AIResultSendByPLC
 {
     internal class NodeParamHTAISendSignal : INodeParam
     {
@@ -28,7 +28,7 @@ namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
 
     public class SignalRowData
     {
-        public string UserNamePlc;
+        public string DevName;
         public string NodeName;
         public string ClassName;
         public int SignalLevel;

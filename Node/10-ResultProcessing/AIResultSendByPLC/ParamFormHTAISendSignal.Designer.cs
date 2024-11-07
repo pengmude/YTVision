@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Node.ResultProcessing.HTDeepResultSend
+﻿namespace YTVisionPro.Node.ResultProcessing.AIResultSendByPLC
 {
     partial class ParamFormHTAISendSignal
     {

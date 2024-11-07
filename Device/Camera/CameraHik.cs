@@ -79,7 +79,6 @@ namespace YTVisionPro.Device.Camera
         /// </summary>
         public string UserDefinedName { get; set; }
 
-
         #region 反序列化相关函数
 
         [JsonConstructor]
@@ -264,20 +263,20 @@ namespace YTVisionPro.Device.Camera
         {
             IImage inputImage = e.FrameOut.Image;
             uint nChannelNum = 0;
+            PixelFormat m_bitmapPixelFormat = PixelFormat.Undefined;
             MvGvspPixelType dstPixelType = MvGvspPixelType.PixelType_Gvsp_Undefined;
             if (IsColorPixelFormat(e.FrameOut.Image.PixelType))
             {
                 dstPixelType = MvGvspPixelType.PixelType_Gvsp_RGB8_Packed;
+                m_bitmapPixelFormat = PixelFormat.Format24bppRgb;
                 nChannelNum = 3;
             }
             else if (IsMonoPixelFormat(e.FrameOut.Image.PixelType))
             {
                 dstPixelType = MvGvspPixelType.PixelType_Gvsp_Mono8;
+                m_bitmapPixelFormat = PixelFormat.Format8bppIndexed;
                 nChannelNum = 1;
             }
-
-            device.PixelTypeConverter.ConvertPixelType(inputImage, out inputImage, dstPixelType);
-
             //通过设置调色板从伪彩改为灰度
             if (nChannelNum == 1)
             {
@@ -285,9 +284,19 @@ namespace YTVisionPro.Device.Camera
                 for (int j = 0; j < 256; j++)
                     pal.Entries[j] = Color.FromArgb(j, j, j);
                 inputImage.ToBitmap().Palette = pal;
-            }
 
-            PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
+                PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
+            }
+            else if (nChannelNum == 3)
+            {
+                Mat mat = new Mat((int)inputImage.Height, (int)inputImage.Width, MatType.CV_8UC1);
+                //使用Marshal.Copy将像素数据复制到Mat的数据区域
+                Marshal.Copy(inputImage.PixelData, 0, mat.Data, inputImage.PixelData.Length);
+                Bitmap bitmap = BitmapConverter.ToBitmap(mat);
+                PublishImageEvent?.Invoke(this, bitmap);
+                mat.Dispose();
+                return;
+            }
         }
 
         /// <summary>
@@ -451,6 +460,144 @@ namespace YTVisionPro.Device.Camera
             {
                 device.Parameters.GetFloatValue("TriggerDelay", out IFloatValue triggerDelay);
                 return triggerDelay.CurValue;
+            }
+        }
+
+        /// <summary>
+        /// 获取线路选择器
+        /// </summary>
+        /// <returns></returns>
+        public IEnumValue GetLineSelector()
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            IEnumValue enumValue;
+            int Rnet;
+            Rnet = device.Parameters.GetEnumValue("LineSelector", out enumValue);
+            if (Rnet != MvError.MV_OK)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"获取线路选择器失败！错误码：{Rnet}", true);
+            }
+            return enumValue;
+        }
+
+        /// <summary>
+        /// 设置线路
+        /// </summary>
+        /// <param name="line"></param>
+        public void SetLineSelector(string line)
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            int Rnet = 0;
+            switch (line)
+            {
+                case "Line0":
+                    Rnet = device.Parameters.SetEnumValue("LineSelector", 0);
+                    break;
+                case "Line1":
+                    Rnet = device.Parameters.SetEnumValue("LineSelector", 1);
+                    break;
+               case "Line2":
+                    Rnet = device.Parameters.SetEnumValue("LineSelector", 2);
+                    break;
+                default:
+                    break;
+            }
+            if (Rnet != MvError.MV_OK)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"设置线路选择器失败！错误码：{Rnet}", true);
+            }
+        }
+
+        /// <summary>
+        /// 获取线路模式
+        /// </summary>
+        /// <returns></returns>
+        public IEnumValue GetLineMode()
+        { 
+            if (device == null) throw new Exception("相机对象为空！");
+            int Rnet = 0;
+            IEnumValue enumValue;
+            device.Parameters.GetEnumValue("LineMode", out enumValue);
+            if (Rnet != MvError.MV_OK)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"获取线路模式失败！错误码：{Rnet}", true);
+            }
+            return enumValue;
+        }
+
+        /// <summary>
+        /// 设置线路模式
+        /// </summary>
+        /// <param name="lineMode"></param>
+        public void SetLineMode(string lineMode)
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            int Rnet = 0;
+            switch (lineMode)
+            { 
+                case "输入":
+                    Rnet = device.Parameters.SetEnumValue("LineMode", 0);
+                    break;
+                case "输出":
+                    Rnet = device.Parameters.SetEnumValue("LineMode", 8);
+                    break;
+                default:
+                    break;
+            }
+            if (Rnet != MvError.MV_OK)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"设置线路模式失败！错误码：{Rnet}", true);
+            }
+        }
+
+        /// <summary>
+        /// 获取使能
+        /// </summary>
+        /// <returns></returns>
+        public bool GetStrobeEnable() 
+        { 
+            if(device == null) throw new Exception("相机对象为空！");
+            int Rnet = 0;
+            bool enable;
+            Rnet = device.Parameters.GetBoolValue("StrobeEnable", out enable);
+
+            if (Rnet != MvError.MV_OK)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"设置线路源失败！错误码：{Rnet}", true);
+            }
+
+            return enable;
+        }
+
+        /// <summary>
+        /// 设置使能
+        /// </summary>
+        /// <param name="enable"></param>
+        public void SetStrobeEnable(bool enable)
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            int Rnet = 0;
+
+            Rnet = device.Parameters.SetBoolValue("StrobeEnable", enable);
+
+            if (Rnet != MvError.MV_OK)
+            { 
+                LogHelper.AddLog(MsgLevel.Exception, $"设置线路源失败！错误码：{Rnet}", true);
+            }
+        }
+
+        /// <summary>
+        /// 设置线路反转
+        /// </summary>
+        /// <param name="inverter"></param>
+        public void SetLineInverter(bool inverter)
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            int Rnet = 0;
+            Rnet = device.Parameters.SetBoolValue("LineInverter", inverter);
+            if (Rnet != MvError.MV_OK)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"设置线路反转失败！错误码：{Rnet}", true);
             }
         }
 
