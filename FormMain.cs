@@ -21,6 +21,11 @@ using HslCommunication;
 using YTVisionPro.Forms.SystemSetting;
 using YTVisionPro.Device.TCP;
 using YTVisionPro.Device.Modbus;
+using YTVisionPro.Forms.LightAdd;
+using YTVisionPro.Forms.CameraAdd;
+using YTVisionPro.Forms.PLCAdd;
+using YTVisionPro.Forms.ModbusAdd;
+using YTVisionPro.Forms.TCPAdd;
 
 namespace YTVisionPro
 {
@@ -29,23 +34,23 @@ namespace YTVisionPro
         /// <summary>
         /// 光源添加窗口
         /// </summary>
-        Forms.LightAdd.FrmLightListView FrmLightAdd = new Forms.LightAdd.FrmLightListView();
+        static FrmLightListView FrmLightAdd = new FrmLightListView();
         /// <summary>
         /// 相机添加窗口
         /// </summary>
-        Forms.CameraAdd.FrmCameraListView FrmCameraAdd = new Forms.CameraAdd.FrmCameraListView();
+        static FrmCameraListView FrmCameraAdd = new FrmCameraListView();
         /// <summary>
         /// PLC添加窗口
         /// </summary>
-        Forms.PLCAdd.FrmPLCListView FrmPLCAdd= new Forms.PLCAdd.FrmPLCListView();
+        static FrmPLCListView FrmPLCAdd = new FrmPLCListView();
         /// <summary>
         /// Modbus添加窗口
         /// </summary>
-        Forms.ModbusAdd.FrmModbusListView FrmModbusAdd = new Forms.ModbusAdd.FrmModbusListView();
+        static FrmModbusListView FrmModbusAdd = new FrmModbusListView();
         /// <summary>
         /// TCP添加窗口
         /// </summary>
-        Forms.TCPAdd.FrmTCPListView FrmTcpAdd = new Forms.TCPAdd.FrmTCPListView();
+        static FrmTCPListView FrmTcpAdd = new FrmTCPListView();
         /// <summary>
         /// 图像显示栏
         /// </summary>
@@ -102,7 +107,6 @@ namespace YTVisionPro
         /// <param name="e"></param>
         private void FormMain_Load(object sender, EventArgs e)
         {
-            FrmNewProcessWizard.FormClosing += FrmNewProcessWizard_FormClosing;
             // 初始化主窗口布局
             InitDockPanel();
 
@@ -134,18 +138,6 @@ namespace YTVisionPro
 
             // 加载默认方案
             AutoLoadSolution();
-        }
-
-        /// <summary>
-        /// 流程窗口关闭不释放
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void FrmNewProcessWizard_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            e.Cancel = true;
-            FrmNewProcessWizard.Hide();
         }
 
         // 软件启动是否加载指定方案
@@ -393,7 +385,7 @@ namespace YTVisionPro
 
         private void 流程管理ToolStripMenuItem_Click(object value1, object value2)
         {
-            FrmNewProcessWizard.ShowDialog(this);
+            FrmNewProcessWizard.ShowDialog();
         }
 
         private async void 停止运行ToolStripMenuItem_Click(object value1, object value2)

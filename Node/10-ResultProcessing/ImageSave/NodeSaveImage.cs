@@ -75,7 +75,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
                             throw new Exception($"订阅的图片对象为空！");
 
                         // 异步队列存图
-                        SaveImage(param);
+                        await SaveImage(param);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
@@ -96,7 +96,7 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
             }
         }
 
-        private async void SaveImage(NodeParamSaveImage param)
+        private async Task SaveImage(NodeParamSaveImage param)
         {
             DateTime time = DateTime.Now;
             // 1.存图路径（不包含图片名称）
