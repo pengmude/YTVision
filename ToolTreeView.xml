@@ -6,6 +6,11 @@
         <Node Text="打开光源" ImageIndex="1" Tag="LightSourceControl" SelectedImageIndex="1" />
       </Nodes>
     </Node>
+    <Node Text="IO控制" ImageIndex="42" Tag="UNKNOWN" SelectedImageIndex="42">
+      <Nodes>
+        <Node Text="相机IO" ImageIndex="41" Tag="CameraIO" SelectedImageIndex="41" />
+      </Nodes>
+    </Node>
     <Node Text="图像采集" ImageIndex="2" Tag="UNKNOWN" SelectedImageIndex="2">
       <Nodes>
         <Node Text="本地图片" ImageIndex="3" Tag="LocalPicture" SelectedImageIndex="3" />
@@ -67,7 +72,7 @@
     <Node Text="结果处理" ImageIndex="23" Tag="UNKNOWN" SelectedImageIndex="23">
       <Nodes>
         <Node Text="PLC发送AI结果" ImageIndex="24" Tag="PLCHTAIResultSend" SelectedImageIndex="24" />
-        <Node Text="Modbus发送AI结果" ImageIndex="40" Tag="PLCHTAIResultSend" SelectedImageIndex="40" />
+        <Node Text="Modbus发送AI结果" ImageIndex="40" Tag="AIResultSendByModbus" SelectedImageIndex="40" />
         <Node Text="检测结果显示" ImageIndex="25" Tag="DetectResultShow" SelectedImageIndex="25" />
         <Node Text="保存图片" ImageIndex="26" Tag="ImageSave" SelectedImageIndex="26" />
         <Node Text="结果汇总" ImageIndex="27" Tag="Summarize" SelectedImageIndex="27" />

@@ -227,5 +227,13 @@ namespace YTVisionPro.Node.ResultProcessing.ImageSave
 
             }
         }
+
+        private void ParamFormImageSave_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(MessageBox.Show("修改参数后需要点击保存才能生效，不保存直接关闭窗口请点击“确定”", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
+        }
     }
 }

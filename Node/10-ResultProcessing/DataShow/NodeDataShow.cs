@@ -51,7 +51,7 @@ namespace YTVisionPro.Node.ResultProcessing.DataShow
                     base.Run(token);
 
                     ResultViewData aiResult = form.GetAiResult();
-                    DataShow?.Invoke(this,new DatashowData(ID.ToString()+NodeName, aiResult));
+                    DataShow?.Invoke(this,new DatashowData($"{ID}.{NodeName}", aiResult));
 
                     long time = SetRunResult(startTime, NodeStatus.Successful);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);

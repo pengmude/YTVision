@@ -1,7 +1,6 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -33,6 +32,43 @@ namespace YTVisionPro.Node
         public NodeSubscription()
         {
             InitializeComponent();
+            NodeBase.RefreshNodeSubControl += RenameChangeEvent;
+        }
+
+        /// <summary>
+        /// 只刷新一次
+        /// </summary>
+        private void RenameChangeEvent(object sender, RenameResult e)
+        {
+            // 只有订阅控件所在节点和重命名的节点同属于一条流程，且前者ID大于后者ID时，才需要前者更新下拉框节点名称
+            if (_node.Process.Nodes.Exists(node => node.ID == e.NodeId) && _node.ID > e.NodeId)
+            {
+                UpdateComboBoxItem($"{e.NodeId}.{e.NodeNameOld}", $"{e.NodeId}.{e.NodeNameNew}");
+            }
+        }
+
+        public void UpdateComboBoxItem(string oldText, string newText)
+        {
+            // 检查 comboBox1.Items 是否存在 oldText
+            int index = comboBox1.Items.IndexOf(oldText);
+
+            if (index != -1)
+            {
+                // 存在 oldText，更新为 newText
+                comboBox1.Items[index] = newText;
+
+                // 检查当前选中的文本是否等于 oldText
+                if (comboBox1.SelectedItem?.ToString() == oldText)
+                {
+                    // 更新选中的项
+                    comboBox1.SelectedItem = newText;
+                }
+            }
+            else
+            {
+                // 不存在 oldText，输出提示信息
+                LogHelper.AddLog(MsgLevel.Warn, $"重命名节点名称时，节点“{_node.NodeName}”的订阅控件找不到该节点原名称“{oldText}”！", true);
+            }
         }
 
         public void Init(NodeBase node)

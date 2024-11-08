@@ -205,6 +205,8 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(38, "两直线平行度.png");
             this.imageList1.Images.SetKeyName(39, "Modbus软触发.png");
             this.imageList1.Images.SetKeyName(40, "Modbus发送AI结果.png");
+            this.imageList1.Images.SetKeyName(41, "相机IO.png");
+            this.imageList1.Images.SetKeyName(42, "IO控制.png");
             // 
             // gCursor1
             // 

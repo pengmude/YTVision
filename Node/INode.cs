@@ -200,6 +200,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// Modbus发送AI结果
         /// </summary>
-        AIResultSendByModbus
+        AIResultSendByModbus,
+        /// <summary>
+        /// 相机IO
+        /// </summary>
+        CameraIO
     }
 }

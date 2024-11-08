@@ -33,6 +33,7 @@ namespace YTVisionPro.Forms.ShapeDraw
 
         public void AddROI(ROI roi)
         {
+            if (roi == null) return;
             // 清空前面的选中效果
             foreach (var item in ROIs)
             {

@@ -330,6 +330,7 @@
             // 
             this.textBoxOKMinR.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxOKMinR.Location = new System.Drawing.Point(61, 189);
+            this.textBoxOKMinR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxOKMinR.Name = "textBoxOKMinR";
             this.textBoxOKMinR.Size = new System.Drawing.Size(126, 28);
             this.textBoxOKMinR.TabIndex = 6;
@@ -340,6 +341,7 @@
             // 
             this.textBoxOKMaxR.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxOKMaxR.Location = new System.Drawing.Point(310, 189);
+            this.textBoxOKMaxR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxOKMaxR.Name = "textBoxOKMaxR";
             this.textBoxOKMaxR.Size = new System.Drawing.Size(126, 28);
             this.textBoxOKMaxR.TabIndex = 6;
@@ -496,7 +498,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(104, 28);
             this.textBox2.TabIndex = 1;
-            this.textBox2.Text = "100";
+            this.textBox2.Text = "70";
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label8

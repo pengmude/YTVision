@@ -263,40 +263,27 @@ namespace YTVisionPro.Device.Camera
         {
             IImage inputImage = e.FrameOut.Image;
             uint nChannelNum = 0;
-            PixelFormat m_bitmapPixelFormat = PixelFormat.Undefined;
             MvGvspPixelType dstPixelType = MvGvspPixelType.PixelType_Gvsp_Undefined;
             if (IsColorPixelFormat(e.FrameOut.Image.PixelType))
             {
                 dstPixelType = MvGvspPixelType.PixelType_Gvsp_RGB8_Packed;
-                m_bitmapPixelFormat = PixelFormat.Format24bppRgb;
                 nChannelNum = 3;
             }
             else if (IsMonoPixelFormat(e.FrameOut.Image.PixelType))
             {
                 dstPixelType = MvGvspPixelType.PixelType_Gvsp_Mono8;
-                m_bitmapPixelFormat = PixelFormat.Format8bppIndexed;
                 nChannelNum = 1;
             }
-            //通过设置调色板从伪彩改为灰度
+            device.PixelTypeConverter.ConvertPixelType(inputImage, out inputImage, dstPixelType);
             if (nChannelNum == 1)
             {
+                //通过设置调色板从伪彩改为灰度
                 var pal = inputImage.ToBitmap().Palette;
                 for (int j = 0; j < 256; j++)
                     pal.Entries[j] = Color.FromArgb(j, j, j);
                 inputImage.ToBitmap().Palette = pal;
-
-                PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
             }
-            else if (nChannelNum == 3)
-            {
-                Mat mat = new Mat((int)inputImage.Height, (int)inputImage.Width, MatType.CV_8UC1);
-                //使用Marshal.Copy将像素数据复制到Mat的数据区域
-                Marshal.Copy(inputImage.PixelData, 0, mat.Data, inputImage.PixelData.Length);
-                Bitmap bitmap = BitmapConverter.ToBitmap(mat);
-                PublishImageEvent?.Invoke(this, bitmap);
-                mat.Dispose();
-                return;
-            }
+            PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
         }
 
         /// <summary>

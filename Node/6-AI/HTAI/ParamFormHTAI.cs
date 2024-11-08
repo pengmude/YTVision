@@ -280,7 +280,7 @@ namespace YTVisionPro.Node.AI.HTAI
             for (int i = 0; i < NodeNum; i++)
             {
                 // 只输出选中的节点信息
-                if (test_node_names.Contains(node_names[i].ToLower()))
+                if (test_node_names.Contains(node_names[i]))
                 {
                     node_info_choose.Add(node_info.NodeInfo[i]);
                 }

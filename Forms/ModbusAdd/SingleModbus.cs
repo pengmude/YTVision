@@ -51,6 +51,7 @@ namespace YTVisionPro.Forms.ModbusAdd
             InitializeComponent();
             ModbusDevice = dev;
             Parms = dev.ModbusParam;
+            dev.ConnectStatusEvent += Modbus_ConnectStatusEvent;
             if (dev.IsConnect)
             {
                 try
@@ -62,7 +63,6 @@ namespace YTVisionPro.Forms.ModbusAdd
                     LogHelper.AddLog(MsgLevel.Exception, $"设备连接失败！原因：{ex.Message}", true);
                 }
             }
-            dev.ConnectStatusEvent += Modbus_ConnectStatusEvent;
             this.label1.Text = dev.UserDefinedName;
             ModbusParamsControl = new ModbusParamsControl(dev.ModbusParam);
             Solution.Instance.AllDevices.Add(dev);

@@ -27,6 +27,12 @@ namespace YTVisionPro.Node
         /// 节点的类别
         /// </summary>
         public NodeType NodeType;
+
+        /// <summary>
+        /// 节点改名后要刷新节点订阅控件的下拉框节点名称
+        /// </summary>
+        public static EventHandler<RenameResult> RefreshNodeSubControl;
+
         /// <summary>
         /// 因为是控件类，提供无参构造函数让设计器可以显示出来
         /// </summary>
@@ -50,14 +56,19 @@ namespace YTVisionPro.Node
             label1.Text = $"{ID}.{_nodeName}";
             Process = process;
             _frmNodeRename = new FrmNodeRename(this);
-            _frmNodeRename.RenameChangeEvent += RenameChangeEvent;
+            FrmNodeRename.RenameChangeEvent += RenameChangeEvent;
             NodeType = nodeType;
         }
 
-        private void RenameChangeEvent(object sender, string e)
+        private void RenameChangeEvent(object sender, RenameResult e)
         {
-            _nodeName = e;
-            label1.Text = ID + "." + e;
+            // 只重命名指定ID的节点
+            if(e.NodeId == _id)
+            {
+                _nodeName = e.NodeNameNew;
+                label1.Text = ID + "." + e.NodeNameNew;
+                RefreshNodeSubControl?.Invoke(this, e);
+            }
         }
 
         /// <summary>

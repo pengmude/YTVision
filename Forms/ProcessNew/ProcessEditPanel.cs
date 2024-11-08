@@ -29,6 +29,7 @@ using YTVisionPro.Node._4_Detection.ParallelLines;
 using YTVisionPro.Node.Modbus.ModbusSoftTrigger;
 using YTVisionPro.Node.Modbus.AIResultSendByModbus;
 using YTVisionPro.Node._4_Detection.FindCircle;
+using YTVisionPro.Node.ImageSrc.CameraIO;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -238,6 +239,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.AIResultSendByModbus:
                     node = new NodeSignalSendByModbus(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.CameraIO:
+                    node = new NodeCameraIO(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

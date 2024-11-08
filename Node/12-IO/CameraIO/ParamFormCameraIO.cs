@@ -9,7 +9,7 @@ namespace YTVisionPro.Node.ImageSrc.CameraIO
         /// <summary>
         /// 当前相机
         /// </summary>
-        private YTVisionPro.Device.Camera.ICamera m_camera;
+        private Device.Camera.ICamera m_camera;
 
         public ParamFormCameraIO()
         {
@@ -82,8 +82,9 @@ namespace YTVisionPro.Node.ImageSrc.CameraIO
                 int index = comboBoxCameraList.Items.IndexOf(param.CameraName);
                 comboBoxCameraList.SelectedIndex = index == -1 ? 0 : index;
 
-                comboBoxIO.Text = param.LineMode;
+                comboBoxLineMode.Text = param.LineMode;
                 comboBoxLines.Text = param.LineSelector;
+                textBoxHoldTime.Text = param.HoldTime.ToString();
                 nodeSubscription1.SetText(param.NodeName, param.NodeResult);
             }
         }
@@ -111,7 +112,7 @@ namespace YTVisionPro.Node.ImageSrc.CameraIO
         /// <param name="e"></param>
         private void comboBoxIO_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxIO.Text == "输出")
+            if (comboBoxLineMode.Text == "输出")
             {
                 checkLineDirection("输出");
             }
@@ -127,49 +128,54 @@ namespace YTVisionPro.Node.ImageSrc.CameraIO
         /// <param name="lineMode"></param>
         private void checkLineDirection(string lineMode)
         {
-            if (lineMode == "输出")
+            try
             {
-                string currentLine = comboBoxLines.Text;
-                comboBoxLines.Items.Clear();
-                // 获取当前相机所有线路
-                foreach (var line in m_camera.GetLineSelector().SupportEnumEntries)
+                if (lineMode == "输出")
                 {
-                    // 设置当前线路
-                    m_camera.SetLineSelector(line.Symbolic);
-                    // 获取当前线路方向
-                    foreach (var mode in m_camera.GetLineMode().SupportEnumEntries)
+                    string currentLine = comboBoxLines.Text;
+                    comboBoxLines.Items.Clear();
+                    // 获取当前相机所有线路
+                    foreach (var line in m_camera.GetLineSelector().SupportEnumEntries)
                     {
-                        if (mode.Symbolic == "Strobe")
+                        // 设置当前线路
+                        m_camera.SetLineSelector(line.Symbolic);
+                        // 获取当前线路方向
+                        foreach (var mode in m_camera.GetLineMode().SupportEnumEntries)
                         {
-                            comboBoxLines.Items.Add(line.Symbolic);
+                            if (mode.Symbolic == "Strobe")
+                            {
+                                comboBoxLines.Items.Add(line.Symbolic);
+                            }
                         }
                     }
+                    int index = comboBoxLines.Items.IndexOf(currentLine);
+                    comboBoxLines.SelectedIndex = index == -1 ? 0 : index;
                 }
-                int index = comboBoxLines.Items.IndexOf(currentLine);
-                comboBoxLines.SelectedIndex = index == -1 ? 0 : index;
-            }
-            else
-            {
-                string currentLine = comboBoxLines.Text;
-                comboBoxLines.Items.Clear();
-                // 获取当前相机所有线路
-                foreach (var line in m_camera.GetLineSelector().SupportEnumEntries)
+                else
                 {
-                    // 设置当前线路
-                    m_camera.SetLineSelector(line.Symbolic);
-                    // 获取当前线路方向
-                    foreach (var mode in m_camera.GetLineMode().SupportEnumEntries)
+                    string currentLine = comboBoxLines.Text;
+                    comboBoxLines.Items.Clear();
+                    // 获取当前相机所有线路
+                    foreach (var line in m_camera.GetLineSelector().SupportEnumEntries)
                     {
-                        if (mode.Symbolic == "Input")
+                        // 设置当前线路
+                        m_camera.SetLineSelector(line.Symbolic);
+                        // 获取当前线路方向
+                        foreach (var mode in m_camera.GetLineMode().SupportEnumEntries)
                         {
-                            comboBoxLines.Items.Add(line.Symbolic);
+                            if (mode.Symbolic == "Input")
+                            {
+                                comboBoxLines.Items.Add(line.Symbolic);
+                            }
                         }
                     }
+                    int index = comboBoxLines.Items.IndexOf(currentLine);
+                    comboBoxLines.SelectedIndex = index == -1 ? 0 : index;
                 }
-                int index = comboBoxLines.Items.IndexOf(currentLine);
-                comboBoxLines.SelectedIndex = index == -1 ? 0 : index;
             }
-
+            catch (Exception)
+            {
+            }
         }
         /// <summary>
         /// 保存参数
@@ -178,16 +184,28 @@ namespace YTVisionPro.Node.ImageSrc.CameraIO
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            NodeParamCameraIO nodeParam = new NodeParamCameraIO();
-            nodeParam.Camera = m_camera;
-            nodeParam.CameraName = comboBoxCameraList.Text;
-            nodeParam.LineMode = comboBoxIO.Text;
-            nodeParam.LineSelector = comboBoxLines.Text;
-            nodeParam.NodeName = nodeSubscription1.GetText1();
-            nodeParam.NodeResult = nodeSubscription1.GetText2();
+            try
+            {
+                if (comboBoxCameraList.SelectedIndex == -1 || comboBoxLineMode.SelectedIndex == -1 || comboBoxLines.SelectedIndex == -1)
+                    throw new Exception("参数未设置完整！");
+                var holdTime = int.Parse(textBoxHoldTime.Text);
 
-            Params = nodeParam; 
-            Hide();
+                NodeParamCameraIO nodeParam = new NodeParamCameraIO();
+                nodeParam.Camera = m_camera;
+                nodeParam.CameraName = comboBoxCameraList.Text;
+                nodeParam.LineMode = comboBoxLineMode.Text;
+                nodeParam.LineSelector = comboBoxLines.Text;
+                nodeParam.HoldTime = holdTime;
+                nodeParam.NodeName = nodeSubscription1.GetText1();
+                nodeParam.NodeResult = nodeSubscription1.GetText2();
+                Params = nodeParam;
+                Hide();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("参数设置不合法！");
+                return;
+            }
         }
     }
 }

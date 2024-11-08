@@ -134,7 +134,7 @@ namespace YTVisionPro.Node.Modbus.AIResultSendByModbus
 
         private async void SendSignalToModbus(SignalRowData dataRow, double time)
         {
-            if (dataRow == null)
+            if (dataRow != null)
             {
                 foreach (var ModbusTmp in Solution.Instance.ModbusDevices)
                 {

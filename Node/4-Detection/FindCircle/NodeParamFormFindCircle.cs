@@ -6,6 +6,12 @@ using System.Windows.Forms;
 using System.Linq;
 using Logger;
 using Point = OpenCvSharp.Point;
+using OpenCvSharp.Flann;
+using System.Collections.Generic;
+using MvCameraControl;
+using System.Threading.Tasks;
+using Sunny.UI;
+using OpenCvSharp.Aruco;
 
 namespace YTVisionPro.Node._4_Detection.FindCircle
 {
@@ -14,6 +20,8 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
         private Process process;//所属流程
         private NodeBase node;//所属节点
         private CircleSelection curLineSelection; // 当前选择的圆
+        private int curLineSelectionID;// 当前选择的圆的ID
+
         public NodeParamFormFindCircle(Process process, NodeBase nodeBase)
         {
             InitializeComponent();
@@ -33,7 +41,7 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
 
         public void SetParam2Form()
         {
-            if(Params is NodeParamFindCircle param)
+            if (Params is NodeParamFindCircle param)
             {
                 nodeSubscription1.SetText(param.Text1, param.Text2);
                 checkBoxMoreParams.Checked = param.MoreParamsEnable;
@@ -45,7 +53,7 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
                 textBoxThreshold2.Text = param.Threshold2.ToString();
                 checkBoxUseL2.Checked = param.IsOpenL2;
                 textBox1.Text = param.param1.ToString();
-                textBox2.Text = param.param2.ToString();    
+                textBox2.Text = param.param2.ToString();
                 textBoxCount.Text = param.Count.ToString();
                 textBoxMinR.Text = param.MinLength.ToString();
                 textBoxMaxR.Text = param.MaxDistance.ToString();
@@ -150,7 +158,7 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
         /// <param name="e"></param>
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            if(SaveParams())
+            if (SaveParams())
                 Hide();
         }
 
@@ -225,7 +233,7 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
                 // 应用高斯模糊减少噪点
                 Mat blurred = new Mat();
                 Cv2.GaussianBlur(image, blurred, new OpenCvSharp.Size(int.Parse(textBoxBlurSize.Text), int.Parse(textBoxBlurSize.Text)), 0);
-                
+
                 // 使用 Canny 边缘检测
                 Mat edges = new Mat();
                 Cv2.Canny(blurred, edges, double.Parse(textBoxThreshold1.Text), double.Parse(textBoxThreshold2.Text), 3, checkBoxUseL2.Checked);
@@ -253,31 +261,49 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
                 Mat result = image.Clone();
                 Cv2.CvtColor(result, result, ColorConversionCodes.BayerBG2BGR);
 
-                // 生成随机颜色（排除红色）
-                Scalar randomColor;
-                Random rand = new Random();
-                do
+                Random random = new Random();
+                int index = 1;  // 圆id从 1 开始
+                HashSet<Scalar> usedColors = new HashSet<Scalar>();  // 用于记录已使用过的颜色
+                double minColorDistance = 5;  // 颜色差异的阈值，可以根据需要调整
+                Dictionary<CircleSegment, Scalar> keyValuePairs1 = new Dictionary<CircleSegment, Scalar>(); //key 圆   value 颜色
+                Dictionary<int, CircleSegment> keyValuePairs2 = new Dictionary<int, CircleSegment>(); //key 圆id    value 圆
+
+                //删除上次执行生成的id项
+                for (int i = comboBox1.Items.Count - 1; i >= 6; i--)
                 {
-                    byte r = GetDarkColorValue(rand);
-                    byte g = GetDarkColorValue(rand);
-                    byte b = GetDarkColorValue(rand);
-                    randomColor = new Scalar(r, g, b);
-                } while (randomColor == Scalar.Red);
+                    comboBox1.Items.RemoveAt(i);
+                }
 
-
-                //int radius = 5; // 端点半径
                 foreach (var circle in circles)
                 {
                     var center = new Point((int)circle.Center.X, (int)circle.Center.Y);
                     var radius = (int)circle.Radius;
+
+                    // 生成差异较大并且不重复的随机颜色
+                    Scalar randomColor;
+                    do
+                    {
+                        randomColor = new Scalar(GetDarkColorValue(random), GetDarkColorValue(random), GetDarkColorValue(random));
+                    } while (randomColor == Scalar.Red || usedColors.Any(usedColor => GetColorDistance(randomColor, usedColor) < minColorDistance));
+
+                    usedColors.Add(randomColor);
+
                     // 绘制圆
-                    Cv2.Circle(result, center, radius, Scalar.Red, 2);
+                    Cv2.Circle(result, center, radius, randomColor, 1);
+
                     // 绘制圆心
-                    Cv2.Circle(result, center, 3, Scalar.Red, -1);
+                    Cv2.Circle(result, center, 3, randomColor, -1);
+
+                    // 绘制序号
+                    Cv2.PutText(result, index.ToString(), new Point(center.X + 1, center.Y), HersheyFonts.Italic, 0.5, randomColor);
+
+                    keyValuePairs1.Add(circle, randomColor);
+                    keyValuePairs2.Add(index, circle);
+                    comboBox1.Items.Add($"选择ID为：{index++}的圆");
                 }
+
                 Cv2.PutText(result, $"Count:{circles.Count()}", new Point(40, 40), HersheyFonts.Italic, 0.5, Scalar.Red);
                 pictureBoxResult1.Image = BitmapConverter.ToBitmap(result);
-
                 #endregion
 
                 #region 绘制筛选后的图像
@@ -290,12 +316,33 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
 
                 // 转换颜色空间
                 Cv2.CvtColor(result1, result1, ColorConversionCodes.BayerBG2BGR);
-                // 合并重合度高的圆并且筛选对应输出的圆
-                var singleCircle = CircleMerger.MergeCircles(circles.ToList(), curLineSelection);
+                // 筛选对应输出的圆
+                var singleCircle = new CircleSegment();
+
+                if (curLineSelectionID > 6) //按照ID筛选圆
+                {
+                    this.comboBox1.SelectedIndexChanged -= comboBox1_SelectedIndexChanged;
+                    if (curLineSelectionID > this.comboBox1.Items.Count) //假设上一次id为20，下一次执行完没找到20个圆，最大的id为5
+                    {
+                        this.comboBox1.SelectedIndex = 0;
+                        singleCircle = CircleMerger.MergeCircles(circles.ToList(), curLineSelection);
+                    }
+                    else
+                    {
+                        this.comboBox1.SelectedIndex = curLineSelectionID - 1;
+                        singleCircle = keyValuePairs2[curLineSelectionID - 6];
+                    }
+                    this.comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+                }
+                else
+                    singleCircle = CircleMerger.MergeCircles(circles.ToList(), curLineSelection);
+
                 // 绘制圆
-                Cv2.Circle(result1, (Point)singleCircle.Center, (int)singleCircle.Radius, randomColor, 2); // 绘制圆，线条宽度为2
+                Cv2.Circle(result1, (Point)singleCircle.Center, (int)singleCircle.Radius, keyValuePairs1[singleCircle], 2); // 绘制圆，线条宽度为2
                 // 绘制圆心
-                Cv2.Circle(result1, (Point)singleCircle.Center, 5, Scalar.Red, -1); // 绘制圆心，半径为5，填充红色
+                Cv2.Circle(result1, (Point)singleCircle.Center, 3, keyValuePairs1[singleCircle], -1); // 绘制圆心，半径为5
+                // 绘制序号
+                Cv2.PutText(result1, (keyValuePairs2.FirstOrDefault(x => x.Value == singleCircle).Key).ToString(), new Point((int)singleCircle.Center.X + 1, singleCircle.Center.Y), HersheyFonts.Italic, 0.5, keyValuePairs1[singleCircle]);
                 // 显示圆的半径
                 Cv2.PutText(result1, $"Radius: {singleCircle.Radius.ToString("F2")} px", new Point(40, 40), HersheyFonts.Italic, 0.5, Scalar.Red);
                 // 更新PictureBox的图像
@@ -319,17 +366,33 @@ namespace YTVisionPro.Node._4_Detection.FindCircle
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            curLineSelection = comboBox1.SelectedIndex == 0 ? CircleSelection.Largest :
-                               comboBox1.SelectedIndex == 1 ? CircleSelection.Smallest :
-                               comboBox1.SelectedIndex == 2 ? CircleSelection.Topmost :
-                               comboBox1.SelectedIndex == 3 ? CircleSelection.Bottommost :
-                               comboBox1.SelectedIndex == 4 ? CircleSelection.Leftmost : CircleSelection.Rightmost;
+            if (!(comboBox1.SelectedIndex > 6))
+            {
+                curLineSelection = comboBox1.SelectedIndex == 0 ? CircleSelection.Largest :
+                   comboBox1.SelectedIndex == 1 ? CircleSelection.Smallest :
+                   comboBox1.SelectedIndex == 2 ? CircleSelection.Topmost :
+                   comboBox1.SelectedIndex == 3 ? CircleSelection.Bottommost :
+                   comboBox1.SelectedIndex == 4 ? CircleSelection.Leftmost : CircleSelection.Rightmost;
+            }
+            curLineSelectionID = comboBox1.SelectedIndex + 1;
         }
 
         private void checkBoxOKEnable_CheckedChanged(object sender, EventArgs e)
         {
             textBoxOKMinR.Enabled = checkBoxOKEnable.Checked;
             textBoxOKMaxR.Enabled = checkBoxOKEnable.Checked;
+        }
+
+        /// <summary>
+        /// 计算两种颜色之间的差异
+        /// </summary>
+        /// <param name="color1"></param>
+        /// <param name="color2"></param>
+        /// <returns></returns>
+        private double GetColorDistance(Scalar color1, Scalar color2)
+        {
+            // 计算RGB颜色之间的欧几里得距离
+            return Math.Sqrt(Math.Pow(color1.Val0 - color2.Val0, 2) + Math.Pow(color1.Val1 - color2.Val1, 2) + Math.Pow(color1.Val2 - color2.Val2, 2));
         }
     }
 }

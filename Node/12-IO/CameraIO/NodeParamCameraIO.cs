@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using YTVisionPro.Device.Camera;
+﻿using YTVisionPro.Device.Camera;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using YTVisionPro.Node.AI.HTAI;
 
 namespace YTVisionPro.Node.ImageSrc.CameraIO
 {
@@ -27,6 +20,11 @@ namespace YTVisionPro.Node.ImageSrc.CameraIO
         /// 线路
         /// </summary>
         public string LineSelector { get; set; }
+
+        /// <summary>
+        /// 保持时间微秒
+        /// </summary>
+        public int HoldTime {  get; set; }
          
         /// <summary>
         /// 线路模式

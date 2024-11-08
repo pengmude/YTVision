@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using YTVisionPro.Node;
 using YTVisionPro.Node.ResultProcessing.DataShow;
 
 namespace YTVisionPro.Forms.ResultView
@@ -18,7 +19,23 @@ namespace YTVisionPro.Forms.ResultView
         {
             InitializeComponent();
             this.tabControl1.TabPages.Clear();
-            NodeDataShow.DataShow += NodeDataShow_DataShow;
+            NodeDataShow.DataShow += NodeDataShow_DataShow; 
+            FrmNodeRename.RenameChangeEvent += RenameChangeEvent;
+        }
+
+        private void RenameChangeEvent(object sender, RenameResult e)
+        {
+            // 节点重命名时，只有检测结果显示的节点才可能需要同步更改TabPage页面名称
+            if (e.Type != NodeType.DetectResultShow)
+                return;
+
+            // 更新tabPage名称
+            TabPage tabPage = tabControl1.TabPages[$"{e.NodeId}.{e.NodeNameOld}"];
+            if (tabPage != null)
+            {
+                tabPage.Text = $"{e.NodeId}.{e.NodeNameNew}";
+                tabPage.Name = $"{e.NodeId}.{e.NodeNameNew}";
+            }
         }
 
         private void FrmResultView_FormClosing(object sender, FormClosingEventArgs e)
@@ -41,7 +58,6 @@ namespace YTVisionPro.Forms.ResultView
                 // 创建 DataGridView 并设置它的 Dock 属性为 Fill，以便充满整个 TabPage
                 DataGridView dataGridView = new DataGridView();
                 dataGridView.ReadOnly = true;
-                dataGridView.Name = "dataGridView_" + e.TabPageName; // 为 DataGridView 设置唯一的 Name
                 dataGridView.Dock = DockStyle.Fill;
 
                 // 为 DataGridView 添加列
@@ -68,7 +84,7 @@ namespace YTVisionPro.Forms.ResultView
             }
 
             // 获取 DataGridView
-            DataGridView dgv = tabPage.Controls.OfType<DataGridView>().FirstOrDefault(c => c.Name == "dataGridView_" + e.TabPageName);
+            DataGridView dgv = tabPage.Controls.OfType<DataGridView>().FirstOrDefault();
             if (dgv == null)
             {
                 //如果找不到 DataGridview，抛出异常或者处理错误
