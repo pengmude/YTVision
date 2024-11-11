@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Device;
 using YTVisionPro.Device.Light;
-using YTVisionPro.Node.LightControl;
+using YTVisionPro.Node._5_EquipmentCommunication.LightOpen;
 
 namespace YTVisionPro.Forms.LightAdd
 {

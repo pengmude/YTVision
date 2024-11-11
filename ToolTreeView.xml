@@ -1,82 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SerializableTreeNode xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Text="Root" ImageIndex="0" Tag="UNKNOWN" SelectedImageIndex="0">
   <Nodes>
-    <Node Text="光源控制" ImageIndex="0" Tag="UNKNOWN" SelectedImageIndex="0">
+    <Node Text="图像采集" ImageName="图像采集" Tag="UNKNOWN" SelectedImageName="图像采集">
       <Nodes>
-        <Node Text="打开光源" ImageIndex="1" Tag="LightSourceControl" SelectedImageIndex="1" />
+        <Node Text="图像源" ImageName="图像源" Tag="ImageSource" SelectedImageName="图像源" />
+        <Node Text="图像显示" ImageName="图像显示" Tag="ImageShow" SelectedImageName="图像显示" />
       </Nodes>
     </Node>
-    <Node Text="IO控制" ImageIndex="42" Tag="UNKNOWN" SelectedImageIndex="42">
+	<Node Text="图像处理" ImageName="图像处理" Tag="UNKNOWN" SelectedImageName="图像处理">
       <Nodes>
-        <Node Text="相机IO" ImageIndex="41" Tag="CameraIO" SelectedImageIndex="41" />
+        <Node Text="图像裁剪" ImageName="图像裁剪" Tag="ImageCrop" SelectedImageName="图像裁剪" />
+        <Node Text="图像旋转" ImageName="图像旋转" Tag="ImageRotate" SelectedImageName="图像旋转" />
       </Nodes>
     </Node>
-    <Node Text="图像采集" ImageIndex="2" Tag="UNKNOWN" SelectedImageIndex="2">
+    <Node Text="检测识别" ImageName="检测识别" Tag="UNKNOWN" SelectedImageName="检测识别">
       <Nodes>
-        <Node Text="本地图片" ImageIndex="3" Tag="LocalPicture" SelectedImageIndex="3" />
-        <Node Text="相机拍照" ImageIndex="4" Tag="CameraShot" SelectedImageIndex="4" />
+        <Node Text="AI检测" ImageName="AI检测" Tag="AIHT" SelectedImageName="AI检测" />
+        <Node Text="检测直线" ImageName="检测直线" Tag="LineFind" SelectedImageName="检测直线" />
+        <Node Text="检测圆" ImageName="检测圆" Tag="CircleFind" SelectedImageName="检测圆" />
       </Nodes>
     </Node>
-    <Node Text="图像预处理" ImageIndex="5" Tag="UNKNOWN" SelectedImageIndex="5">
+    <Node Text="测量工具" ImageName="测量工具" Tag="UNKNOWN" SelectedImageName="测量工具">
       <Nodes>
-        <Node Text="图像裁切" ImageIndex="6" Tag="ImageCrop" SelectedImageIndex="6" />
-        <Node Text="图像旋转" ImageIndex="37" Tag="ImageRotate" SelectedImageIndex="37" />
-        <Node Text="灰度图像" ImageIndex="7" Tag="GrayScale" SelectedImageIndex="7" />
-        <Node Text="Blob分析" ImageIndex="8" Tag="BlobAnalysis" SelectedImageIndex="8" />
+        <Node Text="长度测量" ImageName="长度测量" Tag="LengthMeasurement" SelectedImageName="长度测量" />
+        <Node Text="面积测量" ImageName="面积测量" Tag="AreaMeasurement" SelectedImageName="面积测量" />
+        <Node Text="直线平行度" ImageName="直线平行度" Tag="LineParallelism" SelectedImageName="直线平行度" />
+        <Node Text="注液孔测量" ImageName="注液孔测量" Tag="InjectionHole" SelectedImageName="注液孔测量" />
       </Nodes>
     </Node>
-    <Node Text="检测识别" ImageIndex="9" Tag="UNKNOWN" SelectedImageIndex="9">
+	<Node Text="设备通信" ImageName="通信工具" Tag="UNKNOWN" SelectedImageName="通信工具">
       <Nodes>
-        <Node Text="直线查找" ImageIndex="29" Tag="LineFind" SelectedImageIndex="29" />
-        <Node Text="两直线平行" ImageIndex="38" Tag="LineParallelism" SelectedImageIndex="38" />
-        <Node Text="圆查找" ImageIndex="10" Tag="CircleFind" SelectedImageIndex="10" />
-        <Node Text="模版匹配" ImageIndex="11" Tag="TemplateMatch" SelectedImageIndex="11" />
+        <Node Text="打开光源" ImageName="打开光源" Tag="LightSourceControl" SelectedImageName="打开光源" />
+        <Node Text="相机IO" ImageName="相机IO" Tag="CameraIO" SelectedImageName="相机IO" />
+        <Node Text="PLC读取" ImageName="PLC读" Tag="PLCRead" SelectedImageName="PLC读" />
+        <Node Text="PLC写入" ImageName="PLC写" Tag="PLCWrite" SelectedImageName="PLC写" />
+        <Node Text="PLC软触发" ImageName="PLC软触发" Tag="WaitSoftTrigger" SelectedImageName="PLC软触发" />
+        <Node Text="PLC发送AI结果" ImageName="PLC发送AI结果" Tag="PLCHTAIResultSend" SelectedImageName="PLC发送AI结果" />
+        <Node Text="TCP请求" ImageName="客户端请求" Tag="TCPClientRequest" SelectedImageName="客户端请求" />
+        <Node Text="TCP响应" ImageName="服务器响应" Tag="TCPServerResponse" SelectedImageName="服务器响应" />
+        <Node Text="Modbus读取" ImageName="Modbus读取" Tag="ModbusRead" SelectedImageName="Modbus读取" />
+        <Node Text="Modbus写入" ImageName="Modbus写入" Tag="ModbusWrite" SelectedImageName="Modbus写入" />
+        <Node Text="Modbus软触发" ImageName="Modbus软触发" Tag="ModbusSoftTrigger" SelectedImageName="Modbus软触发" />
+        <Node Text="Modbus发送AI结果" ImageName="Modbus发送AI结果" Tag="AIResultSendByModbus" SelectedImageName="Modbus发送AI结果" />
       </Nodes>
     </Node>
-    <Node Text="几何测量" ImageIndex="12" Tag="UNKNOWN" SelectedImageIndex="12">
+    <Node Text="逻辑工具" ImageName="逻辑工具" Tag="UNKNOWN" SelectedImageName="逻辑工具">
       <Nodes>
-        <Node Text="长度测量" ImageIndex="13" Tag="LengthMeasurement" SelectedImageIndex="13" />
-        <Node Text="面积测量" ImageIndex="14" Tag="AreaMeasurement" SelectedImageIndex="14" />
+        <Node Text="延迟执行" ImageName="延迟执行" Tag="SleepTool" SelectedImageName="延迟执行" />
       </Nodes>
     </Node>
-    <Node Text="Ai检测" ImageIndex="15" Tag="UNKNOWN" SelectedImageIndex="15">
+    <Node Text="结果处理" ImageName="结果处理" Tag="UNKNOWN" SelectedImageName="结果处理">
       <Nodes>
-        <Node Text="AI检测" ImageIndex="16" Tag="AIHT" SelectedImageIndex="16" />
-      </Nodes>
-    </Node>
-    <Node Text="PLC通信" ImageIndex="17" Tag="UNKNOWN" SelectedImageIndex="17">
-      <Nodes>
-        <Node Text="读取PLC数据" ImageIndex="18" Tag="PLCRead" SelectedImageIndex="18" />
-        <Node Text="写入PLC数据" ImageIndex="19" Tag="PLCWrite" SelectedImageIndex="19" />
-        <Node Text="PLC软触发" ImageIndex="20" Tag="WaitSoftTrigger" SelectedImageIndex="20" />
-      </Nodes>
-    </Node>
-	<Node Text="TCP通信" ImageIndex="34" Tag="UNKNOWN" SelectedImageIndex="34">
-      <Nodes>
-        <Node Text="客户端请求" ImageIndex="35" Tag="TCPClientRequest" SelectedImageIndex="35" />
-        <Node Text="服务器响应" ImageIndex="36" Tag="TCPServerResponse" SelectedImageIndex="36" />
-      </Nodes>
-    </Node>
-	<Node Text="Modbus通信" ImageIndex="33" Tag="UNKNOWN" SelectedImageIndex="33">
-      <Nodes>
-        <Node Text="Modbus读取" ImageIndex="31" Tag="ModbusRead" SelectedImageIndex="31" />
-        <Node Text="Modbus写入" ImageIndex="32" Tag="ModbusWrite" SelectedImageIndex="32" />
-        <Node Text="Modbus软触发" ImageIndex="39" Tag="ModbusSoftTrigger" SelectedImageIndex="39" />
-      </Nodes>
-    </Node>
-    <Node Text="逻辑控制" ImageIndex="21" Tag="UNKNOWN" SelectedImageIndex="21">
-      <Nodes>
-        <Node Text="延迟执行" ImageIndex="22" Tag="SleepTool" SelectedImageIndex="22" />
-      </Nodes>
-    </Node>
-    <Node Text="结果处理" ImageIndex="23" Tag="UNKNOWN" SelectedImageIndex="23">
-      <Nodes>
-        <Node Text="PLC发送AI结果" ImageIndex="24" Tag="PLCHTAIResultSend" SelectedImageIndex="24" />
-        <Node Text="Modbus发送AI结果" ImageIndex="40" Tag="AIResultSendByModbus" SelectedImageIndex="40" />
-        <Node Text="检测结果显示" ImageIndex="25" Tag="DetectResultShow" SelectedImageIndex="25" />
-        <Node Text="保存图片" ImageIndex="26" Tag="ImageSave" SelectedImageIndex="26" />
-        <Node Text="结果汇总" ImageIndex="27" Tag="Summarize" SelectedImageIndex="27" />
-        <Node Text="图像显示" ImageIndex="30" Tag="ImageShow" SelectedImageIndex="30" />
+        <Node Text="保存图片" ImageName="保存图片" Tag="ImageSave" SelectedImageName="保存图片" />
+        <Node Text="结果汇总" ImageName="结果汇总" Tag="Summarize" SelectedImageName="结果汇总" />
+        <Node Text="检测结果显示" ImageName="检测结果显示" Tag="DetectResultShow" SelectedImageName="检测结果显示" />
       </Nodes>
     </Node>
   </Nodes>

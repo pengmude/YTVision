@@ -32,7 +32,7 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormNewProcessWizard));
-            gCursorLib.TextShadower textShadower1 = new gCursorLib.TextShadower();
+            gCursorLib.TextShadower textShadower2 = new gCursorLib.TextShadower();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonRemove = new System.Windows.Forms.Button();
             this.buttonAdd = new System.Windows.Forms.Button();
@@ -41,8 +41,8 @@ namespace YTVisionPro.Forms.ProcessNew
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.全部展开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.全部折叠ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.label1 = new System.Windows.Forms.Label();
             this.gCursor1 = new gCursorLib.gCursor(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -114,9 +114,12 @@ namespace YTVisionPro.Forms.ProcessNew
             this.treeView1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.treeView1.ContextMenuStrip = this.contextMenuStrip1;
             this.treeView1.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.treeView1.ImageIndex = 0;
+            this.treeView1.ImageList = this.imageList1;
             this.treeView1.Location = new System.Drawing.Point(7, 103);
             this.treeView1.Name = "treeView1";
             this.tableLayoutPanel1.SetRowSpan(this.treeView1, 2);
+            this.treeView1.SelectedImageIndex = 0;
             this.treeView1.Size = new System.Drawing.Size(385, 865);
             this.treeView1.TabIndex = 3;
             this.treeView1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseDown);
@@ -145,13 +148,55 @@ namespace YTVisionPro.Forms.ProcessNew
             this.全部折叠ToolStripMenuItem.Text = "全部折叠";
             this.全部折叠ToolStripMenuItem.Click += new System.EventHandler(this.全部折叠ToolStripMenuItem_Click);
             // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "工具箱.png");
+            this.imageList1.Images.SetKeyName(1, "图像采集");
+            this.imageList1.Images.SetKeyName(2, "图像源");
+            this.imageList1.Images.SetKeyName(3, "图像显示");
+            this.imageList1.Images.SetKeyName(4, "图像处理");
+            this.imageList1.Images.SetKeyName(5, "图像裁剪");
+            this.imageList1.Images.SetKeyName(6, "图像旋转");
+            this.imageList1.Images.SetKeyName(7, "图像分割");
+            this.imageList1.Images.SetKeyName(8, "检测识别");
+            this.imageList1.Images.SetKeyName(9, "AI检测");
+            this.imageList1.Images.SetKeyName(10, "检测直线");
+            this.imageList1.Images.SetKeyName(11, "检测圆");
+            this.imageList1.Images.SetKeyName(12, "模版匹配");
+            this.imageList1.Images.SetKeyName(13, "测量工具");
+            this.imageList1.Images.SetKeyName(14, "长度测量");
+            this.imageList1.Images.SetKeyName(15, "面积测量");
+            this.imageList1.Images.SetKeyName(16, "直线平行度");
+            this.imageList1.Images.SetKeyName(17, "注液孔测量");
+            this.imageList1.Images.SetKeyName(18, "通信工具");
+            this.imageList1.Images.SetKeyName(19, "打开光源");
+            this.imageList1.Images.SetKeyName(20, "相机IO");
+            this.imageList1.Images.SetKeyName(21, "PLC读");
+            this.imageList1.Images.SetKeyName(22, "PLC写");
+            this.imageList1.Images.SetKeyName(23, "PLC软触发");
+            this.imageList1.Images.SetKeyName(24, "PLC发送AI结果");
+            this.imageList1.Images.SetKeyName(25, "客户端请求");
+            this.imageList1.Images.SetKeyName(26, "服务器响应");
+            this.imageList1.Images.SetKeyName(27, "Modbus读取");
+            this.imageList1.Images.SetKeyName(28, "Modbus写入");
+            this.imageList1.Images.SetKeyName(29, "Modbus软触发");
+            this.imageList1.Images.SetKeyName(30, "Modbus发送AI结果");
+            this.imageList1.Images.SetKeyName(31, "逻辑工具");
+            this.imageList1.Images.SetKeyName(32, "延迟执行");
+            this.imageList1.Images.SetKeyName(33, "结果处理");
+            this.imageList1.Images.SetKeyName(34, "保存图片");
+            this.imageList1.Images.SetKeyName(35, "检测结果显示");
+            this.imageList1.Images.SetKeyName(36, "结果汇总");
+            // 
             // label1
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.Font = new System.Drawing.Font("江西拙楷", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Italic | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.label1.ImageIndex = 28;
+            this.label1.ImageIndex = 0;
             this.label1.ImageList = this.imageList1;
             this.label1.Location = new System.Drawing.Point(128, 24);
             this.label1.Name = "label1";
@@ -159,54 +204,6 @@ namespace YTVisionPro.Forms.ProcessNew
             this.label1.TabIndex = 4;
             this.label1.Text = "工具箱";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "光源控制工具.ico");
-            this.imageList1.Images.SetKeyName(1, "打开光源.png");
-            this.imageList1.Images.SetKeyName(2, "图像采集工具.ico");
-            this.imageList1.Images.SetKeyName(3, "本地图片.png");
-            this.imageList1.Images.SetKeyName(4, "相机拍照.png");
-            this.imageList1.Images.SetKeyName(5, "图像预处理.png");
-            this.imageList1.Images.SetKeyName(6, "图像裁剪.png");
-            this.imageList1.Images.SetKeyName(7, "转为灰度图.png");
-            this.imageList1.Images.SetKeyName(8, "Blob分析.png");
-            this.imageList1.Images.SetKeyName(9, "检测识别.png");
-            this.imageList1.Images.SetKeyName(10, "圆查找.png");
-            this.imageList1.Images.SetKeyName(11, "模版匹配.png");
-            this.imageList1.Images.SetKeyName(12, "几何测量.png");
-            this.imageList1.Images.SetKeyName(13, "长度测量.png");
-            this.imageList1.Images.SetKeyName(14, "面积测量.png");
-            this.imageList1.Images.SetKeyName(15, "Ai检测工具.png");
-            this.imageList1.Images.SetKeyName(16, "AI检测.png");
-            this.imageList1.Images.SetKeyName(17, "plc通信工具.png");
-            this.imageList1.Images.SetKeyName(18, "PLC读.png");
-            this.imageList1.Images.SetKeyName(19, "PLC写.png");
-            this.imageList1.Images.SetKeyName(20, "获取软触发信号.png");
-            this.imageList1.Images.SetKeyName(21, "流程控制.png");
-            this.imageList1.Images.SetKeyName(22, "延迟执行.png");
-            this.imageList1.Images.SetKeyName(23, "结果处理.png");
-            this.imageList1.Images.SetKeyName(24, "AI结果发送 .png");
-            this.imageList1.Images.SetKeyName(25, "检测结果显示.png");
-            this.imageList1.Images.SetKeyName(26, "保存图片.png");
-            this.imageList1.Images.SetKeyName(27, "结果汇总.png");
-            this.imageList1.Images.SetKeyName(28, "工具箱.png");
-            this.imageList1.Images.SetKeyName(29, "直线查找.png");
-            this.imageList1.Images.SetKeyName(30, "图像显示.png");
-            this.imageList1.Images.SetKeyName(31, "Modbus读取.png");
-            this.imageList1.Images.SetKeyName(32, "modbus写入.png");
-            this.imageList1.Images.SetKeyName(33, "Modbus通信.png");
-            this.imageList1.Images.SetKeyName(34, "TCP通信工具.png");
-            this.imageList1.Images.SetKeyName(35, "TCP客户端请求.png");
-            this.imageList1.Images.SetKeyName(36, "服务器响应.png");
-            this.imageList1.Images.SetKeyName(37, "图像旋转.png");
-            this.imageList1.Images.SetKeyName(38, "两直线平行度.png");
-            this.imageList1.Images.SetKeyName(39, "Modbus软触发.png");
-            this.imageList1.Images.SetKeyName(40, "Modbus发送AI结果.png");
-            this.imageList1.Images.SetKeyName(41, "相机IO.png");
-            this.imageList1.Images.SetKeyName(42, "IO控制.png");
             // 
             // gCursor1
             // 
@@ -237,16 +234,16 @@ namespace YTVisionPro.Forms.ProcessNew
             this.gCursor1.gTextMultiline = false;
             this.gCursor1.gTextShadow = false;
             this.gCursor1.gTextShadowColor = System.Drawing.Color.Black;
-            textShadower1.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
-            textShadower1.Blur = 2F;
-            textShadower1.Font = new System.Drawing.Font("Arial", 7F, System.Drawing.FontStyle.Bold);
-            textShadower1.Offset = ((System.Drawing.PointF)(resources.GetObject("textShadower1.Offset")));
-            textShadower1.Padding = new System.Windows.Forms.Padding(0);
-            textShadower1.ShadowColor = System.Drawing.Color.Black;
-            textShadower1.ShadowTransp = 128;
-            textShadower1.Text = "Drop Shadow";
-            textShadower1.TextColor = System.Drawing.Color.Blue;
-            this.gCursor1.gTextShadower = textShadower1;
+            textShadower2.Alignment = System.Drawing.ContentAlignment.MiddleCenter;
+            textShadower2.Blur = 2F;
+            textShadower2.Font = new System.Drawing.Font("Arial", 7F, System.Drawing.FontStyle.Bold);
+            textShadower2.Offset = ((System.Drawing.PointF)(resources.GetObject("textShadower2.Offset")));
+            textShadower2.Padding = new System.Windows.Forms.Padding(0);
+            textShadower2.ShadowColor = System.Drawing.Color.Black;
+            textShadower2.ShadowTransp = 128;
+            textShadower2.Text = "Drop Shadow";
+            textShadower2.TextColor = System.Drawing.Color.Blue;
+            this.gCursor1.gTextShadower = textShadower2;
             this.gCursor1.gTTransp = 0;
             this.gCursor1.gType = gCursorLib.gCursor.eType.Text;
             // 

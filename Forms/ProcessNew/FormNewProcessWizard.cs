@@ -180,6 +180,7 @@ namespace YTVisionPro.Forms.ProcessNew
             nodeEditPanel.Dock = DockStyle.Fill;
             tabPage.Controls.Add(nodeEditPanel);
             tabControl1.Controls.Add(tabPage);
+            tabControl1.SelectedTab = tabPage;
 
             #region 调试代码，上线请注释
 

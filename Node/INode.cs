@@ -204,6 +204,14 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 相机IO
         /// </summary>
-        CameraIO
+        CameraIO,
+        /// <summary>
+        /// 注液孔检测
+        /// </summary>
+        InjectionHole,
+        /// <summary>
+        /// 图像源
+        /// </summary>
+        ImageSource
     }
 }

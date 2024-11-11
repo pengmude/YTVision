@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using YTVisionPro.Node;
-using YTVisionPro.Node.ResultProcessing.DataShow;
+using YTVisionPro.Node._7_ResultProcessing.DataShow;
 
 namespace YTVisionPro.Forms.ResultView
 {

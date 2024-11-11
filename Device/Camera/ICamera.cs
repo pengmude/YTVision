@@ -108,19 +108,19 @@ namespace YTVisionPro.Device.Camera
         /// 获取相机曝光
         /// </summary>
         /// <returns></returns>
-        float GetExposureTime();
+        IFloatValue GetExposureTime();
 
         /// <summary>
         /// 获取相机增益
         /// </summary>
         /// <returns></returns>
-        float GetGain();
+        (IIntValue, IFloatValue) GetGain();
 
         /// <summary>
         /// 获取触发延迟
         /// </summary>
         /// <returns></returns>
-        float GetTriggerDelay();
+        IFloatValue GetTriggerDelay();
 
         /// <summary>
         /// 获取线路选择器

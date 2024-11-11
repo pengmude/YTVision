@@ -35,9 +35,12 @@
             this.启用ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.禁用ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.重命名ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.添加备注ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.uiLight1 = new Sunny.UI.UILight();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -47,10 +50,10 @@
             this.label1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.label1.ContextMenuStrip = this.contextMenuStrip1;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(70, 0);
+            this.label1.Location = new System.Drawing.Point(61, 0);
             this.label1.Margin = new System.Windows.Forms.Padding(0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(255, 95);
+            this.label1.Size = new System.Drawing.Size(240, 95);
             this.label1.TabIndex = 0;
             this.label1.Text = "节点名称";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -64,51 +67,61 @@
             this.删除ToolStripMenuItem,
             this.启用ToolStripMenuItem,
             this.禁用ToolStripMenuItem,
-            this.重命名ToolStripMenuItem});
+            this.重命名ToolStripMenuItem,
+            this.添加备注ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(135, 124);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 154);
             // 
             // 删除ToolStripMenuItem
             // 
             this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(134, 30);
+            this.删除ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
             this.删除ToolStripMenuItem.Text = "删除";
             this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItem_Click);
             // 
             // 启用ToolStripMenuItem
             // 
             this.启用ToolStripMenuItem.Name = "启用ToolStripMenuItem";
-            this.启用ToolStripMenuItem.Size = new System.Drawing.Size(134, 30);
+            this.启用ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
             this.启用ToolStripMenuItem.Text = "启用";
             this.启用ToolStripMenuItem.Click += new System.EventHandler(this.启用ToolStripMenuItem_Click);
             // 
             // 禁用ToolStripMenuItem
             // 
             this.禁用ToolStripMenuItem.Name = "禁用ToolStripMenuItem";
-            this.禁用ToolStripMenuItem.Size = new System.Drawing.Size(134, 30);
+            this.禁用ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
             this.禁用ToolStripMenuItem.Text = "禁用";
             this.禁用ToolStripMenuItem.Click += new System.EventHandler(this.禁用ToolStripMenuItem_Click);
             // 
             // 重命名ToolStripMenuItem
             // 
             this.重命名ToolStripMenuItem.Name = "重命名ToolStripMenuItem";
-            this.重命名ToolStripMenuItem.Size = new System.Drawing.Size(134, 30);
+            this.重命名ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
             this.重命名ToolStripMenuItem.Text = "重命名";
             this.重命名ToolStripMenuItem.Click += new System.EventHandler(this.重命名ToolStripMenuItem_Click);
+            // 
+            // 添加备注ToolStripMenuItem
+            // 
+            this.添加备注ToolStripMenuItem.Name = "添加备注ToolStripMenuItem";
+            this.添加备注ToolStripMenuItem.Size = new System.Drawing.Size(152, 30);
+            this.添加备注ToolStripMenuItem.Text = "添加备注";
+            this.添加备注ToolStripMenuItem.Click += new System.EventHandler(this.添加备注ToolStripMenuItem_Click);
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel1.ColumnCount = 6;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 42F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.ContextMenuStrip = this.contextMenuStrip1;
             this.tableLayoutPanel1.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.uiLight1, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 4, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 3, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -125,7 +138,7 @@
             this.uiLight1.CenterColor = System.Drawing.Color.Lime;
             this.uiLight1.ContextMenuStrip = this.contextMenuStrip1;
             this.uiLight1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.uiLight1.Location = new System.Drawing.Point(37, 30);
+            this.uiLight1.Location = new System.Drawing.Point(28, 30);
             this.uiLight1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiLight1.Name = "uiLight1";
             this.uiLight1.OffCenterColor = System.Drawing.Color.Silver;
@@ -145,13 +158,34 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.ContextMenuStrip = this.contextMenuStrip1;
-            this.label2.Location = new System.Drawing.Point(343, 38);
+            this.label2.Location = new System.Drawing.Point(366, 38);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 18);
             this.label2.TabIndex = 2;
             this.label2.Text = "* ms";
             this.label2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.label1_MouseClick);
             this.label2.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.label1_MouseDoubleClick);
+            // 
+            // label3
+            // 
+            this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("黑体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.label3.Location = new System.Drawing.Point(305, 37);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(34, 21);
+            this.label3.TabIndex = 2;
+            this.label3.Text = " i";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.label1_MouseClick);
+            this.label3.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.label1_MouseDoubleClick);
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutomaticDelay = 300;
+            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip1.ToolTipTitle = "备注:";
             // 
             // NodeBase
             // 
@@ -178,5 +212,8 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private Sunny.UI.UILight uiLight1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripMenuItem 添加备注ToolStripMenuItem;
     }
 }

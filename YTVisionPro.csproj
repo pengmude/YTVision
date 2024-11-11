@@ -376,176 +376,216 @@
     <Compile Include="Device\Light\LightRsee.cs" />
     <Compile Include="Device\Modbus\ModbusPoll.cs" />
     <Compile Include="Device\Modbus\ModbusParam.cs" />
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\NodeParamSignalSendByModbus.cs" />
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\NodeResultSignalSendByModbus.cs" />
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\NodeSignalSendByModbus.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\ParamFormSignalSendByModbus.cs">
+    <Compile Include="Node\1-Acquisition\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByModbus\ParamFormSignalSendByModbus.Designer.cs">
+    <Compile Include="Node\1-Acquisition\Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeParamSignalSendByModbus.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeResultSignalSendByModbus.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeSignalSendByModbus.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\ParamFormSignalSendByModbus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\ParamFormSignalSendByModbus.Designer.cs">
       <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\11-TCP\Client\NodeTCPClient.cs">
+    <Compile Include="Node\5-EquipmentCommunication\TcpClient\NodeTCPClient.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\11-TCP\Client\NodeParamTCPClient.cs" />
-    <Compile Include="Node\11-TCP\Client\NodeResultTCPClient.cs" />
-    <Compile Include="Node\11-TCP\Client\ParamFormTCPClient.cs">
+    <Compile Include="Node\5-EquipmentCommunication\TcpClient\NodeParamTCPClient.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\TcpClient\NodeResultTCPClient.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\TcpClient\ParamFormTCPClient.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\11-TCP\Client\ParamFormTCPClient.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\TcpClient\ParamFormTCPClient.Designer.cs">
       <DependentUpon>ParamFormTCPClient.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\11-TCP\Server\NodeParamTCPServer.cs" />
-    <Compile Include="Node\11-TCP\Server\NodeResultTCPServer.cs" />
-    <Compile Include="Node\11-TCP\Server\NodeTCPServer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\TcpServer\NodeParamTCPServer.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\TcpServer\NodeResultTCPServer.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\TcpServer\NodeTCPServer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\11-TCP\Server\ParamFormTCPServer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\TcpServer\ParamFormTCPServer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\11-TCP\Server\ParamFormTCPServer.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\TcpServer\ParamFormTCPServer.Designer.cs">
       <DependentUpon>ParamFormTCPServer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\12-IO\CameraIO\NodeCameraIO.cs">
+    <Compile Include="Node\5-EquipmentCommunication\CameraIO\NodeCameraIO.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\12-IO\CameraIO\NodeParamCameraIO.cs" />
-    <Compile Include="Node\12-IO\CameraIO\NodeResultCameraIO.cs" />
-    <Compile Include="Node\12-IO\CameraIO\ParamFormCameraIO.cs">
+    <Compile Include="Node\5-EquipmentCommunication\CameraIO\NodeParamCameraIO.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\CameraIO\NodeResultCameraIO.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\CameraIO\ParamFormCameraIO.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\12-IO\CameraIO\ParamFormCameraIO.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\CameraIO\ParamFormCameraIO.Designer.cs">
       <DependentUpon>ParamFormCameraIO.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeImageCrop.cs">
+    <Compile Include="Node\1-Acquisition\ImageSource\NodeImageSource.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.cs">
+    <Compile Include="Node\1-Acquisition\ImageSource\NodeParamImageSoucre.cs" />
+    <Compile Include="Node\1-Acquisition\ImageSource\NodeResultImageSource.cs" />
+    <Compile Include="Node\1-Acquisition\ImageSource\ParamFormImageSource.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.Designer.cs">
+    <Compile Include="Node\1-Acquisition\ImageSource\ParamFormImageSource.Designer.cs">
+      <DependentUpon>ParamFormImageSource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\2-ImagePreprocessing\ImageCrop\NodeImageCrop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\2-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\2-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.Designer.cs">
       <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamImageCrop.cs" />
-    <Compile Include="Node\3-ImagePreprocessing\ImageCrop\NodeResultImageCrop.cs" />
-    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeImageRotate.cs">
+    <Compile Include="Node\2-ImagePreprocessing\ImageCrop\NodeParamImageCrop.cs" />
+    <Compile Include="Node\2-ImagePreprocessing\ImageCrop\NodeResultImageCrop.cs" />
+    <Compile Include="Node\2-ImagePreprocessing\ImageRotate\NodeImageRotate.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.cs">
+    <Compile Include="Node\2-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.Designer.cs">
+    <Compile Include="Node\2-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.Designer.cs">
       <DependentUpon>NodeParamFormImageRotate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamImageRotate.cs" />
-    <Compile Include="Node\3-ImagePreprocessing\ImageRotate\NodeResultImageRotate.cs" />
-    <Compile Include="Node\4-Detection\FindCircle\CircleMerger.cs" />
-    <Compile Include="Node\4-Detection\FindCircle\NodeFIndCircle.cs">
+    <Compile Include="Node\2-ImagePreprocessing\ImageRotate\NodeParamImageRotate.cs" />
+    <Compile Include="Node\2-ImagePreprocessing\ImageRotate\NodeResultImageRotate.cs" />
+    <Compile Include="Node\3-Detection\FindCircle\CircleMerger.cs" />
+    <Compile Include="Node\3-Detection\FindCircle\NodeFIndCircle.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\FindCircle\NodeParamFindCircle.cs" />
-    <Compile Include="Node\4-Detection\FindCircle\NodeParamFormFindCircle.cs">
+    <Compile Include="Node\3-Detection\FindCircle\NodeParamFindCircle.cs" />
+    <Compile Include="Node\3-Detection\FindCircle\NodeParamFormFindCircle.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\FindCircle\NodeParamFormFindCircle.Designer.cs">
+    <Compile Include="Node\3-Detection\FindCircle\NodeParamFormFindCircle.Designer.cs">
       <DependentUpon>NodeParamFormFindCircle.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\4-Detection\FindCircle\NodeResultFindCircle.cs" />
-    <Compile Include="Node\4-Detection\FindLine\LineMerger.cs" />
-    <Compile Include="Node\4-Detection\ParallelLines\LineUtils.cs" />
-    <Compile Include="Node\4-Detection\ParallelLines\NodeParallelLines.cs">
+    <Compile Include="Node\3-Detection\FindCircle\NodeResultFindCircle.cs" />
+    <Compile Include="Node\3-Detection\FindLine\LineMerger.cs" />
+    <Compile Include="Node\4-Measurement\ParallelLines\LineUtils.cs" />
+    <Compile Include="Node\4-Measurement\ParallelLines\NodeParallelLines.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.cs">
+    <Compile Include="Node\4-Measurement\ParallelLines\NodeParamFormParallelLines.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.Designer.cs">
+    <Compile Include="Node\4-Measurement\ParallelLines\NodeParamFormParallelLines.Designer.cs">
       <DependentUpon>NodeParamFormParallelLines.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\4-Detection\ParallelLines\NodeParamParallelLines.cs" />
-    <Compile Include="Node\4-Detection\ParallelLines\NodeResultParallelLines.cs" />
-    <Compile Include="Node\4-Detection\FindLine\NodeFIndLine.cs">
+    <Compile Include="Node\4-Measurement\ParallelLines\NodeParamParallelLines.cs" />
+    <Compile Include="Node\4-Measurement\ParallelLines\NodeResultParallelLines.cs" />
+    <Compile Include="Node\3-Detection\FindLine\NodeFIndLine.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\FindLine\NodeParamFindLine.cs" />
-    <Compile Include="Node\4-Detection\FindLine\NodeParamFormFindLine.cs">
+    <Compile Include="Node\3-Detection\FindLine\NodeParamFindLine.cs" />
+    <Compile Include="Node\3-Detection\FindLine\NodeParamFormFindLine.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\4-Detection\FindLine\NodeParamFormFindLine.Designer.cs">
+    <Compile Include="Node\3-Detection\FindLine\NodeParamFormFindLine.Designer.cs">
       <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\4-Detection\FindLine\NodeResultFindLine.cs" />
-    <Compile Include="Node\6-AI\HTAI\BitmapConvert.cs" />
-    <Compile Include="Node\6-AI\HTAI\HtAiDemo.cs" />
-    <Compile Include="Node\6-AI\HTAI\NGTpyePara.cs" />
-    <Compile Include="Node\6-AI\HTAI\NodeHTAI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\6-AI\HTAI\NodeParamHTAI.cs" />
-    <Compile Include="Node\6-AI\HTAI\NodeResultHTAI.cs" />
-    <Compile Include="Node\6-AI\HTAI\ParamFormHTAI.cs">
+    <Compile Include="Node\3-Detection\FindLine\NodeResultFindLine.cs" />
+    <Compile Include="Node\4-Measurement\InjectionHole\FormCannyDemo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\6-AI\HTAI\ParamFormHTAI.Designer.cs">
+    <Compile Include="Node\4-Measurement\InjectionHole\FormCannyDemo.Designer.cs">
+      <DependentUpon>FormCannyDemo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeInjectionHoleMeasurement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHoleMeasurement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHoleMeasurement.Designer.cs">
+      <DependentUpon>NodeParamFormInjectionHoleMeasurement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamInjectionHoleMeasurement.cs" />
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeResultInjectionHoleMeasurement.cs" />
+    <Compile Include="Node\3-Detection\HTAI\BitmapConvert.cs" />
+    <Compile Include="Node\3-Detection\HTAI\HtAiDemo.cs" />
+    <Compile Include="Node\3-Detection\HTAI\NGTpyePara.cs" />
+    <Compile Include="Node\3-Detection\HTAI\NodeHTAI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\HTAI\NodeParamHTAI.cs" />
+    <Compile Include="Node\3-Detection\HTAI\NodeResultHTAI.cs" />
+    <Compile Include="Node\3-Detection\HTAI\ParamFormHTAI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\HTAI\ParamFormHTAI.Designer.cs">
       <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\2-ImageSrc\Shot\NodeShot.cs">
+    <Compile Include="Node\5-EquipmentCommunication\LightOpen\NodeLight.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\2-ImageSrc\Shot\NodeParamShot.cs" />
-    <Compile Include="Node\2-ImageSrc\Shot\NodeResultShot.cs" />
-    <Compile Include="Node\2-ImageSrc\Shot\ParamFormShot.cs">
+    <Compile Include="Node\5-EquipmentCommunication\LightOpen\NodeParamLight.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\LightOpen\NodeResultLight.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\LightOpen\ParamFormLight.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\2-ImageSrc\Shot\ParamFormShot.Designer.cs">
-      <DependentUpon>ParamFormShot.cs</DependentUpon>
+    <Compile Include="Node\5-EquipmentCommunication\LightOpen\ParamFormLight.Designer.cs">
+      <DependentUpon>ParamFormLight.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\NodeModbusSoftTrigger.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusSoftTrigger\NodeModbusSoftTrigger.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\NodeParamModbusSoftTrigger.cs" />
-    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\NodeReusltModbusSoftTrigger.cs" />
-    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\ParamFormModbusSoftTrigger.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusSoftTrigger\NodeParamModbusSoftTrigger.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\ModbusSoftTrigger\NodeReusltModbusSoftTrigger.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\ModbusSoftTrigger\ParamFormModbusSoftTrigger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\8-Modbus\ModbusSoftTrigger\ParamFormModbusSoftTrigger.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusSoftTrigger\ParamFormModbusSoftTrigger.Designer.cs">
       <DependentUpon>ParamFormModbusSoftTrigger.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\8-Modbus\Read\NodeModbusRead.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusRead\NodeModbusRead.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\8-Modbus\Read\NodeParamModbusRead.cs" />
-    <Compile Include="Node\8-Modbus\Read\NodeResultModbusRead.cs" />
-    <Compile Include="Node\8-Modbus\Read\ParamFormModbusRead.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusRead\NodeParamModbusRead.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\ModbusRead\NodeResultModbusRead.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\ModbusRead\ParamFormModbusRead.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\8-Modbus\Read\ParamFormModbusRead.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusRead\ParamFormModbusRead.Designer.cs">
       <DependentUpon>ParamFormModbusRead.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\8-Modbus\Write\NodeModbusWrite.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusWrite\NodeModbusWrite.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\8-Modbus\Write\NodeParamModbusWrite.cs" />
-    <Compile Include="Node\8-Modbus\Write\NodeResultModbusWrite.cs" />
-    <Compile Include="Node\8-Modbus\Write\ParamFormModbusWrite.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusWrite\NodeParamModbusWrite.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\ModbusWrite\NodeResultModbusWrite.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\ModbusWrite\ParamFormModbusWrite.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\8-Modbus\Write\ParamFormModbusWrite.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\ModbusWrite\ParamFormModbusWrite.Designer.cs">
       <DependentUpon>ParamFormModbusWrite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\ImageShow\NodeImageShow.cs">
+    <Compile Include="Node\1-Acquisition\ImageShow\NodeImageShow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\ImageShow\NodeParamImageShow.cs" />
-    <Compile Include="Node\10-ResultProcessing\ImageShow\NodeResultImageShow.cs" />
-    <Compile Include="Node\10-ResultProcessing\ImageShow\ParamFormImageShow.cs">
+    <Compile Include="Node\1-Acquisition\ImageShow\NodeParamImageShow.cs" />
+    <Compile Include="Node\1-Acquisition\ImageShow\NodeResultImageShow.cs" />
+    <Compile Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\ImageShow\ParamFormImageShow.Designer.cs">
+    <Compile Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.Designer.cs">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\FormAddNotes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\FormAddNotes.Designer.cs">
+      <DependentUpon>FormAddNotes.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\FrmNodeRename.cs">
       <SubType>Form</SubType>
@@ -560,17 +600,6 @@
       <DependentUpon>ImageROIEditControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\INode.cs" />
-    <Compile Include="Node\1-LightControl\NodeLight.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\1-LightControl\NodeParamLight.cs" />
-    <Compile Include="Node\1-LightControl\NodeResultLight.cs" />
-    <Compile Include="Node\1-LightControl\ParamFormLight.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\1-LightControl\ParamFormLight.Designer.cs">
-      <DependentUpon>ParamFormLight.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\ProcessNew\ProcessEditPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -618,104 +647,93 @@
     <Compile Include="Node\NodeSubscription.Designer.cs">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeHTAISendSignal.cs">
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeHTAISendSignal.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeInfo.cs" />
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeParamHTAISendSignal.cs" />
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\NodeResultHTAISendSignal.cs" />
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\ParamFormHTAISendSignal.cs">
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeInfo.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeParamHTAISendSignal.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeResultHTAISendSignal.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\ParamFormHTAISendSignal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\AIResultSendByPLC\ParamFormHTAISendSignal.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\ParamFormHTAISendSignal.Designer.cs">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\7-PLC\WaitSoftTrigger\NodeParamWaitSoftTrigger.cs" />
-    <Compile Include="Node\7-PLC\WaitSoftTrigger\NodeWaitSoftTrigger.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\NodeParamWaitSoftTrigger.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\NodeWaitSoftTrigger.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\7-PLC\WaitSoftTrigger\NodeResultWaitSoftTrigger.cs" />
-    <Compile Include="Node\7-PLC\WaitSoftTrigger\ParamFormWaitSoftTrigger.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\NodeResultWaitSoftTrigger.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\ParamFormWaitSoftTrigger.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\7-PLC\WaitSoftTrigger\ParamFormWaitSoftTrigger.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\ParamFormWaitSoftTrigger.Designer.cs">
       <DependentUpon>ParamFormWaitSoftTrigger.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\7-PLC\PanasonicRead\NodeParamPlcRead.cs" />
-    <Compile Include="Node\7-PLC\PanasonicRead\NodeResultPlcRead.cs" />
-    <Compile Include="Node\7-PLC\PanasonicRead\NodePlcRead.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicRead\NodeParamPlcRead.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicRead\NodeResultPlcRead.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicRead\NodePlcRead.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\7-PLC\PanasonicRead\ParamFormPlcRead.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicRead\ParamFormPlcRead.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\7-PLC\PanasonicRead\ParamFormPlcRead.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicRead\ParamFormPlcRead.Designer.cs">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\7-PLC\PanasonicWrite\NodeParamPlcWrite.cs" />
-    <Compile Include="Node\7-PLC\PanasonicWrite\NodePlcWrite.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodeParamPlcWrite.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodePlcWrite.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\7-PLC\PanasonicWrite\NodeResultPlcWrite.cs" />
-    <Compile Include="Node\7-PLC\PanasonicWrite\ParamFormPlcWrite.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodeResultPlcWrite.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\7-PLC\PanasonicWrite\ParamFormPlcWrite.Designer.cs">
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.Designer.cs">
       <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\DataShow\NodeDataShow.cs">
+    <Compile Include="Node\7-ResultProcessing\DataShow\NodeDataShow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\DataShow\NodeParamDataShow.cs" />
-    <Compile Include="Node\10-ResultProcessing\DataShow\NodeParamFormDataShow.cs">
+    <Compile Include="Node\7-ResultProcessing\DataShow\NodeParamDataShow.cs" />
+    <Compile Include="Node\7-ResultProcessing\DataShow\NodeParamFormDataShow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\DataShow\NodeParamFormDataShow.Designer.cs">
+    <Compile Include="Node\7-ResultProcessing\DataShow\NodeParamFormDataShow.Designer.cs">
       <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\DataShow\NodeResultDataShow.cs" />
-    <Compile Include="Node\2-ImageSrc\ImageRead\NodeParamImageRead.cs" />
-    <Compile Include="Node\2-ImageSrc\ImageRead\NodeImageRead.cs">
+    <Compile Include="Node\7-ResultProcessing\DataShow\NodeResultDataShow.cs" />
+    <Compile Include="Node\7-ResultProcessing\ImageSave\NodeParamSaveImage.cs" />
+    <Compile Include="Node\7-ResultProcessing\ImageSave\NodeResultSaveImage.cs" />
+    <Compile Include="Node\7-ResultProcessing\ImageSave\NodeSaveImage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\2-ImageSrc\ImageRead\NodeResultImageRead.cs" />
-    <Compile Include="Node\2-ImageSrc\ImageRead\ParamFormImageRead.cs">
+    <Compile Include="Node\7-ResultProcessing\ImageSave\ParamFormSaveImage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\2-ImageSrc\ImageRead\ParamFormImageRead.Designer.cs">
-      <DependentUpon>ParamFormImageRead.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Node\10-ResultProcessing\ImageSave\NodeParamSaveImage.cs" />
-    <Compile Include="Node\10-ResultProcessing\ImageSave\NodeResultSaveImage.cs" />
-    <Compile Include="Node\10-ResultProcessing\ImageSave\NodeSaveImage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\10-ResultProcessing\ImageSave\ParamFormSaveImage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\10-ResultProcessing\ImageSave\ParamFormSaveImage.Designer.cs">
+    <Compile Include="Node\7-ResultProcessing\ImageSave\ParamFormSaveImage.Designer.cs">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\ResultSummarize\NodeParamSummarize.cs" />
-    <Compile Include="Node\10-ResultProcessing\ResultSummarize\NodeResultSummarize.cs" />
-    <Compile Include="Node\10-ResultProcessing\ResultSummarize\NodeSummarize.cs">
+    <Compile Include="Node\7-ResultProcessing\ResultSummarize\NodeParamSummarize.cs" />
+    <Compile Include="Node\7-ResultProcessing\ResultSummarize\NodeResultSummarize.cs" />
+    <Compile Include="Node\7-ResultProcessing\ResultSummarize\NodeSummarize.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\ResultSummarize\ParamFormSummarize.cs">
+    <Compile Include="Node\7-ResultProcessing\ResultSummarize\ParamFormSummarize.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\10-ResultProcessing\ResultSummarize\ParamFormSummarize.Designer.cs">
+    <Compile Include="Node\7-ResultProcessing\ResultSummarize\ParamFormSummarize.Designer.cs">
       <DependentUpon>ParamFormSummarize.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ProcessControl\SleepTool\NodeParamFormSleepTool.cs">
+    <Compile Include="Node\6-LogicTool\SleepTool\NodeParamFormSleepTool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\9-ProcessControl\SleepTool\NodeParamFormSleepTool.Designer.cs">
+    <Compile Include="Node\6-LogicTool\SleepTool\NodeParamFormSleepTool.Designer.cs">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\9-ProcessControl\SleepTool\NodeParamSleepTool.cs" />
-    <Compile Include="Node\9-ProcessControl\SleepTool\NodeResultSleepTool.cs" />
-    <Compile Include="Node\9-ProcessControl\SleepTool\NodeSleepTool.cs">
+    <Compile Include="Node\6-LogicTool\SleepTool\NodeParamSleepTool.cs" />
+    <Compile Include="Node\6-LogicTool\SleepTool\NodeResultSleepTool.cs" />
+    <Compile Include="Node\6-LogicTool\SleepTool\NodeSleepTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\ShapeDraw\ROI.cs" />
@@ -826,56 +844,65 @@
     <EmbeddedResource Include="Forms\PLCAdd\SinglePLC.resx">
       <DependentUpon>SinglePLC.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\AIResultSendByModbus\ParamFormSignalSendByModbus.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\AIResultSendByModbus\ParamFormSignalSendByModbus.resx">
       <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\11-TCP\Client\ParamFormTCPClient.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\TcpClient\ParamFormTCPClient.resx">
       <DependentUpon>ParamFormTCPClient.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\11-TCP\Server\ParamFormTCPServer.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\TcpServer\ParamFormTCPServer.resx">
       <DependentUpon>ParamFormTCPServer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\12-IO\CameraIO\ParamFormCameraIO.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\CameraIO\ParamFormCameraIO.resx">
       <DependentUpon>ParamFormCameraIO.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
+    <EmbeddedResource Include="Node\1-Acquisition\ImageSource\ParamFormImageSource.resx">
+      <DependentUpon>ParamFormImageSource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\2-ImagePreprocessing\ImageCrop\NodeParamFormImageCrop.resx">
       <DependentUpon>NodeParamFormImageCrop.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\3-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.resx">
+    <EmbeddedResource Include="Node\2-ImagePreprocessing\ImageRotate\NodeParamFormImageRotate.resx">
       <DependentUpon>NodeParamFormImageRotate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\4-Detection\FindCircle\NodeParamFormFindCircle.resx">
+    <EmbeddedResource Include="Node\3-Detection\FindCircle\NodeParamFormFindCircle.resx">
       <DependentUpon>NodeParamFormFindCircle.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\4-Detection\ParallelLines\NodeParamFormParallelLines.resx">
+    <EmbeddedResource Include="Node\4-Measurement\ParallelLines\NodeParamFormParallelLines.resx">
       <DependentUpon>NodeParamFormParallelLines.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\4-Detection\FindLine\NodeParamFormFindLine.resx">
+    <EmbeddedResource Include="Node\3-Detection\FindLine\NodeParamFormFindLine.resx">
       <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\6-AI\HTAI\ParamFormHTAI.resx">
+    <EmbeddedResource Include="Node\4-Measurement\InjectionHole\FormCannyDemo.resx">
+      <DependentUpon>FormCannyDemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHoleMeasurement.resx">
+      <DependentUpon>NodeParamFormInjectionHoleMeasurement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\3-Detection\HTAI\ParamFormHTAI.resx">
       <DependentUpon>ParamFormHTAI.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\2-ImageSrc\Shot\ParamFormShot.resx">
-      <DependentUpon>ParamFormShot.cs</DependentUpon>
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\LightOpen\ParamFormLight.resx">
+      <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\8-Modbus\ModbusSoftTrigger\ParamFormModbusSoftTrigger.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\ModbusSoftTrigger\ParamFormModbusSoftTrigger.resx">
       <DependentUpon>ParamFormModbusSoftTrigger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\8-Modbus\Read\ParamFormModbusRead.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\ModbusRead\ParamFormModbusRead.resx">
       <DependentUpon>ParamFormModbusRead.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\8-Modbus\Write\ParamFormModbusWrite.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\ModbusWrite\ParamFormModbusWrite.resx">
       <DependentUpon>ParamFormModbusWrite.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\ImageShow\ParamFormImageShow.resx">
+    <EmbeddedResource Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.resx">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\FormAddNotes.resx">
+      <DependentUpon>FormAddNotes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\FrmNodeRename.resx">
       <DependentUpon>FrmNodeRename.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\1-LightControl\ParamFormLight.resx">
-      <DependentUpon>ParamFormLight.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\ProcessEditPanel.resx">
       <DependentUpon>ProcessEditPanel.cs</DependentUpon>
@@ -901,31 +928,28 @@
     <EmbeddedResource Include="Node\NodeSubscription.resx">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\AIResultSendByPLC\ParamFormHTAISendSignal.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\AIResultSendByPLC\ParamFormHTAISendSignal.resx">
       <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\7-PLC\WaitSoftTrigger\ParamFormWaitSoftTrigger.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\PLCSoftTrigger\ParamFormWaitSoftTrigger.resx">
       <DependentUpon>ParamFormWaitSoftTrigger.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\7-PLC\PanasonicRead\ParamFormPlcRead.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\PanasonicRead\ParamFormPlcRead.resx">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\7-PLC\PanasonicWrite\ParamFormPlcWrite.resx">
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.resx">
       <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\DataShow\NodeParamFormDataShow.resx">
+    <EmbeddedResource Include="Node\7-ResultProcessing\DataShow\NodeParamFormDataShow.resx">
       <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\2-ImageSrc\ImageRead\ParamFormImageRead.resx">
-      <DependentUpon>ParamFormImageRead.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\ImageSave\ParamFormSaveImage.resx">
+    <EmbeddedResource Include="Node\7-ResultProcessing\ImageSave\ParamFormSaveImage.resx">
       <DependentUpon>ParamFormSaveImage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\10-ResultProcessing\ResultSummarize\ParamFormSummarize.resx">
+    <EmbeddedResource Include="Node\7-ResultProcessing\ResultSummarize\ParamFormSummarize.resx">
       <DependentUpon>ParamFormSummarize.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\9-ProcessControl\SleepTool\NodeParamFormSleepTool.resx">
+    <EmbeddedResource Include="Node\6-LogicTool\SleepTool\NodeParamFormSleepTool.resx">
       <DependentUpon>NodeParamFormSleepTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -943,6 +967,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\注液孔检测算子示例.png" />
     <Content Include="空方案.YtSol">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -969,7 +994,7 @@
     <None Include="Icon\添加流程.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Node\5-Measurement\" />
+    <Folder Include="Icon\NodeIcon\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dll\Basler.Pylon.dll" />
@@ -977,8 +1002,6 @@
     <Content Include="dll\MvCameraControl.Net.dll" />
     <Content Include="桌面图.ico" />
     <None Include="Icon\Logo\桌面图.ico" />
-    <None Include="Icon\NodeIcon\图像采集.ico" />
-    <None Include="Icon\NodeIcon\光源.ico" />
     <None Include="Icon\Modbus.png" />
     <None Include="Icon\tcp.png" />
     <Content Include="ToolTreeView.xml">
@@ -1002,7 +1025,6 @@
     <Content Include="Icon\用户登录.png" />
     <None Include="Icon\监听.png" />
     <Content Include="Icon\相机.png" />
-    <Content Include="Node\readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="IWshRuntimeLibrary">

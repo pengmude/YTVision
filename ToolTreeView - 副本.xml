@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SerializableTreeNode xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Text="Root" ImageIndex="0" Tag="UNKNOWN" SelectedImageIndex="0">
+  <Nodes>
+    <Node Text="光源控制" ImageIndex="0" Tag="UNKNOWN" SelectedImageIndex="0">
+      <Nodes>
+        <Node Text="打开光源" ImageIndex="1" Tag="LightSourceControl" SelectedImageIndex="1" />
+      </Nodes>
+    </Node>
+    <Node Text="IO控制" ImageIndex="42" Tag="UNKNOWN" SelectedImageIndex="42">
+      <Nodes>
+        <Node Text="相机IO" ImageIndex="41" Tag="CameraIO" SelectedImageIndex="41" />
+      </Nodes>
+    </Node>
+    <Node Text="图像采集" ImageIndex="2" Tag="UNKNOWN" SelectedImageIndex="2">
+      <Nodes>
+        <Node Text="图像源" ImageIndex="44" Tag="ImageSource" SelectedImageIndex="44" />
+      </Nodes>
+    </Node>
+    <Node Text="图像预处理" ImageIndex="3" Tag="UNKNOWN" SelectedImageIndex="3">
+      <Nodes>
+        <Node Text="图像裁切" ImageIndex="4" Tag="ImageCrop" SelectedImageIndex="4" />
+        <Node Text="图像旋转" ImageIndex="37" Tag="ImageRotate" SelectedImageIndex="37" />
+        <Node Text="灰度图像" ImageIndex="5" Tag="GrayScale" SelectedImageIndex="5" />
+        <Node Text="Blob分析" ImageIndex="6" Tag="BlobAnalysis" SelectedImageIndex="6" />
+      </Nodes>
+    </Node>
+    <Node Text="检测识别" ImageIndex="7" Tag="UNKNOWN" SelectedImageIndex="7">
+      <Nodes>
+        <Node Text="直线查找" ImageIndex="29" Tag="LineFind" SelectedImageIndex="29" />
+        <Node Text="两直线平行" ImageIndex="38" Tag="LineParallelism" SelectedImageIndex="38" />
+        <Node Text="圆查找" ImageIndex="8" Tag="CircleFind" SelectedImageIndex="8" />
+        <Node Text="模版匹配" ImageIndex="9" Tag="TemplateMatch" SelectedImageIndex="9" />
+      </Nodes>
+    </Node>
+    <Node Text="几何测量" ImageIndex="10" Tag="UNKNOWN" SelectedImageIndex="10">
+      <Nodes>
+        <Node Text="注液孔测量" ImageIndex="43" Tag="InjectionHole" SelectedImageIndex="43" />
+        <Node Text="长度测量" ImageIndex="11" Tag="LengthMeasurement" SelectedImageIndex="11" />
+        <Node Text="面积测量" ImageIndex="12" Tag="AreaMeasurement" SelectedImageIndex="12" />
+      </Nodes>
+    </Node>
+    <Node Text="Ai检测" ImageIndex="13" Tag="UNKNOWN" SelectedImageIndex="13">
+      <Nodes>
+        <Node Text="AI检测" ImageIndex="14" Tag="AIHT" SelectedImageIndex="14" />
+      </Nodes>
+    </Node>
+    <Node Text="PLC通信" ImageIndex="15" Tag="UNKNOWN" SelectedImageIndex="15">
+      <Nodes>
+        <Node Text="读取PLC数据" ImageIndex="16" Tag="PLCRead" SelectedImageIndex="16" />
+        <Node Text="写入PLC数据" ImageIndex="17" Tag="PLCWrite" SelectedImageIndex="17" />
+        <Node Text="PLC软触发" ImageIndex="18" Tag="WaitSoftTrigger" SelectedImageIndex="18" />
+      </Nodes>
+    </Node>
+	<Node Text="TCP通信" ImageIndex="34" Tag="UNKNOWN" SelectedImageIndex="34">
+      <Nodes>
+        <Node Text="客户端请求" ImageIndex="35" Tag="TCPClientRequest" SelectedImageIndex="35" />
+        <Node Text="服务器响应" ImageIndex="36" Tag="TCPServerResponse" SelectedImageIndex="36" />
+      </Nodes>
+    </Node>
+	<Node Text="Modbus通信" ImageIndex="33" Tag="UNKNOWN" SelectedImageIndex="33">
+      <Nodes>
+        <Node Text="Modbus读取" ImageIndex="31" Tag="ModbusRead" SelectedImageIndex="31" />
+        <Node Text="Modbus写入" ImageIndex="32" Tag="ModbusWrite" SelectedImageIndex="32" />
+        <Node Text="Modbus软触发" ImageIndex="39" Tag="ModbusSoftTrigger" SelectedImageIndex="39" />
+      </Nodes>
+    </Node>
+    <Node Text="逻辑控制" ImageIndex="19" Tag="UNKNOWN" SelectedImageIndex="19">
+      <Nodes>
+        <Node Text="延迟执行" ImageIndex="22" Tag="SleepTool" SelectedImageIndex="22" />
+      </Nodes>
+    </Node>
+    <Node Text="结果处理" ImageIndex="23" Tag="UNKNOWN" SelectedImageIndex="23">
+      <Nodes>
+        <Node Text="PLC发送AI结果" ImageIndex="24" Tag="PLCHTAIResultSend" SelectedImageIndex="24" />
+        <Node Text="Modbus发送AI结果" ImageIndex="40" Tag="AIResultSendByModbus" SelectedImageIndex="40" />
+        <Node Text="检测结果显示" ImageIndex="25" Tag="DetectResultShow" SelectedImageIndex="25" />
+        <Node Text="保存图片" ImageIndex="26" Tag="ImageSave" SelectedImageIndex="26" />
+        <Node Text="结果汇总" ImageIndex="27" Tag="Summarize" SelectedImageIndex="27" />
+        <Node Text="图像显示" ImageIndex="30" Tag="ImageShow" SelectedImageIndex="30" />
+      </Nodes>
+    </Node>
+  </Nodes>
+</SerializableTreeNode>

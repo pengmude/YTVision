@@ -4,32 +4,30 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using YTVisionPro.Node;
-using YTVisionPro.Node.AI.HTAI;
-using YTVisionPro.Node.ImageSrc.Shot;
-using YTVisionPro.Node.PLC.WaitSoftTrigger;
-using YTVisionPro.Node.ImageSrc.ImageRead;
-using YTVisionPro.Node.LightControl;
-using YTVisionPro.Node.ResultProcessing.AIResultSendByPLC;
-using YTVisionPro.Node.PLC.PanasonicRead;
-using YTVisionPro.Node.PLC.PanasonicWirte;
-using YTVisionPro.Node.ResultProcessing.DataShow;
-using YTVisionPro.Node.ResultProcessing.ImageSave;
-using YTVisionPro.Node.ResultProcessing.ResultSummarize;
-using YTVisionPro.Node.ProcessControl.SleepTool;
 using static YTVisionPro.Forms.ProcessNew.FormNewProcessWizard;
-using YTVisionPro.Node._4_Detection.FindLine;
-using YTVisionPro.Node.ImagePreprocessing.ImageCrop;
-using YTVisionPro.Node.Tool.ImageShow;
-using YTVisionPro.Node.Modbus.Read;
-using YTVisionPro.Node.Modbus.Write;
-using YTVisionPro.Node.TCP.Client;
-using YTVisionPro.Node.TCP.Server;
-using YTVisionPro.Node._3_ImagePreprocessing.ImageRotate;
-using YTVisionPro.Node._4_Detection.ParallelLines;
-using YTVisionPro.Node.Modbus.ModbusSoftTrigger;
-using YTVisionPro.Node.Modbus.AIResultSendByModbus;
-using YTVisionPro.Node._4_Detection.FindCircle;
-using YTVisionPro.Node.ImageSrc.CameraIO;
+using YTVisionPro.Node._3_Detection.FindLine;
+using YTVisionPro.Node._3_Detection.FindCircle;
+using YTVisionPro.Node._1_Acquisition.ImageSource;
+using YTVisionPro.Node._2_ImagePreprocessing.ImageRotate;
+using YTVisionPro.Node._4_Measurement.ParallelLines;
+using YTVisionPro.Node._5_EquipmentCommunication.LightOpen;
+using YTVisionPro.Node._4_Measurement.InjectionHole;
+using YTVisionPro.Node._3_Detection.HTAI;
+using YTVisionPro.Node._2_ImagePreprocessing.ImageCrop;
+using YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead;
+using YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte;
+using YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger;
+using YTVisionPro.Node._5_EquipmentCommunication.TcpClient;
+using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC;
+using YTVisionPro.Node._5_EquipmentCommunication.TcpServer;
+using YTVisionPro.Node._5_EquipmentCommunication.ModbusRead;
+using YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite;
+using YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger;
+using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus;
+using YTVisionPro.Node._6_LogicTool.SleepTool;
+using YTVisionPro.Node._7_ResultProcessing.ImageSave;
+using YTVisionPro.Node._7_ResultProcessing.DataShow;
+using YTVisionPro.Node._7_ResultProcessing.ResultSummarize;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -171,12 +169,6 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.LightSourceControl:
                     node = new NodeLight(nodeId, nodeName, _process, nodeType);
                     break;
-                case NodeType.CameraShot:
-                    node = new NodeShot(nodeId, nodeName, _process, nodeType);
-                    break;
-                case NodeType.LocalPicture:
-                    node = new NodeImageRead(nodeId, nodeName, _process, nodeType);
-                    break;
                 case NodeType.PLCRead:
                     node = new NodePlcRead(nodeId, nodeName, _process, nodeType);
                     break;
@@ -242,6 +234,12 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.CameraIO:
                     node = new NodeCameraIO(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.InjectionHole:
+                    node = new NodeInjectionHoleMeasurement(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ImageSource:
+                    node = new NodeImageSource(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

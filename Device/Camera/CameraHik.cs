@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
-using System.Windows.Forms;
 using Logger;
 using MvCameraControl;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using JsonSubTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Sunny.UI.Win32;
-using YTVisionPro.Node.AI.HTAI;
-using OpenCvSharp;
-using OpenCvSharp.Extensions;
 
 namespace YTVisionPro.Device.Camera
 {
@@ -395,18 +386,18 @@ namespace YTVisionPro.Device.Camera
         /// <summary>
         /// 获取曝光
         /// </summary>
-        public float GetExposureTime()
+        public IFloatValue GetExposureTime()
         {
             if (device == null) throw new Exception("相机对象为空！");
             if (device.DeviceInfo.ManufacturerName == "Basler")
             {
                 device.Parameters.GetFloatValue("ExposureTimeAbs", out IFloatValue exposureTime);
-                return exposureTime.CurValue;
+                return exposureTime;
             }
             else
             {
                 device.Parameters.GetFloatValue("ExposureTime", out IFloatValue exposureTime);
-                return exposureTime.CurValue;
+                return exposureTime;
             }
         }
 
@@ -415,19 +406,19 @@ namespace YTVisionPro.Device.Camera
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public float GetGain()
+        public (IIntValue, IFloatValue) GetGain()
         {
             if (device == null) throw new Exception("相机对象为空！");
 
             if (device.DeviceInfo.ManufacturerName == "Basler")
             {
                 device.Parameters.GetIntValue("GainRaw", out IIntValue gain);
-                return gain.CurValue;
+                return (gain, null);
             }
             else
             {
                 device.Parameters.GetFloatValue("Gain", out IFloatValue gain);
-                return gain.CurValue;
+                return (null, gain);
             }
         }
 
@@ -435,18 +426,18 @@ namespace YTVisionPro.Device.Camera
         /// 获取触发延迟时间
         /// </summary>
         /// <returns></returns>
-        public float GetTriggerDelay()
+        public IFloatValue GetTriggerDelay()
         {
             if (device == null) throw new Exception("相机对象为空！");
             if (device.DeviceInfo.ManufacturerName == "Basler")
             {
                 device.Parameters.GetFloatValue("TriggerDelayAbs", out IFloatValue triggerDelay);
-                return triggerDelay.CurValue;
+                return triggerDelay;
             }
             else
             {
                 device.Parameters.GetFloatValue("TriggerDelay", out IFloatValue triggerDelay);
-                return triggerDelay.CurValue;
+                return triggerDelay;
             }
         }
 

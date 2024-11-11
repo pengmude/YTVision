@@ -100,7 +100,7 @@
             this.保存方案ToolStripMenuItem,
             this.另存方案ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 新建方案ToolStripMenuItem
@@ -144,7 +144,7 @@
             this.检测结果ToolStripMenuItem,
             this.运行日志ToolStripMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
-            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
+            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
             this.视图ToolStripMenuItem.Text = "视图";
             // 
             // 默认视图ToolStripMenuItem
@@ -193,7 +193,7 @@
             this.画布设置ToolStripMenuItem,
             this.系统设置ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
             this.设置ToolStripMenuItem.Text = "设置";
             // 
             // 画布设置ToolStripMenuItem
@@ -217,7 +217,7 @@
             this.联系我们ToolStripMenuItem1,
             this.关于YTVisionProToolStripMenuItem1});
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // 使用教程ToolStripMenuItem
@@ -244,7 +244,7 @@
             // 
             this.锁定ToolStripMenuItem.Image = global::YTVisionPro.Properties.Resources.解锁;
             this.锁定ToolStripMenuItem.Name = "锁定ToolStripMenuItem";
-            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 28);
+            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 32);
             this.锁定ToolStripMenuItem.ToolTipText = "界面已锁定";
             this.锁定ToolStripMenuItem.Click += new System.EventHandler(this.锁定ToolStripMenuItem_Click);
             // 

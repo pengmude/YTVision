@@ -1,8 +1,6 @@
 ﻿using Logger;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -18,9 +16,9 @@ using YTVisionPro.Device.Light;
 using YTVisionPro.Device.Modbus;
 using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
-using YTVisionPro.Node.AI.HTAI;
 using YTVisionPro.Device.TCP;
 using YTVisionPro.Forms.TCPAdd;
+using YTVisionPro.Node._3_Detection.HTAI;
 
 namespace YTVisionPro
 {

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
-using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace YTVisionPro.Node
 {
@@ -17,6 +14,7 @@ namespace YTVisionPro.Node
         private bool _active = true;
         private bool _selected = false;
         private string _nodeName;
+        private string _notes = "无备注"; // 节点备注
         private FrmNodeRename _frmNodeRename;
         /// <summary>
         /// 节点所属流程
@@ -58,6 +56,7 @@ namespace YTVisionPro.Node
             _frmNodeRename = new FrmNodeRename(this);
             FrmNodeRename.RenameChangeEvent += RenameChangeEvent;
             NodeType = nodeType;
+            toolTip1.SetToolTip(this.label3, _notes);
         }
 
         private void RenameChangeEvent(object sender, RenameResult e)
@@ -124,6 +123,16 @@ namespace YTVisionPro.Node
         /// 禁用节点事件
         /// </summary>
         public static event EventHandler<bool> NodeDisableEvent;
+
+        /// <summary>
+        /// 设置备注文本
+        /// </summary>
+        /// <param name="text"></param>
+        public void SetNotes(string text)
+        {
+            _notes = text;
+            toolTip1.SetToolTip(this.label3, _notes);
+        }
 
         /// <summary>
         /// 设置节点状态,主要颜色，中心颜色，是否闪烁
@@ -337,6 +346,12 @@ namespace YTVisionPro.Node
         private void 重命名ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _frmNodeRename.ShowDialog();
+        }
+
+        private void 添加备注ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormAddNotes formAddNotes = new FormAddNotes(this);
+            formAddNotes.ShowDialog();
         }
     }
 

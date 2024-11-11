@@ -10,8 +10,8 @@
 
 namespace YTVisionPro.Properties {
     using System;
-
-
+    
+    
     /// <summary>
     ///   一个强类型的资源类，用于查找本地化的字符串等。
     /// </summary>
@@ -153,6 +153,26 @@ namespace YTVisionPro.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 备注 {
+            get {
+                object obj = ResourceManager.GetObject("备注", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 备注1 {
+            get {
+                object obj = ResourceManager.GetObject("备注1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 工具箱 {
             get {
                 object obj = ResourceManager.GetObject("工具箱", resourceCulture);
@@ -207,6 +227,16 @@ namespace YTVisionPro.Properties {
             get {
                 object obj = ResourceManager.GetObject("桌面图", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 注液孔检测算子示例 {
+            get {
+                object obj = ResourceManager.GetObject("注液孔检测算子示例", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

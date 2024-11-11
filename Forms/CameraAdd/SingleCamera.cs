@@ -1,13 +1,11 @@
-﻿using Basler.Pylon;
-using Logger;
-using Sunny.UI;
+﻿using Logger;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using YTVisionPro.Device.Camera;
-using YTVisionPro.Node.ImageSrc.Shot;
+using YTVisionPro.Node._1_Acquisition.ImageSource;
 
 namespace YTVisionPro.Forms.CameraAdd
 {
@@ -185,8 +183,8 @@ namespace YTVisionPro.Forms.CameraAdd
             // 移除设备需要判断当前是否有节点使用该设备
             foreach (var node in Solution.Instance.Nodes)
             {
-                if (node is NodeShot cameraNode
-                    && cameraNode.ParamForm.Params is NodeParamShot paramCamera
+                if (node is NodeImageSource cameraNode
+                    && cameraNode.ParamForm.Params is NodeParamImageSoucre paramCamera
                     && Camera.UserDefinedName == paramCamera.Camera.UserDefinedName)
                 {
                     MessageBox.Show("当前方案的节点正在使用该相机，无法删除相机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -1,6 +1,5 @@
 ﻿using Logger;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -8,16 +7,12 @@ using YTVisionPro.Forms;
 using YTVisionPro.Forms.Helper;
 using YTVisionPro.Forms.ImageViewer;
 using YTVisionPro.Forms.ProcessNew;
-using YTVisionPro.Device;
 using YTVisionPro.Device.Camera;
 using YTVisionPro.Device.Light;
 using YTVisionPro.Device.PLC;
 using YTVisionPro.Forms.ResultView;
-using YTVisionPro.Node.AI.HTAI;
-using System.Threading.Tasks;
 using Sunny.UI;
 using YTVisionPro.Properties;
-using HslCommunication;
 using YTVisionPro.Forms.SystemSetting;
 using YTVisionPro.Device.TCP;
 using YTVisionPro.Device.Modbus;
@@ -26,6 +21,7 @@ using YTVisionPro.Forms.CameraAdd;
 using YTVisionPro.Forms.PLCAdd;
 using YTVisionPro.Forms.ModbusAdd;
 using YTVisionPro.Forms.TCPAdd;
+using YTVisionPro.Node._3_Detection.HTAI;
 
 namespace YTVisionPro
 {
