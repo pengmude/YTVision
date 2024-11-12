@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,11 +67,13 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbt_ModbusManager = new System.Windows.Forms.ToolStripButton();
             this.tsbt_TCPManager = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
+            this.timerLoadSol = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -100,7 +103,7 @@
             this.保存方案ToolStripMenuItem,
             this.另存方案ToolStripMenuItem});
             this.文件ToolStripMenuItem.Name = "文件ToolStripMenuItem";
-            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.文件ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.文件ToolStripMenuItem.Text = "文件";
             // 
             // 新建方案ToolStripMenuItem
@@ -144,7 +147,7 @@
             this.检测结果ToolStripMenuItem,
             this.运行日志ToolStripMenuItem});
             this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
-            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.视图ToolStripMenuItem.Text = "视图";
             // 
             // 默认视图ToolStripMenuItem
@@ -193,7 +196,7 @@
             this.画布设置ToolStripMenuItem,
             this.系统设置ToolStripMenuItem});
             this.设置ToolStripMenuItem.Name = "设置ToolStripMenuItem";
-            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.设置ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.设置ToolStripMenuItem.Text = "设置";
             // 
             // 画布设置ToolStripMenuItem
@@ -217,7 +220,7 @@
             this.联系我们ToolStripMenuItem1,
             this.关于YTVisionProToolStripMenuItem1});
             this.帮助ToolStripMenuItem.Name = "帮助ToolStripMenuItem";
-            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 32);
+            this.帮助ToolStripMenuItem.Size = new System.Drawing.Size(62, 28);
             this.帮助ToolStripMenuItem.Text = "帮助";
             // 
             // 使用教程ToolStripMenuItem
@@ -244,7 +247,7 @@
             // 
             this.锁定ToolStripMenuItem.Image = global::YTVisionPro.Properties.Resources.解锁;
             this.锁定ToolStripMenuItem.Name = "锁定ToolStripMenuItem";
-            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 32);
+            this.锁定ToolStripMenuItem.Size = new System.Drawing.Size(40, 28);
             this.锁定ToolStripMenuItem.ToolTipText = "界面已锁定";
             this.锁定ToolStripMenuItem.Click += new System.EventHandler(this.锁定ToolStripMenuItem_Click);
             // 
@@ -412,7 +415,8 @@
             this.tsbt_TCPManager,
             this.tsbt_SolRunOnce,
             this.tsbt_SolRunLoop,
-            this.tsbt_SolRunStop});
+            this.tsbt_SolRunStop,
+            this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 32);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1556, 41);
@@ -439,6 +443,16 @@
             this.tsbt_TCPManager.Text = "TCP设备";
             this.tsbt_TCPManager.ToolTipText = "TCP设备";
             this.tsbt_TCPManager.Click += new System.EventHandler(this.ToolStripButton_Click);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Font = new System.Drawing.Font("Mongolian Baiti", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripLabel1.ForeColor = System.Drawing.Color.Brown;
+            this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(50, 2, 0, 3);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(307, 36);
+            this.toolStripLabel1.Text = "方案加载中，请耐心等待……";
+            this.toolStripLabel1.Visible = false;
             // 
             // BottomToolStripPanel
             // 
@@ -475,6 +489,11 @@
             // ContentPanel
             // 
             this.ContentPanel.Size = new System.Drawing.Size(1556, 771);
+            // 
+            // timerLoadSol
+            // 
+            this.timerLoadSol.Interval = 300;
+            this.timerLoadSol.Tick += new System.EventHandler(this.timerLoadSol_Tick);
             // 
             // FormMain
             // 
@@ -549,6 +568,8 @@
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripButton tsbt_ModbusManager;
         private System.Windows.Forms.ToolStripButton tsbt_TCPManager;
+        private System.Windows.Forms.Timer timerLoadSol;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }
 

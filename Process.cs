@@ -104,6 +104,10 @@ namespace YTVisionPro
                     {
                         try
                         {
+                            // 如果是流程的第一个节点、且是写入拍照信号的、且是循环运行模式就跳过执行
+                            // 也就是说，这个节点作为点检使用，生产模式（循环运行）时需要跳过，由PLC内部写拍照信号
+                            if(node == _nodes[0] && node.NodeType == NodeType.PLCWrite && isCyclical)
+                                continue;
                             await node.Run(token);
                             RunTime += node.Result.RunTime;
                         }

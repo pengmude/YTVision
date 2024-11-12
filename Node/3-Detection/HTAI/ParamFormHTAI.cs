@@ -15,6 +15,10 @@ namespace YTVisionPro.Node._3_Detection.HTAI
 {
     internal partial class ParamFormHTAI : Form, INodeParamForm
     {
+        /// <summary>
+        /// 不管加载几次，AI模型个数只增加1
+        /// </summary>
+        private bool flag = false;
         private NodeBase _node;
         const int path_len = 256;
         /// <summary>
@@ -177,6 +181,12 @@ namespace YTVisionPro.Node._3_Detection.HTAI
                 cbNodes.SelectedIndex = 0; // 默认选中第一个节点
                 cbClasses.DataSource = node_info_choose[0].ClassNames;
                 InitializeNGConfigs();
+                if (!flag)
+                {
+                    // 方案Ai模型计数+1
+                    Solution.Instance.SolAiModelNum++;
+                    flag = true;
+                }
             }
             catch (Exception ex)
             {
@@ -464,14 +474,16 @@ namespace YTVisionPro.Node._3_Detection.HTAI
                 nodeParamHTAI = param;
                 TestNum = param.TestNum;
                 _allNgConfigs = param.AllNgConfigs;
-                //采取非阻塞方式加载模型（加载模型耗时长）
+
+                // 采取非阻塞方式加载模型（加载模型耗时长）
                 Task.Run(() =>
                 {
                     TreePredictHandle = InitModel(param.ModelInitParams.TreePath, param.ModelInitParams.NodeNames,
-                                        param.ModelInitParams.TestNodeNum, param.ModelInitParams.DeviceType, param.ModelInitParams.DeviceID);
+                                                      param.ModelInitParams.TestNodeNum, param.ModelInitParams.DeviceType, param.ModelInitParams.DeviceID);
                     param.TreePredictHandle = TreePredictHandle;
+                    // AI模型加载完成计数+1
+                    Solution.Instance.LoadedModelNum++;
                 });
-
             }
         }
 
@@ -502,7 +514,6 @@ namespace YTVisionPro.Node._3_Detection.HTAI
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({_node.ID}.{_node.NodeName})设置参数失败！请手动加载模型！原因：{ex.Message}");
             }
-
             return TreePredictHandle;
         }
     }

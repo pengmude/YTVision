@@ -138,7 +138,7 @@ namespace YTVisionPro.Forms.ProcessNew
                 TabPage tabPage = new TabPage();
                 tabPage.Name = processInfo.ProcessName;
                 tabPage.Padding = new Padding(3);
-                tabPage.Size = new System.Drawing.Size(465, 643);
+                tabPage.Size = new Size(465, 643);
                 tabPage.Text = processInfo.ProcessName;
                 tabPage.UseVisualStyleBackColor = true;
 
@@ -148,6 +148,7 @@ namespace YTVisionPro.Forms.ProcessNew
                 tabControl1.Controls.Add(tabPage);
             }
         }
+
         /// <summary>
         /// 快捷键保存方案
         /// </summary>

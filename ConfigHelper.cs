@@ -1,16 +1,9 @@
-﻿using MvCameraControl;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Device.Camera;
-using YTVisionPro.Device.Light;
-using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
 using Logger;
 
@@ -35,6 +28,7 @@ namespace YTVisionPro
                 SolConfig.Devices = Solution.Instance.AllDevices;
                 SolConfig.NodeCount = Solution.Instance.NodeCount;
                 SolConfig.ProcessCount = Solution.Instance.ProcessCount;
+                SolConfig.SolAiModelNum = Solution.Instance.SolAiModelNum;
 
                 SolConfig.ProcessInfos = new List<ProcessConfig>();
                 foreach (var process in Solution.Instance.AllProcesses)
@@ -147,11 +141,13 @@ namespace YTVisionPro
                 Solution.Instance.RunInterval = SolConfig.RunInterval;
                 Solution.Instance.NodeCount = SolConfig.NodeCount;
                 Solution.Instance.ProcessCount = SolConfig.ProcessCount;
+                Solution.Instance.SolAiModelNum = SolConfig.SolAiModelNum;
+
                 // 发送反序列化完成事件
                 // 目的：
                 // 1.先触发光源管理窗口还原所有光源，还原完成触发光源完成事件
                 // 2.相机管理窗口订阅光源完成事件进行相机还原，完成后触发相机完成事件 移除旧方案的设备管理窗口的设备控件
-                // 3.PLC管理窗口订阅相机完成事件进行PLC还原 完成后触发PLC完成事件，
+                // 3.PLC管理窗口订阅相机完成事件进行PLC还原 完成后触发PLC完成事件，Modbus-》TCP也是如此
                 // 4.流程管理窗口订阅PLC完成事件进行流程还原，因为流程还原需要用到设备，这样保证了在还原流程时设备可用
                 DeserializationCompletionEvent?.Invoke(null, flag);
                 Solution.Instance.NodeCount = SolConfig.NodeCount;
@@ -174,6 +170,7 @@ namespace YTVisionPro
         public int RunInterval;     // 流程循环运行间隔时间
         public int NodeCount;       // 开始创建节点使用的ID-1
         public int ProcessCount;    // 开始创建流程使用的ID-1
+        public int SolAiModelNum;   // 方案AI模型计数
         /// <summary>
         /// 方案下的所有设备(光源、相机、PLC)
         /// </summary>

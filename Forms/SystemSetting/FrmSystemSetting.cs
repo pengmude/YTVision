@@ -22,6 +22,7 @@ namespace YTVisionPro.Forms.SystemSetting
             checkBox1.Checked = Settings.Default.IsPowerBoot;
             checkBox2.Checked = Settings.Default.IsAutoLoad;
             textBox1.Text = Settings.Default.SolutionAddress;
+            checkBox3.Checked = Settings.Default.IsAutoRun;
             ConfigHelper.DeserializationCompletionEvent += UpdateRunInterval;
         }
 
@@ -204,20 +205,6 @@ namespace YTVisionPro.Forms.SystemSetting
             }
             Settings.Default.IsPowerBoot = checkBox1.Checked;
             Settings.Default.Save();
-
-        }
-        /// <summary>
-        /// 初始化自启动状态
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FrmsetAutoRun_Load(object sender, EventArgs e)
-        {
-            List<string> shortcutPaths = GetQuickFromFolder(systemStartPath, appAllPath);
-            if (shortcutPaths.Count != 0)
-            {
-                checkBox1.Checked = true;
-            }
         }
 
         #endregion
@@ -247,7 +234,7 @@ namespace YTVisionPro.Forms.SystemSetting
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if(openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = openFileDialog1.FileName;
                 //保存配置到程序设置中
@@ -279,5 +266,11 @@ namespace YTVisionPro.Forms.SystemSetting
         }
 
         #endregion
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.IsAutoRun = checkBox3.Checked;
+            Settings.Default.Save();
+        }
     }
 }

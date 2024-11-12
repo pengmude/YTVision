@@ -58,5 +58,17 @@ namespace YTVisionPro.Properties {
                 this["IsPowerBoot"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsAutoRun {
+            get {
+                return ((bool)(this["IsAutoRun"]));
+            }
+            set {
+                this["IsAutoRun"] = value;
+            }
+        }
     }
 }

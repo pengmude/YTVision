@@ -746,6 +746,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ProcessBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcessBar.Designer.cs">
+      <DependentUpon>ProcessBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Solution.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -956,6 +962,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcessBar.resx">
+      <DependentUpon>ProcessBar.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

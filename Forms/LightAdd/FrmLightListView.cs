@@ -79,6 +79,7 @@ namespace YTVisionPro.Forms.LightAdd
             }
             if(e)
                 LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
+
             OnLightDeserializationCompletionEvent?.Invoke(this, e);
         }
 

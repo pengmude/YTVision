@@ -187,13 +187,7 @@
   <data name="监听" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\监听.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="备注" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\备注.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="桌面图" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Icon\Logo\桌面图.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="备注1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Icon\备注.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

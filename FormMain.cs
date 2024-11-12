@@ -136,18 +136,44 @@ namespace YTVisionPro
             AutoLoadSolution();
         }
 
-        // 软件启动是否加载指定方案
+        /// <summary>
+        /// 软件启动是否加载指定方案
+        /// </summary>
         private void AutoLoadSolution()
         {
             if (Settings.Default.IsAutoLoad)
             {
                 try
                 {
+                    timerLoadSol.Start();
+                    toolStripLabel1.Visible = true;
+                    SetRunStatus(true, true); // 设置为正在加载方案状态
                     Solution.Instance.Load(Settings.Default.SolutionAddress, true);
                 }
                 catch (Exception)
                 {
                     LogHelper.AddLog(MsgLevel.Warn, "方案加载失败！", true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 定时器检查AI模型是否全部加载完毕
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void timerLoadSol_Tick(object sender, EventArgs e)
+        {
+            if (Solution.Instance.SolAiModelNum == Solution.Instance.LoadedModelNum)
+            {
+                timerLoadSol.Stop();
+                toolStripLabel1.Visible = false;
+                SetRunStatus(false); // 设置为正在加载方案状态
+                if (Settings.Default.IsAutoRun && isAutoLoadSol)
+                {
+                    SetRunStatus(true);
+                    await Solution.Instance.Run(true);
+                    SetRunStatus(false);
                 }
             }
         }
@@ -407,13 +433,14 @@ namespace YTVisionPro
         /// <summary>
         /// 设置运行状态，启用/禁用控件
         /// </summary>
-        /// <param name="enable"></param>
-        private void SetRunStatus(bool isRunning)
+        /// <param name="isRunning"></param>
+        /// <param name="all">停止运行按钮是否和其他一致</param>
+        private void SetRunStatus(bool isRunning, bool all = false)
         {
             // 运行和停止按钮
             tsbt_SolRunOnce.Enabled = !isRunning;
             tsbt_SolRunLoop.Enabled = !isRunning;
-            tsbt_SolRunStop.Enabled = isRunning;
+            tsbt_SolRunStop.Enabled = !all ? isRunning : !isRunning;
 
             // 其他设置禁用/启用
             tsbt_SolNew.Enabled = !isRunning;
@@ -502,11 +529,16 @@ namespace YTVisionPro
             }
         }
 
+        private bool isAutoLoadSol = true;
         private void 打开方案ToolStripMenuItem_Click(object value1, object value2)
         {
             openFileDialog1.Title = "请选择要打开的方案";
             if (openFileDialog1.ShowDialog()  == DialogResult.OK)
             {
+                isAutoLoadSol = false;
+                timerLoadSol.Start();
+                toolStripLabel1.Visible = true;
+                SetRunStatus(true, true); // 设置为正在加载方案状态
                 Solution.Instance.Load(openFileDialog1.FileName, true);
             }
         }
@@ -623,12 +655,5 @@ namespace YTVisionPro
         {
             frmSystemSetting.ShowDialog();
         }
-
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
-
-
 }

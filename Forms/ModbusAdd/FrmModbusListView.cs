@@ -68,6 +68,7 @@ namespace YTVisionPro.Forms.ModbusAdd
             }
             if(e)
                 LogHelper.AddLog(MsgLevel.Debug, $"================================================【Modbus设备列表】已加载完成 ================================================", true);
+
             OnModbusDeserializationCompletionEvent?.Invoke(this, e);
         }
 

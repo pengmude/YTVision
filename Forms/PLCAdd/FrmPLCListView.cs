@@ -76,6 +76,7 @@ namespace YTVisionPro.Forms.PLCAdd
             }
             if(e)
                 LogHelper.AddLog(MsgLevel.Debug, $"================================================【PLC设备列表】已加载完成 ================================================", true);
+
             OnPLCDeserializationCompletionEvent?.Invoke(this, e);
         }
 
