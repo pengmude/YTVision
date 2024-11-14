@@ -22,6 +22,18 @@ namespace YTVisionPro.Node._3_Detection.FindLine
             comboBox1.SelectedIndex = 0;
             imageROIEditControl1.SetROIType2Draw(Forms.ShapeDraw.ROIType.Rectangle);
             Shown += NodeParamFormFindLine_Shown;
+            SetToolTips();
+        }
+
+        private void SetToolTips()
+        {
+            toolTip1.SetToolTip(label3, "减少噪点,仅限奇数");
+            toolTip1.SetToolTip(label1, "越小边缘噪点越多");
+            toolTip1.SetToolTip(label2, "越大边缘噪点越少");
+            toolTip1.SetToolTip(label4, "启用时边缘检测更精准但会增加耗时");
+            toolTip1.SetToolTip(label7, "直线特征越明显值越大");
+            toolTip1.SetToolTip(label8, "小于设定值时直线被忽略");
+            toolTip1.SetToolTip(label9, "大于设定值时直线被忽略");
         }
 
         private void NodeParamFormFindLine_Shown(object sender, EventArgs e)

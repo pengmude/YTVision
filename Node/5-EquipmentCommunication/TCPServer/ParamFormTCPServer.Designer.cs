@@ -90,6 +90,7 @@
             // buttonRun
             // 
             this.buttonRun.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonRun.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonRun.Location = new System.Drawing.Point(159, 591);
             this.buttonRun.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonRun.Name = "buttonRun";
@@ -102,6 +103,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonSave.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonSave.Location = new System.Drawing.Point(587, 591);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonSave.Name = "buttonSave";
@@ -115,9 +117,10 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(147, 117);
+            this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(135, 115);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(134, 18);
+            this.label1.Size = new System.Drawing.Size(157, 21);
             this.label1.TabIndex = 0;
             this.label1.Text = "响应的客户端：";
             // 
@@ -125,20 +128,22 @@
             // 
             this.comboBoxClientIp.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxClientIp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxClientIp.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBoxClientIp.FormattingEnabled = true;
-            this.comboBoxClientIp.Location = new System.Drawing.Point(542, 113);
+            this.comboBoxClientIp.Location = new System.Drawing.Point(542, 111);
             this.comboBoxClientIp.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxClientIp.Name = "comboBoxClientIp";
-            this.comboBoxClientIp.Size = new System.Drawing.Size(199, 26);
+            this.comboBoxClientIp.Size = new System.Drawing.Size(199, 29);
             this.comboBoxClientIp.TabIndex = 1;
             // 
             // label2
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(156, 33);
+            this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(146, 31);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 18);
+            this.label2.Size = new System.Drawing.Size(136, 21);
             this.label2.TabIndex = 0;
             this.label2.Text = "选择服务器：";
             // 
@@ -146,11 +151,12 @@
             // 
             this.comboBoxServer.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxServer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxServer.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBoxServer.FormattingEnabled = true;
-            this.comboBoxServer.Location = new System.Drawing.Point(542, 29);
+            this.comboBoxServer.Location = new System.Drawing.Point(542, 27);
             this.comboBoxServer.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxServer.Name = "comboBoxServer";
-            this.comboBoxServer.Size = new System.Drawing.Size(199, 26);
+            this.comboBoxServer.Size = new System.Drawing.Size(199, 29);
             this.comboBoxServer.TabIndex = 1;
             this.comboBoxServer.SelectedIndexChanged += new System.EventHandler(this.comboBoxServer_SelectedIndexChanged);
             // 
@@ -161,6 +167,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.tabControl1, 2);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tabControl1.Location = new System.Drawing.Point(71, 172);
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
@@ -179,7 +186,7 @@
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tabPage1.Size = new System.Drawing.Size(706, 361);
+            this.tabPage1.Size = new System.Drawing.Size(706, 358);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "不需要条件响应";
             // 
@@ -193,14 +200,15 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(698, 353);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(698, 350);
             this.tableLayoutPanel2.TabIndex = 5;
             // 
             // groupBox3
             // 
             this.groupBox3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.groupBox3.Controls.Add(this.textBoxNoConditionContent);
-            this.groupBox3.Location = new System.Drawing.Point(47, 74);
+            this.groupBox3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.groupBox3.Location = new System.Drawing.Point(47, 73);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(604, 204);
             this.groupBox3.TabIndex = 4;
@@ -210,11 +218,12 @@
             // textBoxNoConditionContent
             // 
             this.textBoxNoConditionContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxNoConditionContent.Location = new System.Drawing.Point(3, 24);
+            this.textBoxNoConditionContent.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBoxNoConditionContent.Location = new System.Drawing.Point(3, 27);
             this.textBoxNoConditionContent.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxNoConditionContent.Multiline = true;
             this.textBoxNoConditionContent.Name = "textBoxNoConditionContent";
-            this.textBoxNoConditionContent.Size = new System.Drawing.Size(598, 177);
+            this.textBoxNoConditionContent.Size = new System.Drawing.Size(598, 174);
             this.textBoxNoConditionContent.TabIndex = 3;
             this.textBoxNoConditionContent.Text = "1OK,";
             // 
@@ -253,9 +262,9 @@
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(71, 26);
+            this.label3.Location = new System.Drawing.Point(53, 24);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(206, 18);
+            this.label3.Size = new System.Drawing.Size(242, 21);
             this.label3.TabIndex = 0;
             this.label3.Text = "订阅响应条件(布尔值)：";
             // 
@@ -284,11 +293,11 @@
             // textBoxResponseTrue
             // 
             this.textBoxResponseTrue.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxResponseTrue.Location = new System.Drawing.Point(3, 24);
+            this.textBoxResponseTrue.Location = new System.Drawing.Point(3, 27);
             this.textBoxResponseTrue.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxResponseTrue.Multiline = true;
             this.textBoxResponseTrue.Name = "textBoxResponseTrue";
-            this.textBoxResponseTrue.Size = new System.Drawing.Size(548, 86);
+            this.textBoxResponseTrue.Size = new System.Drawing.Size(548, 83);
             this.textBoxResponseTrue.TabIndex = 3;
             this.textBoxResponseTrue.Text = "1OK,";
             // 
@@ -307,11 +316,11 @@
             // textBoxResponseFalse
             // 
             this.textBoxResponseFalse.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxResponseFalse.Location = new System.Drawing.Point(3, 24);
+            this.textBoxResponseFalse.Location = new System.Drawing.Point(3, 27);
             this.textBoxResponseFalse.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxResponseFalse.Multiline = true;
             this.textBoxResponseFalse.Name = "textBoxResponseFalse";
-            this.textBoxResponseFalse.Size = new System.Drawing.Size(553, 68);
+            this.textBoxResponseFalse.Size = new System.Drawing.Size(553, 65);
             this.textBoxResponseFalse.TabIndex = 3;
             this.textBoxResponseFalse.Text = "1NG,";
             // 
@@ -323,6 +332,8 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ParamFormTCPServer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TCP服务器响应";

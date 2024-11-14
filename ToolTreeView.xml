@@ -11,6 +11,7 @@
       <Nodes>
         <Node Text="图像裁剪" ImageName="图像裁剪" Tag="ImageCrop" SelectedImageName="图像裁剪" />
         <Node Text="图像旋转" ImageName="图像旋转" Tag="ImageRotate" SelectedImageName="图像旋转" />
+        <Node Text="图像分割" ImageName="图像分割" Tag="ImageSplit" SelectedImageName="图像分割" />
       </Nodes>
     </Node>
     <Node Text="检测识别" ImageName="检测识别" Tag="UNKNOWN" SelectedImageName="检测识别">
@@ -18,6 +19,7 @@
         <Node Text="AI检测" ImageName="AI检测" Tag="AIHT" SelectedImageName="AI检测" />
         <Node Text="直线检测" ImageName="检测直线" Tag="LineFind" SelectedImageName="检测直线" />
         <Node Text="圆检测" ImageName="检测圆" Tag="CircleFind" SelectedImageName="检测圆" />
+        <Node Text="二维码识别" ImageName="二维码识别" Tag="QRScan" SelectedImageName="二维码识别" />
       </Nodes>
     </Node>
     <Node Text="测量工具" ImageName="测量工具" Tag="UNKNOWN" SelectedImageName="测量工具">

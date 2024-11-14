@@ -97,6 +97,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button1.Location = new System.Drawing.Point(146, 617);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
@@ -109,17 +110,18 @@
             // nodeSubscription1
             // 
             this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription1.Location = new System.Drawing.Point(58, 31);
+            this.nodeSubscription1.Location = new System.Drawing.Point(6, 31);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(276, 78);
+            this.nodeSubscription1.Size = new System.Drawing.Size(379, 78);
             this.nodeSubscription1.TabIndex = 4;
             // 
             // numericUpDown1
             // 
             this.numericUpDown1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numericUpDown1.Location = new System.Drawing.Point(128, 479);
+            this.numericUpDown1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.numericUpDown1.Location = new System.Drawing.Point(128, 478);
             this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             360,
@@ -127,7 +129,7 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(135, 28);
+            this.numericUpDown1.Size = new System.Drawing.Size(135, 31);
             this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
@@ -135,6 +137,7 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button2.Location = new System.Drawing.Point(141, 194);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button2.Name = "button2";
@@ -148,9 +151,10 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(111, 343);
+            this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(96, 342);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(170, 18);
+            this.label1.Size = new System.Drawing.Size(200, 21);
             this.label1.TabIndex = 0;
             this.label1.Text = "旋转角度(顺时针)：";
             // 
@@ -162,6 +166,8 @@
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "NodeParamFormImageRotate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "旋转图像节点参数";

@@ -1,8 +1,10 @@
 ﻿using Logger;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using YTVisionPro.Forms.ResultView;
 using YTVisionPro.Node._3_Detection.HTAI;
 
 namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
@@ -44,9 +46,14 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        param.AiResult = form.GetAiResult();
-                        param.NonAiResult = form.GetDetectResult();
-                        ResultSummarize(param);
+                        var res1 = form.GetResult1();
+                        var res2 = form.GetResult2();
+                        var res3 = form.GetResult3();
+                        var res4 = form.GetResult4();
+
+                        ResultViewData[] results = new ResultViewData[4] { res1, res2, res3, res4 };
+                        ((NodeResultSummarize)Result).SummaryResult =  ResultSummarize(results, param);
+
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
@@ -73,24 +80,42 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="Exception"></exception>
         /// <exception cref="InvalidOperationException"></exception>
-        private void ResultSummarize(NodeParamSummarize param)
+        private ResultViewData ResultSummarize(ResultViewData[] results, NodeParamSummarize param)
         {
-            // 检查 param 是否为 null
-            if (param == null)
-                throw new ArgumentNullException("无法获取/解析检测结果！");
-            if (param.AiResult == null || param.NonAiResult == null)
-                throw new Exception($"无法获取/解析检测结果！");
-            if (Result is NodeResultSummarize res)
+            List<ResultViewData> total = new List<ResultViewData>();
+            for (int i = 0; i < results.Length; i++)
             {
-                ResultViewData aiResult = new ResultViewData();
-                aiResult.SingleRowDataList = param.AiResult.SingleRowDataList.Concat(param.NonAiResult.SingleRowDataList).ToList();
-                res.SummaryResult = aiResult;
-                Result = res;
+                var res = results[i];
+                var enable = param.Enables[i];
+                if (!enable)
+                    continue;
+                if(res == null)
+                    throw new ArgumentNullException("无法获取/解析检测结果！");
+                total.Add(res);
             }
-            else
+
+            return CombineResults(total);
+        }
+
+        /// <summary>
+        /// 合并多个算法结果
+        /// </summary>
+        /// <param name="results"></param>
+        /// <returns></returns>
+        public static ResultViewData CombineResults(List<ResultViewData> results)
+        {
+            // 使用 SelectMany 将所有 SingleRowDataList 合并为一个列表
+            List<SingleResultViewData> combinedSingleRowDataList = results
+                .SelectMany(r => r.SingleRowDataList)
+                .ToList();
+
+            // 创建新的 ResultViewData 对象
+            ResultViewData combinedResult = new ResultViewData
             {
-                throw new InvalidOperationException("不是有效的参数！");
-            }
+                SingleRowDataList = combinedSingleRowDataList
+            };
+
+            return combinedResult;
         }
     }
 }

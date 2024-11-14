@@ -28,6 +28,8 @@ using YTVisionPro.Node._6_LogicTool.SleepTool;
 using YTVisionPro.Node._7_ResultProcessing.ImageSave;
 using YTVisionPro.Node._7_ResultProcessing.DataShow;
 using YTVisionPro.Node._7_ResultProcessing.ResultSummarize;
+using YTVisionPro.Node._2_ImagePreprocessing.ImageSplit;
+using YTVisionPro.Node._3_Detection.QRScan;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -240,6 +242,12 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.ImageSource:
                     node = new NodeImageSource(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ImageSplit:
+                    node = new NodeImageSplit(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.QRScan:
+                    node = new NodeQRScan(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

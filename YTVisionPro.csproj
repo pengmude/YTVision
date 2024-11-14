@@ -376,12 +376,28 @@
     <Compile Include="Device\Light\LightRsee.cs" />
     <Compile Include="Device\Modbus\ModbusPoll.cs" />
     <Compile Include="Device\Modbus\ModbusParam.cs" />
-    <Compile Include="Node\1-Acquisition\Form1.cs">
+    <Compile Include="Node\2-ImagePreprocessing\ImageSplit\NodeImageSplit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\2-ImagePreprocessing\ImageSplit\NodeParamImageSplit.cs" />
+    <Compile Include="Node\2-ImagePreprocessing\ImageSplit\NodeResultImageSplit.cs" />
+    <Compile Include="Node\2-ImagePreprocessing\ImageSplit\ParamFormImageSplit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Node\1-Acquisition\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Node\2-ImagePreprocessing\ImageSplit\ParamFormImageSplit.Designer.cs">
+      <DependentUpon>ParamFormImageSplit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\3-Detection\QRScan\NodeParamFormQRScan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\QRScan\NodeParamFormQRScan.Designer.cs">
+      <DependentUpon>NodeParamFormQRScan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\3-Detection\QRScan\NodeParamQRScan.cs" />
+    <Compile Include="Node\3-Detection\QRScan\NodeQRScan.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\QRScan\NodeResultQRScan.cs" />
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeParamSignalSendByModbus.cs" />
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeResultSignalSendByModbus.cs" />
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeSignalSendByModbus.cs">
@@ -746,12 +762,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProcessBar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ProcessBar.Designer.cs">
-      <DependentUpon>ProcessBar.cs</DependentUpon>
-    </Compile>
     <Compile Include="Solution.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -849,6 +859,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PLCAdd\SinglePLC.resx">
       <DependentUpon>SinglePLC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\2-ImagePreprocessing\ImageSplit\ParamFormImageSplit.resx">
+      <DependentUpon>ParamFormImageSplit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\3-Detection\QRScan\NodeParamFormQRScan.resx">
+      <DependentUpon>NodeParamFormQRScan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\AIResultSendByModbus\ParamFormSignalSendByModbus.resx">
       <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
@@ -963,9 +979,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ProcessBar.resx">
-      <DependentUpon>ProcessBar.cs</DependentUpon>
-    </EmbeddedResource>
+    <None Include="Node\3-Detection\QRScan\model\detect.caffemodel" />
+    <None Include="Node\3-Detection\QRScan\model\detect.prototxt" />
+    <None Include="Node\3-Detection\QRScan\model\sr.caffemodel" />
+    <None Include="Node\3-Detection\QRScan\model\sr.prototxt" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -1053,4 +1070,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\OpenCvSharp4.runtime.win.4.10.0.20240616\build\net48\OpenCvSharp4.runtime.win.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\OpenCvSharp4.runtime.win.4.10.0.20240616\build\net48\OpenCvSharp4.runtime.win.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>rem 复制 model目录及其所有内容到输出目录
+rem /E：复制所有子目录，即使它们为空。
+rem /Y：覆盖现有文件而不提示。
+rem /I：如果目标不存在，则假定目标必须是目录。
+xcopy "$(ProjectDir)Node\3-Detection\QRScan\model\*" "model\" /E /Y /I</PostBuildEvent>
+  </PropertyGroup>
 </Project>

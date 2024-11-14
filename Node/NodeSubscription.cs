@@ -1,7 +1,10 @@
 ﻿using Logger;
 using Sunny.UI;
 using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace YTVisionPro.Node
@@ -144,7 +147,11 @@ namespace YTVisionPro.Node
 
             foreach (var property in properties) //遍历属性
             {
-                comboBox2.Items.Add(property.Name);
+                var displayNameAttribute = property.GetCustomAttribute<DisplayNameAttribute>();
+                if (displayNameAttribute != null)
+                {
+                    comboBox2.Items.Add(displayNameAttribute.DisplayName);
+                }
             }
             if (comboBox2.Items.Count > 0) comboBox2.SelectedIndex = 0;
         }
@@ -158,14 +165,13 @@ namespace YTVisionPro.Node
             if(comboBox2.Text.IsNullOrEmpty())
                 throw new Exception($"节点无法获取订阅的值!");
 
-            PropertyInfo propertyInfo = _selectedNode.Result.GetType().GetProperty(comboBox2.Text);
+            var propertyInfo = _selectedNode.Result.GetType().GetProperties().ToList().Find(item => item.DisplayName() == comboBox2.Text);
             if (propertyInfo != null && propertyInfo.CanRead && propertyInfo.PropertyType == typeof(T))
             {
                 return (T)propertyInfo.GetValue(_selectedNode.Result);
             }
             else
             {
-                //LogHelper.AddLog(MsgLevel.Fatal, $"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
                 throw new Exception($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
             }
         }

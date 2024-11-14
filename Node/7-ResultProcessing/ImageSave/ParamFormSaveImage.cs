@@ -50,7 +50,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         /// <param name="e"></param>
         private void checkBoxBarCode_CheckedChanged(object sender, EventArgs e)
         {
-            tableLayoutPanelBarCode.Visible = checkBoxBarCode.Checked;
+            panel4.Enabled = checkBoxBarCode.Checked;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         /// <param name="e"></param>
         private void checkBoxSaveWithNG_CheckedChanged(object sender, EventArgs e)
         {
-            tableLayoutPanelNG.Visible = checkBoxSaveWithNG.Checked;
+            panel6.Enabled = checkBoxSaveWithNG.Checked;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         /// <param name="e"></param>
         private void checkBoxDayNight_CheckedChanged(object sender, EventArgs e)
         {
-            tableLayoutPanelDayNight.Visible = checkBoxDayNight.Checked;
+            panel7.Enabled = checkBoxDayNight.Checked;
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         /// <param name="e"></param>
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            tableLayoutPanelCompress.Visible = checkBoxCompress.Checked;
+            panel9.Enabled = checkBoxCompress.Checked;
         }
 
         /// <summary>

@@ -68,15 +68,17 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(44, 62);
+            this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(33, 61);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 18);
+            this.label1.Size = new System.Drawing.Size(147, 21);
             this.label1.TabIndex = 2;
             this.label1.Text = "订阅检测结果:";
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button1.Location = new System.Drawing.Point(217, 158);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(83, 38);
@@ -92,6 +94,7 @@
             this.ClientSize = new System.Drawing.Size(577, 212);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "NodeParamFormDataShow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "显示检测结果";

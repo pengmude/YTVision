@@ -337,8 +337,14 @@ namespace YTVisionPro.Node
         /// <param name="e"></param>
         private void label1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (Active && ParamForm is Form form)
-                form.ShowDialog();
+            try
+            {
+                if (Active && ParamForm is Form form)
+                    form.ShowDialog();
+            }
+            catch (Exception)
+            {
+            }
         }
 
         #endregion 定义节点界面操作-结束

@@ -99,10 +99,10 @@
             // 
             this.labelImgSource.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelImgSource.AutoSize = true;
-            this.labelImgSource.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelImgSource.Location = new System.Drawing.Point(130, 19);
+            this.labelImgSource.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelImgSource.Location = new System.Drawing.Point(131, 20);
             this.labelImgSource.Name = "labelImgSource";
-            this.labelImgSource.Size = new System.Drawing.Size(76, 22);
+            this.labelImgSource.Size = new System.Drawing.Size(73, 21);
             this.labelImgSource.TabIndex = 0;
             this.labelImgSource.Text = "图像源";
             // 
@@ -110,15 +110,15 @@
             // 
             this.comboBoxImgSource.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxImgSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxImgSource.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBoxImgSource.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBoxImgSource.FormattingEnabled = true;
             this.comboBoxImgSource.Items.AddRange(new object[] {
             "本地图像",
             "相机"});
-            this.comboBoxImgSource.Location = new System.Drawing.Point(399, 14);
+            this.comboBoxImgSource.Location = new System.Drawing.Point(399, 16);
             this.comboBoxImgSource.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxImgSource.Name = "comboBoxImgSource";
-            this.comboBoxImgSource.Size = new System.Drawing.Size(211, 32);
+            this.comboBoxImgSource.Size = new System.Drawing.Size(211, 29);
             this.comboBoxImgSource.TabIndex = 1;
             this.comboBoxImgSource.SelectedIndexChanged += new System.EventHandler(this.comboBoxImgSource_SelectedIndexChanged);
             // 
@@ -146,10 +146,11 @@
             this.checkBoxAuto.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBoxAuto.AutoSize = true;
             this.checkBoxAuto.Enabled = false;
-            this.checkBoxAuto.Location = new System.Drawing.Point(425, 134);
+            this.checkBoxAuto.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.checkBoxAuto.Location = new System.Drawing.Point(414, 133);
             this.checkBoxAuto.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBoxAuto.Name = "checkBoxAuto";
-            this.checkBoxAuto.Size = new System.Drawing.Size(160, 22);
+            this.checkBoxAuto.Size = new System.Drawing.Size(183, 25);
             this.checkBoxAuto.TabIndex = 2;
             this.checkBoxAuto.Text = "自动切换下一张";
             this.checkBoxAuto.UseVisualStyleBackColor = true;
@@ -158,20 +159,21 @@
             // 
             this.textBoxImgPath.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanelChoiceImage.SetColumnSpan(this.textBoxImgPath, 2);
-            this.textBoxImgPath.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBoxImgPath.Location = new System.Drawing.Point(80, 15);
+            this.textBoxImgPath.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.textBoxImgPath.Location = new System.Drawing.Point(80, 13);
             this.textBoxImgPath.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBoxImgPath.Name = "textBoxImgPath";
-            this.textBoxImgPath.Size = new System.Drawing.Size(514, 28);
+            this.textBoxImgPath.Size = new System.Drawing.Size(514, 31);
             this.textBoxImgPath.TabIndex = 0;
             // 
             // buttonChoiceImageCatalog
             // 
             this.buttonChoiceImageCatalog.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonChoiceImageCatalog.Location = new System.Drawing.Point(455, 68);
+            this.buttonChoiceImageCatalog.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.buttonChoiceImageCatalog.Location = new System.Drawing.Point(445, 68);
             this.buttonChoiceImageCatalog.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonChoiceImageCatalog.Name = "buttonChoiceImageCatalog";
-            this.buttonChoiceImageCatalog.Size = new System.Drawing.Size(101, 37);
+            this.buttonChoiceImageCatalog.Size = new System.Drawing.Size(120, 37);
             this.buttonChoiceImageCatalog.TabIndex = 1;
             this.buttonChoiceImageCatalog.Text = "选择目录";
             this.buttonChoiceImageCatalog.UseVisualStyleBackColor = true;
@@ -180,10 +182,11 @@
             // buttonChoiceImg
             // 
             this.buttonChoiceImg.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonChoiceImg.Location = new System.Drawing.Point(118, 67);
+            this.buttonChoiceImg.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.buttonChoiceImg.Location = new System.Drawing.Point(108, 67);
             this.buttonChoiceImg.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonChoiceImg.Name = "buttonChoiceImg";
-            this.buttonChoiceImg.Size = new System.Drawing.Size(101, 40);
+            this.buttonChoiceImg.Size = new System.Drawing.Size(121, 40);
             this.buttonChoiceImg.TabIndex = 1;
             this.buttonChoiceImg.Text = "选择图片";
             this.buttonChoiceImg.UseVisualStyleBackColor = true;
@@ -213,6 +216,7 @@
             this.tableLayoutPanelCamera.Controls.Add(this.numericUpDownGain, 1, 5);
             this.tableLayoutPanelCamera.Controls.Add(this.labelStrobe, 0, 6);
             this.tableLayoutPanelCamera.Controls.Add(this.comboBoxStrobe, 1, 6);
+            this.tableLayoutPanelCamera.Font = new System.Drawing.Font("宋体", 10.5F);
             this.tableLayoutPanelCamera.Location = new System.Drawing.Point(3, 256);
             this.tableLayoutPanelCamera.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanelCamera.Name = "tableLayoutPanelCamera";
@@ -224,17 +228,17 @@
             this.tableLayoutPanelCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanelCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
             this.tableLayoutPanelCamera.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 14.28571F));
-            this.tableLayoutPanelCamera.Size = new System.Drawing.Size(674, 483);
+            this.tableLayoutPanelCamera.Size = new System.Drawing.Size(674, 468);
             this.tableLayoutPanelCamera.TabIndex = 2;
             // 
             // labelChoiceCamera
             // 
             this.labelChoiceCamera.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelChoiceCamera.AutoSize = true;
-            this.labelChoiceCamera.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelChoiceCamera.Location = new System.Drawing.Point(119, 23);
+            this.labelChoiceCamera.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelChoiceCamera.Location = new System.Drawing.Point(121, 22);
             this.labelChoiceCamera.Name = "labelChoiceCamera";
-            this.labelChoiceCamera.Size = new System.Drawing.Size(98, 22);
+            this.labelChoiceCamera.Size = new System.Drawing.Size(94, 21);
             this.labelChoiceCamera.TabIndex = 0;
             this.labelChoiceCamera.Text = "选择相机";
             // 
@@ -242,12 +246,12 @@
             // 
             this.comboBoxChoiceCamera.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxChoiceCamera.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxChoiceCamera.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBoxChoiceCamera.Font = new System.Drawing.Font("宋体", 10.5F);
             this.comboBoxChoiceCamera.FormattingEnabled = true;
             this.comboBoxChoiceCamera.Location = new System.Drawing.Point(399, 18);
             this.comboBoxChoiceCamera.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxChoiceCamera.Name = "comboBoxChoiceCamera";
-            this.comboBoxChoiceCamera.Size = new System.Drawing.Size(211, 32);
+            this.comboBoxChoiceCamera.Size = new System.Drawing.Size(211, 29);
             this.comboBoxChoiceCamera.TabIndex = 1;
             this.comboBoxChoiceCamera.SelectedIndexChanged += new System.EventHandler(this.comboBoxChoiceCamera_SelectedIndexChanged);
             // 
@@ -255,10 +259,10 @@
             // 
             this.labelTriggerMode.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelTriggerMode.AutoSize = true;
-            this.labelTriggerMode.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelTriggerMode.Location = new System.Drawing.Point(119, 92);
+            this.labelTriggerMode.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelTriggerMode.Location = new System.Drawing.Point(121, 88);
             this.labelTriggerMode.Name = "labelTriggerMode";
-            this.labelTriggerMode.Size = new System.Drawing.Size(98, 22);
+            this.labelTriggerMode.Size = new System.Drawing.Size(94, 21);
             this.labelTriggerMode.TabIndex = 0;
             this.labelTriggerMode.Text = "触发方式";
             // 
@@ -266,7 +270,7 @@
             // 
             this.comboBoxTriggerMode.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxTriggerMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxTriggerMode.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBoxTriggerMode.Font = new System.Drawing.Font("宋体", 10.5F);
             this.comboBoxTriggerMode.FormattingEnabled = true;
             this.comboBoxTriggerMode.Items.AddRange(new object[] {
             "软触发",
@@ -275,10 +279,10 @@
             "Line2",
             "Line3",
             "Line4"});
-            this.comboBoxTriggerMode.Location = new System.Drawing.Point(399, 87);
+            this.comboBoxTriggerMode.Location = new System.Drawing.Point(399, 84);
             this.comboBoxTriggerMode.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxTriggerMode.Name = "comboBoxTriggerMode";
-            this.comboBoxTriggerMode.Size = new System.Drawing.Size(211, 32);
+            this.comboBoxTriggerMode.Size = new System.Drawing.Size(211, 29);
             this.comboBoxTriggerMode.TabIndex = 1;
             this.comboBoxTriggerMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxTriggerMode_SelectedIndexChanged);
             // 
@@ -286,10 +290,10 @@
             // 
             this.labelHardTrigger.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelHardTrigger.AutoSize = true;
-            this.labelHardTrigger.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelHardTrigger.Location = new System.Drawing.Point(119, 161);
+            this.labelHardTrigger.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelHardTrigger.Location = new System.Drawing.Point(121, 154);
             this.labelHardTrigger.Name = "labelHardTrigger";
-            this.labelHardTrigger.Size = new System.Drawing.Size(98, 22);
+            this.labelHardTrigger.Size = new System.Drawing.Size(94, 21);
             this.labelHardTrigger.TabIndex = 0;
             this.labelHardTrigger.Text = "硬触发沿";
             // 
@@ -298,38 +302,38 @@
             this.comboBoxTriggerEdge.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxTriggerEdge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxTriggerEdge.Enabled = false;
-            this.comboBoxTriggerEdge.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBoxTriggerEdge.Font = new System.Drawing.Font("宋体", 10.5F);
             this.comboBoxTriggerEdge.FormattingEnabled = true;
             this.comboBoxTriggerEdge.Items.AddRange(new object[] {
             "上升沿",
             "下降沿",
             "高电平",
             "低电平"});
-            this.comboBoxTriggerEdge.Location = new System.Drawing.Point(399, 156);
+            this.comboBoxTriggerEdge.Location = new System.Drawing.Point(399, 150);
             this.comboBoxTriggerEdge.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxTriggerEdge.Name = "comboBoxTriggerEdge";
-            this.comboBoxTriggerEdge.Size = new System.Drawing.Size(211, 32);
+            this.comboBoxTriggerEdge.Size = new System.Drawing.Size(211, 29);
             this.comboBoxTriggerEdge.TabIndex = 1;
             // 
             // labelTriggerDelay
             // 
             this.labelTriggerDelay.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelTriggerDelay.AutoSize = true;
-            this.labelTriggerDelay.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelTriggerDelay.Location = new System.Drawing.Point(97, 230);
+            this.labelTriggerDelay.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelTriggerDelay.Location = new System.Drawing.Point(99, 220);
             this.labelTriggerDelay.Name = "labelTriggerDelay";
-            this.labelTriggerDelay.Size = new System.Drawing.Size(142, 22);
+            this.labelTriggerDelay.Size = new System.Drawing.Size(138, 21);
             this.labelTriggerDelay.TabIndex = 0;
             this.labelTriggerDelay.Text = "触发延迟(us)";
             // 
             // numericUpDownTriggerDelay
             // 
             this.numericUpDownTriggerDelay.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numericUpDownTriggerDelay.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.numericUpDownTriggerDelay.Location = new System.Drawing.Point(399, 224);
+            this.numericUpDownTriggerDelay.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.numericUpDownTriggerDelay.Location = new System.Drawing.Point(399, 215);
             this.numericUpDownTriggerDelay.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.numericUpDownTriggerDelay.Name = "numericUpDownTriggerDelay";
-            this.numericUpDownTriggerDelay.Size = new System.Drawing.Size(212, 35);
+            this.numericUpDownTriggerDelay.Size = new System.Drawing.Size(212, 31);
             this.numericUpDownTriggerDelay.TabIndex = 2;
             this.numericUpDownTriggerDelay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -337,21 +341,21 @@
             // 
             this.labelExposureTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelExposureTime.AutoSize = true;
-            this.labelExposureTime.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelExposureTime.Location = new System.Drawing.Point(119, 299);
+            this.labelExposureTime.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelExposureTime.Location = new System.Drawing.Point(120, 286);
             this.labelExposureTime.Name = "labelExposureTime";
-            this.labelExposureTime.Size = new System.Drawing.Size(98, 22);
+            this.labelExposureTime.Size = new System.Drawing.Size(96, 21);
             this.labelExposureTime.TabIndex = 0;
             this.labelExposureTime.Text = "曝光(us)";
             // 
             // numericUpDownExposureTime
             // 
             this.numericUpDownExposureTime.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numericUpDownExposureTime.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.numericUpDownExposureTime.Location = new System.Drawing.Point(399, 293);
+            this.numericUpDownExposureTime.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.numericUpDownExposureTime.Location = new System.Drawing.Point(399, 281);
             this.numericUpDownExposureTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.numericUpDownExposureTime.Name = "numericUpDownExposureTime";
-            this.numericUpDownExposureTime.Size = new System.Drawing.Size(212, 35);
+            this.numericUpDownExposureTime.Size = new System.Drawing.Size(212, 31);
             this.numericUpDownExposureTime.TabIndex = 2;
             this.numericUpDownExposureTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -359,21 +363,21 @@
             // 
             this.labelGain.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelGain.AutoSize = true;
-            this.labelGain.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelGain.Location = new System.Drawing.Point(141, 368);
+            this.labelGain.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelGain.Location = new System.Drawing.Point(142, 352);
             this.labelGain.Name = "labelGain";
-            this.labelGain.Size = new System.Drawing.Size(54, 22);
+            this.labelGain.Size = new System.Drawing.Size(52, 21);
             this.labelGain.TabIndex = 0;
             this.labelGain.Text = "增益";
             // 
             // numericUpDownGain
             // 
             this.numericUpDownGain.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.numericUpDownGain.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.numericUpDownGain.Location = new System.Drawing.Point(399, 362);
+            this.numericUpDownGain.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.numericUpDownGain.Location = new System.Drawing.Point(399, 347);
             this.numericUpDownGain.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.numericUpDownGain.Name = "numericUpDownGain";
-            this.numericUpDownGain.Size = new System.Drawing.Size(212, 35);
+            this.numericUpDownGain.Size = new System.Drawing.Size(212, 31);
             this.numericUpDownGain.TabIndex = 2;
             this.numericUpDownGain.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
@@ -381,10 +385,10 @@
             // 
             this.labelStrobe.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelStrobe.AutoSize = true;
-            this.labelStrobe.Font = new System.Drawing.Font("宋体", 10.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelStrobe.Location = new System.Drawing.Point(86, 437);
+            this.labelStrobe.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.labelStrobe.Location = new System.Drawing.Point(89, 421);
             this.labelStrobe.Name = "labelStrobe";
-            this.labelStrobe.Size = new System.Drawing.Size(164, 22);
+            this.labelStrobe.Size = new System.Drawing.Size(157, 21);
             this.labelStrobe.TabIndex = 0;
             this.labelStrobe.Text = "是否应用于频闪";
             // 
@@ -392,15 +396,15 @@
             // 
             this.comboBoxStrobe.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.comboBoxStrobe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxStrobe.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.comboBoxStrobe.Font = new System.Drawing.Font("宋体", 10.5F);
             this.comboBoxStrobe.FormattingEnabled = true;
             this.comboBoxStrobe.Items.AddRange(new object[] {
             "否",
             "是"});
-            this.comboBoxStrobe.Location = new System.Drawing.Point(399, 432);
+            this.comboBoxStrobe.Location = new System.Drawing.Point(399, 417);
             this.comboBoxStrobe.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBoxStrobe.Name = "comboBoxStrobe";
-            this.comboBoxStrobe.Size = new System.Drawing.Size(211, 32);
+            this.comboBoxStrobe.Size = new System.Drawing.Size(211, 29);
             this.comboBoxStrobe.TabIndex = 1;
             // 
             // tableLayoutPanelSave
@@ -409,7 +413,7 @@
             this.tableLayoutPanelSave.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelSave.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanelSave.Controls.Add(this.button1, 0, 0);
-            this.tableLayoutPanelSave.Location = new System.Drawing.Point(3, 747);
+            this.tableLayoutPanelSave.Location = new System.Drawing.Point(3, 732);
             this.tableLayoutPanelSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanelSave.Name = "tableLayoutPanelSave";
             this.tableLayoutPanelSave.RowCount = 1;
@@ -422,10 +426,11 @@
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanelSave.SetColumnSpan(this.button1, 2);
-            this.button1.Location = new System.Drawing.Point(256, 18);
+            this.button1.Font = new System.Drawing.Font("宋体", 10.5F);
+            this.button1.Location = new System.Drawing.Point(275, 18);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(162, 44);
+            this.button1.Size = new System.Drawing.Size(123, 44);
             this.button1.TabIndex = 2;
             this.button1.Text = "保存";
             this.button1.UseVisualStyleBackColor = true;

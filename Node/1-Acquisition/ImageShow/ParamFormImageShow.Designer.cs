@@ -56,38 +56,40 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(424, 187);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(540, 234);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // nodeSubscription1
             // 
             this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription1.Location = new System.Drawing.Point(163, 6);
+            this.nodeSubscription1.Location = new System.Drawing.Point(207, 14);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(2);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(213, 49);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(245, 49);
+            this.nodeSubscription1.Size = new System.Drawing.Size(314, 49);
             this.nodeSubscription1.TabIndex = 2;
             // 
             // WindowNameList
             // 
             this.WindowNameList.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.WindowNameList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.WindowNameList.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.WindowNameList.FormattingEnabled = true;
-            this.WindowNameList.Location = new System.Drawing.Point(169, 80);
+            this.WindowNameList.Location = new System.Drawing.Point(216, 104);
             this.WindowNameList.Margin = new System.Windows.Forms.Padding(2);
             this.WindowNameList.Name = "WindowNameList";
-            this.WindowNameList.Size = new System.Drawing.Size(233, 26);
+            this.WindowNameList.Size = new System.Drawing.Size(297, 29);
             this.WindowNameList.TabIndex = 1;
             // 
             // WindowNameText
             // 
             this.WindowNameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.WindowNameText.AutoSize = true;
-            this.WindowNameText.Location = new System.Drawing.Point(34, 84);
+            this.WindowNameText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.WindowNameText.Location = new System.Drawing.Point(47, 106);
             this.WindowNameText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.WindowNameText.Name = "WindowNameText";
-            this.WindowNameText.Size = new System.Drawing.Size(80, 18);
+            this.WindowNameText.Size = new System.Drawing.Size(94, 21);
             this.WindowNameText.TabIndex = 0;
             this.WindowNameText.Text = "窗口名称";
             // 
@@ -95,17 +97,19 @@
             // 
             this.subImageText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.subImageText.AutoSize = true;
-            this.subImageText.Location = new System.Drawing.Point(34, 22);
+            this.subImageText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.subImageText.Location = new System.Drawing.Point(47, 28);
             this.subImageText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.subImageText.Name = "subImageText";
-            this.subImageText.Size = new System.Drawing.Size(80, 18);
+            this.subImageText.Size = new System.Drawing.Size(94, 21);
             this.subImageText.TabIndex = 0;
             this.subImageText.Text = "订阅图像";
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.Location = new System.Drawing.Point(235, 138);
+            this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.Location = new System.Drawing.Point(313, 178);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(102, 34);
@@ -118,11 +122,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(424, 187);
+            this.ClientSize = new System.Drawing.Size(540, 234);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("宋体", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "ParamFormImageShow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "图像显示";

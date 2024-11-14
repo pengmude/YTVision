@@ -27,6 +27,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
             InitializeDataTable();
             AddDeleteButton();
             Shown += ParamFormHTAISendSignal_Shown;
+            toolTip1.SetToolTip(label2, "多个NG信号地址请使用英文逗号分隔");
         }
         /// <summary>
         /// 每次显示界面都会刷新设备下拉框

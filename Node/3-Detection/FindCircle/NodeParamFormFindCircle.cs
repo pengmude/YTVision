@@ -26,6 +26,18 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
             comboBox1.SelectedIndex = 0;
             imageROIEditControl1.SetROIType2Draw(Forms.ShapeDraw.ROIType.Circle);
             Shown += NodeParamFormFindLine_Shown;
+            SetToolTips();
+        }
+
+        private void SetToolTips()
+        {
+            toolTip1.SetToolTip(label3, "减少噪点,仅限奇数,影响边缘检测图像");
+            toolTip1.SetToolTip(label1, "越小边缘噪点越多,影响边缘检测图像");
+            toolTip1.SetToolTip(label2, "越大边缘噪点越少,影响边缘检测图像");
+            toolTip1.SetToolTip(label6, "越大则边缘检测变得更加严(检测到的圆更少)");
+            toolTip1.SetToolTip(label5, "检测到的圆更少更加精准(检测到的圆更少)");
+            toolTip1.SetToolTip(label4, "启用时边缘检测更精准但会增加耗时");
+            toolTip1.SetToolTip(label7, "如果设置得太小,多个邻近的圆可能会被错误地检测为一个圆");
         }
 
         private void NodeParamFormFindLine_Shown(object sender, EventArgs e)

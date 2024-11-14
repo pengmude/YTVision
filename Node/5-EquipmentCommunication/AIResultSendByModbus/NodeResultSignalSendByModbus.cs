@@ -1,19 +1,17 @@
 ﻿
+using System.ComponentModel;
+
 namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
 {
     internal class NodeResultSignalSendByModbus : INodeResult
     {
-        /// <summary>
-        /// 是否成功
-        /// </summary>
+        [DisplayName("运行状态")]
         public NodeStatus Status { get; set; }
-        /// <summary>
-        /// 运行耗时
-        /// </summary>
+
+        [DisplayName("节点耗时")]
         public long RunTime { get; set; }
-        /// <summary>
-        /// 运行状态码
-        /// </summary>
+
+        [DisplayName("运行状态码")]
         public NodeRunStatusCode RunStatusCode { get; set; }
     }
 }

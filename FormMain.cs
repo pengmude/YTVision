@@ -230,44 +230,13 @@ namespace YTVisionPro
             }
 
             // 释放方案资源
-            ReleaseSol();
+            Solution.Instance.SolReset();
 
             // 海康相机SDK反序列化
             CameraHik.Finalize();
 
             // 保存主窗口布局
             this.dockPanel1.SaveAsXml(DockPanelConfig);
-        }
-
-        /// <summary>
-        /// 释放方案
-        /// </summary>
-        private void ReleaseSol()
-        {
-            // 释放AI节点的内存
-            foreach (var node in Solution.Instance.Nodes)
-            {
-                if (node is NodeHTAI nodeAi)
-                {
-                    nodeAi.ReleaseAIResult();
-                    ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
-                }
-            }
-
-            // 释放硬件资源（光源、相机、PLC）
-            foreach (var dev in Solution.Instance.AllDevices)
-            {
-                if (dev is ILight light)
-                    light.Disconnect();
-                if (dev is ICamera camera)
-                    camera.Dispose();
-                if (dev is IPlc plc)
-                    plc.Disconnect();
-                if (dev is IModbus modbus)
-                    modbus.Disconnect();
-                if (dev is ITcpDevice tcpDev)
-                    tcpDev.Disconnect();
-            }
         }
 
         /// <summary>
@@ -550,8 +519,6 @@ namespace YTVisionPro
         /// <param name="e"></param>
         private void 新建方案ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 释放旧方案
-            ReleaseSol();
             // 新建方案实际和调用加载空方案一样(传入false，表示不需要打印反序列化的信息因为新建方案实际上就是加载一个空的方案)
             Solution.Instance.Load(Application.StartupPath + "\\空方案.YtSol", false);
             LogHelper.AddLog(MsgLevel.Info, $"新建方案成功！", true);

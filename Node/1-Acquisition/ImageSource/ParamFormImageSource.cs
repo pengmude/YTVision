@@ -28,12 +28,14 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         public INodeParam Params { get; set; }
 
         private string _oldPath;
-        public ParamFormImageSource()
+
+        private NodeBase _node;
+        public ParamFormImageSource(NodeBase node)
         {
             InitializeComponent();
             // 获取最初窗口高度
             _formHeight = this.Height;
-
+            _node = node;
             comboBoxImgSource.SelectedIndex = 0;
         }
 
@@ -208,7 +210,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void Camera_PublishImageEvent(object sender, Bitmap e)
+        public async void CameraHard_PublishImageEvent(object sender, Bitmap e)
         {
             DateTime startTime = DateTime.Now;
             try
@@ -412,9 +414,10 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                 // 如果是硬触发
                 if (_nodeParamImageSource.TriggerSource != TriggerSource.Auto && _nodeParamImageSource.TriggerSource != TriggerSource.SOFT)
                 {
-                    // 硬触发在此订阅图像
-                    _nodeParamImageSource.Camera.PublishImageEvent -= Camera_PublishImageEvent;
-                    _nodeParamImageSource.Camera.PublishImageEvent += Camera_PublishImageEvent;
+                    // 解绑软触发取流事件、绑定硬触发
+                    _nodeParamImageSource.Camera.PublishImageEvent -= ((NodeImageSource)_node).CameraSoft_PublishImageEvent;
+                    _nodeParamImageSource.Camera.PublishImageEvent -= CameraHard_PublishImageEvent;
+                    _nodeParamImageSource.Camera.PublishImageEvent += CameraHard_PublishImageEvent;
                 }
             }
 

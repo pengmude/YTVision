@@ -3,28 +3,28 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Drawing;
 using YTVisionPro.Forms.ResultView;
+using System.ComponentModel;
 
 namespace YTVisionPro.Node._3_Detection.HTAI
 {
     internal class NodeResultHTAI : INodeResult
     {
-        [JsonConverter(typeof(StringEnumConverter))]
+        [DisplayName("运行状态")]
         public NodeStatus Status { get; set; }
+
+        [DisplayName("节点耗时")]
         public long RunTime { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
+        [DisplayName("运行状态码")]
         public NodeRunStatusCode RunStatusCode { get; set; }
-        /// <summary>
-        /// AI检测结果数据
-        /// </summary>
+
+        [DisplayName("算法结果")]
         public ResultViewData ResultData { get; set; }
-        /// <summary>
-        /// 渲染图
-        /// </summary>
+
+        [DisplayName("渲染图")]
         public Bitmap RenderImage { get; set; }
-        /// <summary>
-        /// 检测及结果是否全部是OK的
-        /// </summary>
+
+        [DisplayName("是否全部OK")]
         public bool IsAllOk { get; set; }
     }
 

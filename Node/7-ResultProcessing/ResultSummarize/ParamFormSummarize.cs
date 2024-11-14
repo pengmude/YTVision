@@ -17,50 +17,74 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         {
             nodeSubscription1.Init(node);
             nodeSubscription2.Init(node);
+            nodeSubscription3.Init(node);
+            nodeSubscription4.Init(node);
         }
 
         /// <summary>
-        /// 获取AI结果
+        /// 获取算法结果1
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetAiResult()
+        public ResultViewData GetResult1()
         {
-#if DEBUG
-            ResultViewData result = new ResultViewData();
-            List<SingleResultViewData> singleResultViewDatas = new List<SingleResultViewData>();
-            SingleResultViewData singleResultViewData = new SingleResultViewData();
-            singleResultViewData.NodeName = "a";
-            singleResultViewData.ClassName = "b";
-            singleResultViewData.DetectResult = "c";
-            singleResultViewData.IsOk = true;
-            singleResultViewDatas.Add(singleResultViewData);
-            result.SingleRowDataList = singleResultViewDatas;
-            return result;
-#else
-            return nodeSubscription1.GetValue<ResultViewData>();
-#endif
+            try
+            {
+                return nodeSubscription1.GetValue<ResultViewData>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
-        /// 获取传统算法的结果
+        /// 获取算法结果2
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetDetectResult()
+        public ResultViewData GetResult2()
         {
-#if DEBUG
-            ResultViewData result = new ResultViewData();
-            List<SingleResultViewData> singleResultViewDatas = new List<SingleResultViewData>();
-            SingleResultViewData singleResultViewData = new SingleResultViewData();
-            singleResultViewData.DetectName = "1";
-            singleResultViewData.DetectResult = "2";
-            singleResultViewData.IsOk = false;
-            singleResultViewDatas.Add(singleResultViewData);
-            result.SingleRowDataList = singleResultViewDatas;
-            return result;
-#else
-            return nodeSubscription2.GetValue<ResultViewData>();
-#endif
+            try
+            {
+                return nodeSubscription2.GetValue<ResultViewData>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
+
+        /// <summary>
+        /// 获取算法结果3
+        /// </summary>
+        /// <returns></returns>
+        public ResultViewData GetResult3()
+        {
+            try
+            {
+                return nodeSubscription3.GetValue<ResultViewData>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 获取算法结果1
+        /// </summary>
+        /// <returns></returns>
+        public ResultViewData GetResult4()
+        {
+            try
+            {
+                return nodeSubscription4.GetValue<ResultViewData>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// 点击保存
         /// </summary>
@@ -68,23 +92,20 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-#if DEBUG
             NodeParamSummarize param = new NodeParamSummarize();
-            param.AiResult = GetAiResult();
-            param.NonAiResult = GetDetectResult();
-            param.AiText1 = nodeSubscription1.GetText1();
-            param.AiText2 = nodeSubscription1.GetText2();
-            param.NonAiText1 = nodeSubscription2.GetText1();
-            param.NonAiText2 = nodeSubscription2.GetText2();
+            param.Texts[0] = nodeSubscription1.GetText1();
+            param.Texts[1] = nodeSubscription1.GetText2();
+            param.Texts[2] = nodeSubscription2.GetText1();
+            param.Texts[3] = nodeSubscription2.GetText2();
+            param.Texts[4] = nodeSubscription3.GetText1();
+            param.Texts[5] = nodeSubscription3.GetText2();
+            param.Texts[6] = nodeSubscription4.GetText1();
+            param.Texts[7] = nodeSubscription4.GetText2();
+            param.Enables[0] = checkBox1.Checked;
+            param.Enables[1] = checkBox2.Checked;
+            param.Enables[2] = checkBox3.Checked;
+            param.Enables[3] = checkBox4.Checked;
             Params = param;
-#else
-            NodeParamSummarize param = new NodeParamSummarize();
-            param.AiText1 = nodeSubscription1.GetText1();
-            param.AiText2 = nodeSubscription1.GetText2();
-            param.NonAiText1 = nodeSubscription2.GetText1();
-            param.NonAiText2 = nodeSubscription2.GetText2();
-            Params = new NodeParamSummarize();
-#endif
             Hide();
         }
         /// <summary>
@@ -95,8 +116,38 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         {
             if (Params is NodeParamSummarize param)
             {
-                nodeSubscription1.SetText(param.AiText1, param.AiText2);
-                nodeSubscription2.SetText(param.NonAiText1, param.NonAiText2);
+                nodeSubscription1.SetText(param.Texts[0], param.Texts[1]);
+                nodeSubscription2.SetText(param.Texts[2], param.Texts[3]);
+                nodeSubscription3.SetText(param.Texts[4], param.Texts[5]);
+                nodeSubscription4.SetText(param.Texts[6], param.Texts[7]);
+                checkBox1.Checked = param.Enables[0];
+                checkBox2.Checked = param.Enables[1];
+                checkBox3.Checked = param.Enables[2];
+                checkBox4.Checked = param.Enables[3];
+            }
+        }
+
+        private void checkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if(sender is CheckBox checkBox) 
+            {
+                switch (checkBox.Name)
+                {
+                    case "checkBox1":
+                        nodeSubscription1.Enabled = checkBox.Checked;
+                        break;
+                    case "checkBox2":
+                        nodeSubscription2.Enabled = checkBox.Checked;
+                        break;
+                    case "checkBox3":
+                        nodeSubscription3.Enabled = checkBox.Checked;
+                        break;
+                    case "checkBox4":
+                        nodeSubscription4.Enabled = checkBox.Checked;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

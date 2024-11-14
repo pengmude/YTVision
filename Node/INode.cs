@@ -212,6 +212,14 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 图像源
         /// </summary>
-        ImageSource
+        ImageSource,
+        /// <summary>
+        /// 图像分割
+        /// </summary>
+        ImageSplit,
+        /// <summary>
+        /// 二维码识别
+        /// </summary>
+        QRScan
     }
 }

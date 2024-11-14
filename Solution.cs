@@ -150,6 +150,11 @@ namespace YTVisionPro
         /// </summary>
         public EventHandler<ProcessRunResult> UpdateRunStatus;
 
+        /// <summary>
+        /// 新建方案、加载方案要清除结果窗口数据
+        /// </summary>
+        public EventHandler RemoveResultData;
+
         #endregion
 
         #region 私有方法
@@ -370,6 +375,9 @@ namespace YTVisionPro
             Solution.Instance.AllProcesses.Clear();
             Solution.Instance.NodeCount = 0;
             Solution.Instance.Nodes.Clear();
+
+            // 发送清除结果窗口事件
+            RemoveResultData?.Invoke(this, new EventArgs());
         }
 
         #endregion

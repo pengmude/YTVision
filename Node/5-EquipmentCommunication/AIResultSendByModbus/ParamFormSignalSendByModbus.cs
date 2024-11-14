@@ -28,6 +28,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
             InitializeDataTable();
             AddDeleteButton();
             Shown += ParamFormSignalSendByModbus_Shown;
+            toolTip1.SetToolTip(label2, "多个NG信号地址请使用英文逗号分隔");
         }
 
         /// <summary>

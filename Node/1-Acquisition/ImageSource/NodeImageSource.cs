@@ -36,7 +36,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         public NodeImageSource(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            ParamForm = new ParamFormImageSource();
+            ParamForm = new ParamFormImageSource(this);
             ParamForm.SetNodeBelong(this);
             Result = new NodeResultImageSource();
             ParamFormImageSource.HardTriggerCompleted += ParamFormShot_HardTriggerCompleted;
@@ -71,7 +71,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void Camera_PublishImageEvent(object sender, Bitmap e)
+        public async void CameraSoft_PublishImageEvent(object sender, Bitmap e)
         {
             ((NodeResultImageSource)Result).Bitmap = e;
             _autoResetEvent.Set();
@@ -158,8 +158,10 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
 
                             if (param.TriggerSource != TriggerSource.SOFT) { throw new Exception("只有软触发拍照才能手动点击运行！"); }
 
-                            param.Camera.PublishImageEvent -= Camera_PublishImageEvent;
-                            param.Camera.PublishImageEvent += Camera_PublishImageEvent;
+                            // 解绑硬触发取流事件、绑定软触发
+                            param.Camera.PublishImageEvent -= ((ParamFormImageSource)ParamForm).CameraHard_PublishImageEvent;
+                            param.Camera.PublishImageEvent -= CameraSoft_PublishImageEvent;
+                            param.Camera.PublishImageEvent += CameraSoft_PublishImageEvent;
 
                             // 频闪才需要每次设置相机参数，不频闪的话在参数界面设置一次即可
                             if (param.IsStrobing)
@@ -173,7 +175,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                             }
 
                             param.Camera.GrabOne(); // 软触发
-                            bool result = _autoResetEvent.WaitOne(1000);
+                            bool result = _autoResetEvent.WaitOne(1000);// 软触发1s内取不到图也得返回
                             if (!result) { throw new Exception("软触发取图超时！"); }
 
                             await Task.Run(() =>

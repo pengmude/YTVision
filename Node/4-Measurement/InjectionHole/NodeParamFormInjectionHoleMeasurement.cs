@@ -24,6 +24,15 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
             this.node = nodeBase;
             imageROIEditControl1.SetROIType2Draw(Forms.ShapeDraw.ROIType.Circle);
             Shown += NodeParamFormInjectionHoleMeasurement_Shown;
+            SetToolTips();
+        }
+
+        private void SetToolTips()
+        {
+            toolTip1.SetToolTip(label3, "减少噪点,仅限奇数,影响边缘检测图像");
+            toolTip1.SetToolTip(label1, "越小边缘噪点越多,影响边缘检测图像");
+            toolTip1.SetToolTip(label2, "越大边缘噪点越少,影响边缘检测图像");
+            toolTip1.SetToolTip(label4, "启用时边缘检测更精准但耗时");
         }
 
         private void NodeParamFormInjectionHoleMeasurement_Shown(object sender, EventArgs e)

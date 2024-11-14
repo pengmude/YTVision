@@ -21,6 +21,12 @@ namespace YTVisionPro.Forms.ResultView
             this.tabControl1.TabPages.Clear();
             NodeDataShow.DataShow += NodeDataShow_DataShow; 
             FrmNodeRename.RenameChangeEvent += RenameChangeEvent;
+            Solution.Instance.RemoveResultData += RemoveResultData;
+        }
+
+        private void RemoveResultData(object sender, EventArgs e)
+        {
+            tabControl1.Controls.Clear();
         }
 
         private void RenameChangeEvent(object sender, RenameResult e)

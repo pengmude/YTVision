@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NodeParamFormInjectionHoleMeasurement));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.pictureBoxCanny = new System.Windows.Forms.PictureBox();
@@ -58,6 +59,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCanny)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -119,10 +121,11 @@
             // textBoxBlurSize
             // 
             this.textBoxBlurSize.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxBlurSize.Location = new System.Drawing.Point(652, 121);
+            this.textBoxBlurSize.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBoxBlurSize.Location = new System.Drawing.Point(652, 119);
             this.textBoxBlurSize.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxBlurSize.Name = "textBoxBlurSize";
-            this.textBoxBlurSize.Size = new System.Drawing.Size(100, 28);
+            this.textBoxBlurSize.Size = new System.Drawing.Size(100, 31);
             this.textBoxBlurSize.TabIndex = 1;
             this.textBoxBlurSize.Text = "5";
             this.textBoxBlurSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -130,10 +133,11 @@
             // textBoxOKMaxR
             // 
             this.textBoxOKMaxR.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxOKMaxR.Location = new System.Drawing.Point(288, 322);
+            this.textBoxOKMaxR.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBoxOKMaxR.Location = new System.Drawing.Point(288, 320);
             this.textBoxOKMaxR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxOKMaxR.Name = "textBoxOKMaxR";
-            this.textBoxOKMaxR.Size = new System.Drawing.Size(126, 28);
+            this.textBoxOKMaxR.Size = new System.Drawing.Size(126, 31);
             this.textBoxOKMaxR.TabIndex = 6;
             this.textBoxOKMaxR.Text = "110";
             this.textBoxOKMaxR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -153,6 +157,7 @@
             // button3
             // 
             this.button3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button3.Location = new System.Drawing.Point(293, 124);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
@@ -166,10 +171,11 @@
             // 
             this.checkBoxMoreParams.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBoxMoreParams.AutoSize = true;
-            this.checkBoxMoreParams.Location = new System.Drawing.Point(64, 133);
+            this.checkBoxMoreParams.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkBoxMoreParams.Location = new System.Drawing.Point(57, 131);
             this.checkBoxMoreParams.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxMoreParams.Name = "checkBoxMoreParams";
-            this.checkBoxMoreParams.Size = new System.Drawing.Size(106, 22);
+            this.checkBoxMoreParams.Size = new System.Drawing.Size(120, 25);
             this.checkBoxMoreParams.TabIndex = 5;
             this.checkBoxMoreParams.Text = "更多参数";
             this.checkBoxMoreParams.UseVisualStyleBackColor = true;
@@ -178,6 +184,7 @@
             // buttonSave
             // 
             this.buttonSave.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonSave.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonSave.Location = new System.Drawing.Point(316, 412);
             this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonSave.Name = "buttonSave";
@@ -193,10 +200,11 @@
             this.checkBoxOKEnable.AutoSize = true;
             this.checkBoxOKEnable.Checked = true;
             this.checkBoxOKEnable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxOKEnable.Location = new System.Drawing.Point(316, 229);
+            this.checkBoxOKEnable.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkBoxOKEnable.Location = new System.Drawing.Point(312, 227);
             this.checkBoxOKEnable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxOKEnable.Name = "checkBoxOKEnable";
-            this.checkBoxOKEnable.Size = new System.Drawing.Size(70, 22);
+            this.checkBoxOKEnable.Size = new System.Drawing.Size(78, 25);
             this.checkBoxOKEnable.TabIndex = 5;
             this.checkBoxOKEnable.Text = "启用";
             this.checkBoxOKEnable.UseVisualStyleBackColor = true;
@@ -206,15 +214,17 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(45, 216);
+            this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.Location = new System.Drawing.Point(192, 214);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(377, 18);
+            this.label1.Size = new System.Drawing.Size(84, 21);
             this.label1.TabIndex = 0;
-            this.label1.Text = "弱边缘(越小边缘噪点越多,影响边缘检测图像)";
+            this.label1.Text = "弱边缘?";
             // 
             // buttonRun
             // 
             this.buttonRun.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonRun.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.buttonRun.Location = new System.Drawing.Point(82, 412);
             this.buttonRun.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonRun.Name = "buttonRun";
@@ -231,6 +241,7 @@
             this.checkBoxUseL2.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxUseL2.Checked = true;
             this.checkBoxUseL2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxUseL2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.checkBoxUseL2.Location = new System.Drawing.Point(691, 395);
             this.checkBoxUseL2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxUseL2.Name = "checkBoxUseL2";
@@ -242,11 +253,12 @@
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(32, 126);
+            this.label3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(181, 124);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(404, 18);
+            this.label3.Size = new System.Drawing.Size(105, 21);
             this.label3.TabIndex = 0;
-            this.label3.Text = "高斯模糊(减少噪点,仅限奇数,影响边缘检测图像)";
+            this.label3.Text = "高斯模糊?";
             // 
             // tableLayoutPanel3
             // 
@@ -278,30 +290,32 @@
             // 
             this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel3.SetColumnSpan(this.nodeSubscription1, 2);
-            this.nodeSubscription1.Location = new System.Drawing.Point(27, 18);
+            this.nodeSubscription1.Location = new System.Drawing.Point(18, 18);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(415, 60);
+            this.nodeSubscription1.Size = new System.Drawing.Size(433, 60);
             this.nodeSubscription1.TabIndex = 3;
             // 
             // label11
             // 
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(32, 231);
+            this.label11.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label11.Location = new System.Drawing.Point(17, 229);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(170, 18);
+            this.label11.Size = new System.Drawing.Size(200, 21);
             this.label11.TabIndex = 0;
             this.label11.Text = "圆半径上下限OK判定";
             // 
             // textBoxOKMinR
             // 
             this.textBoxOKMinR.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxOKMinR.Location = new System.Drawing.Point(54, 322);
+            this.textBoxOKMinR.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBoxOKMinR.Location = new System.Drawing.Point(54, 320);
             this.textBoxOKMinR.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxOKMinR.Name = "textBoxOKMinR";
-            this.textBoxOKMinR.Size = new System.Drawing.Size(126, 28);
+            this.textBoxOKMinR.Size = new System.Drawing.Size(126, 31);
             this.textBoxOKMinR.TabIndex = 6;
             this.textBoxOKMinR.Text = "70";
             this.textBoxOKMinR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -338,15 +352,17 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(45, 306);
+            this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label2.Location = new System.Drawing.Point(192, 304);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(377, 18);
+            this.label2.Size = new System.Drawing.Size(84, 21);
             this.label2.TabIndex = 0;
-            this.label2.Text = "强边缘(越大边缘噪点越少,影响边缘检测图像)";
+            this.label2.Text = "强边缘?";
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button1.Location = new System.Drawing.Point(667, 25);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
@@ -360,19 +376,21 @@
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 397);
+            this.label4.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.Location = new System.Drawing.Point(138, 395);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(422, 18);
+            this.label4.Size = new System.Drawing.Size(191, 21);
             this.label4.TabIndex = 0;
-            this.label4.Text = "是否使用 L2 范数（启用时边缘检测更精准但耗时）";
+            this.label4.Text = "是否使用 L2 范数?";
             // 
             // textBoxThreshold1
             // 
             this.textBoxThreshold1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxThreshold1.Location = new System.Drawing.Point(652, 211);
+            this.textBoxThreshold1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBoxThreshold1.Location = new System.Drawing.Point(652, 209);
             this.textBoxThreshold1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxThreshold1.Name = "textBoxThreshold1";
-            this.textBoxThreshold1.Size = new System.Drawing.Size(100, 28);
+            this.textBoxThreshold1.Size = new System.Drawing.Size(100, 31);
             this.textBoxThreshold1.TabIndex = 1;
             this.textBoxThreshold1.Text = "50";
             this.textBoxThreshold1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -380,10 +398,11 @@
             // textBoxThreshold2
             // 
             this.textBoxThreshold2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBoxThreshold2.Location = new System.Drawing.Point(652, 301);
+            this.textBoxThreshold2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.textBoxThreshold2.Location = new System.Drawing.Point(652, 299);
             this.textBoxThreshold2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxThreshold2.Name = "textBoxThreshold2";
-            this.textBoxThreshold2.Size = new System.Drawing.Size(100, 28);
+            this.textBoxThreshold2.Size = new System.Drawing.Size(100, 31);
             this.textBoxThreshold2.TabIndex = 1;
             this.textBoxThreshold2.Text = "150";
             this.textBoxThreshold2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -392,9 +411,10 @@
             // 
             this.label5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(149, 36);
+            this.label5.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.Location = new System.Drawing.Point(134, 34);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(170, 18);
+            this.label5.Size = new System.Drawing.Size(199, 21);
             this.label5.TabIndex = 0;
             this.label5.Text = "参数调节最佳效果图";
             // 
@@ -443,6 +463,13 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "更多参数";
             this.groupBox3.Visible = false;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutomaticDelay = 200;
+            this.toolTip1.AutoPopDelay = 3000;
+            this.toolTip1.InitialDelay = 200;
+            this.toolTip1.ReshowDelay = 40;
             // 
             // NodeParamFormInjectionHoleMeasurement
             // 
@@ -504,5 +531,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
