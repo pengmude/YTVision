@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
+namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
 {
-    internal class NodeParamHTAISendSignal : INodeParam
+    internal class NodeParamSendResultByPLC : INodeParam
     {
         public List<SignalRowData> Data;
         // PLC名称
@@ -17,9 +17,14 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
         //NG信号的PLC地址
         public string NGPLC;
 
+        // 传统算法NG信号的PLC地址
+        public string AlgorithmNG;
+
         //保存订阅节点
         public string Text1;
         public string Text2;
+        public string Text3;
+        public string Text4;
         /// <summary>
         /// 信号保持时间
         /// </summary>
@@ -31,6 +36,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
         public string DevName;
         public string NodeName;
         public string ClassName;
+        public string DetectName;
         public int SignalLevel;
         public string SignalAddress;
     }
@@ -44,5 +50,21 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
     public class NodeInfos
     {
         public NodeInfo[] NodeInfo { get; set; }
+    }
+
+    internal enum SiganlType
+    {
+        /// <summary>
+        /// OK信号
+        /// </summary>
+        OK,
+        /// <summary>
+        /// AI NG信号
+        /// </summary>
+        AING,
+        /// <summary>
+        /// 非AI NG信号
+        /// </summary>
+        NonAING
     }
 }

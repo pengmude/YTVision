@@ -64,7 +64,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                         ((NodeResultFindCircle)Result).OutputImage = image;
                         ((NodeResultFindCircle)Result).Result = new ResultViewData();
                         ((NodeResultFindCircle)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
-                                                                    ("", "", NodeName, res, res == "OK" ? true : false));
+                                                                    ("", "", $"{ID}.{NodeName}", res, res == "OK" ? true : false));
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);

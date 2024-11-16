@@ -96,8 +96,9 @@ namespace YTVisionPro.Forms.ShapeDraw
 
         public Rectangle GetImageROIRect()
         {
+            // 没绘制ROI默认返回全图区域
             if(roiManager.ROIs.Count == 0)
-                throw new Exception("ROI为空！");
+                return new Rectangle(0, 0, pictureBox1.Image.Width, pictureBox1.Image.Height);
             return roiManager.ROIs[0].GetROIRect(pictureBox1);
         }
 

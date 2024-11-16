@@ -387,6 +387,23 @@
     <Compile Include="Node\2-ImagePreprocessing\ImageSplit\ParamFormImageSplit.Designer.cs">
       <DependentUpon>ParamFormImageSplit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\3-Detection\MatchTemplate\TemplateCreate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\MatchTemplate\TemplateCreate.Designer.cs">
+      <DependentUpon>TemplateCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\3-Detection\MatchTemplate\NodeParamFormMatchTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\MatchTemplate\NodeParamFormMatchTemplate.Designer.cs">
+      <DependentUpon>NodeParamFormMatchTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\3-Detection\MatchTemplate\NodeParamMatchTemplate.cs" />
+    <Compile Include="Node\3-Detection\MatchTemplate\NodeMatchTemplate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\3-Detection\MatchTemplate\NodeResultMatchTemplate.cs" />
     <Compile Include="Node\3-Detection\QRScan\NodeParamFormQRScan.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -398,6 +415,17 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Node\3-Detection\QRScan\NodeResultQRScan.cs" />
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeInjectionHole.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHole.Designer.cs">
+      <DependentUpon>NodeParamFormInjectionHole.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamInjectionHole.cs" />
+    <Compile Include="Node\4-Measurement\InjectionHole\NodeResultInjectionHole.cs" />
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeParamSignalSendByModbus.cs" />
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeResultSignalSendByModbus.cs" />
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\NodeSignalSendByModbus.cs">
@@ -408,6 +436,29 @@
     </Compile>
     <Compile Include="Node\5-EquipmentCommunication\AIResultSendByModbus\ParamFormSignalSendByModbus.Designer.cs">
       <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\SendResultByPLC\NodeSendResultByPLC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\SendResultByPLC\NodeInfo.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\SendResultByPLC\NodeParamSendResultByPLC.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\SendResultByPLC\NodeResultSendResultByPLC.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\SendResultByPLC\ParamFormSendResultByPLC.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\SendResultByPLC\ParamFormSendResultByPLC.Designer.cs">
+      <DependentUpon>ParamFormSendResultByPLC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodeParamPlcWrite.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodePlcWrite.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodeResultPlcWrite.cs" />
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.Designer.cs">
+      <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\5-EquipmentCommunication\TcpClient\NodeTCPClient.cs">
       <SubType>UserControl</SubType>
@@ -511,23 +562,6 @@
       <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\3-Detection\FindLine\NodeResultFindLine.cs" />
-    <Compile Include="Node\4-Measurement\InjectionHole\FormCannyDemo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\4-Measurement\InjectionHole\FormCannyDemo.Designer.cs">
-      <DependentUpon>FormCannyDemo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Node\4-Measurement\InjectionHole\NodeInjectionHoleMeasurement.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHoleMeasurement.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHoleMeasurement.Designer.cs">
-      <DependentUpon>NodeParamFormInjectionHoleMeasurement.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Node\4-Measurement\InjectionHole\NodeParamInjectionHoleMeasurement.cs" />
-    <Compile Include="Node\4-Measurement\InjectionHole\NodeResultInjectionHoleMeasurement.cs" />
     <Compile Include="Node\3-Detection\HTAI\BitmapConvert.cs" />
     <Compile Include="Node\3-Detection\HTAI\HtAiDemo.cs" />
     <Compile Include="Node\3-Detection\HTAI\NGTpyePara.cs" />
@@ -663,18 +697,6 @@
     <Compile Include="Node\NodeSubscription.Designer.cs">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </Compile>
-    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeHTAISendSignal.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeInfo.cs" />
-    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeParamHTAISendSignal.cs" />
-    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\NodeResultHTAISendSignal.cs" />
-    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\ParamFormHTAISendSignal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\5-EquipmentCommunication\AIResultSendByPLC\ParamFormHTAISendSignal.Designer.cs">
-      <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
-    </Compile>
     <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\NodeParamWaitSoftTrigger.cs" />
     <Compile Include="Node\5-EquipmentCommunication\PLCSoftTrigger\NodeWaitSoftTrigger.cs">
       <SubType>UserControl</SubType>
@@ -696,17 +718,6 @@
     </Compile>
     <Compile Include="Node\5-EquipmentCommunication\PanasonicRead\ParamFormPlcRead.Designer.cs">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodeParamPlcWrite.cs" />
-    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodePlcWrite.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\NodeResultPlcWrite.cs" />
-    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.Designer.cs">
-      <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </Compile>
     <Compile Include="Node\7-ResultProcessing\DataShow\NodeDataShow.cs">
       <SubType>UserControl</SubType>
@@ -863,11 +874,26 @@
     <EmbeddedResource Include="Node\2-ImagePreprocessing\ImageSplit\ParamFormImageSplit.resx">
       <DependentUpon>ParamFormImageSplit.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\3-Detection\MatchTemplate\TemplateCreate.resx">
+      <DependentUpon>TemplateCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\3-Detection\MatchTemplate\NodeParamFormMatchTemplate.resx">
+      <DependentUpon>NodeParamFormMatchTemplate.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\3-Detection\QRScan\NodeParamFormQRScan.resx">
       <DependentUpon>NodeParamFormQRScan.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHole.resx">
+      <DependentUpon>NodeParamFormInjectionHole.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\AIResultSendByModbus\ParamFormSignalSendByModbus.resx">
       <DependentUpon>ParamFormSignalSendByModbus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\SendResultByPLC\ParamFormSendResultByPLC.resx">
+      <DependentUpon>ParamFormSendResultByPLC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.resx">
+      <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\TcpClient\ParamFormTCPClient.resx">
       <DependentUpon>ParamFormTCPClient.cs</DependentUpon>
@@ -895,12 +921,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\3-Detection\FindLine\NodeParamFormFindLine.resx">
       <DependentUpon>NodeParamFormFindLine.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\4-Measurement\InjectionHole\FormCannyDemo.resx">
-      <DependentUpon>FormCannyDemo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\4-Measurement\InjectionHole\NodeParamFormInjectionHoleMeasurement.resx">
-      <DependentUpon>NodeParamFormInjectionHoleMeasurement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\3-Detection\HTAI\ParamFormHTAI.resx">
       <DependentUpon>ParamFormHTAI.cs</DependentUpon>
@@ -950,17 +970,11 @@
     <EmbeddedResource Include="Node\NodeSubscription.resx">
       <DependentUpon>NodeSubscription.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Node\5-EquipmentCommunication\AIResultSendByPLC\ParamFormHTAISendSignal.resx">
-      <DependentUpon>ParamFormHTAISendSignal.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\PLCSoftTrigger\ParamFormWaitSoftTrigger.resx">
       <DependentUpon>ParamFormWaitSoftTrigger.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\PanasonicRead\ParamFormPlcRead.resx">
       <DependentUpon>ParamFormPlcRead.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.resx">
-      <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\7-ResultProcessing\DataShow\NodeParamFormDataShow.resx">
       <DependentUpon>NodeParamFormDataShow.cs</DependentUpon>

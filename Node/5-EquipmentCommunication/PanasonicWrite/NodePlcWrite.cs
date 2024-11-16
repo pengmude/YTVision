@@ -19,6 +19,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
         public NodePlcWrite(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
             ParamForm = new ParamFormPlcWrite();
+            ParamForm.SetNodeBelong(this);
             Result = new NodeResultPlcWrite();
         }
 
@@ -51,6 +52,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
                 if (!param.Plc.IsConnect)
                     throw new Exception("设备尚未连接！");
 
+                if (param.IsSubscribed)
+                    param.Value = ((ParamFormPlcWrite)ParamForm).GetSubResult();
 
                 OperateResult res = new OperateResult();
                 do

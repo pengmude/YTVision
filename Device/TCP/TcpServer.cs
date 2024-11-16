@@ -49,7 +49,7 @@ namespace YTVisionPro.Device.TCP
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                LogHelper.AddLog(MsgLevel.Exception, $"{ex.Message}", true);
             }
         }
 

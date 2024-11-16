@@ -4,7 +4,6 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace YTVisionPro.Node
@@ -184,6 +183,12 @@ namespace YTVisionPro.Node
         public string GetText2()
         {
             return comboBox2.Text;
+        }
+
+        public void HideText2()
+        {
+            label2.Visible = false;
+            comboBox2.Visible = false;
         }
 
         //反序列化使用

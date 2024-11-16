@@ -9,52 +9,56 @@ using System.Linq;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 using Point = OpenCvSharp.Point;
+using Sunny.UI;
+using Size = OpenCvSharp.Size;
+using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._4_Measurement.InjectionHole
+namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
 {
-    internal partial class NodeParamFormInjectionHoleMeasurement : Form, INodeParamForm
+    internal partial class NodeParamFormInjectionHole : Form, INodeParamForm
     {
         private Process process;//所属流程
         private NodeBase node;//所属节点
+        private Mat srcMat = new Mat(); //原图
 
-        public NodeParamFormInjectionHoleMeasurement(Process process, NodeBase nodeBase)
+        public NodeParamFormInjectionHole(Process process, NodeBase nodeBase)
         {
             InitializeComponent();
             this.process = process;
             this.node = nodeBase;
             imageROIEditControl1.SetROIType2Draw(Forms.ShapeDraw.ROIType.Circle);
-            Shown += NodeParamFormInjectionHoleMeasurement_Shown;
-            SetToolTips();
+            Shown += OnShown;
         }
 
-        private void SetToolTips()
+        /// <summary>
+        /// 窗口显示时执行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnShown(object sender, EventArgs e)
         {
-            toolTip1.SetToolTip(label3, "减少噪点,仅限奇数,影响边缘检测图像");
-            toolTip1.SetToolTip(label1, "越小边缘噪点越多,影响边缘检测图像");
-            toolTip1.SetToolTip(label2, "越大边缘噪点越少,影响边缘检测图像");
-            toolTip1.SetToolTip(label4, "启用时边缘检测更精准但耗时");
+            UpdateImage();
         }
-
-        private void NodeParamFormInjectionHoleMeasurement_Shown(object sender, EventArgs e)
-        {
-            UpdataImage();
-        }
-
         public INodeParam Params { get; set; }
 
+        /// <summary>
+        /// 节点反序列化需要执行
+        /// </summary>
         public void SetParam2Form()
         {
-            if (Params is NodeParamInjectionHoleMeasurement param)
+            if (Params is NodeParamInjectionHole param)
             {
                 nodeSubscription1.SetText(param.Text1, param.Text2);
+                nodeSubscription2.SetText(param.Text3, param.Text4);
+                checkBox1.Checked = param.UseTemplate;
                 checkBoxMoreParams.Checked = param.MoreParamsEnable;
-                checkBoxOKEnable.Checked = param.OKEnable;
                 textBoxOKMinR.Text = param.OKMinR.ToString();
                 textBoxOKMaxR.Text = param.OKMaxR.ToString();
                 textBoxBlurSize.Text = param.GaussianBlur.ToString();
                 textBoxThreshold1.Text = param.Threshold1.ToString();
                 textBoxThreshold2.Text = param.Threshold2.ToString();
                 checkBoxUseL2.Checked = param.IsOpenL2;
+
                 //还原ROI
                 imageROIEditControl1.SetROI(param.ROI);
 
@@ -65,46 +69,76 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
             }
         }
 
+        /// <summary>
+        /// 初始化订阅节点
+        /// </summary>
+        /// <param name="node"></param>
         public void SetNodeBelong(NodeBase node)
         {
             nodeSubscription1.Init(node);
+            nodeSubscription2.Init(node);
         }
 
+        /// <summary>
+        /// 点击更多参数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void checkBoxMoreParams_CheckedChanged(object sender, EventArgs e)
         {
-            groupBox3.Visible = checkBoxMoreParams.Checked;
+            textBoxBlurSize.Enabled = checkBoxMoreParams.Checked;
+            textBoxThreshold1.Enabled = checkBoxMoreParams.Checked;
+            textBoxThreshold2.Enabled = checkBoxMoreParams.Checked;
+            checkBoxUseL2.Enabled = checkBoxMoreParams.Checked;
         }
 
+        /// <summary>
+        /// 点击刷新订阅图像
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void button3_Click(object sender, EventArgs e)
         {
             await process.RunForUpdateImages(node);
-            UpdataImage();
+            UpdateImage();
         }
 
-        public void UpdataImage()
+        /// <summary>
+        /// 刷新图像
+        /// </summary>
+        public void UpdateImage()
         {
             Bitmap bitmap = null;
             try
             {
                 bitmap = nodeSubscription1.GetValue<Bitmap>();
+                srcMat =  BitmapConverter.ToMat(bitmap);
+
+                // 将原始图像转换为灰度图像 (CV_8UC1)
+                Cv2.CvtColor(srcMat, srcMat, ColorConversionCodes.BGR2GRAY);
             }
             catch (Exception)
             {
                 bitmap = null;
             }
+
             imageROIEditControl1.SetImage(bitmap);
         }
 
+        /// <summary>
+        /// 点击执行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonRun_Click(object sender, EventArgs e)
         {
             try
             {
-                DetectCircle();
+                DetectInjectionHole();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"检测异常：{ex.Message}");
-                LogHelper.AddLog(MsgLevel.Exception, $"节点({node.ID}.{node.Name})检测异常，原因：{ex.Message}", true);
+                MessageBox.Show($"注液孔检测算法执行失败,原因:{ex.Message}");
             }
         }
 
@@ -122,19 +156,21 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
         {
             try
             {
-                NodeParamInjectionHoleMeasurement nodeParamInjectionHoleMeasurement = new NodeParamInjectionHoleMeasurement();
-                nodeParamInjectionHoleMeasurement.Text1 = nodeSubscription1.GetText1();
-                nodeParamInjectionHoleMeasurement.Text2 = nodeSubscription1.GetText2();
-                nodeParamInjectionHoleMeasurement.MoreParamsEnable = checkBoxMoreParams.Checked;
-                nodeParamInjectionHoleMeasurement.OKEnable = checkBoxOKEnable.Checked;
-                nodeParamInjectionHoleMeasurement.OKMinR = double.Parse(textBoxOKMinR.Text);
-                nodeParamInjectionHoleMeasurement.OKMaxR = double.Parse(textBoxOKMaxR.Text);
-                nodeParamInjectionHoleMeasurement.GaussianBlur = int.Parse(textBoxBlurSize.Text);
-                nodeParamInjectionHoleMeasurement.Threshold1 = double.Parse(textBoxThreshold1.Text);
-                nodeParamInjectionHoleMeasurement.Threshold2 = double.Parse(textBoxThreshold2.Text);
-                nodeParamInjectionHoleMeasurement.IsOpenL2 = checkBoxUseL2.Checked;
-                nodeParamInjectionHoleMeasurement.ROI = imageROIEditControl1.GetROI();
-                Params = nodeParamInjectionHoleMeasurement;
+                NodeParamInjectionHole param = new NodeParamInjectionHole();
+                param.Text1 = nodeSubscription1.GetText1();
+                param.Text2 = nodeSubscription1.GetText2();
+                param.Text3 = nodeSubscription2.GetText1();
+                param.Text4 = nodeSubscription2.GetText2();
+                param.UseTemplate = checkBox1.Checked;
+                param.MoreParamsEnable = checkBoxMoreParams.Checked;
+                param.OKMinR = double.Parse(textBoxOKMinR.Text);
+                param.OKMaxR = double.Parse(textBoxOKMaxR.Text);
+                param.GaussianBlur = int.Parse(textBoxBlurSize.Text);
+                param.Threshold1 = double.Parse(textBoxThreshold1.Text);
+                param.Threshold2 = double.Parse(textBoxThreshold2.Text);
+                param.IsOpenL2 = checkBoxUseL2.Checked;
+                param.ROI = imageROIEditControl1.GetROI();
+                Params = param;
             }
             catch (Exception)
             {
@@ -144,104 +180,110 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
             return true;
         }
 
-        /// <summary>
-        /// 检测圆
-        /// </summary>
-        public (CircleSegment, Bitmap) DetectCircle()
+        public Rect UpdateLocation()
         {
-            CircleSegment Circle = new CircleSegment();
             try
             {
-                // 更新输入图像和获取ROI图像
-                pictureBoxCanny.Image = null;
-                pictureBoxResult1.Image = null;
-                UpdataImage();
-                Bitmap bitmap = imageROIEditControl1.GetROIImages();
+                return nodeSubscription2.GetValue<Rect>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-                // 图像格式转换
-                Mat image = new Mat();
-                if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
+        public static Point GetCenterPoint(Rect rect)
+        {
+            int centerX = rect.X + rect.Width / 2;
+            int centerY = rect.Y + rect.Height / 2;
+            return new Point(centerX, centerY);
+        }
+
+        public (CircleSegment, Bitmap) DetectInjectionHole()
+        {
+            CircleSegment circle = new CircleSegment();
+            try
+            {
+                UpdateImage();
+
+                // 是否启用模版定位注液孔位置
+                Point center;
+                if (checkBox1.Checked)
                 {
-                    image = BitmapConverter.ToMat(bitmap).CvtColor(ColorConversionCodes.BGR2GRAY);
+                    var rect = UpdateLocation();
+
+                    center = GetCenterPoint(rect);
+
                 }
                 else
                 {
-                    image = BitmapConverter.ToMat(bitmap).CvtColor(ColorConversionCodes.BayerBG2GRAY);
+                    var cen = imageROIEditControl1.GetImageROIRect().Center();
+                    center = new Point(cen.X, cen.Y);
                 }
 
-                if (image.Channels() != 1)
-                {
-                    LogHelper.AddLog(MsgLevel.Exception, $"图像非单通道！", true);
-                    return (Circle, null);
-                }
+                // 裁剪待检测区域
+                int radius3 = 300;
+                Rect roi = new Rect(
+                    Math.Max(0, center.X - radius3),     // 确保不超出图像左边界
+                    Math.Max(0, center.Y - radius3),     // 确保不超出图像上边界
+                    radius3 * 2,                         // 宽度
+                    radius3 * 2                          // 高度
+                );
+                Mat croppedImage = new Mat(srcMat, roi);
 
                 // 应用高斯模糊减少噪点
                 Mat blurred = new Mat();
-                Cv2.GaussianBlur(image, blurred, new OpenCvSharp.Size(int.Parse(textBoxBlurSize.Text), int.Parse(textBoxBlurSize.Text)), 0);
+                Cv2.GaussianBlur(croppedImage, blurred, new Size(int.Parse(textBoxBlurSize.Text), int.Parse(textBoxBlurSize.Text)), 0);
 
                 // 使用 Canny 边缘检测
                 Mat edges = new Mat();
                 Cv2.Canny(blurred, edges, double.Parse(textBoxThreshold1.Text), double.Parse(textBoxThreshold2.Text), 3, checkBoxUseL2.Checked);
                 pictureBoxCanny.Image = BitmapConverter.ToBitmap(edges);
 
-                // 绘制检测到的直线
-                Mat result = image.Clone();
-                Cv2.CvtColor(result, result, ColorConversionCodes.BayerBG2BGR);
-
-                Point center = new Point(edges.Width / 2, edges.Height / 2);
-                int radius = 10; int numPoints = 72;
-                List<Point> circlePoints = GetCirclePoints(center.X, center.Y, radius, numPoints);
-                Dictionary<Point, byte> linePixel = new Dictionary<Point, byte>();
-                List<Point2d> allEdgePoints = new List<Point2d>(); //所有边缘点
-
-                // 克隆图像
-                Mat result1 = image.Clone();
-
                 // 转换颜色空间
+                Mat result1 = croppedImage.Clone();
                 Cv2.CvtColor(result1, result1, ColorConversionCodes.BayerBG2BGR);
 
-                int count = 0;
-                foreach (var point in circlePoints)
+                int radius = 20;
+                int numPoints = 18;
+                center = new Point(edges.Width / 2, edges.Height / 2);
+                List<Point> circlePoints = GetCirclePoints(center.X, center.Y, radius, numPoints);
+                List<Point2d> allEdgePoints = new List<Point2d>();
+
+                // 并行处理
+                Parallel.ForEach(circlePoints, point =>
                 {
                     Point endPoint = GetLineEndPoint(center.X, center.Y, point.X, point.Y, edges.Width, edges.Height);
-                    Cv2.Line(result1, new Point(point.X, point.Y), endPoint, Scalar.Blue, 1);
-                    linePixel = GetLinePixels(edges, new Point(center.X, center.Y), endPoint);
-                    // 找边缘点
+                    var linePixel = GetLinePixels(edges, new Point(center.X, center.Y), endPoint);
                     Point? firstEdgePoint = FindFirstEdgePoint(edges, center, endPoint);
 
                     if (firstEdgePoint.HasValue)
                     {
-                        allEdgePoints.Add(firstEdgePoint.Value);
+                        lock (allEdgePoints)
+                        {
+                            allEdgePoints.Add(firstEdgePoint.Value);
+                        }
                     }
-                    else
-                    {
-                        count++;
-                    }
-                }
-                if (count>=4)
-                {
-                    LogHelper.AddLog(MsgLevel.Exception, $"检测圆失败", true);
-                    return (Circle, null);
-                }
+                });
 
                 var (center2, radius2) = CircleLeastSquares(allEdgePoints);
-                pictureBoxResult1.Image = BitmapConverter.ToBitmap(result);
-
-
 
                 // 在结果图像上绘制拟合的圆
-                Cv2.Circle(result1, (Point)center2, (int)radius2, new Scalar(0, 255, 0), 1);
-                Cv2.PutText(result1, $"Radius: {radius2.ToString("F2")} px", new Point(40, 40), HersheyFonts.Italic, 0.5, Scalar.Red);
+                Cv2.Circle(result1, (Point)center2, (int)radius2, new Scalar(0, 255, 0), 2);
+                Cv2.PutText(result1, $"Radius:{radius2.ToString("F2")}px", new Point(40, 40), HersheyFonts.HersheyTriplex, 1, Scalar.Red);
                 pictureBoxResult1.Image = BitmapConverter.ToBitmap(result1);
-                Circle = new CircleSegment(new Point2f((float)center2.X, (float)center2.Y), (float)radius2);
+                circle = new CircleSegment(new Point2f((float)center2.X, (float)center2.Y), (float)radius2);
             }
             catch (Exception ex)
             {
                 LogHelper.AddLog(MsgLevel.Exception, $"检测圆失败，原因：{ex.Message}", true);
-                return (Circle, null);
+                return (circle, null);
             }
-            return (Circle, (Bitmap)pictureBoxResult1.Image);
+
+            return (circle, (Bitmap)pictureBoxResult1.Image);
         }
+
+        #region 计算边缘特征点
 
         /// <summary>
         /// 获取直线终点
@@ -333,7 +375,13 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
             return edges.At<byte>(y, x) == 255;
         }
 
-        // 查找从起点到终点的第一个边缘点的方法
+        /// <summary>
+        /// 查找从起点到终点的第一个边缘点的方法
+        /// </summary>
+        /// <param name="edges"></param>
+        /// <param name="startPoint"></param>
+        /// <param name="endPoint"></param>
+        /// <returns></returns>
         private Point? FindFirstEdgePoint(Mat edges, Point startPoint, Point endPoint)
         {
             // 计算直线的单位向量
@@ -360,6 +408,8 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
 
             return null;
         }
+
+        #endregion
 
         #region 拟合圆
 
@@ -550,16 +600,14 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
 
         #endregion
 
-        private void checkBoxOKEnable_CheckedChanged_1(object sender, EventArgs e)
+        /// <summary>
+        /// 是否勾选模版定位
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            textBoxOKMinR.Enabled = checkBoxOKEnable.Checked;
-            textBoxOKMaxR.Enabled = checkBoxOKEnable.Checked;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            FormCannyDemo formCannyDemo = new FormCannyDemo();
-            formCannyDemo.ShowDialog();
+            nodeSubscription2.Enabled = checkBox1.Checked;
         }
     }
 }

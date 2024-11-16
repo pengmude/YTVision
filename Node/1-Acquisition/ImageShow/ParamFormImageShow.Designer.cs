@@ -43,11 +43,11 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.tableLayoutPanel1.Controls.Add(this.nodeSubscription1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.WindowNameList, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.WindowNameText, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.subImageText, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button1, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.nodeSubscription1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
@@ -56,17 +56,17 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(540, 234);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(559, 304);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // nodeSubscription1
             // 
             this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription1.Location = new System.Drawing.Point(207, 14);
+            this.nodeSubscription1.Location = new System.Drawing.Point(220, 13);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(2);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(213, 49);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(314, 49);
+            this.nodeSubscription1.Size = new System.Drawing.Size(314, 75);
             this.nodeSubscription1.TabIndex = 2;
             // 
             // WindowNameList
@@ -75,7 +75,7 @@
             this.WindowNameList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.WindowNameList.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.WindowNameList.FormattingEnabled = true;
-            this.WindowNameList.Location = new System.Drawing.Point(216, 104);
+            this.WindowNameList.Location = new System.Drawing.Point(228, 137);
             this.WindowNameList.Margin = new System.Windows.Forms.Padding(2);
             this.WindowNameList.Name = "WindowNameList";
             this.WindowNameList.Size = new System.Drawing.Size(297, 29);
@@ -86,7 +86,7 @@
             this.WindowNameText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.WindowNameText.AutoSize = true;
             this.WindowNameText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.WindowNameText.Location = new System.Drawing.Point(47, 106);
+            this.WindowNameText.Location = new System.Drawing.Point(50, 141);
             this.WindowNameText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.WindowNameText.Name = "WindowNameText";
             this.WindowNameText.Size = new System.Drawing.Size(94, 21);
@@ -98,7 +98,7 @@
             this.subImageText.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.subImageText.AutoSize = true;
             this.subImageText.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.subImageText.Location = new System.Drawing.Point(47, 28);
+            this.subImageText.Location = new System.Drawing.Point(50, 40);
             this.subImageText.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.subImageText.Name = "subImageText";
             this.subImageText.Size = new System.Drawing.Size(94, 21);
@@ -109,7 +109,7 @@
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(313, 178);
+            this.button1.Location = new System.Drawing.Point(326, 236);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(102, 34);
@@ -122,7 +122,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 234);
+            this.ClientSize = new System.Drawing.Size(559, 304);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("宋体", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

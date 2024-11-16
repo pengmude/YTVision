@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC;
+using YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC;
 
 namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
 {

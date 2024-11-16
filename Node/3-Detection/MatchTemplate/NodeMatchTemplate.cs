@@ -1,23 +1,19 @@
 ﻿using Logger;
+using OpenCvSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Node._4_Detection.FindCircle;
-using YTVisionPro.Node.AI.HTAI;
 
-namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
+namespace YTVisionPro.Node._3_Detection.MatchTemplate
 {
-    internal class NodeInjectionHoleMeasurement : NodeBase
+    internal class NodeMatchTemplate : NodeBase
     {
-        public NodeInjectionHoleMeasurement(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
+        public NodeMatchTemplate(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            var form = new NodeParamFormInjectionHoleMeasurement(process, this);
+            var form = new NodeParamFormMatchTemplate(process, this);
             form.SetNodeBelong(this);
             ParamForm = form;
-            Result = new NodeResultInjectionHoleMeasurement();
+            Result = new NodeResultMatchTemplate();
         }
 
         /// <summary>
@@ -39,9 +35,9 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is NodeParamFormInjectionHoleMeasurement form)
+            if (ParamForm is NodeParamFormMatchTemplate form)
             {
-                if (ParamForm.Params is NodeParamInjectionHoleMeasurement param)
+                if (ParamForm.Params is NodeParamMatchTemplate param)
                 {
                     try
                     {
@@ -49,26 +45,24 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        string res = string.Empty;
-                        var (Circle, image) = form.DetectCircle();
-                        if (Circle == null || image == null) { throw new Exception("圆查找失败！"); }
+                        // 获取图像
+                        form.UpdataImage();
 
-                        if (!param.OKEnable)
-                            res = "未启用";
-                        else if (Circle.Radius >= param.OKMinR && Circle.Radius <= param.OKMaxR)
-                            res = "OK";
-                        else
-                            res = "NG";
+                        // 执行模版匹配
+                        var (bitmap, rect, score, isOk) = form.MatchTemplate(false);
 
-                        // 输出节点结果
-                        ((NodeResultInjectionHoleMeasurement)Result).OutputImage = image;
-                        ((NodeResultInjectionHoleMeasurement)Result).Result = new ResultViewData();
-                        ((NodeResultInjectionHoleMeasurement)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
-                                                                    ("", "", NodeName, res, res == "OK" ? true : false));
+                        // 输出结果
+                        ((NodeResultMatchTemplate)Result).Bitmap = bitmap;
+                        ((NodeResultMatchTemplate)Result).Rect = rect;
+                        ((NodeResultMatchTemplate)Result).Score = score;
+                        ((NodeResultMatchTemplate)Result).IsOk = isOk;
 
-                        SetRunResult(startTime, NodeStatus.Successful);
+                        if (!isOk)
+                            throw new Exception($"当前图像匹配得分为{score.ToString("F2")}, 低于该节点设置的得分阈值，请检查图像成像是否异常，或降低设置的得分阈值！");
+
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径：{Circle.Radius} 像素, 圆心：({Circle.Center.X},{Circle.Center.Y}), 判定：{res}", true);
+                        SetRunResult(startTime, NodeStatus.Successful);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，匹配得分：{score.ToString("F2")}, 匹配是否成功: {isOk}", true);
                     }
                     catch (OperationCanceledException)
                     {

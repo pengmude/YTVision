@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using YTVisionPro.Node._3_Detection.HTAI;
-using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC;
+using YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC;
 
 namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
 {

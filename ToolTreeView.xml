@@ -20,6 +20,7 @@
         <Node Text="直线检测" ImageName="检测直线" Tag="LineFind" SelectedImageName="检测直线" />
         <Node Text="圆检测" ImageName="检测圆" Tag="CircleFind" SelectedImageName="检测圆" />
         <Node Text="二维码识别" ImageName="二维码识别" Tag="QRScan" SelectedImageName="二维码识别" />
+        <Node Text="模版匹配" ImageName="模版匹配" Tag="MatchTemplate" SelectedImageName="模版匹配" />
       </Nodes>
     </Node>
     <Node Text="测量工具" ImageName="测量工具" Tag="UNKNOWN" SelectedImageName="测量工具">
@@ -37,7 +38,7 @@
         <Node Text="PLC读取" ImageName="PLC读" Tag="PLCRead" SelectedImageName="PLC读" />
         <Node Text="PLC写入" ImageName="PLC写" Tag="PLCWrite" SelectedImageName="PLC写" />
         <Node Text="PLC软触发" ImageName="PLC软触发" Tag="WaitSoftTrigger" SelectedImageName="PLC软触发" />
-        <Node Text="PLC发送AI结果" ImageName="PLC发送AI结果" Tag="PLCHTAIResultSend" SelectedImageName="PLC发送AI结果" />
+        <Node Text="PLC发送结果" ImageName="PLC发送结果" Tag="SendResultByPLC" SelectedImageName="PLC发送结果" />
         <Node Text="TCP请求" ImageName="客户端请求" Tag="TCPClientRequest" SelectedImageName="客户端请求" />
         <Node Text="TCP响应" ImageName="服务器响应" Tag="TCPServerResponse" SelectedImageName="服务器响应" />
         <Node Text="Modbus读取" ImageName="Modbus读取" Tag="ModbusRead" SelectedImageName="Modbus读取" />

@@ -81,7 +81,7 @@ namespace YTVisionPro.Node._4_Measurement.ParallelLines
                             ((NodeResultParallelLines)Result).Result = new ResultViewData();
                             ((NodeResultParallelLines)Result).Image = form.DrawLines(line1, line2, result);
                             ((NodeResultParallelLines)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
-                                                                        ("", "", NodeName, result, result == "平行" ? true : false));
+                                                                        ("", "", $"{ID}.{NodeName}", result, result == "平行" ? true : false));
 
                         }
                         else

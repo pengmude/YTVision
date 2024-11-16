@@ -6,6 +6,8 @@ using MvCameraControl;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Threading.Tasks;
+using Sunny.UI;
 
 namespace YTVisionPro.Device.Camera
 {
@@ -52,6 +54,11 @@ namespace YTVisionPro.Device.Camera
         /// 相机SN
         /// </summary>
         public string SN { get; set; }
+
+        /// <summary>
+        /// 厂商名称
+        /// </summary>
+        public string ManufacturerName { get; set; }
 
         /// <summary>
         /// 相机品牌
@@ -109,7 +116,7 @@ namespace YTVisionPro.Device.Camera
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogHelper.AddLog(MsgLevel.Exception, $"{ex.Message}", true);
             }
         }
 
@@ -125,11 +132,19 @@ namespace YTVisionPro.Device.Camera
             try
             {
                 device = DeviceFactory.CreateDevice(devInfo);
+                ManufacturerName = device.DeviceInfo.ManufacturerName;  // 获取相机厂商
+                var a = device.DeviceInfo; // 无其他用意，调用一次仅为下面能获取到SN
                 DevName = GetDevNameByDevInfo(device.DeviceInfo);
                 UserDefinedName = userName;
                 if (devInfo is IGigEDeviceInfo info)
                 {
-                    SN = info.SerialNumber;
+                    Task.Run(() => 
+                    {
+                        do
+                        {
+                            SN = info.SerialNumber;
+                        } while (SN.IsNullOrEmpty());
+                    });
                 }
                 else
                     throw new Exception("暂时不支持非网口连接的相机！");
@@ -302,7 +317,7 @@ namespace YTVisionPro.Device.Camera
             //           3 - Line3;
             //           4 - Counter;
             //           7 - Software;
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 switch (triggerSource)
                 {
@@ -389,7 +404,7 @@ namespace YTVisionPro.Device.Camera
         public IFloatValue GetExposureTime()
         {
             if (device == null) throw new Exception("相机对象为空！");
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 device.Parameters.GetFloatValue("ExposureTimeAbs", out IFloatValue exposureTime);
                 return exposureTime;
@@ -410,7 +425,7 @@ namespace YTVisionPro.Device.Camera
         {
             if (device == null) throw new Exception("相机对象为空！");
 
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 device.Parameters.GetIntValue("GainRaw", out IIntValue gain);
                 return (gain, null);
@@ -429,7 +444,7 @@ namespace YTVisionPro.Device.Camera
         public IFloatValue GetTriggerDelay()
         {
             if (device == null) throw new Exception("相机对象为空！");
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 device.Parameters.GetFloatValue("TriggerDelayAbs", out IFloatValue triggerDelay);
                 return triggerDelay;
@@ -587,7 +602,7 @@ namespace YTVisionPro.Device.Camera
         {
             if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("GainAuto", 0);
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 device.Parameters.SetIntValue("GainRaw", (int)gainValue);
             }
@@ -606,7 +621,7 @@ namespace YTVisionPro.Device.Camera
             if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("ExposureAuto", 0);
 
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 device.Parameters.SetFloatValue("ExposureTimeAbs", time);
             }
@@ -624,7 +639,7 @@ namespace YTVisionPro.Device.Camera
         {
             if (device == null) throw new Exception("相机对象为空！");
 
-            if (device.DeviceInfo.ManufacturerName == "Basler")
+            if (ManufacturerName == "Basler")
             {
                 device.Parameters.SetFloatValue("TriggerDelayAbs", time);
             }

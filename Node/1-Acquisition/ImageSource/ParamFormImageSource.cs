@@ -263,26 +263,30 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                 if (camera.UserDefinedName == comboBoxChoiceCamera.Text)
                 {
                     // 当前相机触发延迟
-                    labelTriggerDelay.Text = $"触发延迟(当前{camera.GetTriggerDelay().CurValue})";
-                    numericUpDownTriggerDelay.Minimum = (decimal)camera.GetTriggerDelay().Min;
-                    numericUpDownTriggerDelay.Maximum = (decimal)camera.GetTriggerDelay().Max;
+                    var _triggerDelay = camera.GetTriggerDelay();
+                    numericUpDownTriggerDelay.Minimum = (decimal)_triggerDelay.Min;
+                    numericUpDownTriggerDelay.Maximum = (decimal)_triggerDelay.Max;
+                    numericUpDownTriggerDelay.Value = (decimal)_triggerDelay.CurValue;
+
                     // 当前相机曝光
-                    labelExposureTime.Text = $"曝光(当前{camera.GetExposureTime().CurValue})";
-                    numericUpDownExposureTime.Minimum = (decimal)camera.GetExposureTime().Min;
-                    numericUpDownExposureTime.Maximum = (decimal)camera.GetExposureTime().Max;
+                    var _exposurTime = camera.GetExposureTime();
+                    numericUpDownExposureTime.Minimum = (decimal)_exposurTime.Min;
+                    numericUpDownExposureTime.Maximum = (decimal)_exposurTime.Max;
+                    numericUpDownExposureTime.Value = (decimal)_exposurTime.CurValue;
+
                     // 当前相机增益
-                    var(gainInt, gainFloat) = camera.GetGain();
+                    var (gainInt, gainFloat) = camera.GetGain();
                     if (gainInt != null)
                     {
-                        labelGain.Text = $"增益(当前{gainInt.CurValue})";
-                        numericUpDownGain.Minimum = (decimal)gainInt.Min;
-                        numericUpDownGain.Maximum = (decimal)gainInt.Max;
+                        numericUpDownGain.Minimum = gainInt.Min;
+                        numericUpDownGain.Maximum = gainInt.Max;
+                        numericUpDownGain.Value = gainInt.CurValue;
                     }
                     else
                     {
-                        labelGain.Text = $"增益(当前{gainFloat.CurValue})";
                         numericUpDownGain.Minimum = (decimal)gainFloat.Min;
                         numericUpDownGain.Maximum = (decimal)gainFloat.Max;
+                        numericUpDownGain.Value = (decimal)gainFloat.CurValue;
                     }
                     return;
                 }

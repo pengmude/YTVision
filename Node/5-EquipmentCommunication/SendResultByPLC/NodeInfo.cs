@@ -1,5 +1,5 @@
 ﻿
-namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
+namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
 {
     public class NodeInfo
     {

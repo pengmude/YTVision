@@ -9,6 +9,7 @@ using YTVisionPro.Forms.LightAdd;
 using YTVisionPro.Device.Camera;
 using YTVisionPro.Device.Light;
 using System.IO.Ports;
+using Logger;
 
 namespace YTVisionPro.Device.PLC
 {
@@ -100,7 +101,7 @@ namespace YTVisionPro.Device.PLC
             }
             catch (Exception ex)
             {
-                throw ex;
+                LogHelper.AddLog(MsgLevel.Exception, $"{ex.Message}", true);
             }
         }
 

@@ -2,9 +2,9 @@
 using System.Drawing;
 using YTVisionPro.Node._3_Detection.HTAI;
 
-namespace YTVisionPro.Node._4_Measurement.InjectionHole
+namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
 {
-    internal class NodeResultInjectionHoleMeasurement : INodeResult
+    internal class NodeResultInjectionHole : INodeResult
     {
         [DisplayName("运行状态")]
         public NodeStatus Status { get; set; }

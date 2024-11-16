@@ -1,8 +1,6 @@
-﻿using Logger;
-using OpenCvSharp.Extensions;
+﻿using OpenCvSharp.Extensions;
 using OpenCvSharp;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;

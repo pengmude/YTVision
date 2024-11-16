@@ -1,4 +1,5 @@
-﻿using Modbus.Device;
+﻿using Logger;
+using Modbus.Device;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -46,7 +47,7 @@ namespace YTVisionPro.Device.Modbus
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                LogHelper.AddLog(MsgLevel.Exception, $"{ex.Message}", true);
             }
         }
 

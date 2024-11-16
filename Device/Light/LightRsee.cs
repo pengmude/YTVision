@@ -6,6 +6,7 @@ using System.Timers;
 using YTVisionPro.Forms.LightAdd;
 using System.Linq;
 using YTVisionPro.Device.Camera;
+using Logger;
 
 namespace YTVisionPro.Device.Light
 {
@@ -92,15 +93,11 @@ namespace YTVisionPro.Device.Light
                         ComHandle = item.Handle;
                         break;
                     }
-                    //if (ComHandle == 0)
-                    //    Connenct();
-                    //else
-                    //    IsComOpen = true;
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                LogHelper.AddLog(MsgLevel.Exception, $"{ex.Message}", true);
             }
         }
 

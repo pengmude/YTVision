@@ -8,15 +8,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Node._3_Detection.HTAI;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
+namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
 {
-    internal class NodeHTAISendSignal : NodeBase
+    internal class NodeSendResultByPLC : NodeBase
     {
-        public NodeHTAISendSignal(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
+        public NodeSendResultByPLC(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType) 
         {
-            ParamForm = new ParamFormHTAISendSignal();
+            ParamForm = new ParamFormSendResultByPLC();
             ParamForm.SetNodeBelong(this);
-            Result = new NodeResultHTAISendSignal();
+            Result = new NodeResultSendResultByPLC();
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
             
-            var param = (NodeParamHTAISendSignal)ParamForm.Params;
+            var param = (NodeParamSendResultByPLC)ParamForm.Params;
 
-            if(ParamForm is ParamFormHTAISendSignal form)
+            if(ParamForm is ParamFormSendResultByPLC form)
             {
                 try
                 {
@@ -49,15 +49,17 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.Run(token);
 
-                    ResultViewData aiResult = form.GetAiResult();
+                    // 获取订阅的算法结果
+                    ResultViewData detectResult = form.GetAllResult();
 
                     List<SignalRowData> allMatchingRows = new List<SignalRowData>();
 
-                    if (aiResult.IsAllOk)
+                    if (detectResult.IsAllOk)
                     {
                         string nodeName = "OK";
                         string className = "OK";
-                        var matchingRows = FindMatchSignalRow(param.Data, nodeName, className);
+                        string detectName = "OK";
+                        var matchingRows = FindMatchSignalRow(param.Data, nodeName, className, detectName);
                         if (matchingRows != null && matchingRows.Count > 0)
                         {
                             allMatchingRows.AddRange(matchingRows);
@@ -65,25 +67,26 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
                         else
                         {
                             // 记录没有找到匹配信号行的日志
-                            throw new Exception($"节点({ID}.{NodeName})没有设置{nodeName}-{className}的信号！");
+                            throw new Exception($"节点({ID}.{NodeName})信号列表中不存在节点为\"{nodeName}\"，类别为\"{className}\"，检测项为\"{detectName}\"的信号！");
                         }
                     }
                     else
                     {
-                        foreach (var item in aiResult.SingleRowDataList)
+                        foreach (var item in detectResult.SingleRowDataList)
                         {
                             if (item.IsOk)
                                 continue;
                             string nodeName = item.NodeName;
                             string className = item.ClassName;
-                            var matchingRows = FindMatchSignalRow(param.Data, nodeName, className);
+                            string detectName = item.DetectName;
+                            var matchingRows = FindMatchSignalRow(param.Data, nodeName, className, detectName);
                             if (matchingRows != null && matchingRows.Count > 0)
                             {
                                 allMatchingRows.AddRange(matchingRows);
                             }
                             else
                             {
-                                throw new Exception($"节点({ID}.{NodeName})没有设置{nodeName}-{className}的信号！");
+                                throw new Exception($"节点({ID}.{NodeName})信号列表中不存在节点为\"{nodeName}\"，类别为\"{className}\"，检测项为\"{detectName}\"的信号！");
                             }
                         }
                     }
@@ -99,14 +102,12 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
                         throw new Exception($"节点({ID}.{NodeName})没有匹配到对应的信号！");
                     }
 
-                    await Task.Run(() =>
+                    // 发送信号到对应的PLC
+                    foreach (var maxSignalRow in maxSignalRowsByPlc)
                     {
-                        // 发送信号到对应的PLC
-                        foreach (var maxSignalRow in maxSignalRowsByPlc)
-                        {
-                            SendSignalToPlc(maxSignalRow, param.StayTime);
-                        }
-                    });
+                        await SendSignalToPlc(maxSignalRow, param.StayTime);
+                    }
+                    
                     long time = SetRunResult(startTime, NodeStatus.Successful);
                     LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                 }
@@ -125,13 +126,13 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC
             }
         }
 
-        private List<SignalRowData> FindMatchSignalRow(List<SignalRowData> list, string nodeName, string className)
+        private List<SignalRowData> FindMatchSignalRow(List<SignalRowData> list, string nodeName, string className, string detectName)
         {
-            var matchingRows = list.Where(row => row.NodeName == nodeName && row.ClassName == className).ToList();
+            var matchingRows = list.Where(row => row.NodeName == nodeName && row.ClassName == className && row.DetectName == detectName).ToList();
             return matchingRows;
         }
 
-        private async void SendSignalToPlc(SignalRowData dataRow, double time)
+        private async Task SendSignalToPlc(SignalRowData dataRow, double time)
         {
             if (dataRow != null)
             {

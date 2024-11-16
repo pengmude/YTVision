@@ -110,9 +110,9 @@ namespace YTVisionPro.Node
         /// </summary>
         PLCWrite,
         /// <summary>
-        /// PLC寄存器写入AI检测结果
+        /// PLC寄存器写入算法结果
         /// </summary>
-        PLCHTAIResultSend,
+        SendResultByPLC,
         /// <summary>
         /// 汇图AI节点
         /// </summary>
@@ -220,6 +220,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 二维码识别
         /// </summary>
-        QRScan
+        QRScan,
+        /// <summary>
+        /// 模版匹配
+        /// </summary>
+        MatchTemplate
     }
 }

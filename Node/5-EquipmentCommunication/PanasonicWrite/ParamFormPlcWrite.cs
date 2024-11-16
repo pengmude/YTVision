@@ -16,7 +16,29 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
 
         public INodeParam Params { get; set; }
 
-        void INodeParamForm.SetNodeBelong(NodeBase node) { }
+        public void SetNodeBelong(NodeBase node) 
+        {
+            nodeSubscription1.Init(node);
+        }
+
+        public object GetSubResult()
+        {
+            //return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
+            //return nodeSubscription1.GetValue<object>();
+            switch (this.comboBox2.Text)
+            {
+                case "整数类型":
+                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content2;
+                case "布尔类型":
+                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content1;
+                case "字符串类型":
+                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
+                case "":
+                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
+                default:
+                    return null;
+            }
+        }
 
         /// <summary>
         /// 初始化PLC下拉框
@@ -77,10 +99,10 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
                 MessageBox.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (this.comboBox2.Text == "字符串类型" && string.IsNullOrEmpty(this.textBox3.Text))
+            if (this.comboBox2.Text == "字符串类型" && string.IsNullOrEmpty(this.textBox3.Text) && this.radioButton1.Checked)
             {
-                LogHelper.AddLog(MsgLevel.Exception, "读取字符串类型需要设置读取长度", true);
-                MessageBox.Show("读取字符串类型需要设置读取长度", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                LogHelper.AddLog(MsgLevel.Exception, "写入字符串类型需要设置值", true);
+                MessageBox.Show("写入字符串类型需要设置值", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -103,18 +125,37 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
             {
                 case "整数类型":
                     nodeParamPlcWrite.DataType = DataType.INT;
-                    nodeParamPlcWrite.Value = int.Parse(this.textBox3.Text);
+                    if(radioButton1.Checked)
+                    {
+                        nodeParamPlcWrite.Value = int.Parse(this.textBox3.Text);
+                    }
                     break;
                 case "布尔类型":
                     nodeParamPlcWrite.DataType = DataType.BOOL;
-                    nodeParamPlcWrite.Value = this.comboBox3.SelectedIndex == 0? true : false;
+                    if(radioButton1.Checked)
+                    {
+                        nodeParamPlcWrite.Value = this.comboBox3.SelectedIndex == 0 ? true : false;
+                    }
                     break;
                 case "字符串类型":
                     nodeParamPlcWrite.DataType = DataType.STRING;
-                    nodeParamPlcWrite.Value = this.textBox3.Text;
+                    if (radioButton1.Checked)
+                    {
+                        nodeParamPlcWrite.Value = this.textBox3.Text;
+                    }
                     break;
                 default:
                     break;
+            }
+            if(radioButton1.Checked)
+            {
+                nodeParamPlcWrite.IsSubscribed = false;
+            }
+            else
+            {
+                nodeParamPlcWrite.IsSubscribed = true;
+                nodeParamPlcWrite.Text1 = nodeSubscription1.GetText1();
+                nodeParamPlcWrite.Text2 = nodeSubscription1.GetText2();
             }
             Params = nodeParamPlcWrite;
             Hide();
@@ -159,19 +200,65 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
                 {
                     case DataType.INT:
                         comboBox2.SelectedIndex = 0;
-                        textBox3.Text = param.Value.ToString();
+                        if(!param.IsSubscribed)
+                        {
+                            textBox3.Text = param.Value.ToString();
+                        }
                         break;
                     case DataType.BOOL:
                         comboBox2.SelectedIndex = 1;
-                        comboBox3.SelectedIndex = (bool)param.Value == true ? 0 : 1;
+                        if (!param.IsSubscribed)
+                        {
+                            comboBox3.SelectedIndex = (bool)param.Value == true ? 0 : 1;
+                        }
                         break;
                     case DataType.STRING:
                         comboBox2.SelectedIndex = 2;
-                        textBox3.Text = param.Value.ToString();
+                        if (!param.IsSubscribed)
+                        {
+                            textBox3.Text = param.Value.ToString();
+                        }
                         break;
                     default:
                         break;
                 }
+                if(param.IsSubscribed)
+                {
+                    radioButton2.Checked = true;
+                    nodeSubscription1.SetText(param.Text1, param.Text2);
+                }
+                else
+                {
+                    radioButton1.Checked = true;
+                }
+            }
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            if(radioButton1.Checked)
+            {
+                tabControl1.SelectedIndex = 0;
+                radioButton2.Checked = false;
+            }
+            else
+            {
+                tabControl1.SelectedIndex = 1;
+                radioButton2.Checked = true;
+            }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(tabControl1.SelectedIndex == 0)
+            {
+                radioButton1.Checked = true;
+                radioButton2.Checked = false;
+            }
+            else
+            {
+                radioButton1.Checked = false;
+                radioButton2.Checked = true;
             }
         }
     }

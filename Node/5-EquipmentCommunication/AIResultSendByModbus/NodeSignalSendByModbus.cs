@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Device.Modbus;
 using YTVisionPro.Node._3_Detection.HTAI;
-using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC;
+using YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC;
 
 namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
 {

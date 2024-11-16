@@ -11,14 +11,13 @@ using YTVisionPro.Node._1_Acquisition.ImageSource;
 using YTVisionPro.Node._2_ImagePreprocessing.ImageRotate;
 using YTVisionPro.Node._4_Measurement.ParallelLines;
 using YTVisionPro.Node._5_EquipmentCommunication.LightOpen;
-using YTVisionPro.Node._4_Measurement.InjectionHole;
 using YTVisionPro.Node._3_Detection.HTAI;
 using YTVisionPro.Node._2_ImagePreprocessing.ImageCrop;
 using YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead;
 using YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte;
 using YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger;
 using YTVisionPro.Node._5_EquipmentCommunication.TcpClient;
-using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByPLC;
+using YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC;
 using YTVisionPro.Node._5_EquipmentCommunication.TcpServer;
 using YTVisionPro.Node._5_EquipmentCommunication.ModbusRead;
 using YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite;
@@ -30,6 +29,8 @@ using YTVisionPro.Node._7_ResultProcessing.DataShow;
 using YTVisionPro.Node._7_ResultProcessing.ResultSummarize;
 using YTVisionPro.Node._2_ImagePreprocessing.ImageSplit;
 using YTVisionPro.Node._3_Detection.QRScan;
+using YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement;
+using YTVisionPro.Node._3_Detection.MatchTemplate;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -177,8 +178,8 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.PLCWrite:
                     node = new NodePlcWrite(nodeId, nodeName, _process, nodeType);
                     break;
-                case NodeType.PLCHTAIResultSend:
-                    node = new NodeHTAISendSignal(nodeId, nodeName, _process, nodeType);
+                case NodeType.SendResultByPLC:
+                    node = new NodeSendResultByPLC(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.AIHT:
                     node = new NodeHTAI(nodeId, nodeName, _process, nodeType);
@@ -238,7 +239,7 @@ namespace YTVisionPro.Forms.ProcessNew
                     node = new NodeCameraIO(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.InjectionHole:
-                    node = new NodeInjectionHoleMeasurement(nodeId, nodeName, _process, nodeType);
+                    node = new NodeInjectionHole(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.ImageSource:
                     node = new NodeImageSource(nodeId, nodeName, _process, nodeType);
@@ -248,6 +249,9 @@ namespace YTVisionPro.Forms.ProcessNew
                     break;
                 case NodeType.QRScan:
                     node = new NodeQRScan(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.MatchTemplate:
+                    node = new NodeMatchTemplate(nodeId, nodeName, _process, nodeType);
                     break;
                 default:
                     break;

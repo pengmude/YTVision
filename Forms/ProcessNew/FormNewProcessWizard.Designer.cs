@@ -177,7 +177,7 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(22, "PLC读");
             this.imageList1.Images.SetKeyName(23, "PLC写");
             this.imageList1.Images.SetKeyName(24, "PLC软触发");
-            this.imageList1.Images.SetKeyName(25, "PLC发送AI结果");
+            this.imageList1.Images.SetKeyName(25, "PLC发送结果");
             this.imageList1.Images.SetKeyName(26, "客户端请求");
             this.imageList1.Images.SetKeyName(27, "服务器响应");
             this.imageList1.Images.SetKeyName(28, "Modbus读取");

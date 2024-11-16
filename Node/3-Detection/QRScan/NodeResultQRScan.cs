@@ -13,7 +13,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
         [DisplayName("运行状态码")]
         public NodeRunStatusCode RunStatusCode { get; set; }
 
-        [DisplayName("识别结果集合")]
+        [DisplayName("读码结果集合")]
         public string[] Codes { get; set; }
     }
 }

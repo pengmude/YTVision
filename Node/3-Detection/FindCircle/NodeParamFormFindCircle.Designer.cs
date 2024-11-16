@@ -588,7 +588,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(191, 21);
             this.label4.TabIndex = 0;
-            this.label4.Text = "是否使用 L2 范数?";
+            this.label4.Text = "是否启用 L2 范数?";
             // 
             // label5
             // 

@@ -4,16 +4,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Node._3_Detection.HTAI;
 
-namespace YTVisionPro.Node._4_Measurement.InjectionHole
+namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
 {
-    internal class NodeInjectionHoleMeasurement : NodeBase
+    internal class NodeInjectionHole : NodeBase
     {
-        public NodeInjectionHoleMeasurement(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
+        public NodeInjectionHole(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            var form = new NodeParamFormInjectionHoleMeasurement(process, this);
+            var form = new NodeParamFormInjectionHole(process, this);
             form.SetNodeBelong(this);
             ParamForm = form;
-            Result = new NodeResultInjectionHoleMeasurement();
+            Result = new NodeResultInjectionHole();
         }
 
         /// <summary>
@@ -35,9 +35,9 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is NodeParamFormInjectionHoleMeasurement form)
+            if (ParamForm is NodeParamFormInjectionHole form)
             {
-                if (ParamForm.Params is NodeParamInjectionHoleMeasurement param)
+                if (ParamForm.Params is NodeParamInjectionHole param)
                 {
                     try
                     {
@@ -46,25 +46,23 @@ namespace YTVisionPro.Node._4_Measurement.InjectionHole
                         base.Run(token);
 
                         string res = string.Empty;
-                        var (Circle, image) = form.DetectCircle();
-                        if (Circle == null || image == null) { throw new Exception("注液孔查找失败！"); }
+                        var (circle, image) = form.DetectInjectionHole();
+                        if (circle == null || image == null) { throw new Exception("注液孔查找失败！"); }
 
-                        if (!param.OKEnable)
-                            res = "未启用";
-                        else if (Circle.Radius >= param.OKMinR && Circle.Radius <= param.OKMaxR)
+                        if (circle.Radius >= param.OKMinR && circle.Radius <= param.OKMaxR)
                             res = "OK";
                         else
                             res = "NG";
 
                         // 输出节点结果
-                        ((NodeResultInjectionHoleMeasurement)Result).OutputImage = image;
-                        ((NodeResultInjectionHoleMeasurement)Result).Result = new ResultViewData();
-                        ((NodeResultInjectionHoleMeasurement)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
-                                                                    ("", "", NodeName, res, res == "OK" ? true : false));
+                        ((NodeResultInjectionHole)Result).OutputImage = image;
+                        ((NodeResultInjectionHole)Result).Result = new ResultViewData();
+                        ((NodeResultInjectionHole)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
+                                                                    ("", "", $"{ID}.{NodeName}", res, res == "OK" ? true : false));
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径：{Circle.Radius} 像素, 圆心：({Circle.Center.X},{Circle.Center.Y}), 判定：{res}", true);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径：{circle.Radius.ToString("F2")} 像素, 圆心：({(int)circle.Center.X}，{(int)circle.Center.Y}), 判定：{res}", true);
                     }
                     catch (OperationCanceledException)
                     {
