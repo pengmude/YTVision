@@ -3,16 +3,15 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._3_Detection.QRScan
+namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
 {
-    internal class NodeQRScan : NodeBase
+    internal class NodeImageDelete : NodeBase
     {
-        public NodeQRScan(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
+        public NodeImageDelete(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
-            var form = new NodeParamFormQRScan(process, this);
-            form.SetNodeBelong(this);
-            ParamForm = form;
-            Result = new NodeResultQRScan();
+            ParamForm = new NodeParamFormImageDelete();
+            ParamForm.SetNodeBelong(this);
+            Result = new NodeResultImageDelete();
         }
 
         /// <summary>
@@ -21,12 +20,13 @@ namespace YTVisionPro.Node._3_Detection.QRScan
         public override async Task Run(CancellationToken token)
         {
             DateTime startTime = DateTime.Now;
-            // 参数合法性校验
+
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
                 return;
             }
+
             if (ParamForm.Params == null)
             {
                 LogHelper.AddLog(MsgLevel.Fatal, $"节点({NodeName})运行参数未设置或保存！", true);
@@ -34,9 +34,9 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                 throw new Exception($"节点({NodeName})运行参数未设置或保存！");
             }
 
-            if (ParamForm is NodeParamFormQRScan form)
+            if (ParamForm is NodeParamFormImageDelete form)
             {
-                if (ParamForm.Params is NodeParamQRScan param)
+                if (ParamForm.Params is NodeParamImageDelete param)
                 {
                     try
                     {
@@ -44,17 +44,9 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.Run(token);
 
-                        var codes = await form.QRCodeDetect(false);
-                        
-                        if(codes == null || codes.Length == 0)
-                            throw new Exception("读取二维码失败！");
-
-                        ((NodeResultQRScan)Result).Codes = codes;
-                        ((NodeResultQRScan)Result).FirstCode = codes[0];
-
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
                         SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，二维码数据为:“{codes[0]}”", true);
+                        long time = SetRunResult(startTime, NodeStatus.Successful);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms", true);
                     }
                     catch (OperationCanceledException)
                     {
@@ -70,7 +62,6 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                     }
                 }
             }
-
         }
     }
 }

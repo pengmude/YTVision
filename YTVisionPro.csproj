@@ -631,6 +631,17 @@
     <Compile Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.Designer.cs">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeImageDelete.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeParamImageDelete.cs" />
+    <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeParamFormImageDelete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeParamFormImageDelete.Designer.cs">
+      <DependentUpon>NodeParamFormImageDelete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeResultImageDelete.cs" />
     <Compile Include="Node\FormAddNotes.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -939,6 +950,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.resx">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\7-ResultProcessing\ImageDelete\NodeParamFormImageDelete.resx">
+      <DependentUpon>NodeParamFormImageDelete.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\FormAddNotes.resx">
       <DependentUpon>FormAddNotes.cs</DependentUpon>

@@ -145,6 +145,7 @@ namespace YTVisionPro
             {
                 try
                 {
+                    timeOverCount = 0;
                     timerLoadSol.Start();
                     toolStripLabel1.Visible = true;
                     SetRunStatus(true, true); // 设置为正在加载方案状态
@@ -162,13 +163,22 @@ namespace YTVisionPro
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        int timeOverCount = 0; // 计时器触发次数
         private async void timerLoadSol_Tick(object sender, EventArgs e)
         {
+            // 5分钟（5*60*1000/300=1000次）没加载完方案，不再继续加载
+            if(timeOverCount > 1000)
+            {
+                timerLoadSol.Stop();
+                toolStripLabel1.Visible = false;
+                SetRunStatus(false);
+            }
+
             if (Solution.Instance.SolAiModelNum == Solution.Instance.LoadedModelNum)
             {
                 timerLoadSol.Stop();
                 toolStripLabel1.Visible = false;
-                SetRunStatus(false); // 设置为正在加载方案状态
+                SetRunStatus(false); 
                 if (Settings.Default.IsAutoRun && isAutoLoadSol)
                 {
                     SetRunStatus(true);
@@ -176,6 +186,7 @@ namespace YTVisionPro
                     SetRunStatus(false);
                 }
             }
+            timeOverCount++;
         }
 
         /// <summary>
@@ -505,6 +516,7 @@ namespace YTVisionPro
             if (openFileDialog1.ShowDialog()  == DialogResult.OK)
             {
                 isAutoLoadSol = false;
+                timeOverCount = 0;
                 timerLoadSol.Start();
                 toolStripLabel1.Visible = true;
                 SetRunStatus(true, true); // 设置为正在加载方案状态

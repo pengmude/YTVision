@@ -23,17 +23,13 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
 
         public object GetSubResult()
         {
-            //return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
-            //return nodeSubscription1.GetValue<object>();
-            switch (this.comboBox2.Text)
+            switch (this.comboBoxDataType.Text)
             {
                 case "整数类型":
                     return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content2;
                 case "布尔类型":
                     return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content1;
                 case "字符串类型":
-                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
-                case "":
                     return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
                 default:
                     return null;
@@ -45,38 +41,38 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
         /// </summary>
         private void InitPLCComboBox()
         {
-            string text1 = comboBox1.Text;
+            string text1 = comboBoxPLCList.Text;
 
-            comboBox1.Items.Clear();
-            comboBox1.Items.Add("[未设置]");
+            comboBoxPLCList.Items.Clear();
+            comboBoxPLCList.Items.Add("[未设置]");
             // 初始化PLC列表,只显示添加的PLC用户自定义名称
             foreach (var plc in Solution.Instance.PlcDevices)
             {
-                comboBox1.Items.Add(plc.UserDefinedName);
+                comboBoxPLCList.Items.Add(plc.UserDefinedName);
             }
-            int index1 = comboBox1.Items.IndexOf(text1);
+            int index1 = comboBoxPLCList.Items.IndexOf(text1);
             if (index1 == -1)
-                comboBox1.SelectedIndex = 0;
+                comboBoxPLCList.SelectedIndex = 0;
             else
-                comboBox1.SelectedIndex = index1;
+                comboBoxPLCList.SelectedIndex = index1;
 
-            string text2 = comboBox2.Text;
-            comboBox2.Items.Clear();
-            comboBox2.Items.Add("整数类型");
-            comboBox2.Items.Add("布尔类型");
-            comboBox2.Items.Add("字符串类型");
-            int index2 = comboBox2.Items.IndexOf(text2);
+            string text2 = comboBoxDataType.Text;
+            comboBoxDataType.Items.Clear();
+            comboBoxDataType.Items.Add("整数类型");
+            comboBoxDataType.Items.Add("布尔类型");
+            comboBoxDataType.Items.Add("字符串类型");
+            int index2 = comboBoxDataType.Items.IndexOf(text2);
             if (index2 == -1)
-                comboBox2.SelectedIndex = 0;
+                comboBoxDataType.SelectedIndex = 0;
             else
-                comboBox2.SelectedIndex = index2;
+                comboBoxDataType.SelectedIndex = index2;
 
-            string text3 = comboBox3.Text;
-            int index3 = comboBox3.Items.IndexOf(text3);
+            string text3 = comboBoxBoolValue.Text;
+            int index3 = comboBoxBoolValue.Items.IndexOf(text3);
             if (index3 == -1)
-                comboBox3.SelectedIndex = 0;
+                comboBoxBoolValue.SelectedIndex = 0;
             else
-                comboBox3.SelectedIndex = index3;
+                comboBoxBoolValue.SelectedIndex = index3;
 
         }
 
@@ -87,19 +83,19 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
         /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
-            if (comboBox1.Text.IsNullOrEmpty() || comboBox1.Text == "[未设置]")
+            if (comboBoxPLCList.Text.IsNullOrEmpty() || comboBoxPLCList.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "PLC不能为空！", true);
                 MessageBox.Show("PLC不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (string.IsNullOrEmpty(this.textBox1.Text))
+            if (string.IsNullOrEmpty(this.textBoxAddress.Text))
             {
                 LogHelper.AddLog(MsgLevel.Exception, "信号地址为空", true);
                 MessageBox.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (this.comboBox2.Text == "字符串类型" && string.IsNullOrEmpty(this.textBox3.Text) && this.radioButton1.Checked)
+            if (this.comboBoxDataType.Text == "字符串类型" && string.IsNullOrEmpty(this.textBoxCustomData.Text) && this.radioButton1.Checked)
             {
                 LogHelper.AddLog(MsgLevel.Exception, "写入字符串类型需要设置值", true);
                 MessageBox.Show("写入字符串类型需要设置值", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -110,7 +106,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
             IPlc plc = null;
             foreach (var plcTmp in Solution.Instance.PlcDevices)
             {
-                if (plcTmp.UserDefinedName == comboBox1.Text)
+                if (plcTmp.UserDefinedName == comboBoxPLCList.Text)
                 {
                     plc = plcTmp;
                     break;
@@ -120,28 +116,28 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
             NodeParamPlcWrite nodeParamPlcWrite = new NodeParamPlcWrite();
             nodeParamPlcWrite.Plc = plc;
             nodeParamPlcWrite.PlcName = plc.UserDefinedName;
-            nodeParamPlcWrite.Address = this.textBox1.Text;
-            switch(this.comboBox2.Text)
+            nodeParamPlcWrite.Address = this.textBoxAddress.Text;
+            switch(this.comboBoxDataType.Text)
             {
                 case "整数类型":
                     nodeParamPlcWrite.DataType = DataType.INT;
                     if(radioButton1.Checked)
                     {
-                        nodeParamPlcWrite.Value = int.Parse(this.textBox3.Text);
+                        nodeParamPlcWrite.Value = int.Parse(this.textBoxCustomData.Text);
                     }
                     break;
                 case "布尔类型":
                     nodeParamPlcWrite.DataType = DataType.BOOL;
                     if(radioButton1.Checked)
                     {
-                        nodeParamPlcWrite.Value = this.comboBox3.SelectedIndex == 0 ? true : false;
+                        nodeParamPlcWrite.Value = this.comboBoxBoolValue.SelectedIndex == 0 ? true : false;
                     }
                     break;
                 case "字符串类型":
                     nodeParamPlcWrite.DataType = DataType.STRING;
                     if (radioButton1.Checked)
                     {
-                        nodeParamPlcWrite.Value = this.textBox3.Text;
+                        nodeParamPlcWrite.Value = this.textBoxCustomData.Text;
                     }
                     break;
                 default:
@@ -173,8 +169,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textBox3.Enabled = (comboBox2.Text == "字符串类型" || comboBox2.Text  == "整数类型" )? true : false;
-            comboBox3.Enabled = comboBox2.Text == "布尔类型"? true : false;
+            textBoxCustomData.Enabled = (comboBoxDataType.Text == "字符串类型" || comboBoxDataType.Text  == "整数类型" )? true : false;
+            comboBoxBoolValue.Enabled = comboBoxDataType.Text == "布尔类型"? true : false;
         }
         /// <summary>
         /// 反序列化需要设置参数给回界面
@@ -184,8 +180,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
         {
             if (Params is NodeParamPlcWrite param)
             {
-                int index1 = comboBox1.Items.IndexOf(param.PlcName);
-                comboBox1.SelectedIndex = index1 == -1 ? 0 : index1;
+                int index1 = comboBoxPLCList.Items.IndexOf(param.PlcName);
+                comboBoxPLCList.SelectedIndex = index1 == -1 ? 0 : index1;
                 // 反序列化后方案中的PLC设备对象才是完整的，需要赋值给用到PLC的节点参数中
                 foreach (var plc in Solution.Instance.PlcDevices)
                 {
@@ -195,28 +191,28 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
                         break;
                     }
                 }
-                textBox1.Text = param.Address;
+                textBoxAddress.Text = param.Address;
                 switch (param.DataType)
                 {
                     case DataType.INT:
-                        comboBox2.SelectedIndex = 0;
+                        comboBoxDataType.SelectedIndex = 0;
                         if(!param.IsSubscribed)
                         {
-                            textBox3.Text = param.Value.ToString();
+                            textBoxCustomData.Text = param.Value.ToString();
                         }
                         break;
                     case DataType.BOOL:
-                        comboBox2.SelectedIndex = 1;
+                        comboBoxDataType.SelectedIndex = 1;
                         if (!param.IsSubscribed)
                         {
-                            comboBox3.SelectedIndex = (bool)param.Value == true ? 0 : 1;
+                            comboBoxBoolValue.SelectedIndex = (bool)param.Value == true ? 0 : 1;
                         }
                         break;
                     case DataType.STRING:
-                        comboBox2.SelectedIndex = 2;
+                        comboBoxDataType.SelectedIndex = 2;
                         if (!param.IsSubscribed)
                         {
-                            textBox3.Text = param.Value.ToString();
+                            textBoxCustomData.Text = param.Value.ToString();
                         }
                         break;
                     default:

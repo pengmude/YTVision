@@ -220,6 +220,8 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
         {
             using (Mat mat = BitmapConverter.ToMat(bitmap))
             {
+                if(mat.Channels() == 1)
+                    return mat;
                 Mat grayMat = new Mat();
                 Cv2.CvtColor(mat, grayMat, ColorConversionCodes.BGR2GRAY);
                 return grayMat;

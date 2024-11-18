@@ -453,6 +453,7 @@
             this.Name = "ParamFormImageSource";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "图像源";
+            this.Load += new System.EventHandler(this.ParamFormImageSource_Load);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

@@ -31,6 +31,7 @@ using YTVisionPro.Node._2_ImagePreprocessing.ImageSplit;
 using YTVisionPro.Node._3_Detection.QRScan;
 using YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement;
 using YTVisionPro.Node._3_Detection.MatchTemplate;
+using YTVisionPro.Node._7_ResultProcessing.ImageDelete;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -253,6 +254,9 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.MatchTemplate:
                     node = new NodeMatchTemplate(nodeId, nodeName, _process, nodeType);
                     break;
+                case NodeType.ImageFileDelete:
+                    node = new NodeImageDelete(nodeId, nodeName, _process, nodeType);
+                    break;
                 default:
                     break;
             }
@@ -322,12 +326,11 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private async void button1_Click(object sender, EventArgs e)
         {
-            //运行流程
-            if (Solution.Instance.CancellationToken.IsCancellationRequested)
-                Solution.Instance.ResetTokenSource();
             try
             {
-                await _process.Run(false, Solution.Instance.CancellationToken);
+                // 重置运行取消令牌
+                Solution.Instance.ResetTokenSource();
+                await _process.Run(false);
             }
             catch (Exception) { }
         }

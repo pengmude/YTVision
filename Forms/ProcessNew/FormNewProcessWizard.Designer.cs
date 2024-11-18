@@ -190,6 +190,7 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(35, "保存图片");
             this.imageList1.Images.SetKeyName(36, "检测结果显示");
             this.imageList1.Images.SetKeyName(37, "结果汇总");
+            this.imageList1.Images.SetKeyName(38, "图片删除");
             // 
             // label1
             // 

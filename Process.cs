@@ -84,66 +84,61 @@ namespace YTVisionPro
         /// <summary>
         /// 流程开始运行
         /// </summary>
-        public async Task Run(bool isCyclical, CancellationToken token = default(CancellationToken))
+        public async Task Run(bool isCyclical)
         {
-            if (Nodes.Count == 0)
+            // 节点数为0或流程不启用则不运行
+            if (Nodes.Count == 0 || !Enable)
                 return;
 
             do
             {
                 RunTime = 0;
-                if (Enable)
-                {
-                    // 界面运行按钮Enable设置为运行中
-                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+                // 界面运行按钮Enable设置为运行中
+                UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
 
-                    LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
-                    IsRuning = true;
-                    Success = false;
-                    foreach (var node in _nodes)
+                LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
+                IsRuning = true;
+                Success = false;
+                foreach (var node in _nodes)
+                {
+                    try
                     {
-                        try
-                        {
-                            // 如果是流程的第一个节点、且是写入拍照信号的、且是循环运行模式就跳过执行
-                            // 也就是说，这个节点作为点检使用，生产模式（循环运行）时需要跳过，由PLC内部写拍照信号
-                            if(node == _nodes[0] && node.NodeType == NodeType.PLCWrite && isCyclical)
-                                continue;
-                            await node.Run(token);
-                            RunTime += node.Result.RunTime;
-                        }
-                        catch (OperationCanceledException ex)
-                        {
-                            Success = false;
-                            IsRuning = false;
-                            RunTime += node.Result.RunTime;
-                            LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                            throw ex;
-                        }
-                        catch (Exception ex)
-                        {
-                            Success = false;
-                            IsRuning = false;
-                            RunTime += node.Result.RunTime;
-                            LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                            throw ex;
-                        }
+                        // 如果是流程的第一个节点、且是写入拍照信号的、且是循环运行模式就跳过执行
+                        // 也就是说，这个节点作为点检使用，生产模式（循环运行）时需要跳过，由PLC内部写拍照信号
+                        if (node == _nodes[0] && node.NodeType == NodeType.PLCWrite && isCyclical)
+                            continue;
+                        await node.Run(Solution.Instance.CancellationToken);
+                        RunTime += node.Result.RunTime;
                     }
+                    catch (OperationCanceledException ex)
+                    {
+                        Success = false;
+                        IsRuning = false;
+                        RunTime += node.Result.RunTime;
+                        LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                        throw ex;
+                    }
+                    catch (Exception ex)
+                    {
+                        Success = false;
+                        IsRuning = false;
+                        RunTime += node.Result.RunTime;
+                        LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                        throw ex;
+                    }
+                }
 
-                    Success = true;
-                    IsRuning = false;
-                    LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
-                }
+                Success = true;
+                IsRuning = false;
+                LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
+                UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
                 if (isCyclical)
-                {
-                    await Task.Delay(Solution.Instance.RunInterval, token);
+                { 
+                    await Task.Delay(Solution.Instance.RunInterval, Solution.Instance.CancellationToken);
                 }
-            } while (isCyclical && !token.IsCancellationRequested);
-            
-            // 重置运行取消令牌
-            Solution.Instance.ResetTokenSource();
+            } while (isCyclical && !Solution.Instance.CancellationToken.IsCancellationRequested);
         }
 
         /// <summary>
@@ -155,54 +150,52 @@ namespace YTVisionPro
         {
             // 重置运行取消令牌
             Solution.Instance.ResetTokenSource();
-            // 节点数为0不运行
-            if (Nodes.Count == 0)
+
+            // 节点数为0或流程不启用则不运行
+            if (Nodes.Count == 0 || !Enable)
                 return;
 
             RunTime = 0;
-            if (Enable)
+            // 更新运行状态
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+            IsRuning = true;
+            Success = false;
+            foreach (var node in _nodes)
             {
-                // 更新运行状态
-                UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
-                IsRuning = true;
-                Success = false;
-                foreach (var node in _nodes)
+                try
                 {
-                    try
+                    if (nodeShot == node)
                     {
-                        if (nodeShot == node)
-                        {
-                            RunTime += time;
-                            continue;
-                        }
-                        await node.Run(Solution.Instance.CancellationToken);
-                        RunTime += node.Result.RunTime;
+                        RunTime += time;
+                        continue;
                     }
-                    catch (OperationCanceledException ex)
-                    {
-                        Success = false;
-                        IsRuning = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
-                    }
-                    catch (Exception ex)
-                    {
-                        Success = false;
-                        IsRuning = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
-                    }
+                    await node.Run(Solution.Instance.CancellationToken);
+                    RunTime += node.Result.RunTime;
                 }
-
-                Success = true;
-                IsRuning = false;
-                LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-                UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
+                catch (OperationCanceledException ex)
+                {
+                    Success = false;
+                    IsRuning = false;
+                    RunTime += node.Result.RunTime;
+                    LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    Success = false;
+                    IsRuning = false;
+                    RunTime += node.Result.RunTime;
+                    LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    throw ex;
+                }
             }
+
+            Success = true;
+            IsRuning = false;
+            LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
         }
 
         /// <summary>
@@ -213,54 +206,52 @@ namespace YTVisionPro
         {
             // 重置运行取消令牌
             Solution.Instance.ResetTokenSource();
-            // 节点数为0不运行
-            if (Nodes.Count == 0)
+
+            // 节点数为0或流程不启用则不运行
+            if (Nodes.Count == 0 || !Enable)
                 return;
 
             RunTime = 0;
-            if (Enable)
+            // 更新运行状态
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+            LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
+            IsRuning = true;
+            Success = false;
+            foreach (var node in _nodes)
             {
-                // 更新运行状态
-                UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
-                LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
-                IsRuning = true;
-                Success = false;
-                foreach (var node in _nodes)
+                try
                 {
-                    try
+                    if (node2Stop == node)
                     {
-                        if (node2Stop == node)
-                        {
-                            break;
-                        }
-                        await node.Run(Solution.Instance.CancellationToken);
-                        RunTime += node.Result.RunTime;
+                        break;
                     }
-                    catch (OperationCanceledException ex)
-                    {
-                        Success = false;
-                        IsRuning = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
-                    }
-                    catch (Exception ex)
-                    {
-                        Success = false;
-                        IsRuning = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
-                    }
+                    await node.Run(Solution.Instance.CancellationToken);
+                    RunTime += node.Result.RunTime;
                 }
-
-                Success = true;
-                IsRuning = false;
-                LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-                UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
+                catch (OperationCanceledException ex)
+                {
+                    Success = false;
+                    IsRuning = false;
+                    RunTime += node.Result.RunTime;
+                    LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    Success = false;
+                    IsRuning = false;
+                    RunTime += node.Result.RunTime;
+                    LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    throw ex;
+                }
             }
+
+            Success = true;
+            IsRuning = false;
+            LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
         }
     }
 }

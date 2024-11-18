@@ -50,6 +50,9 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// <exception cref="NotImplementedException"></exception>
         private async void ParamFormShot_HardTriggerCompleted(object sender, HardTriggerResult e)
         {
+            // 流程没启用不运行
+            if(!Process.Enable)
+                return;
             // 设置图像结果
             ((NodeResultImageSource)Result).Bitmap = e.Bitmap;
             // 设置本节点的运行状态

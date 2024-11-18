@@ -439,6 +439,12 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
             if(SaveParams())
                 Hide();
         }
+
+        private void ParamFormImageSource_Load(object sender, EventArgs e)
+        {
+            if(comboBoxImgSource.SelectedIndex == 1)
+                InitCameraList();
+        }
     }
 
     /// <summary>

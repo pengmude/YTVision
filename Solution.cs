@@ -237,24 +237,21 @@ namespace YTVisionPro
         public async Task Run(bool isCyclical = false)
         {
             IsRunning = true;
-            //DateTime startTime = DateTime.Now;
-            _cancellationTokenSource = new CancellationTokenSource();
+
+            // 重置运行取消令牌
+            Solution.Instance.ResetTokenSource();
             try
             {
                 // 启动所有流程
                 var tasks = new List<Task>();
                 foreach (var process in AllProcesses)
                 {
-                    tasks.Add(process.Run(isCyclical, _cancellationTokenSource.Token));
+                    tasks.Add(process.Run(isCyclical));
                 }
                 // 等待所有流程完成
                 await Task.WhenAll(tasks);
             }
             catch (Exception ex) { }
-
-            // 方案总耗时计算
-            //RunTime = (long)(DateTime.Now - startTime).TotalMilliseconds;
-            //LogHelper.AddLog(MsgLevel.Info, $"方案总耗时：{RunTime} ms", true);
 
             IsRunning = false;
         }

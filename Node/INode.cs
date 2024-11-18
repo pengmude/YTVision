@@ -224,6 +224,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 模版匹配
         /// </summary>
-        MatchTemplate
+        MatchTemplate,
+        /// <summary>
+        /// 图片定时删除
+        /// </summary>
+        ImageFileDelete
     }
 }

@@ -114,6 +114,12 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                 bitmap = nodeSubscription1.GetValue<Bitmap>();
                 srcMat =  BitmapConverter.ToMat(bitmap);
 
+                if(srcMat.Channels() == 1)
+                {
+                    imageROIEditControl1.SetImage(bitmap);
+                    return;
+                }
+
                 // 将原始图像转换为灰度图像 (CV_8UC1)
                 Cv2.CvtColor(srcMat, srcMat, ColorConversionCodes.BGR2GRAY);
             }
