@@ -16,10 +16,12 @@ namespace YTVisionPro
     {
         public bool IsRunning;
         public bool IsSuccess;
-        public ProcessRunResult(bool  isRunning, bool isSuccess)
+        public string ProcessName;
+        public ProcessRunResult(bool  isRunning, bool isSuccess, string name)
         {
             IsRunning = isRunning;
             IsSuccess = isSuccess;
+            ProcessName = name;
         }
     }
 
@@ -48,6 +50,11 @@ namespace YTVisionPro
         /// 流程是否正在运行
         /// </summary>
         public bool IsRuning { get; set; } = false;
+
+        /// <summary>
+        /// 流程运行优先级
+        /// </summary>
+        public ProcessLvEnum RunLv { get; set; } = ProcessLvEnum.Lv5;
 
         /// <summary>
         /// 流程运行时间
@@ -89,56 +96,48 @@ namespace YTVisionPro
             // 节点数为0或流程不启用则不运行
             if (Nodes.Count == 0 || !Enable)
                 return;
+            RunTime = 0;
+            // 界面运行按钮Enable设置为运行中
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false, ProcessName));
 
-            do
+            LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
+            IsRuning = true;
+            Success = false;
+            foreach (var node in _nodes)
             {
-                RunTime = 0;
-                // 界面运行按钮Enable设置为运行中
-                UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
-
-                LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
-                IsRuning = true;
-                Success = false;
-                foreach (var node in _nodes)
+                try
                 {
-                    try
-                    {
-                        // 如果是流程的第一个节点、且是写入拍照信号的、且是循环运行模式就跳过执行
-                        // 也就是说，这个节点作为点检使用，生产模式（循环运行）时需要跳过，由PLC内部写拍照信号
-                        if (node == _nodes[0] && node.NodeType == NodeType.PLCWrite && isCyclical)
-                            continue;
-                        await node.Run(Solution.Instance.CancellationToken);
-                        RunTime += node.Result.RunTime;
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        Success = false;
-                        IsRuning = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
-                    }
-                    catch (Exception ex)
-                    {
-                        Success = false;
-                        IsRuning = false;
-                        RunTime += node.Result.RunTime;
-                        LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                        UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
-                        throw ex;
-                    }
+                    // 如果是流程的第一个节点、且是写入拍照信号的、且是循环运行模式就跳过执行
+                    // 也就是说，这个节点作为点检使用，生产模式（循环运行）时需要跳过，由PLC内部写拍照信号
+                    if (node == _nodes[0] && node.NodeType == NodeType.PLCWrite && isCyclical)
+                        continue;
+                    await node.Run(Solution.Instance.CancellationToken);
+                    RunTime += node.Result.RunTime;
                 }
+                catch (OperationCanceledException ex)
+                {
+                    Success = false;
+                    IsRuning = false;
+                    RunTime += node.Result.RunTime;
+                    LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false, ProcessName));
+                    throw ex;
+                }
+                catch (Exception ex)
+                {
+                    Success = false;
+                    IsRuning = false;
+                    RunTime += node.Result.RunTime;
+                    LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false, ProcessName));
+                    throw ex;
+                }
+            }
 
-                Success = true;
-                IsRuning = false;
-                LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-                UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
-                if (isCyclical)
-                { 
-                    await Task.Delay(Solution.Instance.RunInterval, Solution.Instance.CancellationToken);
-                }
-            } while (isCyclical && !Solution.Instance.CancellationToken.IsCancellationRequested);
+            Success = true;
+            IsRuning = false;
+            LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true, ProcessName));
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace YTVisionPro
 
             RunTime = 0;
             // 更新运行状态
-            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false, ProcessName));
             IsRuning = true;
             Success = false;
             foreach (var node in _nodes)
@@ -178,7 +177,7 @@ namespace YTVisionPro
                     IsRuning = false;
                     RunTime += node.Result.RunTime;
                     LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false, ProcessName));
                     throw ex;
                 }
                 catch (Exception ex)
@@ -187,7 +186,7 @@ namespace YTVisionPro
                     IsRuning = false;
                     RunTime += node.Result.RunTime;
                     LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false, ProcessName));
                     throw ex;
                 }
             }
@@ -195,7 +194,7 @@ namespace YTVisionPro
             Success = true;
             IsRuning = false;
             LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true, ProcessName));
         }
 
         /// <summary>
@@ -213,7 +212,7 @@ namespace YTVisionPro
 
             RunTime = 0;
             // 更新运行状态
-            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false));
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(true, false, ProcessName));
             LogHelper.AddLog(MsgLevel.Info, $"-----------------------------------------------------  【{ProcessName}】（开始）  -----------------------------------------------------", true);
             IsRuning = true;
             Success = false;
@@ -234,7 +233,7 @@ namespace YTVisionPro
                     IsRuning = false;
                     RunTime += node.Result.RunTime;
                     LogHelper.AddLog(MsgLevel.Warn, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（运行中断）  ---------------------------------", true);
-                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false, ProcessName));
                     throw ex;
                 }
                 catch (Exception ex)
@@ -243,7 +242,7 @@ namespace YTVisionPro
                     IsRuning = false;
                     RunTime += node.Result.RunTime;
                     LogHelper.AddLog(MsgLevel.Exception, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（失败）  ---------------------------------", true);
-                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false));
+                    UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, false, ProcessName));
                     throw ex;
                 }
             }
@@ -251,7 +250,26 @@ namespace YTVisionPro
             Success = true;
             IsRuning = false;
             LogHelper.AddLog(MsgLevel.Info, $"---------------------------------  【{ProcessName}】（结束） 【耗时】（{RunTime}ms） 【状态】（成功）  ---------------------------------", true);
-            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true));
+            UpdateRunStatus?.Invoke(this, new ProcessRunResult(false, true, ProcessName));
         }
     }
+
+    /// <summary>
+    /// 流程运行优先级别，同级并行运行
+    /// </summary>
+    internal enum ProcessLvEnum 
+    {
+        /// <summary>
+        /// 1级最先运行
+        /// </summary>
+        Lv1,
+        Lv2,
+        Lv3,
+        Lv4,
+        /// <summary>
+        /// 5级最后运行
+        /// </summary>
+        Lv5,
+    }
+
 }

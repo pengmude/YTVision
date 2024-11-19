@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YTVisionPro.Node._3_Detection.HTAI;
 
 namespace YTVisionPro.Node
 {
@@ -213,7 +214,11 @@ namespace YTVisionPro.Node
             {
                 Solution.Instance.Nodes.Remove(this);
                 Process.Nodes.Remove(this);
-                NodeDeletedEvent.Invoke(this, this);
+                NodeDeletedEvent.Invoke(this, this); 
+                if (this is NodeHTAI)
+                {
+                    Solution.Instance.SolAiModelNum--;
+                }
             }
 
             #region 测试节点删除后代码

@@ -58,5 +58,10 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
         public ROI ROI { get; set; }
+
+        /// <summary>
+        /// 比例(每一个像素的长度是多少毫米)
+        /// </summary>
+        public double Scale { get; set; }
     }
 }

@@ -105,7 +105,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                     // 发送信号到对应的PLC
                     foreach (var maxSignalRow in maxSignalRowsByPlc)
                     {
-                        await SendSignalToPlc(maxSignalRow, param.StayTime);
+                        await Task.Run(() => SendSignalToPlc(maxSignalRow, param.StayTime));
                     }
                     
                     long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -163,7 +163,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                             } while (!writeResult.IsSuccess);
 
                             // 信号保持时间
-                            await ExecuteSleepAsync((int)time);
+                            await Task.Delay((int)time);
 
                             do
                             {
@@ -183,12 +183,6 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                     }
                 }
             }
-        }
-
-        private async Task ExecuteSleepAsync(int timeInMilliseconds)
-        {
-            // 使用 Task.Delay 在后台线程上执行异步睡眠操作
-            await Task.Delay(timeInMilliseconds);
         }
     }
 }

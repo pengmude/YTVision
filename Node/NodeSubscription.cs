@@ -165,9 +165,19 @@ namespace YTVisionPro.Node
                 throw new Exception($"节点无法获取订阅的值!");
 
             var propertyInfo = _selectedNode.Result.GetType().GetProperties().ToList().Find(item => item.DisplayName() == comboBox2.Text);
-            if (propertyInfo != null && propertyInfo.CanRead && propertyInfo.PropertyType == typeof(T))
+            if (propertyInfo != null && propertyInfo.CanRead)
             {
-                return (T)propertyInfo.GetValue(_selectedNode.Result);
+                var value = propertyInfo.GetValue(_selectedNode.Result);
+                if (value == null)
+                    return default(T);
+                if (value is T)
+                {
+                    return (T)value;
+                }
+                else
+                {
+                    throw new InvalidCastException($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值类型不匹配，期望类型为{typeof(T).Name}，实际类型为{value.GetType().Name}!");
+                }
             }
             else
             {

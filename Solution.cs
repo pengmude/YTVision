@@ -121,6 +121,11 @@ namespace YTVisionPro
         public bool IsModify { get; set; } = false;
 
         /// <summary>
+        /// 方案的共享变量
+        /// </summary>
+        public SharedVariable SharedVariable { get; set; } = new SharedVariable();
+
+        /// <summary>
         /// 方案文件名
         /// </summary>
         public string SolFileName { get; set; }
@@ -230,9 +235,9 @@ namespace YTVisionPro
         #region 方案运行/停止、配置加载/保存等相关操作
 
         /// <summary>
-        /// 方案运行
+        /// 按照流程运行优先级顺序执行
         /// </summary>
-        /// <param name="isCyclical">是否循环运行</param>
+        /// <param name="isCyclical"></param>
         /// <returns></returns>
         public async Task Run(bool isCyclical = false)
         {
@@ -240,20 +245,47 @@ namespace YTVisionPro
 
             // 重置运行取消令牌
             Solution.Instance.ResetTokenSource();
+
             try
             {
-                // 启动所有流程
-                var tasks = new List<Task>();
-                foreach (var process in AllProcesses)
+                do
                 {
-                    tasks.Add(process.Run(isCyclical));
-                }
-                // 等待所有流程完成
-                await Task.WhenAll(tasks);
-            }
-            catch (Exception ex) { }
+                    // 按优先级分组
+                    var groupedProcesses = AllProcesses.GroupBy(p => p.RunLv)
+                                                        .OrderBy(g => g.Key)
+                                                        .ToList();
 
-            IsRunning = false;
+                    // 按优先级顺序执行
+                    foreach (var group in groupedProcesses)
+                    {
+                        var tasks = new List<Task>();
+                        foreach (var process in group)
+                        {
+                            tasks.Add(process.Run(isCyclical));
+                        }
+                        // 等待同级流程完成
+                        await Task.WhenAll(tasks);
+                    }
+
+                    // 如果是循环运行模式，等待一段时间后再继续
+                    if (isCyclical)
+                    {
+                        await Task.Delay(Solution.Instance.RunInterval, Solution.Instance.CancellationToken);
+                    }
+                } while (isCyclical && !Solution.Instance.CancellationToken.IsCancellationRequested);
+            }
+            catch (OperationCanceledException)
+            {
+                //Console.WriteLine("Run operation was canceled.");
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                IsRunning = false;
+            }
         }
 
         /// <summary>
@@ -366,6 +398,9 @@ namespace YTVisionPro
                     ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
                 }
             }
+
+            // 清空方案共享变量
+            Solution.Instance.SharedVariable.ClearAll();
 
             // 清空流程和节点
             Solution.Instance.ProcessCount = 0;

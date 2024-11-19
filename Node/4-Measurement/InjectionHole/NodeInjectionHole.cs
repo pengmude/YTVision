@@ -49,7 +49,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                         var (circle, image) = form.DetectInjectionHole();
                         if (circle == null || image == null) { throw new Exception("注液孔查找失败！"); }
 
-                        if (circle.Radius >= param.OKMinR && circle.Radius <= param.OKMaxR)
+                        if (circle.Radius * param.Scale >= param.OKMinR && circle.Radius * param.Scale <= param.OKMaxR)
                             res = "OK";
                         else
                             res = "NG";
@@ -62,7 +62,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径：{circle.Radius.ToString("F2")} 像素, 圆心：({(int)circle.Center.X}，{(int)circle.Center.Y}), 判定：{res}", true);
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径(PX)：{circle.Radius.ToString("F2")} PX, 圆半径(mm)：{circle.Radius * param.Scale} mm, 圆心：({(int)circle.Center.X}，{(int)circle.Center.Y}), 判定：{res}", true);
                     }
                     catch (OperationCanceledException)
                     {

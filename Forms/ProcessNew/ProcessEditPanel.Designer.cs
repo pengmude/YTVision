@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.uiLedBulb1 = new Sunny.UI.UILedBulb();
             this.uiSwitchEnable = new Sunny.UI.UISwitch();
@@ -35,7 +36,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.设置流程优先级ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -125,6 +129,7 @@
             // 
             this.panel1.AllowDrop = true;
             this.panel1.AutoScroll = true;
+            this.panel1.ContextMenuStrip = this.contextMenuStrip1;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 61);
             this.panel1.Name = "panel1";
@@ -132,6 +137,21 @@
             this.panel1.TabIndex = 1;
             this.panel1.DragDrop += new System.Windows.Forms.DragEventHandler(this.NodeEditPanel_DragDrop);
             this.panel1.DragEnter += new System.Windows.Forms.DragEventHandler(this.NodeEditPanel_DragEnter);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.设置流程优先级ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(207, 34);
+            // 
+            // 设置流程优先级ToolStripMenuItem
+            // 
+            this.设置流程优先级ToolStripMenuItem.Name = "设置流程优先级ToolStripMenuItem";
+            this.设置流程优先级ToolStripMenuItem.Size = new System.Drawing.Size(206, 30);
+            this.设置流程优先级ToolStripMenuItem.Text = "设置流程优先级";
+            this.设置流程优先级ToolStripMenuItem.Click += new System.EventHandler(this.设置流程优先级ToolStripMenuItem_Click);
             // 
             // ProcessEditPanel
             // 
@@ -146,6 +166,7 @@
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.NodeEditPanel_DragEnter);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -159,5 +180,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private Sunny.UI.UILedBulb uiLedBulb1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 设置流程优先级ToolStripMenuItem;
     }
 }

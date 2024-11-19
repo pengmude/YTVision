@@ -1,4 +1,5 @@
-﻿using Sunny.UI;
+﻿using Logger;
+using Sunny.UI;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -304,67 +305,75 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
         /// <exception cref="NotImplementedException"></exception>
         public void SetParam2Form()
         {
-            if (Params is NodeParamSendResultByPLC param)
+            try
             {
-                nodeParamSendSignal = param;
-                
-                // 还原订阅节点
-                nodeSubscription1.SetText(param.Text1, param.Text2);
-                nodeSubscription2.SetText(param.Text3, param.Text4);
-
-                // 还原输入框文本
-                textBox2.Text = param.OKPLC;
-                textBox1.Text = param.NGPLC;
-                textBox4.Text = param.AlgorithmNG;
-                textBoxStayTime.Text = param.StayTime.ToString();
-
-                //加载表格数据
-                dataTable.Clear();
-                foreach (var item in param.Data)
+                if (Params is NodeParamSendResultByPLC param)
                 {
-                    DataRow newRow = dataTable.NewRow();
-                    newRow["PLC"] = item.DevName;
-                    newRow["节点(AI)"] = item.NodeName;
-                    newRow["类别(AI)"] = item.ClassName;
-                    newRow["检测项"] = item.DetectName;
-                    newRow["信号等级"] = item.SignalLevel;
-                    newRow["信号地址"] = item.SignalAddress;
-                    dataTable.Rows.Add(newRow);
-                    UpdateDataTable();
+                    nodeParamSendSignal = param;
+
+                    // 还原订阅节点
+                    nodeSubscription1.SetText(param.Text1, param.Text2);
+                    nodeSubscription2.SetText(param.Text3, param.Text4);
+
+                    // 还原输入框文本
+                    textBox2.Text = param.OKPLC;
+                    textBox1.Text = param.NGPLC;
+                    textBox4.Text = param.AlgorithmNG;
+                    textBoxStayTime.Text = param.StayTime.ToString();
+
+                    //加载表格数据
+                    dataTable.Clear();
+                    foreach (var item in param.Data)
+                    {
+                        DataRow newRow = dataTable.NewRow();
+                        newRow["PLC"] = item.DevName;
+                        newRow["节点(AI)"] = item.NodeName;
+                        newRow["类别(AI)"] = item.ClassName;
+                        newRow["检测项"] = item.DetectName;
+                        newRow["信号等级"] = item.SignalLevel;
+                        newRow["信号地址"] = item.SignalAddress;
+                        dataTable.Rows.Add(newRow);
+                        UpdateDataTable();
+                    }
+
+                    //初始PLC
+                    comboBox2.Items.Clear();
+                    comboBox2.Items.Add("[未设置]");
+                    foreach (var plc in Solution.Instance.PlcDevices)
+                    {
+                        comboBox2.Items.Add(plc.UserDefinedName);
+                    }
+                    int index1 = comboBox2.Items.IndexOf(param.PlcName);
+                    comboBox2.SelectedIndex = index1 == -1 ? 0 : index1;
+
+                    // 加载tree文件
+                    this.textBox3.Text = param.Path;
+                    comboBox3.Items.Clear();
+
+                    // tree文件为空直接返回
+                    if (param.Path.IsNullOrEmpty())
+                        return;
+                    string treefile = File.ReadAllText(param.Path);
+                    NodeInfos treeNode = Newtonsoft.Json.JsonConvert.DeserializeObject<NodeInfos>(treefile);
+                    _nodeToClassName = new List<NodeToClassName>();
+
+                    //填充节点、类别下拉框
+                    foreach (var item in treeNode.NodeInfo)
+                    {
+                        NodeToClassName nodeToClassName = new NodeToClassName();
+                        nodeToClassName.NodeName = item.NodeName;
+                        comboBox3.Items.Add(item.NodeName);
+                        nodeToClassName.ClassNames = item.ClassNames;
+                        _nodeToClassName.Add(nodeToClassName);
+                    }
+                    comboBox3.SelectedIndex = 0;
                 }
-
-                //初始PLC
-                comboBox2.Items.Clear();
-                comboBox2.Items.Add("[未设置]");
-                foreach (var plc in Solution.Instance.PlcDevices)
-                {
-                    comboBox2.Items.Add(plc.UserDefinedName);
-                }
-                int index1 = comboBox2.Items.IndexOf(param.PlcName);
-                comboBox2.SelectedIndex = index1 == -1 ? 0 : index1;
-
-                // 加载tree文件
-                this.textBox3.Text = param.Path;
-                comboBox3.Items.Clear();
-
-                // tree文件为空直接返回
-                if (param.Path.IsNullOrEmpty())
-                    return;
-                string treefile = File.ReadAllText(param.Path);
-                NodeInfos treeNode = Newtonsoft.Json.JsonConvert.DeserializeObject<NodeInfos>(treefile);
-                _nodeToClassName = new List<NodeToClassName>();
-
-                //填充节点、类别下拉框
-                foreach (var item in treeNode.NodeInfo)
-                {
-                    NodeToClassName nodeToClassName = new NodeToClassName();
-                    nodeToClassName.NodeName = item.NodeName;
-                    comboBox3.Items.Add(item.NodeName);
-                    nodeToClassName.ClassNames = item.ClassNames;
-                    _nodeToClassName.Add(nodeToClassName);
-                }
-                comboBox3.SelectedIndex = 0;
             }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, $"{ex.Message}", true);
+            }
+            
         }
 
         private void ParamFormHTAISendSignal_Load(object sender, EventArgs e)

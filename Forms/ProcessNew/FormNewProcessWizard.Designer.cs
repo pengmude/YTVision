@@ -185,12 +185,13 @@ namespace YTVisionPro.Forms.ProcessNew
             this.imageList1.Images.SetKeyName(30, "Modbus软触发");
             this.imageList1.Images.SetKeyName(31, "Modbus发送AI结果");
             this.imageList1.Images.SetKeyName(32, "逻辑工具");
-            this.imageList1.Images.SetKeyName(33, "延迟执行");
-            this.imageList1.Images.SetKeyName(34, "结果处理");
-            this.imageList1.Images.SetKeyName(35, "保存图片");
-            this.imageList1.Images.SetKeyName(36, "检测结果显示");
-            this.imageList1.Images.SetKeyName(37, "结果汇总");
-            this.imageList1.Images.SetKeyName(38, "图片删除");
+            this.imageList1.Images.SetKeyName(33, "共享变量");
+            this.imageList1.Images.SetKeyName(34, "延迟执行");
+            this.imageList1.Images.SetKeyName(35, "结果处理");
+            this.imageList1.Images.SetKeyName(36, "保存图片");
+            this.imageList1.Images.SetKeyName(37, "检测结果显示");
+            this.imageList1.Images.SetKeyName(38, "结果汇总");
+            this.imageList1.Images.SetKeyName(39, "图片删除");
             // 
             // label1
             // 

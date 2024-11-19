@@ -32,6 +32,8 @@ using YTVisionPro.Node._3_Detection.QRScan;
 using YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement;
 using YTVisionPro.Node._3_Detection.MatchTemplate;
 using YTVisionPro.Node._7_ResultProcessing.ImageDelete;
+using YTVisionPro.Node._6_LogicTool.SharedVariable;
+using System.Diagnostics;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -41,6 +43,11 @@ namespace YTVisionPro.Forms.ProcessNew
         /// 绑定的流程
         /// </summary>
         private Process _process { get; set; }
+
+        /// <summary>
+        /// 流程优先级设置窗口
+        /// </summary>
+        private FormSetProcessLv _processLvSet { get; set; }
 
         /// <summary>
         /// 所有的节点控件
@@ -55,6 +62,7 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             InitializeComponent();
             _process = new Process(processName);
+            _processLvSet = new FormSetProcessLv(_process);
             Process.UpdateRunStatus += RunStatusChange;
             Solution.Instance.UpdateRunStatus += RunStatusChange;
             Solution.Instance.AddProcess(_process);
@@ -62,6 +70,7 @@ namespace YTVisionPro.Forms.ProcessNew
             // 反序列化需要执行以下逻辑
             if(processConfig != null)
             {
+                _process.RunLv = processConfig.Level;
                 _stack.Clear();
                 label1.Text = $"节点数:0";
                 if(showInfo)
@@ -76,10 +85,13 @@ namespace YTVisionPro.Forms.ProcessNew
 
         private void RunStatusChange(object sender, ProcessRunResult e)
         {
-            label2.Text = $"耗时:{_process.RunTime} ms";
-            buttonRun.Enabled = !e.IsRunning;
-            uiSwitchEnable.Enabled = !e.IsRunning;
-            uiLedBulb1.Color = e.IsRunning ? Color.DarkGray : e.IsSuccess ? Color.LawnGreen : Color.Red;
+            if(_process.ProcessName == e.ProcessName)
+            {
+                label2.Text = $"耗时:{_process.RunTime} ms";
+                buttonRun.Enabled = !e.IsRunning;
+                uiSwitchEnable.Enabled = !e.IsRunning;
+                uiLedBulb1.Color = e.IsRunning ? Color.DarkGray : e.IsSuccess ? Color.LawnGreen : Color.Red;
+            }
         }
 
         /// <summary>
@@ -257,6 +269,9 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.ImageFileDelete:
                     node = new NodeImageDelete(nodeId, nodeName, _process, nodeType);
                     break;
+                case NodeType.SharedVariable:
+                    node = new NodeSharedVariable(nodeId, nodeName, _process, nodeType);
+                    break;
                 default:
                     break;
             }
@@ -347,6 +362,11 @@ namespace YTVisionPro.Forms.ProcessNew
                 LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}启用", true);
             else
                 LogHelper.AddLog(MsgLevel.Info, $"{_process.ProcessName}禁用", true);
+        }
+
+        private void 设置流程优先级ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _processLvSet.ShowDialog();
         }
     }
 }

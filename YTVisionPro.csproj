@@ -276,6 +276,12 @@
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProcessNew\FormSetProcessLv.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormSetProcessLv.Designer.cs">
+      <DependentUpon>FormSetProcessLv.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ShapeDraw\CircleROI.cs" />
     <Compile Include="Forms\ShapeDraw\RectangleROI.cs" />
     <Compile Include="Forms\TCPAdd\FrmTCPListView.cs">
@@ -631,6 +637,17 @@
     <Compile Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.Designer.cs">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Node\6-LogicTool\SharedVariable\NodeParamFormSharedVariable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\6-LogicTool\SharedVariable\NodeParamFormSharedVariable.Designer.cs">
+      <DependentUpon>NodeParamFormSharedVariable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Node\6-LogicTool\SharedVariable\NodeParamSharedVariable.cs" />
+    <Compile Include="Node\6-LogicTool\SharedVariable\NodeResultSharedVariable.cs" />
+    <Compile Include="Node\6-LogicTool\SharedVariable\NodeSharedVariable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeImageDelete.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -784,6 +801,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SharedVariable.cs" />
     <Compile Include="Solution.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -836,6 +854,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\FormSetProcessLv.resx">
+      <DependentUpon>FormSetProcessLv.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TCPAdd\FrmTCPListView.resx">
       <DependentUpon>FrmTCPListView.cs</DependentUpon>
@@ -950,6 +971,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\1-Acquisition\ImageShow\ParamFormImageShow.resx">
       <DependentUpon>ParamFormImageShow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\6-LogicTool\SharedVariable\NodeParamFormSharedVariable.resx">
+      <DependentUpon>NodeParamFormSharedVariable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\7-ResultProcessing\ImageDelete\NodeParamFormImageDelete.resx">
       <DependentUpon>NodeParamFormImageDelete.cs</DependentUpon>

@@ -228,6 +228,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 图片定时删除
         /// </summary>
-        ImageFileDelete
+        ImageFileDelete,
+        /// <summary>
+        /// 共享变量
+        /// </summary>
+        SharedVariable
     }
 }

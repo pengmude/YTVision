@@ -58,6 +58,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                 textBoxThreshold1.Text = param.Threshold1.ToString();
                 textBoxThreshold2.Text = param.Threshold2.ToString();
                 checkBoxUseL2.Checked = param.IsOpenL2;
+                textBoxScale.Text = param.Scale.ToString();
 
                 //还原ROI
                 imageROIEditControl1.SetROI(param.ROI);
@@ -90,6 +91,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
             textBoxThreshold1.Enabled = checkBoxMoreParams.Checked;
             textBoxThreshold2.Enabled = checkBoxMoreParams.Checked;
             checkBoxUseL2.Enabled = checkBoxMoreParams.Checked;
+            textBoxScale.Enabled = checkBoxMoreParams.Checked;
         }
 
         /// <summary>
@@ -176,6 +178,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                 param.Threshold2 = double.Parse(textBoxThreshold2.Text);
                 param.IsOpenL2 = checkBoxUseL2.Checked;
                 param.ROI = imageROIEditControl1.GetROI();
+                param.Scale = double.Parse(textBoxScale.Text);
                 Params = param;
             }
             catch (Exception)
@@ -251,7 +254,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                 Cv2.CvtColor(result1, result1, ColorConversionCodes.BayerBG2BGR);
 
                 int radius = 20;
-                int numPoints = 18;
+                int numPoints = 36;
                 center = new Point(edges.Width / 2, edges.Height / 2);
                 List<Point> circlePoints = GetCirclePoints(center.X, center.Y, radius, numPoints);
                 List<Point2d> allEdgePoints = new List<Point2d>();
@@ -276,7 +279,8 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
 
                 // 在结果图像上绘制拟合的圆
                 Cv2.Circle(result1, (Point)center2, (int)radius2, new Scalar(0, 255, 0), 2);
-                Cv2.PutText(result1, $"Radius:{radius2.ToString("F2")}px", new Point(40, 40), HersheyFonts.HersheyTriplex, 1, Scalar.Red);
+                Cv2.PutText(result1, $"Radius(px):{radius2.ToString("F2")}px", new Point(40, 40), HersheyFonts.HersheyTriplex, 1, Scalar.Red);
+                Cv2.PutText(result1, $"Radius(mm):{radius2 * double.Parse(textBoxScale.Text)}", new Point(40, 75), HersheyFonts.HersheyTriplex, 1, Scalar.Red);
                 pictureBoxResult1.Image = BitmapConverter.ToBitmap(result1);
                 circle = new CircleSegment(new Point2f((float)center2.X, (float)center2.Y), (float)radius2);
             }

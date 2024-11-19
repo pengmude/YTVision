@@ -49,6 +49,7 @@
     </Node>
     <Node Text="逻辑工具" ImageName="逻辑工具" Tag="UNKNOWN" SelectedImageName="逻辑工具">
       <Nodes>
+        <Node Text="共享变量" ImageName="共享变量" Tag="SharedVariable" SelectedImageName="共享变量" />
         <Node Text="延迟执行" ImageName="延迟执行" Tag="SleepTool" SelectedImageName="延迟执行" />
       </Nodes>
     </Node>

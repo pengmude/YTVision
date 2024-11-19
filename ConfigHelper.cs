@@ -36,6 +36,7 @@ namespace YTVisionPro
                     ProcessConfig processConfig = new ProcessConfig();
                     processConfig.ProcessName = process.ProcessName;
                     processConfig.Enable = process.Enable;
+                    processConfig.Level = process.RunLv;
                     processConfig.NodeInfos.Clear();
                     foreach (var nodeConfig in process.Nodes)
                     {
@@ -196,6 +197,11 @@ namespace YTVisionPro
         /// 流程启用/禁用状态
         /// </summary>
         public bool Enable;
+        /// <summary>
+        /// 流程运行优先级
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ProcessLvEnum Level;
     }
 
     internal class NodeConfig
