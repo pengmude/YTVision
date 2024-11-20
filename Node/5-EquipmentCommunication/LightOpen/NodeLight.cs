@@ -41,7 +41,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
             try
             {
                 SetStatus(NodeStatus.Unexecuted, "*");
-                base.Run(token);
+                base.CheckTokenCancel(token);
 
                 //如果没有连接则不运行
                 if (!param.Light.IsComOpen)

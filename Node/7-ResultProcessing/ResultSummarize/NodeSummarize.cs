@@ -44,7 +44,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         var res1 = form.GetResult1();
                         var res2 = form.GetResult2();

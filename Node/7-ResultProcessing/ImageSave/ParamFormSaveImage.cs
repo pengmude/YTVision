@@ -107,7 +107,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         {
             try
             {
-                return nodeSubscriptionBarCode.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
+                return nodeSubscriptionBarCode.GetValue<string>();
             }
             catch (Exception)
             {

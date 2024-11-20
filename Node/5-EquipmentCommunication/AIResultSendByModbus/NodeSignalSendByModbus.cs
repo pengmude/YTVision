@@ -48,7 +48,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
                 {
                     // 初始化运行状态
                     SetStatus(NodeStatus.Unexecuted, "*");
-                    base.Run(token);
+                    base.CheckTokenCancel(token);
 
                     ResultViewData aiResult = form.GetAiResult();
 
@@ -105,7 +105,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
                         // 发送信号到对应的Modbus
                         foreach (var maxSignalRow in maxSignalRowsByModbus)
                         {
-                            SendSignalToModbus(maxSignalRow, param.StayTime);
+                            SendSignalToModbus(maxSignalRow, param.StayTime, token);
                         }
                     });
                     long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -132,7 +132,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
             return matchingRows;
         }
 
-        private async void SendSignalToModbus(SignalRowData dataRow, double time)
+        private async void SendSignalToModbus(SignalRowData dataRow, double time, CancellationToken token)
         {
             if (dataRow != null)
             {
@@ -147,6 +147,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
 
                             do
                             {
+                                base.CheckTokenCancel(token);
                                 modbuspolltmp.WriteSingleCoil(address, true);
 
                                 long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
@@ -160,6 +161,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus
 
                             do
                             {
+                                base.CheckTokenCancel(token);
                                 modbuspolltmp.WriteSingleCoil(address, false);
 
                                 long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;

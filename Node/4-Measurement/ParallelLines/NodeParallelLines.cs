@@ -46,7 +46,7 @@ namespace YTVisionPro.Node._4_Measurement.ParallelLines
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         var line1 = form.GetLinesSrc1();
                         var line2 = form.GetLinesSrc2();

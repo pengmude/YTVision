@@ -42,7 +42,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         //如果没有连接则不运行
                         if (!param.modbus.IsConnect)
@@ -51,7 +51,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
                         await Task.Run(() =>
                         {
                             // 监听拍照信号
-                            GetShotSignalFromModbus(param);
+                            GetShotSignalFromModbus(param, token);
                         });
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -73,18 +73,30 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
             }
         }
 
-        private void GetShotSignalFromModbus(NodeParamModbusSoftTrigger param)
+        private void GetShotSignalFromModbus(NodeParamModbusSoftTrigger param, CancellationToken token)
         {
-            bool[] readResult;
-            var modbusPoll = param.modbus as ModbusPoll;
-            // 读取拍照信号
-            do
+            try
             {
-                readResult = modbusPoll.ReadCoils(Convert.ToUInt16(param.Address), 1);
-            } while (!readResult.All(b => b == true));  // 读取失败或读取不到拍照信号为true均需要重试
-            // 重置拍照信号
-            modbusPoll.WriteSingleCoil(Convert.ToUInt16(param.Address), false);
-            LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
+                bool[] readResult;
+                var modbusPoll = param.modbus as ModbusPoll;
+                // 读取拍照信号
+                do
+                {
+                    base.CheckTokenCancel(token);
+                    readResult = modbusPoll.ReadCoils(Convert.ToUInt16(param.Address), 1);
+                } while (!readResult.All(b => b == true));  // 读取失败或读取不到拍照信号为true均需要重试
+                                                            // 重置拍照信号
+                modbusPoll.WriteSingleCoil(Convert.ToUInt16(param.Address), false);
+                LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw ex;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

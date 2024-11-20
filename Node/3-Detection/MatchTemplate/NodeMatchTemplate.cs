@@ -43,7 +43,7 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         // 获取图像
                         form.UpdataImage();

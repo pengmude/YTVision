@@ -70,7 +70,7 @@ namespace YTVisionPro.Node._3_Detection.HTAI
                         try
                         {
                             SetStatus(NodeStatus.Unexecuted, "*");
-                            base.Run(token);
+                            base.CheckTokenCancel(token);
 
                             // 获取订阅的图像
                             Bitmap srcImg = form.GetImage();

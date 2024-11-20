@@ -42,7 +42,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);

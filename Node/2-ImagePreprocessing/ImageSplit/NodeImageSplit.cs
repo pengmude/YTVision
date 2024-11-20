@@ -44,7 +44,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         NodeResultImageSplit res = new NodeResultImageSplit();
                         var img = paramForm.GetImage();

@@ -46,7 +46,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         Bitmap image = form.GetImage();
                         ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, image));

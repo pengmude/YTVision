@@ -75,6 +75,8 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button5 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -466,7 +468,8 @@
             this.tableLayoutPanel7.Controls.Add(this.textBox1, 1, 2);
             this.tableLayoutPanel7.Controls.Add(this.label2, 0, 2);
             this.tableLayoutPanel7.Controls.Add(this.button4, 3, 0);
-            this.tableLayoutPanel7.Controls.Add(this.button1, 3, 3);
+            this.tableLayoutPanel7.Controls.Add(this.button1, 2, 3);
+            this.tableLayoutPanel7.Controls.Add(this.button5, 3, 3);
             this.tableLayoutPanel7.Location = new System.Drawing.Point(63, 3);
             this.tableLayoutPanel7.Name = "tableLayoutPanel7";
             this.tableLayoutPanel7.RowCount = 4;
@@ -601,7 +604,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.button1.Location = new System.Drawing.Point(798, 200);
+            this.button1.Location = new System.Drawing.Point(558, 200);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(84, 43);
@@ -641,6 +644,17 @@
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // button5
+            // 
+            this.button5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.button5.Location = new System.Drawing.Point(780, 202);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(119, 40);
+            this.button5.TabIndex = 10;
+            this.button5.Text = "清空列表";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // ParamFormSendResultByPLC
             // 
@@ -724,5 +738,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ComboBox comboBoxSignalLevel1;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Timer timer1;
     }
 }

@@ -43,7 +43,7 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         string res = string.Empty;
                         var (circle, image) = form.DetectInjectionHole();

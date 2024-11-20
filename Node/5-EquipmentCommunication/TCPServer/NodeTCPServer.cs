@@ -50,7 +50,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.TcpServer
             try
             {
                 SetStatus(NodeStatus.Unexecuted, "*");
-                base.Run(token);
+                base.CheckTokenCancel(token);
 
                 //如果没有连接则不运行
                 if (!param.Sever.IsConnect)

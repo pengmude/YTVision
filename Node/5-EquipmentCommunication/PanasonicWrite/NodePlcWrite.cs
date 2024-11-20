@@ -46,7 +46,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
             try
             {
                 SetStatus(NodeStatus.Unexecuted, "*");
-                base.Run(token);
+                base.CheckTokenCancel(token);
 
                 //如果没有连接则不运行
                 if (!param.Plc.IsConnect)
@@ -58,6 +58,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
                 OperateResult res = new OperateResult();
                 do
                 {
+                    base.CheckTokenCancel(token);
                     switch (param.Value)
                     {
                         case bool bValue:
@@ -71,6 +72,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
                         case string sValue:
                             res.IsSuccess = param.Plc.WriteString(param.Address, sValue).IsSuccess;
                             break;
+                        default:
+                            throw new Exception("没有匹配的类型！");
                     }
 
                     long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;

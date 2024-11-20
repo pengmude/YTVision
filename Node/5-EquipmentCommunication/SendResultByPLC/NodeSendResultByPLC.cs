@@ -1,5 +1,6 @@
 ﻿using HslCommunication;
 using Logger;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -47,7 +48,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                 {
                     // 初始化运行状态
                     SetStatus(NodeStatus.Unexecuted, "*");
-                    base.Run(token);
+                    base.CheckTokenCancel(token);
 
                     // 获取订阅的算法结果
                     ResultViewData detectResult = form.GetAllResult();
@@ -102,10 +103,11 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                         throw new Exception($"节点({ID}.{NodeName})没有匹配到对应的信号！");
                     }
 
+                    base.CheckTokenCancel(token);
                     // 发送信号到对应的PLC
                     foreach (var maxSignalRow in maxSignalRowsByPlc)
                     {
-                        await Task.Run(() => SendSignalToPlc(maxSignalRow, param.StayTime));
+                        await Task.Run(() => SendSignalToPlc(maxSignalRow, param.StayTime, token));
                     }
                     
                     long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -132,7 +134,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
             return matchingRows;
         }
 
-        private async Task SendSignalToPlc(SignalRowData dataRow, double time)
+        private async Task SendSignalToPlc(SignalRowData dataRow, double time, CancellationToken token)
         {
             if (dataRow != null)
             {
@@ -154,6 +156,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
 
                             do
                             {
+                                base.CheckTokenCancel(token);
                                 writeResult = plcTmp.WriteMultipleBool(signals, trueVals);
 
                                 long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
@@ -167,6 +170,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
 
                             do
                             {
+                                base.CheckTokenCancel(token);
                                 writeResult = plcTmp.WriteMultipleBool(signals, falseVals);
 
                                 long timeTotal = (long)(DateTime.Now - startTime).TotalMilliseconds;
@@ -175,6 +179,10 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                             } while (!writeResult.IsSuccess);
                             LogHelper.AddLog(MsgLevel.Info, $"{dataRow.SignalAddress}信号发送成功!", true);
                             break;
+                        }
+                        catch (OperationCanceledException ex)
+                        {
+                            throw ex;
                         }
                         catch (Exception)
                         {

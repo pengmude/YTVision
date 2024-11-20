@@ -52,7 +52,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         // 参数获取订阅控件的值
                         if (param.IsBarCode)

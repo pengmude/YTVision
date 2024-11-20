@@ -41,10 +41,10 @@ namespace YTVisionPro.Node._6_LogicTool.SleepTool
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         // 异步执行睡眠操作
-                        await ExecuteSleepAsync(param.Time);
+                        await ExecuteSleepAsync(param.Time, token);
                         long time = SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
@@ -64,10 +64,36 @@ namespace YTVisionPro.Node._6_LogicTool.SleepTool
             }
         }
 
-        private async Task ExecuteSleepAsync(int timeInMilliseconds)
+        private async Task ExecuteSleepAsync(int timeInMilliseconds, CancellationToken token)
         {
-            // 使用 Task.Delay 在后台线程上执行异步睡眠操作
-            await Task.Delay(timeInMilliseconds);
+            try
+            {
+                int interval = 200; // 每隔 200 毫秒检查一次取消状态
+                int remainingTime = timeInMilliseconds;
+
+                while (remainingTime > 0)
+                {
+                    // 计算本次等待的时间
+                    int thisDelay = Math.Min(remainingTime, interval);
+
+                    // 等待 100 毫秒或剩余时间
+                    await Task.Delay(thisDelay, token);
+
+                    // 检查取消状态
+                    token.ThrowIfCancellationRequested();
+
+                    // 更新剩余时间
+                    remainingTime -= thisDelay;
+                }
+            }
+            catch (OperationCanceledException ex)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

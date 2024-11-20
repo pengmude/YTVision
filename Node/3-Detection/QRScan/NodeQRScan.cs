@@ -2,6 +2,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using YTVisionPro.Node._3_Detection.FindCircle;
+using YTVisionPro.Node._3_Detection.HTAI;
 
 namespace YTVisionPro.Node._3_Detection.QRScan
 {
@@ -42,17 +44,24 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
+                        long time = 0;
+                        var res = ((NodeResultQRScan)Result);
                         var codes = await form.QRCodeDetect(false);
                         
                         if(codes == null || codes.Length == 0)
-                            throw new Exception("读取二维码失败！");
+                        {
+                            codes = new string[] { "null" }; //识别不到二维码默认赋“null”值
+                        }
 
-                        ((NodeResultQRScan)Result).Codes = codes;
-                        ((NodeResultQRScan)Result).FirstCode = codes[0];
+                        res.Codes = codes;
+                        res.FirstCode = codes[0];
+                        res.Result = new ResultViewData();
+                        res.Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", codes[0], true));
+                        Result = res;
 
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
+                        time = SetRunResult(startTime, NodeStatus.Successful);
                         SetRunResult(startTime, NodeStatus.Successful);
                         LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，二维码数据为:“{codes[0]}”", true);
                     }

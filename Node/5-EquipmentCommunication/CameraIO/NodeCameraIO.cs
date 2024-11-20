@@ -38,7 +38,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         //获取AI检测条件
                         bool con = from.GetCondition();

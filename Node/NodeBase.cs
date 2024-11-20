@@ -39,7 +39,6 @@ namespace YTVisionPro.Node
         {
             InitializeComponent();
             启用ToolStripMenuItem.Enabled = false;
-            //_id = ++Solution.Instance.NodeCount;
         }
 
         /// <summary>
@@ -79,10 +78,11 @@ namespace YTVisionPro.Node
         /// 节点运行结果
         /// </summary>
         public INodeResult Result { get; protected set; }
+
         /// <summary>
-        /// 节点运行，虚函数需要重写
+        /// 检查节点信号源Token是否取消,如果取消会抛出异常，停止运行流程
         /// </summary>
-        public virtual Task Run(CancellationToken token) 
+        public virtual Task CheckTokenCancel(CancellationToken token) 
         {
             try
             {
@@ -95,6 +95,12 @@ namespace YTVisionPro.Node
             }
             return Task.CompletedTask;
         }
+
+        public virtual Task Run(CancellationToken token)
+        {
+            return Task.CompletedTask;
+        }
+
         /// <summary>
         /// 节点id
         /// </summary>
@@ -363,6 +369,16 @@ namespace YTVisionPro.Node
         {
             FormAddNotes formAddNotes = new FormAddNotes(this);
             formAddNotes.ShowDialog();
+        }
+
+        /// <summary>
+        /// 计时器用于检查节点是否被取消
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using HslCommunication;
 using Logger;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         //如果没有连接则不运行
                         if (!param.Plc.IsConnect)
@@ -50,7 +51,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
                         await Task.Run(() =>
                         {
                             // 监听拍照信号
-                            GetShotSignalFromPlc(param);
+                            GetShotSignalFromPlc(param, token);
                         });
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -72,21 +73,34 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
             }
         }
 
-        private void GetShotSignalFromPlc(NodeParamWaitSoftTrigger param)
+        private void GetShotSignalFromPlc(NodeParamWaitSoftTrigger param, CancellationToken token)
         {
-            OperateResult<bool> readResult;
-            OperateResult writeResult;
-            // 读取拍照信号
-            do
+            try
             {
-                readResult = param.Plc.ReadBool(param.Address);
-            } while (!readResult.IsSuccess || !readResult.Content);  // 读取失败或读取不到拍照信号为true均需要重试
-            // 重置拍照信号
-            do
+                OperateResult<bool> readResult;
+                OperateResult writeResult;
+                // 读取拍照信号
+                do
+                {
+                    base.CheckTokenCancel(token);
+                    readResult = param.Plc.ReadBool(param.Address);
+                } while (!readResult.IsSuccess || !readResult.Content);  // 读取失败或读取不到拍照信号为true均需要重试
+                                                                         // 重置拍照信号
+                do
+                {
+                    base.CheckTokenCancel(token);
+                    writeResult = param.Plc.WriteBool(param.Address, false);
+                } while (!writeResult.IsSuccess);
+                LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
+            }
+            catch (OperationCanceledException ex)
             {
-                writeResult = param.Plc.WriteBool(param.Address, false);
-            } while (!writeResult.IsSuccess);
-            LogHelper.AddLog(MsgLevel.Info, $"{param.Address}信号发送成功", true);
+                throw ex;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
     }

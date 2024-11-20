@@ -110,11 +110,10 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         if (param.ImageSource == "本地图像")
                         {
-                            //_lock.EnterReadLock();
                             if (param.ImagePath != null)
                             {
                                 _bitmap = new Bitmap(param.ImagePath);
@@ -153,7 +152,6 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
 
                             }
                             Result = res;
-                            //_lock.ExitReadLock();
                         }
                         else if (param.ImageSource == "相机")
                         {

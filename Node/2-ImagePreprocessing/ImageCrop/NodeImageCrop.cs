@@ -42,7 +42,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         form.UpdataImage();
                         var roiImg = form.GetROIImage();

@@ -46,7 +46,7 @@ namespace YTVisionPro.Node._3_Detection.FindLine
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         var (line, image) = form.DetectLine();
                         if (line == null || image == null) { throw new Exception("直线查找失败！"); }

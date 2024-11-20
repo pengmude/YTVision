@@ -6,6 +6,9 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
 {
     internal partial class NodeParamFormSharedVariable : Form, INodeParamForm
     {
+        // 前一个变量名称
+        private string _preVariable = null;
+
         public NodeParamFormSharedVariable()
         {
             InitializeComponent();
@@ -100,8 +103,15 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
                 param.Text1 = nodeSubscription1.GetText1();
                 param.Text2 = nodeSubscription1.GetText2();
                 param.WriteName = textBox1.Text;
+
                 // 共享变量要提前写入默认值，要不然其他地方添加读取共享变量时获取不到该变量的名称
+                if(_preVariable != null && _preVariable != textBox1.Text)
+                {
+                    Solution.Instance.SharedVariable.Remove(_preVariable);
+                }
                 Solution.Instance.SharedVariable.SetValue(textBox1.Text, default(object));
+                _preVariable = textBox1.Text;
+
                 Params = param;
             }
             catch (Exception)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using YTVisionPro.Node._3_Detection.HTAI;
 
 namespace YTVisionPro.Node._3_Detection.QRScan
 {
@@ -13,10 +14,13 @@ namespace YTVisionPro.Node._3_Detection.QRScan
         [DisplayName("运行状态码")]
         public NodeRunStatusCode RunStatusCode { get; set; }
 
-        [DisplayName("第一个读码结果")]
+        [DisplayName("第一个二维码")]
         public string FirstCode { get; set; }
 
-        [DisplayName("读码结果集合")]
+        [DisplayName("所有检出二维码")]
         public string[] Codes { get; set; }
+
+        [DisplayName("算法结果")]
+        public ResultViewData Result  { get; set; }
     }
 }

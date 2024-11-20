@@ -42,7 +42,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         NodeResultImageRotate nodeResultImageRotate = new NodeResultImageRotate();
                         nodeResultImageRotate.Image = form.ImageRotate(BitmapConverter.ToMat(form.GetImage()), param.Angle);

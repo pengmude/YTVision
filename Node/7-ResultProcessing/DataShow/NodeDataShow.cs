@@ -44,7 +44,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.DataShow
                 {
                     // 初始化运行状态
                     SetStatus(NodeStatus.Unexecuted, "*");
-                    base.Run(token);
+                    base.CheckTokenCancel(token);
 
                     ResultViewData aiResult = form.GetAiResult();
                     DataShow?.Invoke(this,new DatashowData($"{ID}.{NodeName}", aiResult));

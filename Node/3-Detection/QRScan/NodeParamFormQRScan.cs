@@ -102,7 +102,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"检测异常：原因：{ex.Message}");
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -127,9 +127,6 @@ namespace YTVisionPro.Node._3_Detection.QRScan
 
                 // 检测二维码
                 string[] Information = IdentifyQRCodesAndBarcodes(blurred, weChatQRCode);
-
-                if (Information.Length == 0) 
-                    throw new Exception($"二维码为空！");
 
                 return Information;
             }

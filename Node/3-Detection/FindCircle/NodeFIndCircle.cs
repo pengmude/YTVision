@@ -46,7 +46,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                     {
                         // 初始化状态
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         string res = string.Empty;
                         var (Circle, image) = form.DetectCircle();

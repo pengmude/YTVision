@@ -19,6 +19,7 @@ namespace YTVisionPro.Node._3_Detection.HTAI
         /// 不管加载几次，AI模型个数只增加1
         /// </summary>
         private bool flag = false;
+        private readonly object _lockObject = new object();
         private NodeBase _node;
         const int path_len = 256;
         /// <summary>
@@ -221,38 +222,6 @@ namespace YTVisionPro.Node._3_Detection.HTAI
                 }
             }
             return node_names;
-        }
-
-        /// <summary>
-        /// 根据节点名字节数组转为节点字符串列表
-        /// </summary>
-        /// <param name="byteArray_name"></param>
-        /// <param name="TestNum"></param>
-        /// <param name="path_len"></param>
-        /// <returns></returns>
-        private List<string> ConvertByteArrayToList(byte[] byteArray_name, int TestNum, int path_len)
-        {
-            List<string> test_node_names = new List<string>();
-
-            for (int i = 0; i < TestNum; i++)
-            {
-                // 提取当前字符串的字节数组
-                byte[] name_byte = new byte[path_len];
-                Array.Copy(byteArray_name, i * path_len, name_byte, 0, path_len);
-
-                // 找到第一个空字符的位置，以确定实际字符串长度
-                int nullIndex = Array.IndexOf(name_byte, (byte)0x00);
-                if (nullIndex == -1)
-                {
-                    nullIndex = path_len; // 如果没有找到空字符，则使用整个路径长度
-                }
-
-                // 将字节数组转换为字符串
-                string nodeName = Encoding.Default.GetString(name_byte, 0, nullIndex);
-                test_node_names.Add(nodeName);
-            }
-
-            return test_node_names;
         }
 
         // 获取选中的节点信息
@@ -481,8 +450,11 @@ namespace YTVisionPro.Node._3_Detection.HTAI
                     TreePredictHandle = InitModel(param.ModelInitParams.TreePath, param.ModelInitParams.NodeNames,
                                                       param.ModelInitParams.TestNodeNum, param.ModelInitParams.DeviceType, param.ModelInitParams.DeviceID);
                     param.TreePredictHandle = TreePredictHandle;
-                    // AI模型加载完成计数+1
-                    Solution.Instance.LoadedModelNum++;
+                    lock (_lockObject)
+                    {
+                        // AI模型加载完成计数+1
+                        Solution.Instance.LoadedModelNum++;
+                    }
                 });
             }
         }

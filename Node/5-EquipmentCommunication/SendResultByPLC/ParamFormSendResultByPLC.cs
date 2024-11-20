@@ -274,7 +274,6 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                     }
 
                     comboBox3.SelectedIndex = 0;
-                    dataTable.Clear();
                 } 
             }
         }
@@ -402,6 +401,11 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC
                 MessageBox.Show("不合法的参数！");
                 e.Cancel = true;
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            dataTable.Clear();
         }
     }
 }

@@ -23,16 +23,23 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte
 
         public object GetSubResult()
         {
-            switch (this.comboBoxDataType.Text)
+            try
             {
-                case "整数类型":
-                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content2;
-                case "布尔类型":
-                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content1;
-                case "字符串类型":
-                    return nodeSubscription1.GetValue<PlcResult<bool, int, string, byte[]>>().Content3;
-                default:
-                    return null;
+                switch (this.comboBoxDataType.Text)
+                {
+                    case "整数类型":
+                        return nodeSubscription1.GetValue<int>();
+                    case "布尔类型":
+                        return nodeSubscription1.GetValue<bool>();
+                    case "字符串类型":
+                        return nodeSubscription1.GetValue<string>();
+                    default:
+                        return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 

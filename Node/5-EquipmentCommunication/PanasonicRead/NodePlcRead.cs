@@ -44,8 +44,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead
                 try
                 {
                     SetStatus(NodeStatus.Unexecuted, "*");
-                    base.Run(token);
-
+                    base.CheckTokenCancel(token);
 
                     //如果没有连接则不运行
                     if (!param.Plc.IsConnect)
@@ -56,6 +55,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead
                     {
                         do
                         {
+                            base.CheckTokenCancel(token);
                             switch (param.DataType)
                             {
                                 case DataType.BOOL:
@@ -91,7 +91,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead
                                 throw new Exception("PLC读取超时！请检查PLC端是否正常！");
                         } while (!data.IsSuccess);
                     });
-                    
+                    res.Code = data.Content3;
                     res.ReadData = data;
                     Result = res;
                     long time = SetRunResult(startTime, NodeStatus.Successful);

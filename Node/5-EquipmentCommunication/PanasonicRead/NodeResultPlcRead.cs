@@ -1,10 +1,4 @@
-﻿using HslCommunication;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using YTVisionPro.Device.PLC;
 
 namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead
@@ -22,5 +16,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead
 
         [DisplayName("读取结果")]
         public PlcResult<bool, int, string, byte[]> ReadData { get; set; }
+
+        [DisplayName("二维码字符串")]
+        public string Code { get; set; }
     }
 }

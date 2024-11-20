@@ -43,7 +43,7 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
                     try
                     {
                         SetStatus(NodeStatus.Unexecuted, "*");
-                        base.Run(token);
+                        base.CheckTokenCancel(token);
 
                         string resStr = "";
                         var result = ((NodeResultSharedVariable)Result);

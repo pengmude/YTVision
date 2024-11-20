@@ -258,11 +258,7 @@ namespace YTVisionPro
                     // 按优先级顺序执行
                     foreach (var group in groupedProcesses)
                     {
-                        var tasks = new List<Task>();
-                        foreach (var process in group)
-                        {
-                            tasks.Add(process.Run(isCyclical));
-                        }
+                        var tasks = group.Select(process => Task.Run(() => process.Run(isCyclical))).ToList();
                         // 等待同级流程完成
                         await Task.WhenAll(tasks);
                     }

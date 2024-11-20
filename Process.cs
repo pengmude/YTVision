@@ -1,13 +1,7 @@
 ﻿using Logger;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using YTVisionPro.Device.Camera;
-using YTVisionPro.Device.Light;
-using YTVisionPro.Device.PLC;
 using YTVisionPro.Node;
 
 namespace YTVisionPro
