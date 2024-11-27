@@ -1,4 +1,7 @@
 ﻿
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
+
 namespace YTVisionPro.Node._6_LogicTool.SharedVariable
 {
     internal class NodeParamSharedVariable : INodeParam
@@ -14,6 +17,7 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// <summary>
         /// 读取转换的类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public SharedVarTypeEnum Type;
         /// <summary>
         /// 是否指定输出数组某个值

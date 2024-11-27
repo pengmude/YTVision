@@ -319,7 +319,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error processing image: {ex.Message}");
+                    LogHelper.AddLog(MsgLevel.Exception, $"压缩图像失败: {ex.Message}");
                 }
                 finally
                 {

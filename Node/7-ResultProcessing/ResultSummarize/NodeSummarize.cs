@@ -39,7 +39,8 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
             }
 
             if(ParamForm is ParamFormSummarize form)
-                if(form.Params is NodeParamSummarize param)
+            {
+                if (form.Params is NodeParamSummarize param)
                 {
                     try
                     {
@@ -52,7 +53,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
                         var res4 = form.GetResult4();
 
                         ResultViewData[] results = new ResultViewData[4] { res1, res2, res3, res4 };
-                        ((NodeResultSummarize)Result).SummaryResult =  ResultSummarize(results, param);
+                        ((NodeResultSummarize)Result).SummaryResult = ResultSummarize(results, param);
 
 
                         long time = SetRunResult(startTime, NodeStatus.Successful);
@@ -71,6 +72,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
                         throw new Exception($"节点({ID}.{NodeName})运行失败！原因:{ex.Message}");
                     }
                 }
+            }
         }
 
         /// <summary>

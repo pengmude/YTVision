@@ -1,5 +1,6 @@
 ﻿using Logger;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Node._3_Detection.FindCircle;
@@ -49,16 +50,26 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                         long time = 0;
                         var res = ((NodeResultQRScan)Result);
                         var codes = await form.QRCodeDetect(false);
-                        
-                        if(codes == null || codes.Length == 0)
+
+                        if (codes == null || codes.Length == 0)
                         {
-                            codes = new string[] { "null" }; //识别不到二维码默认赋“null”值
+                            codes = new string[] { "null          " }; //识别不到二维码默认赋“null”值
                         }
 
                         res.Codes = codes;
                         res.FirstCode = codes[0];
                         res.Result = new ResultViewData();
-                        res.Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", codes[0], true));
+
+                        // 检查 codes 数组中是否有 null 元素
+                        if (codes[0] == "null          ")
+                        {
+                            res.Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", codes[0], false));
+                        }
+                        else
+                        {
+                            res.Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", codes[0], true));
+                        }
+
                         Result = res;
 
                         time = SetRunResult(startTime, NodeStatus.Successful);

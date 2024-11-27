@@ -59,6 +59,7 @@
         <Node Text="定期删除图片" ImageName="图片删除" Tag="ImageFileDelete" SelectedImageName="图片删除" />
         <Node Text="结果汇总" ImageName="结果汇总" Tag="Summarize" SelectedImageName="结果汇总" />
         <Node Text="检测结果显示" ImageName="检测结果显示" Tag="DetectResultShow" SelectedImageName="检测结果显示" />
+        <Node Text="导出检测表格" ImageName="导出检测表格" Tag="GenerateExcel" SelectedImageName="导出检测表格" />
       </Nodes>
     </Node>
   </Nodes>

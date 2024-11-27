@@ -141,7 +141,11 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
             {
                 radioButton1.Checked = param.IsRead;
                 radioButton2.Checked = !param.IsRead;
-                comboBoxVars.Text = param.ReadName;
+
+                //this.comboBoxVars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;   DropDownList不能使用text赋值，不生效
+                comboBoxVars.Items.Add(param.ReadName);
+                comboBoxVars.SelectedItem = param.ReadName;
+
                 checkBox1.Checked = param.Flag;
                 switch (param.Type)
                 {
@@ -166,8 +170,11 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
                     case SharedVarTypeEnum.Bitmap:
                         comboBoxTypes.SelectedIndex = 6;
                         break;
-                    case SharedVarTypeEnum.ResultViewData:
+                    case SharedVarTypeEnum.BitmapArr:      //漏了一个   SharedVarTypeEnum.BitmapArr  
                         comboBoxTypes.SelectedIndex = 7;
+                        break;
+                    case SharedVarTypeEnum.ResultViewData:
+                        comboBoxTypes.SelectedIndex = 8;
                         break;
                     default:
                         break;

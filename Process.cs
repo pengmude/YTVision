@@ -51,6 +51,11 @@ namespace YTVisionPro
         public ProcessLvEnum RunLv { get; set; } = ProcessLvEnum.Lv5;
 
         /// <summary>
+        /// 流程组别
+        /// </summary>
+        public ProcessGroup processGroup { get; set; } = ProcessGroup.Group1;
+
+        /// <summary>
         /// 流程运行时间
         /// </summary>
         public long RunTime { get; private set; } = 0;
@@ -101,9 +106,8 @@ namespace YTVisionPro
             {
                 try
                 {
-                    // 如果是流程的第一个节点、且是写入拍照信号的、且是循环运行模式就跳过执行
-                    // 也就是说，这个节点作为点检使用，生产模式（循环运行）时需要跳过，由PLC内部写拍照信号
-                    if (node == _nodes[0] && node.NodeType == NodeType.PLCWrite && isCyclical)
+                    // 点检模式（非循环运行方案模式）需要跳过流程中第一个节点是“PLC软触发”或“Modbus软触发”节点
+                    if (node == _nodes[0] && (node.NodeType == NodeType.WaitSoftTrigger || node.NodeType == NodeType.ModbusSoftTrigger) && !isCyclical)
                         continue;
                     await node.Run(Solution.Instance.CancellationToken);
                     RunTime += node.Result.RunTime;
@@ -266,4 +270,23 @@ namespace YTVisionPro
         Lv5,
     }
 
+    internal enum ProcessGroup
+    {
+        Group1,
+        Group2,
+        Group3,
+        Group4,
+        Group5
+        //Group6,
+        //Group7,
+        //Group8,
+        //Group9,
+        //Group10,
+        //Group11,
+        //Group12,
+        //Group13,
+        //Group14,
+        //Group15,
+        //Group16
+    }
 }

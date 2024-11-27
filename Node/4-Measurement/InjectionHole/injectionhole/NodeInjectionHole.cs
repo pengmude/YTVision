@@ -57,7 +57,8 @@ namespace YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement
                         // 输出节点结果
                         ((NodeResultInjectionHole)Result).OutputImage = image;
                         ((NodeResultInjectionHole)Result).Result = new ResultViewData();
-                        ((NodeResultInjectionHole)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", (circle.Radius * param.Scale).ToString(), res == "OK" ? true : false));
+                        ((NodeResultInjectionHole)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
+                                                                    ("", "", $"{ID}.{NodeName}", res, res == "OK" ? true : false));
 
                         SetRunResult(startTime, NodeStatus.Successful);
                         long time = SetRunResult(startTime, NodeStatus.Successful);

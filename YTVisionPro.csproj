@@ -90,6 +90,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\Basler.Pylon.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="HslCommunication, Version=10.6.1.0, Culture=neutral, PublicKeyToken=3d72ad3b6b5ec0e3, processorArchitecture=MSIL">
       <HintPath>packages\HslCommunication.10.6.1\lib\net451\HslCommunication.dll</HintPath>
     </Reference>
@@ -116,6 +119,7 @@
     <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>packages\OpenCvSharp4.Extensions.4.10.0.20240616\lib\net48\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="SunnyUI, Version=3.6.8.1, Culture=neutral, PublicKeyToken=27d7d2e821d97aeb, processorArchitecture=MSIL">
       <HintPath>packages\SunnyUI.3.6.8.1\lib\net472\SunnyUI.dll</HintPath>
     </Reference>
@@ -275,6 +279,12 @@
     </Compile>
     <Compile Include="Forms\ProcessNew\FormNewProcessWizard.Designer.cs">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormProcessGroupSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessNew\FormProcessGroupSetting.Designer.cs">
+      <DependentUpon>FormProcessGroupSetting.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ProcessNew\FormSetProcessLv.cs">
       <SubType>Form</SubType>
@@ -648,6 +658,17 @@
     <Compile Include="Node\6-LogicTool\SharedVariable\NodeSharedVariable.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\NodeGenerateExcel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\NodeParamGenerateExcel.cs" />
+    <Compile Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\NodeResultGenerateExcel.cs" />
+    <Compile Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\ParamFormGenerateExcel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\ParamFormGenerateExcel.Designer.cs">
+      <DependentUpon>ParamFormGenerateExcel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Node\7-ResultProcessing\ImageDelete\NodeImageDelete.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -855,6 +876,9 @@
     <EmbeddedResource Include="Forms\ProcessNew\FormNewProcessWizard.resx">
       <DependentUpon>FormNewProcessWizard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessNew\FormProcessGroupSetting.resx">
+      <DependentUpon>FormProcessGroupSetting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProcessNew\FormSetProcessLv.resx">
       <DependentUpon>FormSetProcessLv.cs</DependentUpon>
     </EmbeddedResource>
@@ -923,6 +947,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\SendResultByPLC\ParamFormSendResultByPLC.resx">
       <DependentUpon>ParamFormSendResultByPLC.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\5-EquipmentCommunication\PanasonicWrite\ParamFormPlcWrite.resx">
       <DependentUpon>ParamFormPlcWrite.cs</DependentUpon>
@@ -974,6 +999,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Node\6-LogicTool\SharedVariable\NodeParamFormSharedVariable.resx">
       <DependentUpon>NodeParamFormSharedVariable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\ParamFormGenerateExcel.resx">
+      <DependentUpon>ParamFormGenerateExcel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Node\7-ResultProcessing\ImageDelete\NodeParamFormImageDelete.resx">
       <DependentUpon>NodeParamFormImageDelete.cs</DependentUpon>

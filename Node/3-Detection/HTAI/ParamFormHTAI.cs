@@ -19,7 +19,8 @@ namespace YTVisionPro.Node._3_Detection.HTAI
         /// 不管加载几次，AI模型个数只增加1
         /// </summary>
         private bool flag = false;
-        private readonly object _lockObject = new object();
+        private readonly static object _lockObject = new object();
+
         private NodeBase _node;
         const int path_len = 256;
         /// <summary>

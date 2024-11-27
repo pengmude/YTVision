@@ -34,6 +34,7 @@ using YTVisionPro.Node._3_Detection.MatchTemplate;
 using YTVisionPro.Node._7_ResultProcessing.ImageDelete;
 using YTVisionPro.Node._6_LogicTool.SharedVariable;
 using System.Diagnostics;
+using YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet;
 
 namespace YTVisionPro.Forms.ProcessNew
 {
@@ -49,6 +50,8 @@ namespace YTVisionPro.Forms.ProcessNew
         /// </summary>
         private FormSetProcessLv _processLvSet { get; set; }
 
+        private FormProcessGroupSetting formProcessGroupSetting { get; set; }
+
         /// <summary>
         /// 所有的节点控件
         /// </summary>
@@ -63,6 +66,7 @@ namespace YTVisionPro.Forms.ProcessNew
             InitializeComponent();
             _process = new Process(processName);
             _processLvSet = new FormSetProcessLv(_process);
+            formProcessGroupSetting = new FormProcessGroupSetting(_process);
             Process.UpdateRunStatus += RunStatusChange;
             Solution.Instance.UpdateRunStatus += RunStatusChange;
             Solution.Instance.AddProcess(_process);
@@ -71,6 +75,7 @@ namespace YTVisionPro.Forms.ProcessNew
             if(processConfig != null)
             {
                 _process.RunLv = processConfig.Level;
+                _process.processGroup = processConfig.Group;
                 _stack.Clear();
                 label1.Text = $"节点数:0";
                 if(showInfo)
@@ -272,6 +277,9 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.SharedVariable:
                     node = new NodeSharedVariable(nodeId, nodeName, _process, nodeType);
                     break;
+                case NodeType.GenerateExcel:
+                    node = new NodeGenerateExcel(nodeId, nodeName, _process, nodeType);
+                    break;
                 default:
                     break;
             }
@@ -367,6 +375,11 @@ namespace YTVisionPro.Forms.ProcessNew
         private void 设置流程优先级ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _processLvSet.ShowDialog();
+        }
+
+        private void 设置流程组别ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            formProcessGroupSetting.ShowDialog();
         }
     }
 }

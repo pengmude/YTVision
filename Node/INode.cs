@@ -232,6 +232,10 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 共享变量
         /// </summary>
-        SharedVariable
+        SharedVariable,
+        /// <summary>
+        /// 生成Excel表格
+        /// </summary>
+        GenerateExcel
     }
 }

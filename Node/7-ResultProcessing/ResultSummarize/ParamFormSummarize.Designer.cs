@@ -50,22 +50,22 @@
             // 
             this.nodeSubscription1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription1.Enabled = false;
-            this.nodeSubscription1.Location = new System.Drawing.Point(237, 2);
+            this.nodeSubscription1.Location = new System.Drawing.Point(211, 2);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(424, 93);
+            this.nodeSubscription1.Size = new System.Drawing.Size(376, 77);
             this.nodeSubscription1.TabIndex = 0;
             // 
             // nodeSubscription2
             // 
             this.nodeSubscription2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription2.Enabled = false;
-            this.nodeSubscription2.Location = new System.Drawing.Point(237, 99);
+            this.nodeSubscription2.Location = new System.Drawing.Point(211, 83);
             this.nodeSubscription2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription2.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription2.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription2.Name = "nodeSubscription2";
-            this.nodeSubscription2.Size = new System.Drawing.Size(424, 93);
+            this.nodeSubscription2.Size = new System.Drawing.Size(376, 77);
             this.nodeSubscription2.TabIndex = 1;
             // 
             // button1
@@ -73,10 +73,9 @@
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.SetColumnSpan(this.button1, 3);
             this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(338, 416);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button1.Location = new System.Drawing.Point(301, 347);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(105, 43);
+            this.button1.Size = new System.Drawing.Size(93, 36);
             this.button1.TabIndex = 2;
             this.button1.Text = "保存";
             this.button1.UseVisualStyleBackColor = true;
@@ -103,7 +102,6 @@
             this.tableLayoutPanel1.Controls.Add(this.nodeSubscription4, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -111,8 +109,8 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(782, 488);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(695, 407);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // label1
@@ -120,9 +118,9 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(64, 38);
+            this.label1.Location = new System.Drawing.Point(59, 31);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 21);
+            this.label1.Size = new System.Drawing.Size(89, 18);
             this.label1.TabIndex = 3;
             this.label1.Text = "算法结果1";
             // 
@@ -131,9 +129,9 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(64, 135);
+            this.label2.Location = new System.Drawing.Point(59, 112);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(105, 21);
+            this.label2.Size = new System.Drawing.Size(89, 18);
             this.label2.TabIndex = 3;
             this.label2.Text = "算法结果2";
             // 
@@ -141,9 +139,10 @@
             // 
             this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(688, 37);
+            this.checkBox1.Location = new System.Drawing.Point(613, 31);
+            this.checkBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(70, 22);
+            this.checkBox1.Size = new System.Drawing.Size(59, 19);
             this.checkBox1.TabIndex = 4;
             this.checkBox1.Text = "启用";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -153,9 +152,10 @@
             // 
             this.checkBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(688, 134);
+            this.checkBox2.Location = new System.Drawing.Point(613, 112);
+            this.checkBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(70, 22);
+            this.checkBox2.Size = new System.Drawing.Size(59, 19);
             this.checkBox2.TabIndex = 4;
             this.checkBox2.Text = "启用";
             this.checkBox2.UseVisualStyleBackColor = true;
@@ -165,9 +165,10 @@
             // 
             this.checkBox3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(688, 231);
+            this.checkBox3.Location = new System.Drawing.Point(613, 193);
+            this.checkBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(70, 22);
+            this.checkBox3.Size = new System.Drawing.Size(59, 19);
             this.checkBox3.TabIndex = 4;
             this.checkBox3.Text = "启用";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -177,9 +178,10 @@
             // 
             this.checkBox4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(688, 328);
+            this.checkBox4.Location = new System.Drawing.Point(613, 274);
+            this.checkBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(70, 22);
+            this.checkBox4.Size = new System.Drawing.Size(59, 19);
             this.checkBox4.TabIndex = 4;
             this.checkBox4.Text = "启用";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -190,9 +192,9 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(64, 232);
+            this.label3.Location = new System.Drawing.Point(59, 193);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(105, 21);
+            this.label3.Size = new System.Drawing.Size(89, 18);
             this.label3.TabIndex = 3;
             this.label3.Text = "算法结果3";
             // 
@@ -201,9 +203,9 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(64, 329);
+            this.label4.Location = new System.Drawing.Point(59, 274);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 21);
+            this.label4.Size = new System.Drawing.Size(89, 18);
             this.label4.TabIndex = 3;
             this.label4.Text = "算法结果4";
             // 
@@ -211,32 +213,31 @@
             // 
             this.nodeSubscription3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription3.Enabled = false;
-            this.nodeSubscription3.Location = new System.Drawing.Point(237, 196);
+            this.nodeSubscription3.Location = new System.Drawing.Point(211, 164);
             this.nodeSubscription3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription3.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription3.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription3.Name = "nodeSubscription3";
-            this.nodeSubscription3.Size = new System.Drawing.Size(424, 93);
+            this.nodeSubscription3.Size = new System.Drawing.Size(376, 77);
             this.nodeSubscription3.TabIndex = 1;
             // 
             // nodeSubscription4
             // 
             this.nodeSubscription4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription4.Enabled = false;
-            this.nodeSubscription4.Location = new System.Drawing.Point(237, 293);
+            this.nodeSubscription4.Location = new System.Drawing.Point(211, 245);
             this.nodeSubscription4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription4.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription4.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription4.Name = "nodeSubscription4";
-            this.nodeSubscription4.Size = new System.Drawing.Size(424, 93);
+            this.nodeSubscription4.Size = new System.Drawing.Size(376, 77);
             this.nodeSubscription4.TabIndex = 1;
             // 
             // ParamFormSummarize
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(782, 488);
+            this.ClientSize = new System.Drawing.Size(695, 407);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ParamFormSummarize";

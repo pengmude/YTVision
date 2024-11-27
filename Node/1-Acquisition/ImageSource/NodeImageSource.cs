@@ -1,5 +1,6 @@
 ﻿using Logger;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -174,7 +175,6 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                                 param.Camera.SetTriggerSource(param.TriggerSource);     // 设置触发源
                                 param.Camera.SetTriggerEdge(param.TriggerEdge);         // 设置硬触发边沿
                             }
-
                             param.Camera.GrabOne(); // 软触发
                             bool result = _autoResetEvent.WaitOne(1000);// 软触发1s内取不到图也得返回
                             if (!result) { throw new Exception("软触发取图超时！"); }

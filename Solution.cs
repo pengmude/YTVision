@@ -235,7 +235,7 @@ namespace YTVisionPro
         #region 方案运行/停止、配置加载/保存等相关操作
 
         /// <summary>
-        /// 按照流程运行优先级顺序执行
+        /// 流程运行，默认不是循环运行
         /// </summary>
         /// <param name="isCyclical"></param>
         /// <returns></returns>
@@ -248,35 +248,68 @@ namespace YTVisionPro
 
             try
             {
-                do
-                {
-                    // 按优先级分组
-                    var groupedProcesses = AllProcesses.GroupBy(p => p.RunLv)
-                                                        .OrderBy(g => g.Key)
+                // 按组别分组
+                var groupedByProcessGroup = AllProcesses.GroupBy(p => p.processGroup)
                                                         .ToList();
 
-                    // 按优先级顺序执行
-                    foreach (var group in groupedProcesses)
-                    {
-                        var tasks = group.Select(process => Task.Run(() => process.Run(isCyclical))).ToList();
-                        // 等待同级流程完成
-                        await Task.WhenAll(tasks);
-                    }
+                // 存储每个组别下的任务组
+                var taskGroups = new List<Task>();
 
-                    // 如果是循环运行模式，等待一段时间后再继续
-                    if (isCyclical)
+                // 按组别顺序启动任务组的循环
+                foreach (var processGroup in groupedByProcessGroup)
+                {
+                    taskGroups.Add(Task.Run(async () =>
                     {
-                        await Task.Delay(Solution.Instance.RunInterval, Solution.Instance.CancellationToken);
-                    }
-                } while (isCyclical && !Solution.Instance.CancellationToken.IsCancellationRequested);
+                        // 按优先级分组
+                        var groupedByPriority = processGroup.GroupBy(p => p.RunLv)
+                                                            .OrderBy(g => g.Key)
+                                                            .ToList();
+
+                        // 当未请求取消时，继续执行
+                        while (!Solution.Instance.CancellationToken.IsCancellationRequested)
+                        {
+                            // 遍历每个优先级组
+                            foreach (var priorityGroup in groupedByPriority)
+                            {
+                                // 创建一个任务列表，用于存储当前优先级组的所有任务
+                                var tasks = new List<Task>();
+
+                                // 遍历当前优先级组中的每个流程
+                                foreach (var process in priorityGroup)
+                                {
+                                    // 为每个流程创建一个异步任务，并添加到任务列表中
+                                    Task processTask = Task.Run(() => process.Run(isCyclical));
+                                    tasks.Add(processTask);
+                                }
+
+                                // 如果任务列表中有任务，则等待所有任务完成
+                                if (tasks.Count > 0)
+                                {
+                                    await Task.WhenAll(tasks);
+                                }
+                            }
+
+                            // 如果不是循环模式，则退出循环
+                            if (!isCyclical)
+                            {
+                                break;
+                            }
+
+                            // 等待指定的时间间隔，然后继续下一轮执行
+                            await Task.Delay(Solution.Instance.RunInterval, Solution.Instance.CancellationToken);
+                        }
+                    }));
+                }
+
+                await Task.WhenAll(taskGroups); // 等待所有组别的任务组完成
             }
             catch (OperationCanceledException)
             {
-                //Console.WriteLine("Run operation was canceled.");
+                // 处理取消操作异常
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"An error occurred: {ex.Message}");
+                // 处理一般异常
             }
             finally
             {
