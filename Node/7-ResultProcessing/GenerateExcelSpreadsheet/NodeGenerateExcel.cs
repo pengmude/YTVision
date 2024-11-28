@@ -1,6 +1,7 @@
 ﻿using Logger;
 using OfficeOpenXml;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
+using OpenCvSharp.Aruco;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,12 +12,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using YTVisionPro.Node._3_Detection.HTAI;
 using YTVisionPro.Node._7_ResultProcessing.ResultSummarize;
+using static Logger.LogHelper;
 
 namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
 {
     internal class NodeGenerateExcel : NodeBase
     {
-        ResultViewData[] results = new ResultViewData[10];
+        ResultViewData[] results;
+        public static int lastRow = 2;
 
         public NodeGenerateExcel(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -56,65 +59,47 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
 
                         #region 获取结果
 
-                        var res1 = form.GetResult1();
-                        if (res1!=null)
+                        results = new ResultViewData[10];
+
+                        void ProcessResult(int index, Func<object> getResultFunc, string detectName)
                         {
-                            results[0] = res1;
+                            var result = getResultFunc();
+                            if (result != null && form.Dictionary[index])
+                            {
+                                if (result is string r1)
+                                {
+                                    results[index] = new ResultViewData();
+                                    bool isValid = !string.IsNullOrEmpty(r1.Trim()) && r1.Trim() != "null";
+                                    results[index].SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", detectName, r1, isValid));
+                                }
+                                else if (result is ResultViewData r11)
+                                {
+                                    if (string.IsNullOrEmpty(r11.SingleRowDataList[0].DetectName.Trim()) || r11.SingleRowDataList[0].DetectName.Trim() == "null")
+                                    {
+                                        for (int i = 0; i < r11.SingleRowDataList.Count; i++)
+                                        {
+                                            if (string.IsNullOrEmpty(r11.SingleRowDataList[i].DetectName.Trim()) || r11.SingleRowDataList[i].DetectName.Trim() == "null")
+                                            {
+                                                r11.SingleRowDataList[i].DetectName = detectName;
+                                            }
+                                        }
+                                    }
+                                    results[index] = r11;
+                                }
+                            }
                         }
 
-                        var res2 = form.GetResult2();
-                        if (res2 != null)
-                        {
-                            results[1] = res2;
-                        }
-
-                        var res3 = form.GetResult3();
-                        if (res3 != null)
-                        {
-                            results[2] = res3;
-                        }
-
-                        var res4 = form.GetResult4();
-                        if (res4 != null)
-                        {
-                            results[3] = res4;
-                        }
-
-                        var res5 = form.GetResult5();
-                        if (res5 != null)
-                        {
-                            results[4] = res5;
-                        }
-
-                        var res6 = form.GetResult6();
-                        if (res6 != null)
-                        {
-                            results[5] = res6;
-                        }
-
-                        var res7 = form.GetResult7();
-                        if (res7 != null)
-                        {
-                            results[6] = res7;
-                        }
-
-                        var res8 = form.GetResult8();
-                        if (res8 != null)
-                        {
-                            results[7] = res8;
-                        }
-
-                        var res9 = form.GetResult9();
-                        if (res9 != null)
-                        {
-                            results[8] = res9;
-                        }
-
-                        var res10 = form.GetResult10();
-                        if (res10 != null)
-                        {
-                            results[9] = res10;
-                        }
+                        // 调用 ProcessResult 方法处理每个结果
+                        ProcessResult(1, form.GetResult1, param.Texts[0]);
+                        ProcessResult(2, form.GetResult2, param.Texts[2]);
+                        ProcessResult(3, form.GetResult3, param.Texts[4]);
+                        ProcessResult(4, form.GetResult4, param.Texts[6]);
+                        ProcessResult(5, form.GetResult5, param.Texts[8]);
+                        ProcessResult(6, form.GetResult6, param.Texts[10]);
+                        ProcessResult(7, form.GetResult7, param.Texts[12]);
+                        ProcessResult(8, form.GetResult8, param.Texts[14]);
+                        ProcessResult(9, form.GetResult9, param.Texts[16]);
+                        ProcessResult(10, form.GetResult10, param.Texts[18]);
 
                         #endregion
 
@@ -131,6 +116,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
                     }
                     catch (Exception ex)
                     {
+                        lastRow--;
                         LogHelper.AddLog(MsgLevel.Fatal, $"节点({ID}.{NodeName})运行失败！原因:{ex.Message}", true);
                         SetRunResult(startTime, NodeStatus.Failed);
                         throw new Exception($"节点({ID}.{NodeName})运行失败！原因:{ex.Message}");
@@ -143,8 +129,38 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
         public void GenerateExcel(ResultViewData[] resultViewData, string filePath)
         {
             FileInfo file = new FileInfo(filePath);
-            ExcelPackage package = new ExcelPackage(file.Exists ? file : new FileInfo(filePath));
+            ExcelPackage package;
+            // 如果文件存在，则打开它；否则创建一个新的 ExcelPackage
+            if (file.Exists)
+            {
+                package = new ExcelPackage(file);
+            }
+            else
+            {
+                package = new ExcelPackage(new FileInfo(filePath));
+                lastRow = 2;
+            }
+
             ExcelWorksheet worksheet = package.Workbook.Worksheets[file.Name];
+
+            // 获取或添加一个工作表
+            if (worksheet == null)
+            {
+                worksheet = package.Workbook.Worksheets.Add(file.Name);
+            }
+
+            // 此时，worksheet.Dimension 为 null，因为没有任何数据
+            if (worksheet.Dimension == null)
+            {
+                lastRow = 2;
+            }
+            else
+            {
+                // 获取最后有数据的一行
+                lastRow = worksheet.Dimension.End.Row + 1;
+            }          
+
+            // 获取最后有数据的一行
             List<bool> IsOKS = new List<bool>();
             bool AllOK;
 
@@ -155,13 +171,37 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
                     string FirstLine = item.SingleRowDataList[0].DetectName;
                     string Price = item.SingleRowDataList[0].DetectResult;
                     string FirstLine2 = $"{FirstLine}结果";
-                    string Price2 = item.SingleRowDataList[0].IsOk.ToString();
+                    string Price2 = "NG";
+                    if (item.SingleRowDataList.Count > 1)
+                    {
+                        bool allOk = true;
+                        foreach (var singleRow in item.SingleRowDataList)
+                        {
+                            if (!singleRow.IsOk)
+                            {
+                                allOk = false;
+                                IsOKS.Add(allOk);
+                                break;
+                            }
+                        }
+                        if (allOk)
+                        {
+                            Price2 = "OK";
+                        }
+                    }
+                    else
+                    {
+                        Price2 = item.SingleRowDataList[0].IsOk ? "OK" : "NG";
+                    }
+
                     IsOKS.Add(item.SingleRowDataList[0].IsOk);
+
                     GenerateTable(ref FirstLine, ref Price, ref filePath, ref file, ref package, ref worksheet);
                     GenerateTable(ref FirstLine2, ref Price2, ref filePath, ref file, ref package, ref worksheet);
                 }
             }
 
+            
             int lastRowTime = GetLastNonEmptyRowInColumn(worksheet, 1);
             DateTime now = DateTime.Now;
             string formattedDateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -170,14 +210,15 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
             AllOK = true;
             foreach (var item in IsOKS)
             {
+                int i = 0;
                 if (!item)
                 {
-                    AllOK = false; 
+                    AllOK = false;
                     break;
                 }
             }
 
-            string AllOK1 = AllOK.ToString();
+            string AllOK1 = AllOK ? "OK" : "NG";
             string AllOK2 = "汇总结果";
             GenerateTable(ref AllOK2, ref AllOK1, ref filePath, ref file, ref package, ref worksheet);
 
@@ -196,12 +237,6 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
         {     
             try
             {
-                // 获取或添加一个工作表
-                if (worksheet == null)
-                {
-                    worksheet = package.Workbook.Worksheets.Add(file.Name);
-                }
-
                 // 查找第一行
                 int firstRow = worksheet.Dimension?.Start.Row ?? 1;
                 // 获取有数据的最后一列
@@ -223,12 +258,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
                 if (exists == -1)
                 {
                     worksheet.Cells[firstRow, lastColumn + 1].Value = FirstLine;
-                    worksheet.Cells[2, lastColumn + 1].Value = Price;
+                    worksheet.Cells[lastRow, lastColumn + 1].Value = Price;
                 }
                 else
                 {
-                    int lastRow = GetLastNonEmptyRowInColumn(worksheet, exists);
-                    worksheet.Cells[lastRow + 1, exists].Value = Price;
+                    worksheet.Cells[lastRow, exists].Value = Price;
                 }
 
             }

@@ -1000,6 +1000,9 @@
     <EmbeddedResource Include="Node\6-LogicTool\SharedVariable\NodeParamFormSharedVariable.resx">
       <DependentUpon>NodeParamFormSharedVariable.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\NodeGenerateExcel.resx">
+      <DependentUpon>NodeGenerateExcel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Node\7-ResultProcessing\GenerateExcelSpreadsheet\ParamFormGenerateExcel.resx">
       <DependentUpon>ParamFormGenerateExcel.cs</DependentUpon>
     </EmbeddedResource>
