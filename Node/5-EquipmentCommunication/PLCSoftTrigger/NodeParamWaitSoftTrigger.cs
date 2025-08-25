@@ -1,10 +1,10 @@
 ﻿using JsonSubTypes;
 using Newtonsoft.Json;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device.PLC;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
+namespace TDJS_Vision.Node._5_EquipmentCommunication.PLCSoftTrigger
 {
-    internal class NodeParamWaitSoftTrigger : INodeParam
+    public class NodeParamWaitSoftTrigger : INodeParam
     {
         [JsonIgnore]
         public IPlc Plc { get; set; }
@@ -13,5 +13,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
         /// </summary>
         public string PlcName {  get; set; }
         public string Address { get; set; }
+        public bool Reset { get; set; }
+
     }
 }

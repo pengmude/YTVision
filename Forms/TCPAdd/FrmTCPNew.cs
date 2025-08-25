@@ -1,11 +1,12 @@
 ﻿using Logger;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Device.TCP;
+using TDJS_Vision.Device.TCP;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.TCPAdd
+namespace TDJS_Vision.Forms.TCPAdd
 {
-    internal partial class FrmTCPNew : Form
+    public partial class FrmTCPNew : FormBase
     {
         /// <summary>
         /// TCP添加事件
@@ -40,14 +41,14 @@ namespace YTVisionPro.Forms.TCPAdd
         {
             if (string.IsNullOrEmpty(uiipTextBoxIP.Text) || string.IsNullOrEmpty(textBoxPort.Text) || string.IsNullOrEmpty(this.textBoxDevName.Text))
             {
-                MessageBox.Show("参数不能为空！");
+                MessageBoxTD.Show("参数不能为空！");
                 return;
             }
 
             // 已添加设备冲突判断
             if (Solution.Instance.TcpDevices.Exists(modbus => modbus.UserDefinedName == textBoxDevName.Text))
             {
-                MessageBox.Show("TCP的用户自定义名不能相同！");
+                MessageBoxTD.Show("TCP的用户自定义名不能相同！");
                 LogHelper.AddLog(MsgLevel.Warn, "TCP的用户自定义名不能相同！", true);
                 return;
             }
@@ -71,7 +72,7 @@ namespace YTVisionPro.Forms.TCPAdd
             catch (Exception ex)
             {
                 LogHelper.AddLog(MsgLevel.Warn, "添加TCP时参数设置错误！\n" + ex, true);
-                MessageBox.Show("请检查TCP参数是否有误！");
+                MessageBoxTD.Show("请检查TCP参数是否有误！");
             }
         }
         static int i = 1, j = 1;   // 服务器客户端计数

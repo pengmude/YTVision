@@ -1,11 +1,14 @@
 ﻿using Logger;
+using OpenCvSharp;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageCrop
 {
-    internal class NodeImageCrop : NodeBase
+    public class NodeImageCrop : NodeBase
     {
 
         public NodeImageCrop(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
@@ -18,14 +21,14 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -44,20 +47,23 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.CheckTokenCancel(token);
 
-                        form.UpdataImage();
-                        var roiImg = form.GetROIImage();
-                        if (roiImg == null)
+                        var src = form.UpdataImage();
+                        var roiImg = form.GetROIImages();
+                        if (roiImg == null || roiImg.Count == 0)
                         {
                             throw new Exception("裁切的图像为空，请检查是否超出图像区域！");
                         }
-                        var rect = form.GetImageROIRect();
+                        var rects = form.GetImageROIRects();
                         NodeResultImageCrop nodeResultImageCrop = new NodeResultImageCrop();
-                        nodeResultImageCrop.Image = roiImg;
-                        nodeResultImageCrop.Rectangle = rect;
+                        nodeResultImageCrop.OutputImage.SrcImg = src;
+                        nodeResultImageCrop.OutputImage.Bitmaps = roiImg;
+                        nodeResultImageCrop.OutputImage.Rectangles = rects;
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        nodeResultImageCrop.RunTime = time;
                         Result = nodeResultImageCrop;
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，ROI图像坐标：({rect.X},{rect.Y})，宽：{rect.Width}，高：{rect.Height} )", true);
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，ROI数量：{rects.Count} 个）", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -73,6 +79,8 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
                     }
                 }
             }
+
+            return new NodeReturn(NodeRunFlag.ContinueRun);
         }
     }
 }

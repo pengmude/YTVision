@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.DataShow
+namespace TDJS_Vision.Node._7_ResultProcessing.DataShow
 {
-    internal partial class NodeParamFormDataShow : Form, INodeParamForm
+    public partial class NodeParamFormDataShow : FormBase, INodeParamForm
     {
         public NodeParamFormDataShow()
         {
@@ -22,9 +23,9 @@ namespace YTVisionPro.Node._7_ResultProcessing.DataShow
         /// 获取订阅的结果
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetAiResult()
+        public AlgorithmResult GetAiResult()
         {
-            return nodeSubscription1.GetValue<ResultViewData>();
+            return nodeSubscription1.GetValue<AlgorithmResult>();
         }
 
         private void button1_Click(object sender, EventArgs e)

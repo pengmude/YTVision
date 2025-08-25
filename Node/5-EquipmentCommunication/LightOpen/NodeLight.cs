@@ -3,9 +3,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
+namespace TDJS_Vision.Node._5_EquipmentCommunication.LightOpen
 {
-    internal class NodeLight : NodeBase
+    public class NodeLight : NodeBase
     {
         /// <summary>
         /// 创建一个指定名称的节点
@@ -20,14 +20,14 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if(ParamForm.Params == null)
             {
@@ -43,13 +43,17 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.CheckTokenCancel(token);
 
+                //如果光源资源已释放
+                if (param.Light == null) { throw new Exception("光源对象无效！"); }
                 //如果没有连接则不运行
-                if (!param.Light.IsComOpen)
-                    throw new Exception("光源串口尚未连接！");
+                if (!param.Light.IsComOpen) { throw new Exception("光源串口尚未连接！"); }
 
                 param.Light.TurnOn(param.Brightness, param.Time);
-                long time = SetRunResult(startTime, NodeStatus.Successful);
-                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                var time = SetRunResult(startTime, NodeStatus.Successful);
+                Result.RunTime = time;
+                if (showLog)
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                return new NodeReturn(NodeRunFlag.ContinueRun);
             }
             catch(OperationCanceledException)
             {

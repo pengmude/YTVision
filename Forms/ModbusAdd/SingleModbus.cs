@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Device;
-using YTVisionPro.Device.Modbus;
+using TDJS_Vision.Device;
+using TDJS_Vision.Device.Modbus;
 
-namespace YTVisionPro.Forms.ModbusAdd
+namespace TDJS_Vision.Forms.ModbusAdd
 {
     /// <summary>
     /// 单个Modbus
     /// </summary>
-    internal partial class SingleModbus : UserControl
+    public partial class SingleModbus : UserControl
     {
         /// <summary>
         /// Modbus设备
@@ -20,7 +20,7 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// <summary>
         /// 设备参数
         /// </summary>
-        public ModbusParam Parms = new ModbusParam();
+        public IModbusParam Parms;
         /// <summary>
         /// 是否选中
         /// </summary>
@@ -37,10 +37,6 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// 保存所有的当前类实例
         /// </summary>
         public static List<SingleModbus> SingleModbuss = new List<SingleModbus>();
-        /// <summary>
-        /// Modbus参数显示控件
-        /// </summary>
-        public ModbusParamsControl ModbusParamsControl;
 
         /// <summary>
         /// 反序列化用
@@ -64,26 +60,27 @@ namespace YTVisionPro.Forms.ModbusAdd
                 }
             }
             this.label1.Text = dev.UserDefinedName;
-            ModbusParamsControl = new ModbusParamsControl(dev.ModbusParam);
             Solution.Instance.AllDevices.Add(dev);
             SingleModbuss.Add(this);
         }
 
-        public SingleModbus(ModbusParam param)
+        public SingleModbus(IModbusParam param)
         {
             InitializeComponent();
             this.label1.Text = param.UserDefinedName;
             Parms = param;
             try
             {
-                ModbusParamsControl = new ModbusParamsControl(param);
                 switch (param.DevType)
                 {
-                    case DevType.ModbusPoll:
-                        ModbusDevice = new ModbusPoll(param);
+                    case DevType.ModbusRTUPoll:
+                        ModbusDevice = new ModbusRTUPoll((ModbusRTUParam)param);
                         break;
-                    case DevType.ModbusSlave:
-                        ModbusDevice = new ModbusSlave(param);
+                    case DevType.ModbusTcpPoll:
+                        ModbusDevice = new ModbusTcpPoll((ModbusTcpParam)param);
+                        break;
+                    case DevType.ModbusTcpSlave:
+                        ModbusDevice = new ModbusTcpSlave((ModbusTcpParam)param);
                         break;
                     default:
                         break;

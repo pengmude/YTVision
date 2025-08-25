@@ -1,14 +1,15 @@
-﻿using YTVisionPro.Device.Camera;
+﻿using TDJS_Vision.Device.Camera;
 using System;
 using System.Windows.Forms;
 using Logger;
 using System.Diagnostics;
-using YTVisionPro.Forms.LightAdd;
+using TDJS_Vision.Forms.LightAdd;
 using System.Linq;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.CameraAdd
+namespace TDJS_Vision.Forms.CameraAdd
 {
-    internal partial class FrmCameraListView : Form
+    public partial class FrmCameraListView : FormBase
     {
         /// <summary>
         /// 添加相机时通过快捷键保存方案的事件
@@ -44,37 +45,38 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void Deserialization(object sender,  bool e)
         {
-            // 先移除旧方案的相机控件
-            flowLayoutPanel1.Controls.Clear();
-
-            // 没有对应类型设备跳过加载
-            if (ConfigHelper.SolConfig.Devices.Count(device => device is ICamera) == 0)
+            try
             {
-                OnCameraDeserializationCompletionEvent?.Invoke(this, e);
-                return;
-            }
-            // 添加新的相机
-            SingleCamera singleCamera = null;
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【相机设备列表】=================================================", true);
-            foreach (var dev in ConfigHelper.SolConfig.Devices)
-            {
-                if (dev is ICamera camera)
+                // 先移除旧方案的相机控件
+                flowLayoutPanel1.Controls.Clear();
+                // 添加新的相机
+                SingleCamera singleCamera = null;
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【相机设备列表】=================================================", true);
+                foreach (var dev in ConfigHelper.SolConfig.Devices)
                 {
-                    camera.CreateDevice(); // 创建相机，必要的
-                    singleCamera = new SingleCamera(camera);
-                    singleCamera.Anchor = AnchorStyles.Left;
-                    singleCamera.Anchor = AnchorStyles.Right;
-                    flowLayoutPanel1.Controls.Add(singleCamera);
-                    if (e)
-                        LogHelper.AddLog(MsgLevel.Info, $"相机设备【{dev.DevName}】已加载！", true);
-                }
-                
-            }
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================【相机设备列表】已加载完成 ================================================", true);
+                    if (dev is ICamera camera)
+                    {
+                        camera.CreateDevice(); // 创建相机，必要的
+                        singleCamera = new SingleCamera(camera);
+                        singleCamera.Anchor = AnchorStyles.Left;
+                        singleCamera.Anchor = AnchorStyles.Right;
+                        flowLayoutPanel1.Controls.Add(singleCamera);
+                        if (e)
+                            LogHelper.AddLog(MsgLevel.Info, $"相机设备【{dev.DevName}】已加载！", true);
+                    }
 
-            OnCameraDeserializationCompletionEvent?.Invoke(this, e);
+                }
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================【相机设备列表】已加载完成 ================================================", true);
+
+            }
+            catch (Exception) { }
+            finally
+            {
+                // 触发相机反序列化完成事件
+                OnCameraDeserializationCompletionEvent?.Invoke(this, e);
+            }
         }
 
         /// <summary>
@@ -99,7 +101,7 @@ namespace YTVisionPro.Forms.CameraAdd
         private void SingleCamera_SingleCameraRemoveEvent(object sender, SingleCamera e)
         {
             SingleCamera.SingleCameraList.Remove(e);
-            panel1.Controls.Remove(e.CameraParamsShowControl);
+            panel1.Controls.Clear();
             e.Camera.Dispose();
             //然后移除掉方案中的全局相机并释放相机内存
             Solution.Instance.AllDevices.Remove(e.Camera);
@@ -127,7 +129,7 @@ namespace YTVisionPro.Forms.CameraAdd
             {
                 SingleCamera.SingleCameraList.Remove(singleCamera);
                 LogHelper.AddLog(MsgLevel.Fatal, $"添加相机失败:{ex.Message}", true);
-                MessageBox.Show("添加失败！原因：" + ex.Message);
+                MessageBoxTD.Show("添加失败！原因：" + ex.Message);
             }
         }
         
@@ -139,9 +141,9 @@ namespace YTVisionPro.Forms.CameraAdd
         private void SingleCamera_SingleCameraSelectedChanged(object sender, SingleCamera e)
         {
             panel1.Controls.Clear();
-            e.CameraParamsShowControl.Dock = DockStyle.Fill;
-            e.CameraParamsShowControl.Show();
-            panel1.Controls.Add(e.CameraParamsShowControl);
+            var control = new CameraParamsShowControl(e.Camera);
+            control.Dock = DockStyle.Fill;
+            panel1.Controls.Add(control);
         }
 
         /// <summary>
@@ -166,7 +168,10 @@ namespace YTVisionPro.Forms.CameraAdd
                 foreach (var item in Solution.Instance.CameraDevices)
                 {
                     if (item.IsOpen)
+                    {
                         item.SetTriggerMode(true);
+                        item.SetTriggerSource(TriggerSource.LINE0); // 默认设置触发源为LINE0
+                    }
                 }
             } 
             catch(Exception ex)

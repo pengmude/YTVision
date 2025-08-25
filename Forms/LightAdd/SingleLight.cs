@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Device;
-using YTVisionPro.Device.Light;
-using YTVisionPro.Node._5_EquipmentCommunication.LightOpen;
+using TDJS_Vision.Device;
+using TDJS_Vision.Device.Light;
+using TDJS_Vision.Node._5_EquipmentCommunication.LightOpen;
 
-namespace YTVisionPro.Forms.LightAdd
+namespace TDJS_Vision.Forms.LightAdd
 {
     /// <summary>
     /// 单个光源控件
     /// </summary>
-    internal partial class SingleLight : UserControl
+    public partial class SingleLight : UserControl
     {
         /// <summary>
         /// 光源对象
@@ -38,10 +38,6 @@ namespace YTVisionPro.Forms.LightAdd
         /// 移除当前实例
         /// </summary>
         public static event EventHandler<SingleLight> SingleLightRemoveEvent;
-        /// <summary>
-        /// 光源参数显示控件
-        /// </summary>
-        public LightParamsShowControl LightParamsShowControl;
         /// <summary>
         /// 保存所有的当前类实例
         /// </summary>
@@ -71,8 +67,6 @@ namespace YTVisionPro.Forms.LightAdd
             Light = light;
             Parms = light.LightParam;
             Solution.Instance.AllDevices.Add(Light);
-            //给光源绑定参数界面
-            LightParamsShowControl = new LightParamsShowControl(Parms);
             // 保存所有的实例
             SingleLights.Add(this);
         }
@@ -100,8 +94,6 @@ namespace YTVisionPro.Forms.LightAdd
                 else
                     throw new Exception("暂时不支持的光源品牌！");
                 Solution.Instance.AllDevices.Add(Light);
-                //给光源绑定参数界面
-                LightParamsShowControl = new LightParamsShowControl(Parms);
                 // 保存所有的实例
                 SingleLights.Add(this);
             }
@@ -183,17 +175,6 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 移除设备需要判断当前是否有节点使用该设备
-            foreach (var node in Solution.Instance.Nodes)
-            {
-                if (node is NodeLight lightNode
-                    && lightNode.ParamForm.Params is NodeParamLight paramLight
-                    && Light.UserDefinedName == paramLight.Light.UserDefinedName)
-                {
-                    MessageBox.Show("当前方案的节点正在使用该光源，无法删除光源！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
             if(IsSelected)
                 SingleLightRemoveEvent?.Invoke(this, this);
         }

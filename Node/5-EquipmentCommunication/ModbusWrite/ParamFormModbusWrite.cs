@@ -3,12 +3,13 @@ using Sunny.UI;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Modbus;
-using YTVisionPro.Node._5_EquipmentCommunication.ModbusRead;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
+namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusWrite
 {
-    internal partial class ParamFormModbusWrite : Form, INodeParamForm
+    public partial class ParamFormModbusWrite : FormBase, INodeParamForm
     {
         public INodeParam Params { get; set; }
 
@@ -58,7 +59,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
             foreach (var modbus in Solution.Instance.ModbusDevices)
             {
                 // 从站作为服务器不能发起请求
-                if (modbus.ModbusParam.DevType == Device.DevType.ModbusSlave)
+                if (modbus.ModbusParam.DevType == Device.DevType.ModbusTcpSlave)
                     continue;
                 comboBoxModbusDev.Items.Add(modbus.UserDefinedName);
             }
@@ -82,7 +83,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
             if (comboBoxModbusDev.Text.IsNullOrEmpty() || comboBoxModbusDev.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "Modbus不能为空！", true);
-                MessageBox.Show("Modbus不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("Modbus不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             ushort adress;
@@ -93,7 +94,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
             catch (Exception)
             {
                 LogHelper.AddLog(MsgLevel.Exception, "无效的起始地址", true);
-                MessageBox.Show("无效的起始地址", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxTD.Show("无效的起始地址", "错误提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -135,6 +136,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
                 nodeParamWrite.Text1 = nodeSubscription1.GetText1();
                 nodeParamWrite.Text2 = nodeSubscription1.GetText2();
             }
+            nodeParamWrite.IsAutoReset = checkBoxAutoReset.Checked;
             Params = nodeParamWrite;
         }
 
@@ -172,14 +174,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
                     case RegistersType.Coils:
                         comboBoxType.SelectedIndex = 0;
                         break;
-                    case RegistersType.DiscreteInput:
-                        comboBoxType.SelectedIndex = 1;
-                        break;
-                    case RegistersType.InputRegisters:
-                        comboBoxType.SelectedIndex = 2;
-                        break;
                     case RegistersType.HoldingRegisters:
-                        comboBoxType.SelectedIndex = 3;
+                        comboBoxType.SelectedIndex = 1;
                         break;
                     default:
                         break;
@@ -195,6 +191,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
                     radioButton2.Checked = true;
                     textBoxData.Text = param.Data.ToString();
                 }
+                checkBoxAutoReset.Checked = param.IsAutoReset;
             }
         }
 

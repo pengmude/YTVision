@@ -1,0 +1,85 @@
+{
+  "ModelName": "胶壳",
+  "ModelSize": 640,
+  "ScoreThreshold": 0.5,
+  "ScoreNMS": 0.4,
+  "ModelInfo": {
+    "ModelType": "OBB",
+    "DeviceType": "CPU",
+    "IsEncrypted": true,
+    "ModelPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\Shell_encrypted.onnx",
+    "KeyPointNum": 0
+  },
+  "ClassNames": [
+    "shell",
+    "shrapnel",
+    "tip",
+    "ng"
+  ],
+  "DetectItems": [
+    {
+      "Name": "胶壳数量",
+      "MinValue": "6",
+      "MaxValue": "6",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "6"
+    },
+    {
+      "Name": "胶壳角度",
+      "MinValue": "-3",
+      "MaxValue": "3",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "-0.72,-0.74,-1.11,0.27,-0.23,-0.44,"
+    },
+    {
+      "Name": "弹片数量",
+      "MinValue": "12",
+      "MaxValue": "12",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "12"
+    },
+    {
+      "Name": "弹片长度",
+      "MinValue": "20",
+      "MaxValue": "30",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "23.60,23.80,23.61,23.36,22.86,23.42,22.83,22.76,23.07,22.96,23.60,22.63,"
+    },
+    {
+      "Name": "针尖数量",
+      "MinValue": "9",
+      "MaxValue": "9",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "-1"
+    },
+    {
+      "Name": "针尖长度",
+      "MinValue": "90",
+      "MaxValue": "110",
+      "Enable": false,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "针尖角度",
+      "MinValue": "-3",
+      "MaxValue": "3",
+      "Enable": false,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "外观不良",
+      "MinValue": "-1",
+      "MaxValue": "0",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "-1"
+    }
+  ]
+}

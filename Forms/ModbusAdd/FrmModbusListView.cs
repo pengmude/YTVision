@@ -1,15 +1,15 @@
 ﻿using Logger;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Device.Modbus;
-using YTVisionPro.Device;
+using TDJS_Vision.Forms.CameraAdd;
+using TDJS_Vision.Forms.PLCAdd;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Device;
 using System.Linq;
 
-namespace YTVisionPro.Forms.ModbusAdd
+namespace TDJS_Vision.Forms.ModbusAdd
 {
-    internal partial class FrmModbusListView : Form
+    public partial class FrmModbusListView : FormBase
     {
         /// <summary>
         /// 添加Modbus时通过快捷键保存方案的事件
@@ -40,36 +40,37 @@ namespace YTVisionPro.Forms.ModbusAdd
         /// <param name="e"></param>
         private void Deserialization(object sender, bool e)
         {
-            // 先移除旧方案的Modbus控件
-            flowLayoutPanel1.Controls.Clear();
-
-            // 没有对应类型设备跳过加载
-            if (ConfigHelper.SolConfig.Devices.Count(device => device is IModbus) == 0)
+            try
             {
-                OnModbusDeserializationCompletionEvent?.Invoke(this, e);
-                return;
-            }
-            // 添加新的Modbus
-            SingleModbus singlePLC = null;
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【Modbus设备列表】=================================================", true);
-            foreach (var dev in ConfigHelper.SolConfig.Devices)
-            {
-                if (dev is IModbus modbus)
+                // 先移除旧方案的Modbus控件
+                flowLayoutPanel1.Controls.Clear();
+                // 添加新的Modbus
+                SingleModbus singlePLC = null;
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【Modbus设备列表】=================================================", true);
+                foreach (var dev in ConfigHelper.SolConfig.Devices)
                 {
-                    modbus.CreateDevice(); // 创建modbus，必要的
-                    singlePLC = new SingleModbus(modbus);
-                    singlePLC.Anchor = AnchorStyles.Left;
-                    singlePLC.Anchor = AnchorStyles.Right;
-                    flowLayoutPanel1.Controls.Add(singlePLC);
-                    if (e)
-                        LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{modbus.DevName}】已加载！", true);
+                    if (dev is IModbus modbus)
+                    {
+                        modbus.CreateDevice(); // 创建modbus，必要的
+                        singlePLC = new SingleModbus(modbus);
+                        singlePLC.Anchor = AnchorStyles.Left;
+                        singlePLC.Anchor = AnchorStyles.Right;
+                        flowLayoutPanel1.Controls.Add(singlePLC);
+                        if (e)
+                            LogHelper.AddLog(MsgLevel.Info, $"Modbus设备【{modbus.DevName}】已加载！", true);
+                    }
                 }
-            }
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================【Modbus设备列表】已加载完成 ================================================", true);
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================【Modbus设备列表】已加载完成 ================================================", true);
 
-            OnModbusDeserializationCompletionEvent?.Invoke(this, e);
+            }
+            catch (Exception) { }
+            finally
+            {
+                // 触发Modbus反序列化完成事件
+                OnModbusDeserializationCompletionEvent?.Invoke(this, e);
+            }
         }
 
         /// <summary>
@@ -94,7 +95,7 @@ namespace YTVisionPro.Forms.ModbusAdd
         private void SingleModbus_RemoveEvent(object sender, SingleModbus e)
         {
             SingleModbus.SingleModbuss.Remove(e);
-            panel1.Controls.Remove(e.ModbusParamsControl);
+            panel1.Controls.Clear();
             e.ModbusDevice.Disconnect();
             Solution.Instance.AllDevices.Remove(e.ModbusDevice);
             flowLayoutPanel1.Controls.Remove(e);
@@ -110,8 +111,9 @@ namespace YTVisionPro.Forms.ModbusAdd
         {
             //将选中的Modbus的参数控件设置到右侧
             panel1.Controls.Clear();
-            e.ModbusParamsControl.Dock = DockStyle.Fill;
-            panel1.Controls.Add(e.ModbusParamsControl);
+            var control = new ModbusParamsControl(e.Parms);
+            control.Dock = DockStyle.Fill;
+            panel1.Controls.Add(control);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -119,7 +121,7 @@ namespace YTVisionPro.Forms.ModbusAdd
             _frmAdd.ShowDialog();
         }
 
-        private void FrmAdd_ModbusAddEvent(object sender, ModbusParam e)
+        private void FrmAdd_ModbusAddEvent(object sender, IModbusParam e)
         {
             SingleModbus singleModbus = null;
             try

@@ -4,10 +4,11 @@ using System.Drawing;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.ImageViewer
+namespace TDJS_Vision.Forms.ImageViewer
 {
-    internal partial class YTPictrueBox : UserControl
+    public partial class YTPictrueBox : UserControl
     {
         Point _srcDragLoc = new Point();                                    // 图像拖动前鼠标按下的位置
         bool _isMove = false;                                               // 是否拖拽移动
@@ -281,13 +282,13 @@ namespace YTVisionPro.Forms.ImageViewer
                     }
                     else
                     {
-                        MessageBox.Show("图像为空！");
+                        MessageBoxTD.Show("图像为空！");
                         return;
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("图像保存失败！");
+                    MessageBoxTD.Show("图像保存失败！");
                     return;
                 }
             }

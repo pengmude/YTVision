@@ -5,10 +5,12 @@ using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Size = OpenCvSharp.Size;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._3_Detection.QRScan
+namespace TDJS_Vision.Node._3_Detection.QRScan
 {
-    internal partial class NodeParamFormQRScan : Form, INodeParamForm
+    public partial class NodeParamFormQRScan : FormBase, INodeParamForm
     {
         private Process process;//所属流程
         private NodeBase node;//所属节点
@@ -28,10 +30,10 @@ namespace YTVisionPro.Node._3_Detection.QRScan
             // 加载模型
             Task.Run(() =>
             {
-                string detect_caffe_model = ".\\model\\detect.caffemodel";
-                string detect_prototxt = ".\\model\\detect.prototxt";
-                string sr_caffe_model = ".\\model\\sr.caffemodel";
-                string sr_prototxt = ".\\model\\sr.prototxt";
+                string detect_caffe_model = ".\\QRCodeModel\\detect.caffemodel";
+                string detect_prototxt = ".\\QRCodeModel\\detect.prototxt";
+                string sr_caffe_model = ".\\QRCodeModel\\sr.caffemodel";
+                string sr_prototxt = ".\\QRCodeModel\\sr.prototxt";
 
                 weChatQRCode = WeChatQRCode.Create(
                     detect_prototxt,
@@ -60,12 +62,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                 this.textBox2.Text = param.ClipLimit.ToString();
                 this.textBox3.Text = param.TileGridSize.Width.ToString();
                 //还原ROI
-                imageROIEditControl1.SetROI(param.ROI);
-
-                // TODO: 修复必须得显示一下参数窗口再运行截取的图像才是正确的区域，
-                // 原因未知，估计是和ROI管理类构造需要传入pictrueBox有关
-                Show();
-                Hide();
+                imageROIEditControl1.SetROIs(param.ROIs);
             }
         }
 
@@ -85,7 +82,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
             Bitmap bitmap = null;
             try
             {
-                bitmap = nodeSubscription1.GetValue<Bitmap>();
+                bitmap = nodeSubscription1.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
             }
             catch (Exception)
             {
@@ -102,7 +99,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBoxTD.Show(ex.Message);
             }
         }
 
@@ -116,7 +113,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                 // 更新输入图像和获取ROI图像
                 pictureBoxCanny.Image = null;
                 UpdataImage();
-                Mat image = imageROIEditControl1.GetROIImages().ToMat();
+                Mat image = imageROIEditControl1.GetROIImages()[0];
 
                 // 处理图像
                 Mat blurred = await ImageProcessingasync(image);
@@ -155,7 +152,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                 nodeParamQRCodeIdentification.Text2 = nodeSubscription1.GetText2();
                 nodeParamQRCodeIdentification.MoreParamsEnable = checkBoxMoreParams.Checked;
                 nodeParamQRCodeIdentification.GaussianBlur = int.Parse(textBoxBlurSize.Text);
-                nodeParamQRCodeIdentification.ROI = imageROIEditControl1.GetROI();
+                nodeParamQRCodeIdentification.ROIs = imageROIEditControl1.GetROIs();
                 nodeParamQRCodeIdentification.ISHistogramEqualization = this.checkBox1.Checked;
                 nodeParamQRCodeIdentification.ClipLimit = double.Parse(this.textBox2.Text);
                 nodeParamQRCodeIdentification.TileGridSize = new Size(int.Parse(this.textBox3.Text), int.Parse(this.textBox3.Text));
@@ -163,7 +160,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
             }
             catch (Exception)
             {
-                MessageBox.Show("参数设置异常，请检查参数设置是否合理！");
+                MessageBoxTD.Show("参数设置异常，请检查参数设置是否合理！");
                 return false;
             }
             return true;

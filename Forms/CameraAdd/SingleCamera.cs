@@ -4,20 +4,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Camera;
-using YTVisionPro.Node._1_Acquisition.ImageSource;
+using TDJS_Vision.Device.Camera;
 
-namespace YTVisionPro.Forms.CameraAdd
+namespace TDJS_Vision.Forms.CameraAdd
 {
     /// <summary>
     /// 单个相机控件
     /// </summary>
-    internal partial class SingleCamera : UserControl
+    public partial class SingleCamera : UserControl
     {
         /// <summary>
         /// 相机对象
         /// </summary>
-        public Device.Camera.ICamera Camera;
+        public ICamera Camera;
         /// <summary>
         /// 是否被选中
         /// </summary>
@@ -34,10 +33,6 @@ namespace YTVisionPro.Forms.CameraAdd
         /// 移除当前实例
         /// </summary>
         public static event EventHandler<SingleCamera> SingleCameraRemoveEvent;
-        /// <summary>
-        /// 相机参数显示控件
-        /// </summary>
-        public CameraParamsShowControl CameraParamsShowControl;
         /// <summary>
         /// 保存所有的当前类实例
         /// </summary>
@@ -57,18 +52,17 @@ namespace YTVisionPro.Forms.CameraAdd
                 try
                 {
                     Camera.Open();
-                    Camera.SetTriggerMode(true);
                     Camera.StartGrabbing();
+                    Camera.SetTriggerMode(true);
                 }
                 catch (Exception ex)
                 {
+                    uiSwitch1.Active = false;
                     LogHelper.AddLog(MsgLevel.Exception, $"相机（{camera.UserDefinedName}）打开失败，请检查相机状态！原因：{ex.Message}", true);
                 }
             }
             this.label1.Text = camera.UserDefinedName;
             Solution.Instance.AllDevices.Add(Camera);
-            //绑定图像显示控件界面
-            CameraParamsShowControl = new CameraParamsShowControl(Camera);
             // 保存所有的实例
             SingleCameraList.Add(this);
         }
@@ -91,9 +85,6 @@ namespace YTVisionPro.Forms.CameraAdd
                 Camera = new CameraHik(parms.DevInfo.cameraInfo, parms.UserDefinedName);
                 Camera.ConnectStatusEvent += Camera_ConnectStatusEvent;
                 Solution.Instance.AllDevices.Add(Camera);
-
-                //绑定图像显示控件界面
-                CameraParamsShowControl = new CameraParamsShowControl(Camera);
                 // 保存所有的实例
                 SingleCameraList.Add(this);
             }
@@ -148,13 +139,14 @@ namespace YTVisionPro.Forms.CameraAdd
                     await Task.Run(() =>
                     {
                         Camera.Open();
-                        Camera.SetTriggerMode(false);
+                        Camera.SetTriggerMode(true);
                         Camera.StartGrabbing();
                     });
                     LogHelper.AddLog(MsgLevel.Info, $"{Camera.UserDefinedName}已打开！", true);
                 }
                 catch (Exception e)
                 {
+                    uiSwitch1.Active = false;
                     LogHelper.AddLog(MsgLevel.Fatal, $"{Camera.UserDefinedName}打开失败！原因：{e.Message}", true);
                 }
             }
@@ -180,17 +172,6 @@ namespace YTVisionPro.Forms.CameraAdd
         /// <param name="e"></param>
         private void 移除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 移除设备需要判断当前是否有节点使用该设备
-            foreach (var node in Solution.Instance.Nodes)
-            {
-                if (node is NodeImageSource cameraNode
-                    && cameraNode.ParamForm.Params is NodeParamImageSoucre paramCamera
-                    && Camera.UserDefinedName == paramCamera.Camera.UserDefinedName)
-                {
-                    MessageBox.Show("当前方案的节点正在使用该相机，无法删除相机！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-            }
             if (IsSelected)
                 SingleCameraRemoveEvent?.Invoke(this, this);
         }

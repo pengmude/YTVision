@@ -1,12 +1,14 @@
 ﻿using Logger;
+using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageRotate
 {
-    internal class NodeImageRotate : NodeBase
+    public class NodeImageRotate : NodeBase
     {
         public NodeImageRotate(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -18,14 +20,14 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -45,11 +47,13 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
                         base.CheckTokenCancel(token);
 
                         NodeResultImageRotate nodeResultImageRotate = new NodeResultImageRotate();
-                        nodeResultImageRotate.Image = form.ImageRotate(BitmapConverter.ToMat(form.GetImage()), param.Angle);
+                        nodeResultImageRotate.OutputImage.Bitmaps = new List<Mat>() { form.ImageRotate(BitmapConverter.ToMat(form.GetImage()), param.Angle) };
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        nodeResultImageRotate.RunTime = time;
                         Result = nodeResultImageRotate;
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -65,6 +69,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
     }
 }

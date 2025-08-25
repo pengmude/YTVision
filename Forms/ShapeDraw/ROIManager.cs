@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 
-namespace YTVisionPro.Forms.ShapeDraw
+namespace TDJS_Vision.Forms.ShapeDraw
 {/// <summary>
  /// 鼠标按下结果
  /// </summary>
@@ -24,6 +26,7 @@ namespace YTVisionPro.Forms.ShapeDraw
     {
         private PictureBox pictureBox;
         public List<ROI> ROIs;
+        private Stack<ROI> roiStack = new Stack<ROI>();  // 用来删除上一个ROI的栈结构
 
         public ROIManager(PictureBox pictureBox)
         {
@@ -42,6 +45,15 @@ namespace YTVisionPro.Forms.ShapeDraw
             roi.IsSelected = true;
             // 添加ROI
             ROIs.Add(roi);
+            roiStack.Push(roi);
+            pictureBox.Invalidate(); // 重绘 PictureBox
+        }
+        /// <summary>
+        /// 移除上一个ROI
+        /// </summary>
+        public void RemovePrevious()
+        {
+            ROIs.Remove(roiStack.Pop());
             pictureBox.Invalidate(); // 重绘 PictureBox
         }
 
@@ -57,21 +69,23 @@ namespace YTVisionPro.Forms.ShapeDraw
             pictureBox.Invalidate(); // 重绘 PictureBox
         }
 
-        public List<Bitmap> GetROIImages()
+        public List<Mat> GetROIImages()
         {
-            var roiImages = new List<Bitmap>();
+            var roiImages = new List<Mat>();
             if (pictureBox.Image != null)
             {
                 // 如果没有ROI就返回原图
                 if (ROIs.Count == 0)
                 {
-                    roiImages.Add((Bitmap)pictureBox.Image);
+                    roiImages.Add(((Bitmap)pictureBox.Image).ToMat());
                     return roiImages;
                 }
 
-                foreach (var roi in ROIs)
+                for (int i = 0; i < ROIs.Count; i++)
                 {
-                    roiImages.Add(roi.GetROIImage((Bitmap)pictureBox.Image, pictureBox));
+                    var img = ROIs[i].GetROIImage((Bitmap)pictureBox.Image, pictureBox);
+                    //Cv2.ImWrite($"img_{i}.jpg", img);
+                    roiImages.Add(img);
                 }
             }
             return roiImages;
@@ -126,7 +140,7 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="pictureBox"></param>
         /// <param name="clientPoint"></param>
         /// <returns></returns>
-        public Point GetImagePoint(PictureBox pictureBox, Point clientPoint)
+        public System.Drawing.Point GetImagePoint(PictureBox pictureBox, System.Drawing.Point clientPoint)
         {
             if (pictureBox.Image == null) return clientPoint;
 
@@ -137,7 +151,7 @@ namespace YTVisionPro.Forms.ShapeDraw
             int imageY = (pictureBox.ClientSize.Height - (int)(pictureBox.Image.Height * scaleFactor)) / 2;
 
             // 考虑偏移量来转换坐标
-            Point imagePoint = new Point(
+            System.Drawing.Point imagePoint = new System.Drawing.Point(
                 (int)((clientPoint.X - imageX) / scaleFactor + 0.5f), // 四舍五入
                 (int)((clientPoint.Y - imageY) / scaleFactor + 0.5f)); // 四舍五入
 
@@ -150,7 +164,7 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="pictureBox"></param>
         /// <param name="imagePoint"></param>
         /// <returns></returns>
-        public Point GetClientPoint(PictureBox pictureBox, Point imagePoint)
+        public System.Drawing.Point GetClientPoint(PictureBox pictureBox, System.Drawing.Point imagePoint)
         {
             if (pictureBox.Image == null) return imagePoint;
 
@@ -161,7 +175,7 @@ namespace YTVisionPro.Forms.ShapeDraw
             int imageY = (pictureBox.ClientSize.Height - (int)(pictureBox.Image.Height * scaleFactor)) / 2;
 
             // 将图像坐标转换为客户区坐标
-            Point clientPoint = new Point(
+            System.Drawing.Point clientPoint = new System.Drawing.Point(
                 (int)(imageX + imagePoint.X * scaleFactor + 0.5f), // 四舍五入
                 (int)(imageY + imagePoint.Y * scaleFactor + 0.5f)); // 四舍五入
 
@@ -174,7 +188,7 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="roi"></param>
         /// <param name="point"></param>
         /// <returns></returns>
-        public static ROISelectionState GetClickedROIItem(ROIManager roiManager, Point point, PictureBox pictrueBox, ref ROI roiSelected)
+        public static ROISelectionState GetClickedROIItem(ROIManager roiManager, System.Drawing.Point point, PictureBox pictrueBox, ref ROI roiSelected)
         {
             ROISelectionState state = ROISelectionState.None;
             // 先清除之前的选中状态

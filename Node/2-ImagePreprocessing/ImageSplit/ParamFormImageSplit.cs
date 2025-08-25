@@ -2,10 +2,13 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using OpenCvSharp.Extensions;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageSplit
 {
-    internal partial class ParamFormImageSplit : Form, INodeParamForm
+    public partial class ParamFormImageSplit : FormBase, INodeParamForm
     {
         private readonly Process _process;//所属流程
         private readonly NodeBase _node;//所属节点
@@ -43,7 +46,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
             Bitmap bitmap = null;
             try
             {
-                bitmap = nodeSubscription1.GetValue<Bitmap>();
+                bitmap = nodeSubscription1.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
             }
             catch (Exception)
             {
@@ -70,7 +73,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
             }
             catch (Exception)
             {
-                MessageBox.Show("刷新图像失败！请检查是否订阅正确的结果或前面节点运行存在异常！");
+                MessageBoxTD.Show("刷新图像失败！请检查是否订阅正确的结果或前面节点运行存在异常！");
             }
         }
 
@@ -107,7 +110,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
             }
             catch (Exception)
             {
-                MessageBox.Show("预览失败，请检查参数！");
+                MessageBoxTD.Show("预览失败，请检查参数！");
             }
         }
 

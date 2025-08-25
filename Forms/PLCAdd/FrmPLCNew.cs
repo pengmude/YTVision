@@ -1,12 +1,14 @@
 ﻿using Logger;
+using Sunny.UI;
 using System;
 using System.IO.Ports;
 using System.Windows.Forms;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device.PLC;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.PLCAdd
+namespace TDJS_Vision.Forms.PLCAdd
 {
-    internal partial class FrmPLCNew : Form
+    public partial class FrmPLCNew : FormBase
     {
         /// <summary>
         /// PLC添加事件
@@ -20,82 +22,153 @@ namespace YTVisionPro.Forms.PLCAdd
         }
 
         /// <summary>
-        /// 搜索串口并添加到下拉框
+        /// 松下Mewtocol,搜索串口并添加到下拉框
         /// </summary>
         public void InitPortComboBox()
         {
             // 串口号获取
-            comboBox2.Items.Clear();
-            foreach (var com in SerialPort.GetPortNames())
-            {
-                comboBox2.Items.Add(com);
-            }
-            if (comboBox2.Items.Count > 0)
-                this.comboBox2.SelectedIndex = 0;
+            comboBoxCom1.Items.Clear();
+            comboBoxCom1.Items.AddRange(SerialPort.GetPortNames());
+            if (comboBoxCom1.Items.Count > 0)
+                this.comboBoxCom1.SelectedIndex = 0;
 
             // 波特率
-            comboBox3.SelectedIndex = 1;
+            comboBoxBaute1.SelectedIndex = 1;
             // 数据位
-            comboBox4.SelectedIndex = 3;
+            comboBoxDataBit1.SelectedIndex = 3;
             // 停止位
-            comboBox5.SelectedIndex = 0;
+            comboBoxStopBit1.SelectedIndex = 0;
             // 校验位
-            comboBox6.SelectedIndex = 0;
-            // 品牌
-            comboBox1.SelectedIndex = 0;
-            // 通信方式
-            comboBox8.SelectedIndex = 0;
-
+            comboBoxParity1.SelectedIndex = 0;
         }
 
         /// <summary>
-        /// 确认按钮
+        /// 点击添加三菱MC(Binary)设备
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonConfirm1_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(this.textBox2.Text))
+            if(textBoxPort1.Text.IsNullOrEmpty() || textBoxName1.Text.IsNullOrEmpty())
+            {
+                MessageBoxTD.Show("请输入端口和设备名！"); return;
+            }
+
+            // 已添加设备冲突判断
+            bool exist = Solution.Instance.PlcDevices.Exists(plc => plc.PLCParms.EthernetParms.IP == uiipTextBoxIP1.Text || plc.UserDefinedName == textBoxName1.Text);
+            if (exist)
+            {
+                MessageBoxTD.Show("PLC的IP地址和用户自定义名称已存在！");
+                LogHelper.AddLog(MsgLevel.Warn, "PLC的IP地址和用户自定义名称已存在！", true);
+                return;
+            }
+
+            try
             {
                 PLCParms pLCParms = new PLCParms();
+                pLCParms.DeviceBrand = Device.DeviceBrand.Melsec;
+                pLCParms.EthernetParms = new EthernetParms();
+                pLCParms.UserDefinedName = textBoxName1.Text;
+                pLCParms.PlcConType = PlcConType.ETHERNET;
+                pLCParms.EthernetParms.IP = uiipTextBoxIP1.Text;
+                pLCParms.EthernetParms.Port = int.Parse(textBoxPort1.Text);
 
+                PLCAddEvent?.Invoke(this, pLCParms);
+                Hide();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Warn, "请检查PLC参数是否有误！\n" + ex, true);
+                MessageBoxTD.Show("请检查PLC参数是否有误！");
+            }
+        }
+        /// <summary>
+        /// 松下Mewtocol，点击确定添加
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonConfirm2_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.textBoxName2.Text))
+            {
+
+                // 已添加设备冲突判断
+                bool exist = Solution.Instance.PlcDevices.Exists(plc => plc.PLCParms.SerialParms.PortName == comboBoxCom1.Text || plc.UserDefinedName == textBoxName2.Text);
+                if (exist)
+                {
+                    MessageBoxTD.Show("PLC的串口号和用户自定义名不能相同！");
+                    LogHelper.AddLog(MsgLevel.Warn, "PLC的串口号和用户自定义名不能相同！", true);
+                    return;
+                }
                 try
                 {
-                    if (comboBox1.Text == "松下" && comboBox8.Text == "串口")
-                    {
-                        pLCParms.EthernetParms = new EthernetParms();
+                    PLCParms pLCParms = new PLCParms();
+                    pLCParms.DeviceBrand = Device.DeviceBrand.Panasonic;
+                    pLCParms.EthernetParms = new EthernetParms();
 
-                        pLCParms.UserDefinedName = textBox2.Text;
-                        pLCParms.PlcConType = PlcConType.COM;
+                    pLCParms.UserDefinedName = textBoxName2.Text;
+                    pLCParms.PlcConType = PlcConType.COM;
 
-                        pLCParms.SerialParms.PortName = comboBox2.Text;
-                        pLCParms.SerialParms.BaudRate = int.Parse(comboBox3.Text);
-                        pLCParms.SerialParms.DataBits = int.Parse(comboBox4.Text);
-                        pLCParms.SerialParms.StopBits = comboBox5.SelectedIndex == 0 ? StopBits.One : (comboBox5.SelectedIndex == 1 ? StopBits.OnePointFive : StopBits.Two);
-                        pLCParms.SerialParms.Parity = comboBox6.SelectedIndex == 0 ? Parity.None : (comboBox6.SelectedIndex == 1 ? Parity.Odd : Parity.Even);
+                    pLCParms.SerialParms.PortName = comboBoxCom1.Text;
+                    pLCParms.SerialParms.BaudRate = int.Parse(comboBoxBaute1.Text);
+                    pLCParms.SerialParms.DataBits = int.Parse(comboBoxDataBit1.Text);
+                    pLCParms.SerialParms.StopBits = comboBoxStopBit1.SelectedIndex == 0 ? StopBits.One : (comboBoxStopBit1.SelectedIndex == 1 ? StopBits.OnePointFive : StopBits.Two);
+                    pLCParms.SerialParms.Parity = comboBoxParity1.SelectedIndex == 0 ? Parity.None : (comboBoxParity1.SelectedIndex == 1 ? Parity.Odd : Parity.Even);
 
-                        // 已添加设备冲突判断
-                        bool exist = Solution.Instance.PlcDevices.Exists(plc => plc.PLCParms.SerialParms.PortName == comboBox2.Text || plc.UserDefinedName == textBox2.Text);
-                        if (exist)
-                        {
-                            MessageBox.Show("PLC的串口号和用户自定义名不能相同！");
-                            LogHelper.AddLog(MsgLevel.Warn, "PLC的串口号和用户自定义名不能相同！", true);
-                            return;
-                        }
-
-                        PLCAddEvent?.Invoke(this, pLCParms);
-                        Hide();
-                    }
+                    PLCAddEvent?.Invoke(this, pLCParms);
+                    Hide();
                 }
                 catch (Exception ex)
                 {
                     LogHelper.AddLog(MsgLevel.Warn, "添加PLC时参数设置错误！\n" + ex, true);
-                    MessageBox.Show("请检查PLC参数是否有误！");
+                    MessageBoxTD.Show("请检查PLC参数是否有误！");
                 }
             }
             else
             {
-                MessageBox.Show("请添加PLC设备名称！");
+                MessageBoxTD.Show("请添加PLC设备名称！");
+            }
+        }
+        /// <summary>
+        /// 松下Mewtocol OverTcp， 点击确认添加
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonConfirm3_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.textBoxName3.Text))
+            {
+
+                // 已添加设备冲突判断
+                bool exist = Solution.Instance.PlcDevices.Exists(plc => plc.PLCParms.EthernetParms.IP == uiipTextBoxIP2.Text || plc.UserDefinedName == textBoxName3.Text);
+                if (exist)
+                {
+                    MessageBoxTD.Show("PLC的IP地址和用户自定义名称已存在！");
+                    LogHelper.AddLog(MsgLevel.Warn, "PLC的IP地址和用户自定义名称已存在！", true);
+                    return;
+                }
+                try
+                {
+                    PLCParms pLCParms = new PLCParms();
+                    pLCParms.DeviceBrand = Device.DeviceBrand.Panasonic;
+                    pLCParms.EthernetParms = new EthernetParms();
+                    pLCParms.UserDefinedName = textBoxName3.Text;
+                    pLCParms.PlcConType = PlcConType.ETHERNET;
+                    pLCParms.EthernetParms.IP = uiipTextBoxIP2.Text;
+                    pLCParms.EthernetParms.Port = int.Parse(textBoxPort2.Text);
+
+                    PLCAddEvent?.Invoke(this, pLCParms);
+                    Hide();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.AddLog(MsgLevel.Warn, "添加PLC时参数设置错误！\n" + ex, true);
+                    MessageBoxTD.Show("请检查PLC参数是否有误！");
+                }
+            }
+            else
+            {
+                MessageBoxTD.Show("请添加PLC设备名称！");
             }
         }
     }

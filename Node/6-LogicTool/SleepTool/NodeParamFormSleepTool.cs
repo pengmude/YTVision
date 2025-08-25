@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._6_LogicTool.SleepTool
+namespace TDJS_Vision.Node._6_LogicTool.SleepTool
 {
-    internal partial class NodeParamFormSleepTool : Form, INodeParamForm
+    public partial class NodeParamFormSleepTool : FormBase, INodeParamForm
     {
         public NodeParamFormSleepTool()
         {
@@ -22,7 +23,7 @@ namespace YTVisionPro.Node._6_LogicTool.SleepTool
             }
             catch (Exception)
             {
-                MessageBox.Show("参数设置异常！", "异常", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBoxTD.Show("参数设置异常！", "异常", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             Hide();

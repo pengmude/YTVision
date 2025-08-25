@@ -1,12 +1,16 @@
 ﻿using Logger;
 using OpenCvSharp;
+using OpenCvSharp.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._3_Detection.MatchTemplate
+namespace TDJS_Vision.Node._3_Detection.MatchTemplate
 {
-    internal class NodeMatchTemplate : NodeBase
+    public class NodeMatchTemplate : NodeBase
     {
         public NodeMatchTemplate(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -19,14 +23,14 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -49,20 +53,27 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
                         form.UpdataImage();
 
                         // 执行模版匹配
-                        var (bitmap, rect, score, isOk) = form.MatchTemplate(false);
+                        var (bitmap, rectList, scoreList, isOk) = form.MatchTemplate(false);
 
                         // 输出结果
-                        ((NodeResultMatchTemplate)Result).Bitmap = bitmap;
-                        ((NodeResultMatchTemplate)Result).Rect = rect;
-                        ((NodeResultMatchTemplate)Result).Score = score;
-                        ((NodeResultMatchTemplate)Result).IsOk = isOk;
+                        ((NodeResultMatchTemplate)Result).OutputImage.Bitmaps = new List<Mat>() { bitmap.ToMat() };
+                        ((NodeResultMatchTemplate)Result).OutputImage.Rectangles = rectList;
+                        ((NodeResultMatchTemplate)Result).Result.Clear();
+                        ((NodeResultMatchTemplate)Result).Result.Texts.Add(new ColorText($"模版匹配结果个数：{rectList.Count}个", Color.Green));
+                        for (int i = 0; i < rectList.Count; i++)
+                        {
+                            ((NodeResultMatchTemplate)Result).Result.Rects.Add(new ColorRotatedRect(rectList[i]));
+                            ((NodeResultMatchTemplate)Result).Result.Texts.Add(new ColorText($"模版匹配结果{i+1}：位置（{rectList[i].X}, {rectList[i].Y}） 宽{rectList[i].Width} 高{rectList[i].Height}", Color.Green));
+                        }
 
                         if (!isOk)
-                            throw new Exception($"当前图像匹配得分为{score.ToString("F2")}, 低于该节点设置的得分阈值，请检查图像成像是否异常，或降低设置的得分阈值！");
+                            throw new Exception($"当前图像匹配得分或者结果个数不足，请降低设置的得分阈值再次尝试！");
 
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，匹配得分：{score.ToString("F2")}, 匹配是否成功: {isOk}", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，当前结果最低匹配得分：{scoreList[0].ToString("F2")}, 匹配是否成功: {isOk}", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -78,6 +89,7 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
 
         }
     }

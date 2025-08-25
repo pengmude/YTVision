@@ -1,14 +1,15 @@
 ﻿using Logger;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.DataShow
+namespace TDJS_Vision.Node._7_ResultProcessing.DataShow
 {
-    internal class NodeDataShow : NodeBase
+    public class NodeDataShow : NodeBase
     {
-        public static event EventHandler<DatashowData> DataShow;
+        public static event EventHandler<DataShowData> DataShow;
 
         public NodeDataShow(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -20,14 +21,14 @@ namespace YTVisionPro.Node._7_ResultProcessing.DataShow
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
 
             if (ParamForm.Params == null)
@@ -46,11 +47,14 @@ namespace YTVisionPro.Node._7_ResultProcessing.DataShow
                     SetStatus(NodeStatus.Unexecuted, "*");
                     base.CheckTokenCancel(token);
 
-                    ResultViewData aiResult = form.GetAiResult();
-                    DataShow?.Invoke(this,new DatashowData($"{ID}.{NodeName}", aiResult));
+                    AlgorithmResult aiResult = form.GetAiResult();
+                    DataShow?.Invoke(this,new DataShowData($"{ID}.{NodeName}", aiResult));
 
-                    long time = SetRunResult(startTime, NodeStatus.Successful);
-                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                    var time = SetRunResult(startTime, NodeStatus.Successful);
+                    Result.RunTime = time;
+                    if (showLog)
+                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                    return new NodeReturn(NodeRunFlag.ContinueRun);
                 }
                 catch (OperationCanceledException)
                 {
@@ -65,6 +69,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.DataShow
                     throw new Exception($"节点({ID}.{NodeName})运行失败！原因:{ex.Message}");
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
     }
 }

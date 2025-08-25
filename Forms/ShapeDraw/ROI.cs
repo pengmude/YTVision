@@ -4,16 +4,15 @@ using System.Drawing;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using static YTVisionPro.Forms.ShapeDraw.ImageROIEditControl;
+using static TDJS_Vision.Forms.ShapeDraw.ImageROIEditControl;
+using OpenCvSharp;
+using Size = OpenCvSharp.Size;
+using Point = OpenCvSharp.Point;
 
-namespace YTVisionPro.Forms.ShapeDraw
+namespace TDJS_Vision.Forms.ShapeDraw
 {
     public enum ROIType
     {
-        /// <summary>
-        /// 空类型
-        /// </summary>
-        None,
         /// <summary>
         /// 矩形
         /// </summary>
@@ -25,6 +24,7 @@ namespace YTVisionPro.Forms.ShapeDraw
     }
     public abstract class ROI
     {
+        string ClassName { get; set; }
         /// <summary>
         /// ROI 是否选中
         /// </summary>
@@ -51,14 +51,14 @@ namespace YTVisionPro.Forms.ShapeDraw
         public abstract ROIType ROIType { get; set; }
 
         public abstract void Draw(Graphics g, Pen pen);
-        public abstract Bitmap GetROIImage(Bitmap sourceImage, PictureBox pictureBox);
+        public abstract Mat GetROIImage(Bitmap sourceImage, PictureBox pictureBox);
 
         /// <summary>
         /// 获取图像坐标系下的ROI
         /// </summary>
         /// <param name="pictureBox"></param>
         /// <returns></returns>
-        public Rectangle GetROIRect(PictureBox pictureBox)
+        public Rect GetROIRect(PictureBox pictureBox)
         {
             return ConvertClientRectToImageRect(_rect, pictureBox);
         }
@@ -69,7 +69,7 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="clientRect"></param>
         /// <param name="pictureBox"></param>
         /// <returns></returns>
-        protected Rectangle ConvertClientRectToImageRect(RectangleF clientRect, PictureBox pictureBox)
+        protected Rect ConvertClientRectToImageRect(RectangleF clientRect, PictureBox pictureBox)
         {
             // 获取当前缩放比例
             float zoomFactor = (float)pictureBox.Image.Width / pictureBox.ClientSize.Width;
@@ -80,6 +80,11 @@ namespace YTVisionPro.Forms.ShapeDraw
                 zoomFactor = (float)pictureBox.Image.Height / pictureBox.ClientSize.Height;
             }
 
+            //// 计算图像上的左上角点位置
+            //Point imageTopLeft = new Point(
+            //    (int)((clientRect.Left - (pictureBox.ClientSize.Width - pictureBox.Image.Width / zoomFactor) / 2) * zoomFactor),
+            //    (int)((clientRect.Top - (pictureBox.ClientSize.Height - pictureBox.Image.Height / zoomFactor) / 2) * zoomFactor)
+            //);
             // 计算图像上的左上角点位置
             Point imageTopLeft = new Point(
                 (int)((clientRect.Left - (pictureBox.ClientSize.Width - pictureBox.Image.Width / zoomFactor) / 2) * zoomFactor),
@@ -87,7 +92,7 @@ namespace YTVisionPro.Forms.ShapeDraw
             );
 
             // 创建并返回图像坐标中的矩形
-            return new Rectangle(
+            return new Rect(
                 imageTopLeft,
                 new Size((int)(clientRect.Width * zoomFactor), (int)(clientRect.Height * zoomFactor))
             );

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Node
+namespace TDJS_Vision.Node
 {
     /// <summary>
     /// 
@@ -20,7 +20,7 @@ namespace YTVisionPro.Node
     ///【注意事项】: 截止当前为止节点仅仅支持在当前流程订阅当前节点之前的节点结果。
     ///
     /// </summary>
-    internal partial class NodeSubscription : UserControl
+    public partial class NodeSubscription : UserControl
     {
         /// <summary>
         /// 所属节点
@@ -30,6 +30,9 @@ namespace YTVisionPro.Node
         /// 选择的节点
         /// </summary>
         NodeBase _selectedNode = null;
+
+        string _text1;
+        string _text2;
 
         public NodeSubscription()
         {
@@ -45,7 +48,9 @@ namespace YTVisionPro.Node
             // 只有订阅控件所在节点和重命名的节点同属于一条流程，且前者ID大于后者ID时，才需要前者更新下拉框节点名称
             if (_node.Process.Nodes.Exists(node => node.ID == e.NodeId) && _node.ID > e.NodeId)
             {
-                UpdateComboBoxItem($"{e.NodeId}.{e.NodeNameOld}", $"{e.NodeId}.{e.NodeNameNew}");
+                _text1 = $"{e.NodeId}.{e.NodeNameOld}";
+                _text2 = $"{e.NodeId}.{e.NodeNameNew}";
+                UpdateComboBoxItem(_text1, _text2);
             }
         }
 
@@ -96,6 +101,7 @@ namespace YTVisionPro.Node
             {
                 comboBox2.Items.Clear();
                 comboBox2.Text = "";
+                _text2 = "";
             }
         }
 
@@ -105,7 +111,7 @@ namespace YTVisionPro.Node
         /// <param name="ids"></param>
         private void InitNodeIdList()
         {
-            if(_node == null) return;
+            if (_node == null) return;
             comboBox1.Items.Clear();
             foreach (var node in _node.Process.Nodes)
             {
@@ -114,7 +120,21 @@ namespace YTVisionPro.Node
                     comboBox1.Items.Add($"{node.ID}.{node.NodeName}");
                 }
             }
-            if (comboBox1.Items.Count > 0) comboBox1.SelectedIndex = 0;
+            if (comboBox1.Items.Count > 0)
+            {
+                comboBox1.SelectedIndex = 0;
+                _text1 = (string)comboBox1.Items[0];
+
+                foreach (var node in _node.Process.Nodes)
+                {
+                    if ($"{node.ID}.{node.NodeName}" == _text1)
+                    {
+                        _selectedNode = node;
+                        InitProperties(node, "", true);
+                        break;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -129,7 +149,8 @@ namespace YTVisionPro.Node
                 if($"{node.ID}.{node.NodeName}" == comboBox1.Text)
                 {
                     _selectedNode = node;
-                    InitProperties(node);
+                    _text1 = comboBox1.Text;
+                    InitProperties(node, _text2);
                 }
             }
         }
@@ -138,7 +159,7 @@ namespace YTVisionPro.Node
         /// 初始化节点的属性到下拉框中
         /// </summary>
         /// <param name="nodeBase"></param>
-        private void InitProperties(NodeBase nodeBase)
+        private void InitProperties(NodeBase nodeBase, string text2 = null, bool needRefresh = false)
         {
             comboBox2.Items.Clear();
             Type nodeResult = nodeBase.Result.GetType();
@@ -152,7 +173,21 @@ namespace YTVisionPro.Node
                     comboBox2.Items.Add(displayNameAttribute.DisplayName);
                 }
             }
-            if (comboBox2.Items.Count > 0) comboBox2.SelectedIndex = 0;
+
+            if (comboBox2.Items.Count > 0)
+            {
+                if (needRefresh || text2 == null)
+                {
+                    comboBox2.SelectedIndex = 0;
+                    _text2 = comboBox2.Text;
+                }
+                else
+                {
+                    int index1 = comboBox2.Items.IndexOf(text2);
+                    comboBox2.SelectedIndex = index1 == -1 ? 0 : index1;
+                    _text2 = text2;
+                }
+            }
         }
         /// <summary>
         /// 获取节点对应结果的值
@@ -161,10 +196,10 @@ namespace YTVisionPro.Node
         /// <returns></returns>
         public T GetValue<T>()
         {
-            if(comboBox2.Text.IsNullOrEmpty())
+            if(_text2.IsNullOrEmpty())
                 throw new Exception($"节点无法获取订阅的值!");
 
-            var propertyInfo = _selectedNode.Result.GetType().GetProperties().ToList().Find(item => item.DisplayName() == comboBox2.Text);
+            var propertyInfo = _selectedNode.Result.GetType().GetProperties().ToList().Find(item => item.DisplayName() == _text2);
             if (propertyInfo != null && propertyInfo.CanRead)
             {
                 var value = propertyInfo.GetValue(_selectedNode.Result);
@@ -176,23 +211,30 @@ namespace YTVisionPro.Node
                 }
                 else
                 {
-                    throw new InvalidCastException($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值类型不匹配，期望类型为{typeof(T).Name}，实际类型为{value.GetType().Name}!");
+                    throw new InvalidCastException($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{_text2}值类型不匹配，期望类型为{typeof(T).Name}，实际类型为{value.GetType().Name}!");
                 }
             }
             else
             {
-                throw new Exception($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{comboBox2.Text}值失败!");
+                throw new Exception($"节点({_selectedNode.ID}.{_selectedNode.NodeName})获取订阅的{_text2}值失败!");
             }
+        }
+
+        public NodeType GetNodeType()
+        {
+            if (_selectedNode == null)
+                throw new Exception("订阅节点的类型未知！");
+            return _selectedNode.NodeType;
         }
 
         public string GetText1()
         {
-            return comboBox1.Text;
+            return _text1;
         }
 
         public string GetText2()
         {
-            return comboBox2.Text;
+            return _text2;
         }
 
         public void HideText2()
@@ -209,17 +251,23 @@ namespace YTVisionPro.Node
                 if(text1 == comboBox1.Items[i].ToString())
                 {
                     comboBox1.SelectedIndex = i;
+                    _text1 = text1;
+                    foreach (var node in _node.Process.Nodes)
+                    {
+                        if ($"{node.ID}.{node.NodeName}" == _text1)
+                        {
+                            _selectedNode = node;
+                            InitProperties(node, text2);
+                        }
+                    }
                     break;
                 }
             }
-            for (int i = 0;i < comboBox2.Items.Count; i++)
-            {
-                if (text2 == comboBox2.Items[i].ToString())
-                {
-                    comboBox2.SelectedIndex = i;
-                    break;
-                }
-            }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _text2 = comboBox2.Text;
         }
     }
 }

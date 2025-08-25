@@ -1,13 +1,17 @@
 ﻿using Logger;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Device.PLC;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
+using TDJS_Vision.Node._3_Detection.TDAI;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 
-namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
+namespace TDJS_Vision.Node._7_ResultProcessing.ImageSave
 {
-    internal partial class ParamFormImageSave : Form, INodeParamForm
+    public partial class ParamFormImageSave : FormBase, INodeParamForm
     {
         /// <summary>
         /// 节点参数
@@ -61,6 +65,9 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         private void checkBoxSaveWithNG_CheckedChanged(object sender, EventArgs e)
         {
             panel6.Enabled = checkBoxSaveWithNG.Checked;
+            radioButtonOKAndNG.Enabled = checkBoxSaveWithNG.Checked;
+            radioButtonOK.Enabled = checkBoxSaveWithNG.Checked;
+            radioButtonNG.Enabled = checkBoxSaveWithNG.Checked;
         }
 
         /// <summary>
@@ -91,7 +98,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         {
             try
             {
-                return (Bitmap)nodeSubscriptionImg2Save.GetValue<Bitmap>().Clone();
+                return nodeSubscriptionImg2Save.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
             }
             catch (Exception)
             {
@@ -118,11 +125,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         /// <summary>
         /// 获取AI结果订阅控件的值
         /// </summary>
-        public ResultViewData GetAiResult()
+        public AlgorithmResult GetAiResult()
         {
             try
             {
-                return nodeSubscriptionAiRes.GetValue<ResultViewData>();
+                return nodeSubscriptionAiRes.GetValue<AlgorithmResult>();
             }
             catch (Exception)
             {
@@ -139,13 +146,13 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         {
             if (string.IsNullOrEmpty(textBox1.Text))
             {
-                MessageBox.Show("未选择存图路径");
+                MessageBoxTD.Show("未选择存图路径");
                 LogHelper.AddLog(MsgLevel.Fatal, "未选择存图路径", true);
                 return;
             }
             if(Convert.ToUInt16(this.numericUpDown1.Value) > 100 && Convert.ToUInt16(this.numericUpDown1.Value) < 0)
             {
-                MessageBox.Show("压缩阈值范围不合法！");
+                MessageBoxTD.Show("压缩阈值范围不合法！");
                 LogHelper.AddLog(MsgLevel.Fatal, "压缩阈值范围不合法！", true);
                 return;
             }

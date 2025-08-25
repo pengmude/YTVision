@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Forms.Helper
+namespace TDJS_Vision.Forms.Helper
 {
-    internal partial class ContactUsFormForm : Form
+    public partial class ContactUsFormForm : FormBase
     {
         public ContactUsFormForm()
         {

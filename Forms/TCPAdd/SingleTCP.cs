@@ -3,15 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Device;
-using YTVisionPro.Device.TCP;
+using TDJS_Vision.Device;
+using TDJS_Vision.Device.TCP;
 
-namespace YTVisionPro.Forms.TCPAdd
+namespace TDJS_Vision.Forms.TCPAdd
 {
     /// <summary>
     /// 单个TCP
     /// </summary>
-    internal partial class SingleTcp : UserControl
+    public partial class SingleTcp : UserControl
     {
         /// <summary>
         /// Tcp设备
@@ -37,10 +37,6 @@ namespace YTVisionPro.Forms.TCPAdd
         /// 保存所有的当前类实例
         /// </summary>
         public static List<SingleTcp> SingleTCPs = new List<SingleTcp>();
-        /// <summary>
-        /// TCP参数显示控件
-        /// </summary>
-        public TcpParamsControl TcpParamsControl;
 
         /// <summary>
         /// 反序列化用
@@ -68,7 +64,6 @@ namespace YTVisionPro.Forms.TCPAdd
             }
             dev.ConnectStatusEvent += TCP_ConnectStatusEvent;
             this.label1.Text = dev.UserDefinedName;
-            TcpParamsControl = new TcpParamsControl(dev.TcpParam);
             Solution.Instance.AllDevices.Add(dev);
             SingleTCPs.Add(this);
         }
@@ -80,7 +75,6 @@ namespace YTVisionPro.Forms.TCPAdd
             Parms = param;
             try
             {
-                TcpParamsControl = new TcpParamsControl(param);
                 switch (param.DevType)
                 {
                     case DevType.TcpServer:

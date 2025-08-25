@@ -1,12 +1,12 @@
 ﻿
 using System.IO.Ports;
 
-namespace YTVisionPro.Node
+namespace TDJS_Vision.Node
 {
     /// <summary>
     /// 节点参数界面接口类
     /// </summary>
-    internal interface INodeParamForm
+    public interface INodeParamForm
     {
         /// <summary>
         /// 节点运行参数
@@ -26,36 +26,70 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 节点参数接口类
     /// </summary>
-    internal interface INodeParam { }
+    public interface INodeParam { }
 
     /// <summary>
     /// 节点运行结果接口类
     /// </summary>
-    internal interface INodeResult 
+    public interface INodeResult 
+    {
+        int RunTime { get; set; } // 运行时间
+    }
+
+    /// <summary>
+    /// 节点运行结果类
+    /// </summary>
+    public class NodeReturn
     {
         /// <summary>
-        /// 节点运行状态
+        /// 节点运行标志，用来标记当前节点运行完后是否继续运行流程下一个节点
         /// </summary>
-        NodeStatus Status { get; set; }
+        public NodeRunFlag Flag;
         /// <summary>
-        /// 节点运行时间ms，计算方法：
-        /// Stopwatch stopwatch = new Stopwatch();
-        /// DateTime endTime = DateTime.Now;
-        /// TimeSpan elapsed = endTime - startTime;
-        /// long elapsedMilliseconds = elapsed.TotalMilliseconds;
+        /// 当前流程下一个要运行的节点索引
         /// </summary>
-        long RunTime {  get; set; }
+        public int NextIndex = -1;
         /// <summary>
-        /// 运行状态码
+        /// 构造函数
         /// </summary>
-        NodeRunStatusCode RunStatusCode { get; set; }
+        /// <param name="flag"></param>
+        /// <param name="nextIndex"></param>
+        public NodeReturn(NodeRunFlag flag = NodeRunFlag.ContinueRun, int nextIndex = -1)
+        {
+            Flag = flag;
+            NextIndex = nextIndex;
+        }
+    }
 
+    public enum NodeStatus
+    {
+        /// <summary>
+        /// 未运行
+        /// </summary>
+        Unexecuted,
+        /// <summary>
+        /// 运行成功
+        /// </summary>
+        Successful,
+        /// <summary>
+        /// 运行失败
+        /// </summary>
+        Failed
+    }
+
+    /// <summary>
+    /// 用来控制当前节点运行完是否继续运行流程下一个节点
+    /// </summary>
+    public enum NodeRunFlag
+    {
+        ContinueRun,
+        StopRun
     }
 
     /// <summary>
     /// 节点运行状态码
     /// </summary>
-    internal enum NodeRunStatusCode
+    public enum NodeRunStatusCode
     {
         /// <summary>
         /// 成功
@@ -110,13 +144,9 @@ namespace YTVisionPro.Node
         /// </summary>
         PLCWrite,
         /// <summary>
-        /// PLC寄存器写入算法结果
+        /// 瞳达AI节点
         /// </summary>
-        SendResultByPLC,
-        /// <summary>
-        /// 汇图AI节点
-        /// </summary>
-        AIHT,
+        AITD,
         /// <summary>
         /// 存图节点
         /// </summary>
@@ -162,14 +192,6 @@ namespace YTVisionPro.Node
         /// </summary>
         TemplateMatch,
         /// <summary>
-        /// 长度测量
-        /// </summary>
-        LengthMeasurement,
-        /// <summary>
-        /// 面积测量
-        /// </summary>
-        AreaMeasurement,
-        /// <summary>
         /// ModbusRead读取
         /// </summary>
         ModbusRead,
@@ -190,25 +212,17 @@ namespace YTVisionPro.Node
         /// </summary>
         ImageRotate,
         /// <summary>
-        /// 两直线平行度
-        /// </summary>
-        LineParallelism,
-        /// <summary>
         /// Modbus软触发
         /// </summary>
         ModbusSoftTrigger,
         /// <summary>
-        /// Modbus发送AI结果
+        /// 发送AI结果
         /// </summary>
-        AIResultSendByModbus,
+        AIResultSend,
         /// <summary>
         /// 相机IO
         /// </summary>
         CameraIO,
-        /// <summary>
-        /// 注液孔检测
-        /// </summary>
-        InjectionHole,
         /// <summary>
         /// 图像源
         /// </summary>
@@ -236,6 +250,42 @@ namespace YTVisionPro.Node
         /// <summary>
         /// 生成Excel表格
         /// </summary>
-        GenerateExcel
+        GenerateExcel,
+        /// <summary>
+        /// AI结果绘制
+        /// </summary>
+        DrawAIResult,
+        /// <summary>
+        /// 条件运行
+        /// </summary>
+        ConditionRun,
+        /// <summary>
+        /// 触发流程
+        /// </summary>
+        ProcessTrigger,
+        /// <summary>
+        /// 流程信号
+        /// </summary>
+        ProcessSignal,
+        /// <summary>
+        /// IF节点
+        /// </summary>
+        If,
+        /// <summary>
+        /// Else节点
+        /// </summary>
+        Else,
+        /// <summary>
+        /// EndIf节点
+        /// </summary>
+        EndIf,
+        /// <summary>
+        /// 锂电池极耳检测
+        /// </summary>
+        BatteryEar,
+        /// <summary>
+        /// C#脚本
+        /// </summary>
+        CSharpScript
     }
 }

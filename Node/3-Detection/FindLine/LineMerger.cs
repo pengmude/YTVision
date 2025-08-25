@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace YTVisionPro.Node._3_Detection.FindLine
+namespace TDJS_Vision.Node._3_Detection.FindLine
 {
     public class LineMerger
     {

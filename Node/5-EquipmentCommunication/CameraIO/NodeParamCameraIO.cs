@@ -1,9 +1,9 @@
-﻿using YTVisionPro.Device.Camera;
+﻿using TDJS_Vision.Device.Camera;
 using Newtonsoft.Json;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
+namespace TDJS_Vision.Node._5_EquipmentCommunication.LightOpen
 {
-    internal class NodeParamCameraIO:INodeParam
+    public class NodeParamCameraIO : INodeParam
     {
         /// <summary>
         /// 相机
@@ -42,5 +42,6 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
         public string NodeResult { get; set; }
 
         public bool Condition { get; set; }
+        
     }
 }

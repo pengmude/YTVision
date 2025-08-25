@@ -4,10 +4,11 @@ using OpenCvSharp.Extensions;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageRotate
 {
-    internal partial class NodeParamFormImageRotate : Form, INodeParamForm
+    public partial class NodeParamFormImageRotate : FormBase, INodeParamForm
     {
         private Mat originalImage;
         private float angle;
@@ -66,7 +67,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
             Bitmap bitmap = null;
             try
             {
-                bitmap = nodeSubscription1.GetValue<Bitmap>();
+                bitmap = nodeSubscription1.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
             }
             catch (Exception)
             {
@@ -107,7 +108,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
             }
         }
 
-        public Bitmap ImageRotate(Mat srcImg, float angle)
+        public Mat ImageRotate(Mat srcImg, float angle)
         {
             if (srcImg == null)
                 throw new Exception("输入图像为null！");
@@ -132,7 +133,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
             // 显示旋转后的图像
             pictureBox1.Image = BitmapConverter.ToBitmap(rotatedImage);
             
-            return (Bitmap)pictureBox1.Image;
+            return rotatedImage;
         }
     }
 }

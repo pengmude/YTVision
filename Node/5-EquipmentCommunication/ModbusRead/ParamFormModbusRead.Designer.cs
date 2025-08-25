@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
+﻿namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead
 {
     partial class ParamFormModbusRead
     {
@@ -68,16 +68,16 @@
             this.tableLayoutPanel1.Controls.Add(this.buttonRun, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(2, 32);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(828, 467);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(660, 347);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -85,9 +85,9 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(344, 36);
+            this.label1.Location = new System.Drawing.Point(272, 26);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(139, 21);
+            this.label1.Size = new System.Drawing.Size(116, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "选择Modbus：";
             // 
@@ -97,10 +97,9 @@
             this.comboBoxModbusDev.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxModbusDev.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.comboBoxModbusDev.FormattingEnabled = true;
-            this.comboBoxModbusDev.Location = new System.Drawing.Point(594, 33);
-            this.comboBoxModbusDev.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.comboBoxModbusDev.Location = new System.Drawing.Point(465, 22);
             this.comboBoxModbusDev.Name = "comboBoxModbusDev";
-            this.comboBoxModbusDev.Size = new System.Drawing.Size(191, 29);
+            this.comboBoxModbusDev.Size = new System.Drawing.Size(170, 25);
             this.comboBoxModbusDev.TabIndex = 1;
             // 
             // label2
@@ -108,9 +107,9 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(356, 129);
+            this.label2.Location = new System.Drawing.Point(281, 96);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 21);
+            this.label2.Size = new System.Drawing.Size(98, 18);
             this.label2.TabIndex = 0;
             this.label2.Text = "起始地址：";
             // 
@@ -119,9 +118,9 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(346, 222);
+            this.label3.Location = new System.Drawing.Point(272, 166);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(136, 21);
+            this.label3.Size = new System.Drawing.Size(116, 18);
             this.label3.TabIndex = 0;
             this.label3.Text = "寄存器类型：";
             // 
@@ -130,9 +129,9 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(356, 315);
+            this.label4.Location = new System.Drawing.Point(281, 236);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(115, 21);
+            this.label4.Size = new System.Drawing.Size(98, 18);
             this.label4.TabIndex = 0;
             this.label4.Text = "读取个数：";
             // 
@@ -140,20 +139,18 @@
             // 
             this.textBoxAddress.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxAddress.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBoxAddress.Location = new System.Drawing.Point(595, 124);
-            this.textBoxAddress.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxAddress.Location = new System.Drawing.Point(465, 91);
             this.textBoxAddress.Name = "textBoxAddress";
-            this.textBoxAddress.Size = new System.Drawing.Size(190, 31);
+            this.textBoxAddress.Size = new System.Drawing.Size(169, 27);
             this.textBoxAddress.TabIndex = 3;
             // 
             // buttonSave
             // 
             this.buttonSave.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonSave.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonSave.Location = new System.Drawing.Point(635, 400);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonSave.Location = new System.Drawing.Point(501, 297);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(109, 38);
+            this.buttonSave.Size = new System.Drawing.Size(97, 32);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "保存";
             this.buttonSave.UseVisualStyleBackColor = true;
@@ -163,10 +160,9 @@
             // 
             this.textBoxLength.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxLength.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBoxLength.Location = new System.Drawing.Point(595, 310);
-            this.textBoxLength.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxLength.Location = new System.Drawing.Point(465, 231);
             this.textBoxLength.Name = "textBoxLength";
-            this.textBoxLength.Size = new System.Drawing.Size(190, 31);
+            this.textBoxLength.Size = new System.Drawing.Size(169, 27);
             this.textBoxLength.TabIndex = 3;
             // 
             // comboBox2
@@ -180,20 +176,18 @@
             "离散量输入",
             "输入寄存器",
             "保持寄存器"});
-            this.comboBox2.Location = new System.Drawing.Point(594, 219);
-            this.comboBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.comboBox2.Location = new System.Drawing.Point(465, 162);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(191, 29);
+            this.comboBox2.Size = new System.Drawing.Size(170, 25);
             this.comboBox2.TabIndex = 1;
             // 
             // buttonRun
             // 
             this.buttonRun.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.buttonRun.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonRun.Location = new System.Drawing.Point(359, 400);
-            this.buttonRun.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonRun.Location = new System.Drawing.Point(281, 297);
             this.buttonRun.Name = "buttonRun";
-            this.buttonRun.Size = new System.Drawing.Size(109, 38);
+            this.buttonRun.Size = new System.Drawing.Size(97, 32);
             this.buttonRun.TabIndex = 2;
             this.buttonRun.Text = "执行";
             this.buttonRun.UseVisualStyleBackColor = true;
@@ -204,10 +198,12 @@
             this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox1.Location = new System.Drawing.Point(3, 3);
+            this.groupBox1.Location = new System.Drawing.Point(3, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.SetRowSpan(this.groupBox1, 5);
-            this.groupBox1.Size = new System.Drawing.Size(270, 461);
+            this.groupBox1.Size = new System.Drawing.Size(214, 343);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "结果显示";
@@ -218,10 +214,11 @@
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 21;
-            this.listBox1.Location = new System.Drawing.Point(3, 27);
+            this.listBox1.ItemHeight = 17;
+            this.listBox1.Location = new System.Drawing.Point(3, 22);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(264, 431);
+            this.listBox1.Size = new System.Drawing.Size(208, 319);
             this.listBox1.TabIndex = 4;
             // 
             // contextMenuStrip1
@@ -230,29 +227,29 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.清空ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 34);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(109, 28);
             // 
             // 清空ToolStripMenuItem
             // 
             this.清空ToolStripMenuItem.Name = "清空ToolStripMenuItem";
-            this.清空ToolStripMenuItem.Size = new System.Drawing.Size(116, 30);
+            this.清空ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
             this.清空ToolStripMenuItem.Text = "清空";
             this.清空ToolStripMenuItem.Click += new System.EventHandler(this.清空ToolStripMenuItem_Click);
             // 
             // ParamFormModbusRead
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(828, 467);
+            this.ClientSize = new System.Drawing.Size(664, 381);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "ParamFormModbusRead";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Modbus读取";
             this.Shown += new System.EventHandler(this.ParamFormRead_Shown);
+            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.groupBox1.ResumeLayout(false);

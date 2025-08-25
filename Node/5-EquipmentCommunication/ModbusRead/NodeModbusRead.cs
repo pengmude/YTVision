@@ -2,18 +2,20 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Device.Modbus;
+using TDJS_Vision.Device.Modbus;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
+namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead
 {
-    internal class NodeModbusRead : NodeBase
+    public class NodeModbusRead : NodeBase
     {
+        private Process _process;
         public NodeModbusRead(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             var form = new ParamFormModbusRead();
             form.RunHandler += RunHandler;
             ParamForm = form;
             Result = new NodeResultModbusRead();
+            _process = process;
         }
         /// <summary>
         /// 节点界面点击执行Modbus读取
@@ -23,20 +25,20 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
         /// <returns></returns>
         private async Task RunHandler(object sender, EventArgs e)
         {
-            await Run(CancellationToken.None);
+            await Run(CancellationToken.None, _process.ShowLog);
         }
 
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -46,80 +48,89 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
             }
 
             var param = (NodeParamModbusRead)ParamForm.Params;
-
+            var modbus = param.Device as IModbus;
             try
             {
                 SetStatus(NodeStatus.Unexecuted, "*");
                 base.CheckTokenCancel(token);
 
                 //如果没有连接则不运行
-                if (!param.Device.IsConnect)
-                    throw new Exception("设备尚未连接！");
+                if (param.Device == null || !param.Device.IsConnect)
+                    throw new Exception("Modbus设备资源已释放或尚未连接！");
 
                 object data = null;
                 switch (param.DataType)
                 {
                     case RegistersType.Coils:
-                        data = await ((ModbusPoll)param.Device).ReadCoilsAsync(param.StartAddress, param.Count);
+                        data = await modbus.ReadCoilsAsync(param.StartAddress, param.Count);
                         break;
                     case RegistersType.DiscreteInput:
-                        data = await ((ModbusPoll)param.Device).ReadInputsAsync(param.StartAddress, param.Count);
+                        data = await modbus.ReadInputsAsync(param.StartAddress, param.Count);
                         break;
                     case RegistersType.InputRegisters:
-                        data = await ((ModbusPoll)param.Device).ReadInputRegistersAsync(param.StartAddress, param.Count);
+                        data = await modbus.ReadInputRegistersAsync(param.StartAddress, param.Count);
                         break;
                     case RegistersType.HoldingRegisters:
-                        data = await ((ModbusPoll)param.Device).ReadHoldingRegistersAsync(param.StartAddress, param.Count);
+                        data = await modbus.ReadHoldingRegistersAsync(param.StartAddress, param.Count);
                         break;
                     default:
                         break;
                 }
 
                 #region 数据显示
-                string resultStr = string.Empty;
-                if(ParamForm is ParamFormModbusRead form)
-                {
-                    form.SetReadResult("[开始]");
-                    switch (param.DataType)
-                    {
-                        case RegistersType.Coils:
-                        case RegistersType.DiscreteInput:
-                            if (data is bool[] dataBoolArr)
-                            {
-                                for (int i = 0; i < dataBoolArr.Length; i++)
-                                {
-                                    resultStr += $"[{param.StartAddress + i}: {dataBoolArr[i]}] ";
-                                    form.SetReadResult($"{param.StartAddress + i}: {dataBoolArr[i]} ");
-                                }
-                            }
-                            break;
-                        case RegistersType.InputRegisters:
-                        case RegistersType.HoldingRegisters:
-                            if (data is ushort[] dataUShortArr)
-                            {
-                                for (int i = 0; i < dataUShortArr.Length; i++)
-                                {
-                                    resultStr += $"[{param.StartAddress + i}: 0x{dataUShortArr[i]:X4}] ";
-                                    form.SetReadResult($"{param.StartAddress + i}: 0x{dataUShortArr[i]:X4} ");
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                    form.SetReadResult("[结束]");
-                    form.SetReadResult("-------------------------------");
-                }
 
+                string resultStr = string.Empty;
+                if (showLog)
+                {
+                    if (ParamForm is ParamFormModbusRead form)
+                    {
+                        form.SetReadResult("[开始]");
+                        switch (param.DataType)
+                        {
+                            case RegistersType.Coils:
+                            case RegistersType.DiscreteInput:
+                                if (data is bool[] dataBoolArr)
+                                {
+                                    for (int i = 0; i < dataBoolArr.Length; i++)
+                                    {
+                                        resultStr += $"[{param.StartAddress + i}: {dataBoolArr[i]}] ";
+                                        form.SetReadResult($"{param.StartAddress + i}: {dataBoolArr[i]} ");
+                                    }
+                                }
+                                break;
+                            case RegistersType.InputRegisters:
+                            case RegistersType.HoldingRegisters:
+                                if (data is ushort[] dataUShortArr)
+                                {
+                                    for (int i = 0; i < dataUShortArr.Length; i++)
+                                    {
+                                        resultStr += $"[{param.StartAddress + i}: 0x{dataUShortArr[i]:X4}] ";
+                                        form.SetReadResult($"{param.StartAddress + i}: 0x{dataUShortArr[i]:X4} ");
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        form.SetReadResult("[结束]");
+                        form.SetReadResult("-------------------------------");
+                    }
+                }
                 #endregion
 
                 if (Result is NodeResultModbusRead result)
                 {
-                    result.ReadData = data;
+                    if(param.DataType == RegistersType.Coils || param.DataType == RegistersType.DiscreteInput)
+                        result.ReadData = new ModbusReadResult(data, typeof(bool[]).Name);
+                    else
+                        result.ReadData = new ModbusReadResult(data, typeof(ushort[]).Name);
                     Result = result;
                 }
-                long time = SetRunResult(startTime, NodeStatus.Successful);
-                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms, 读取结果：{resultStr})", true);
+                var time = SetRunResult(startTime, NodeStatus.Successful);
+                Result.RunTime = time;
+                if(showLog)
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms, 读取结果：{resultStr})", true);
+                return new NodeReturn(NodeRunFlag.ContinueRun);
 
             }
             catch (OperationCanceledException)

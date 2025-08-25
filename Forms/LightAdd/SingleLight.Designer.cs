@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.LightAdd
+﻿namespace TDJS_Vision.Forms.LightAdd
 {
     partial class SingleLight
     {

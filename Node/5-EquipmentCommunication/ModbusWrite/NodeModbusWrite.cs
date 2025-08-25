@@ -4,13 +4,14 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Device.Modbus;
-using YTVisionPro.Node._5_EquipmentCommunication.ModbusRead;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
+namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusWrite
 {
-    internal class NodeModbusWrite : NodeBase
+    public class NodeModbusWrite : NodeBase
     {
+        private Process _process;
         public NodeModbusWrite(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             var form = new ParamFormModbusWrite();
@@ -18,24 +19,25 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
             form.SetNodeBelong(this);
             ParamForm = form;
             Result = new NodeResultModbusWrite();
+            _process = process;
         }
 
         private async Task RunHandler(object sender, EventArgs e)
         {
-            await Run(CancellationToken.None);
+            await Run(CancellationToken.None, _process.ShowLog);
         }
 
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -52,37 +54,52 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite
                 base.CheckTokenCancel(token);
 
                 //如果没有连接则不运行
-                if (!param.Device.IsConnect)
-                    throw new Exception("设备尚未连接！");
+                if (param.Device == null || !param.Device.IsConnect)
+                    throw new Exception("Modbus设备资源已释放或尚未连接！");
 
                 //如果是订阅的数据，需要先获取订阅的值
                 if (param.IsSubscribed)
                     param.Data = ((ParamFormModbusWrite)ParamForm).GetSubValue();
 
+                var modbus = param.Device as IModbus;
                 switch (param.DataType)
                 {
                     case RegistersType.Coils:
                         string[] datas = param.Data.Split(',');
                         bool[] boolArray = datas.Select(part => part.Trim() != "0").ToArray();
-                        if(param.IsAsync)
-                            ((ModbusPoll)param.Device).WriteMultipleCoilsAsync(param.StartAddress, boolArray);
+                        bool[] falseArray = new bool[boolArray.Length];
+                        if (param.IsAsync)
+                            modbus.WriteMultipleCoilsAsync(param.StartAddress, boolArray);
                         else
-                            ((ModbusPoll)param.Device).WriteMultipleCoils(param.StartAddress, boolArray);
+                            modbus.WriteMultipleCoils(param.StartAddress, boolArray);
+                        //线圈寄存器保持时间
+                        Thread.Sleep(modbus.ModbusParam.HoldTime);
+                        // 是否自动重置线圈
+                        if (param.IsAutoReset)
+                        {
+                            if (param.IsAsync)
+                                modbus.WriteMultipleCoilsAsync(param.StartAddress, falseArray);
+                            else
+                                modbus.WriteMultipleCoils(param.StartAddress, falseArray);
+                        }
                         break;
                     case RegistersType.HoldingRegisters:
                         string[] parts = param.Data.Split(',');
                         ushort[] ushortArray = Array.ConvertAll(parts, part => ushort.Parse(part.Trim()));
                         if (param.IsAsync)
-                            ((ModbusPoll)param.Device).WriteMultipleRegistersAsync(param.StartAddress, ushortArray);
+                            modbus.WriteMultipleRegistersAsync(param.StartAddress, ushortArray);
                         else
-                            ((ModbusPoll)param.Device).WriteMultipleRegisters(param.StartAddress, ushortArray);
+                            modbus.WriteMultipleRegisters(param.StartAddress, ushortArray);
                         break;
                     default:
                         break;
                 }
 
-                long time = SetRunResult(startTime, NodeStatus.Successful);
-                LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                var time = SetRunResult(startTime, NodeStatus.Successful);
+                Result.RunTime = time;
+                if (showLog)
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                return new NodeReturn(NodeRunFlag.ContinueRun);
 
             }
             catch (OperationCanceledException)

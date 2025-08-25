@@ -2,9 +2,9 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 
-namespace YTVisionPro.Node._6_LogicTool.SharedVariable
+namespace TDJS_Vision.Node._6_LogicTool.SharedVariable
 {
-    internal class NodeParamSharedVariable : INodeParam
+    public class NodeParamSharedVariable : INodeParam
     {
         /// <summary>
         /// 是否是读取变量
@@ -44,7 +44,7 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
     /// <summary>
     /// 共享变量类型枚举
     /// </summary>
-    internal enum SharedVarTypeEnum
+    public enum SharedVarTypeEnum
     {
         /// <summary>
         /// 任意类型
@@ -54,6 +54,10 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// 布尔类型
         /// </summary>
         Bool,
+        /// <summary>
+        /// 布尔数组类型
+        /// </summary>
+        BoolArr,
         /// <summary>
         /// 整型
         /// </summary>
@@ -71,6 +75,10 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// </summary>
         Double,
         /// <summary>
+        /// 图像源结果
+        /// </summary>
+        ImageSource,
+        /// <summary>
         /// Bitmap图像类型
         /// </summary>
         Bitmap,
@@ -81,6 +89,6 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// <summary>
         /// 算法结果类型
         /// </summary>
-        ResultViewData
+        AlgorithmResult
     }
 }

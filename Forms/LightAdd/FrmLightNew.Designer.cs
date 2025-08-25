@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.LightAdd
+﻿namespace TDJS_Vision.Forms.LightAdd
 {
     partial class FrmLightNew
     {
@@ -67,10 +67,10 @@
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.SetColumnSpan(this.button1, 2);
             this.button1.Font = new System.Drawing.Font("黑体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(411, 466);
-            this.button1.Margin = new System.Windows.Forms.Padding(60, 4, 60, 4);
+            this.button1.Location = new System.Drawing.Point(365, 389);
+            this.button1.Margin = new System.Windows.Forms.Padding(53, 3, 53, 3);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(89, 54);
+            this.button1.Size = new System.Drawing.Size(79, 45);
             this.button1.TabIndex = 7;
             this.button1.Text = "确认";
             this.button1.UseVisualStyleBackColor = true;
@@ -80,10 +80,9 @@
             // 
             this.textBoxLightName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxLightName.Font = new System.Drawing.Font("宋体", 12F);
-            this.textBoxLightName.Location = new System.Drawing.Point(225, 365);
-            this.textBoxLightName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBoxLightName.Location = new System.Drawing.Point(199, 302);
             this.textBoxLightName.Name = "textBoxLightName";
-            this.textBoxLightName.Size = new System.Drawing.Size(216, 35);
+            this.textBoxLightName.Size = new System.Drawing.Size(191, 30);
             this.textBoxLightName.TabIndex = 0;
             this.textBoxLightName.Text = "磐鑫光源";
             // 
@@ -96,7 +95,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(449, 457);
+            this.groupBox3.Size = new System.Drawing.Size(399, 381);
             this.groupBox3.TabIndex = 13;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "通信参数";
@@ -117,7 +116,8 @@
             this.tableLayoutPanel3.Controls.Add(this.label6, 0, 2);
             this.tableLayoutPanel3.Controls.Add(this.label7, 0, 3);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 30);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 25);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 5;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -125,7 +125,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(443, 425);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(393, 354);
             this.tableLayoutPanel3.TabIndex = 12;
             // 
             // label5
@@ -133,9 +133,9 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 12F);
-            this.label5.Location = new System.Drawing.Point(3, 30);
+            this.label5.Location = new System.Drawing.Point(3, 25);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(215, 24);
+            this.label5.Size = new System.Drawing.Size(190, 20);
             this.label5.TabIndex = 2;
             this.label5.Text = "串口号";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -146,10 +146,10 @@
             this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox2.Font = new System.Drawing.Font("宋体", 12F);
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(224, 26);
+            this.comboBox2.Location = new System.Drawing.Point(199, 21);
             this.comboBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(216, 32);
+            this.comboBox2.Size = new System.Drawing.Size(191, 28);
             this.comboBox2.TabIndex = 1;
             // 
             // label4
@@ -157,9 +157,9 @@
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 12F);
-            this.label4.Location = new System.Drawing.Point(3, 115);
+            this.label4.Location = new System.Drawing.Point(3, 95);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(215, 24);
+            this.label4.Size = new System.Drawing.Size(190, 20);
             this.label4.TabIndex = 1;
             this.label4.Text = "波特率";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -174,10 +174,10 @@
             "无",
             "奇",
             "偶"});
-            this.comboBox6.Location = new System.Drawing.Point(224, 366);
+            this.comboBox6.Location = new System.Drawing.Point(199, 303);
             this.comboBox6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(216, 32);
+            this.comboBox6.Size = new System.Drawing.Size(191, 28);
             this.comboBox6.TabIndex = 5;
             // 
             // comboBox3
@@ -193,10 +193,10 @@
             "38400",
             "57600",
             "115200"});
-            this.comboBox3.Location = new System.Drawing.Point(224, 111);
+            this.comboBox3.Location = new System.Drawing.Point(199, 91);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(216, 32);
+            this.comboBox3.Size = new System.Drawing.Size(191, 28);
             this.comboBox3.TabIndex = 2;
             // 
             // label12
@@ -204,9 +204,9 @@
             this.label12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("宋体", 12F);
-            this.label12.Location = new System.Drawing.Point(3, 370);
+            this.label12.Location = new System.Drawing.Point(3, 307);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(215, 24);
+            this.label12.Size = new System.Drawing.Size(190, 20);
             this.label12.TabIndex = 9;
             this.label12.Text = "校验位";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -222,10 +222,10 @@
             "6",
             "7",
             "8"});
-            this.comboBox4.Location = new System.Drawing.Point(224, 196);
+            this.comboBox4.Location = new System.Drawing.Point(199, 161);
             this.comboBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(216, 32);
+            this.comboBox4.Size = new System.Drawing.Size(191, 28);
             this.comboBox4.TabIndex = 3;
             // 
             // comboBox5
@@ -238,10 +238,10 @@
             "1",
             "1.5",
             "2"});
-            this.comboBox5.Location = new System.Drawing.Point(224, 281);
+            this.comboBox5.Location = new System.Drawing.Point(199, 231);
             this.comboBox5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(216, 32);
+            this.comboBox5.Size = new System.Drawing.Size(191, 28);
             this.comboBox5.TabIndex = 4;
             // 
             // label6
@@ -249,9 +249,9 @@
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("宋体", 12F);
-            this.label6.Location = new System.Drawing.Point(3, 200);
+            this.label6.Location = new System.Drawing.Point(3, 165);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(215, 24);
+            this.label6.Size = new System.Drawing.Size(190, 20);
             this.label6.TabIndex = 3;
             this.label6.Text = "数据位";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -261,9 +261,9 @@
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("宋体", 12F);
-            this.label7.Location = new System.Drawing.Point(3, 285);
+            this.label7.Location = new System.Drawing.Point(3, 235);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(215, 24);
+            this.label7.Size = new System.Drawing.Size(190, 20);
             this.label7.TabIndex = 4;
             this.label7.Text = "停止位";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -279,10 +279,10 @@
             "2",
             "3",
             "4"});
-            this.comboBoxChannel.Location = new System.Drawing.Point(225, 281);
+            this.comboBoxChannel.Location = new System.Drawing.Point(199, 231);
             this.comboBoxChannel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxChannel.Name = "comboBoxChannel";
-            this.comboBoxChannel.Size = new System.Drawing.Size(216, 32);
+            this.comboBoxChannel.Size = new System.Drawing.Size(191, 28);
             this.comboBoxChannel.TabIndex = 6;
             // 
             // label8
@@ -290,9 +290,9 @@
             this.label8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("宋体", 12F);
-            this.label8.Location = new System.Drawing.Point(3, 285);
+            this.label8.Location = new System.Drawing.Point(3, 235);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(216, 24);
+            this.label8.Size = new System.Drawing.Size(190, 20);
             this.label8.TabIndex = 11;
             this.label8.Text = "光源通道";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -302,11 +302,11 @@
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Font = new System.Drawing.Font("宋体", 12F);
-            this.groupBox2.Location = new System.Drawing.Point(458, 2);
+            this.groupBox2.Location = new System.Drawing.Point(408, 2);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox2.Size = new System.Drawing.Size(450, 457);
+            this.groupBox2.Size = new System.Drawing.Size(399, 381);
             this.groupBox2.TabIndex = 12;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "设备信息";
@@ -327,7 +327,8 @@
             this.tableLayoutPanel2.Controls.Add(this.comboBoxRseeType, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 30);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 25);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -335,7 +336,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(444, 425);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(393, 354);
             this.tableLayoutPanel2.TabIndex = 12;
             // 
             // comboBoxBrand
@@ -347,10 +348,10 @@
             this.comboBoxBrand.Items.AddRange(new object[] {
             "磐鑫",
             "锐视"});
-            this.comboBoxBrand.Location = new System.Drawing.Point(225, 26);
+            this.comboBoxBrand.Location = new System.Drawing.Point(199, 21);
             this.comboBoxBrand.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxBrand.Name = "comboBoxBrand";
-            this.comboBoxBrand.Size = new System.Drawing.Size(216, 32);
+            this.comboBoxBrand.Size = new System.Drawing.Size(191, 28);
             this.comboBoxBrand.TabIndex = 4;
             this.comboBoxBrand.SelectedIndexChanged += new System.EventHandler(this.comboBoxBrand_SelectedIndexChanged);
             // 
@@ -359,9 +360,9 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 12F);
-            this.label3.Location = new System.Drawing.Point(3, 370);
+            this.label3.Location = new System.Drawing.Point(3, 307);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(216, 24);
+            this.label3.Size = new System.Drawing.Size(190, 20);
             this.label3.TabIndex = 11;
             this.label3.Text = "光源名称";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -371,9 +372,9 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 12F);
-            this.label2.Location = new System.Drawing.Point(3, 200);
+            this.label2.Location = new System.Drawing.Point(3, 165);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(216, 24);
+            this.label2.Size = new System.Drawing.Size(190, 20);
             this.label2.TabIndex = 1;
             this.label2.Text = "通信方式";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -386,9 +387,10 @@
             this.comboBoxConnectType.FormattingEnabled = true;
             this.comboBoxConnectType.Items.AddRange(new object[] {
             "串口"});
-            this.comboBoxConnectType.Location = new System.Drawing.Point(225, 196);
+            this.comboBoxConnectType.Location = new System.Drawing.Point(199, 161);
+            this.comboBoxConnectType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxConnectType.Name = "comboBoxConnectType";
-            this.comboBoxConnectType.Size = new System.Drawing.Size(216, 32);
+            this.comboBoxConnectType.Size = new System.Drawing.Size(191, 28);
             this.comboBoxConnectType.TabIndex = 13;
             // 
             // label9
@@ -396,9 +398,9 @@
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("宋体", 12F);
-            this.label9.Location = new System.Drawing.Point(3, 115);
+            this.label9.Location = new System.Drawing.Point(3, 95);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(216, 24);
+            this.label9.Size = new System.Drawing.Size(190, 20);
             this.label9.TabIndex = 1;
             this.label9.Text = "锐视光源类型";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -413,9 +415,10 @@
             this.comboBoxRseeType.Items.AddRange(new object[] {
             "PM_D",
             "P_MDPS_24W75"});
-            this.comboBoxRseeType.Location = new System.Drawing.Point(225, 111);
+            this.comboBoxRseeType.Location = new System.Drawing.Point(199, 91);
+            this.comboBoxRseeType.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxRseeType.Name = "comboBoxRseeType";
-            this.comboBoxRseeType.Size = new System.Drawing.Size(216, 32);
+            this.comboBoxRseeType.Size = new System.Drawing.Size(191, 28);
             this.comboBoxRseeType.TabIndex = 13;
             // 
             // label1
@@ -423,9 +426,9 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 12F);
-            this.label1.Location = new System.Drawing.Point(3, 30);
+            this.label1.Location = new System.Drawing.Point(3, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(216, 24);
+            this.label1.Size = new System.Drawing.Size(190, 20);
             this.label1.TabIndex = 0;
             this.label1.Text = "品牌";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -440,21 +443,21 @@
             this.tableLayoutPanel1.Controls.Add(this.button1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(911, 525);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(810, 438);
             this.tableLayoutPanel1.TabIndex = 14;
             // 
             // FrmLightNew
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 525);
+            this.ClientSize = new System.Drawing.Size(810, 438);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmLightNew";

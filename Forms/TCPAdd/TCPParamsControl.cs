@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Modbus;
-using YTVisionPro.Device.TCP;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Device.TCP;
 
-namespace YTVisionPro.Forms.TCPAdd
+namespace TDJS_Vision.Forms.TCPAdd
 {
-    internal partial class TcpParamsControl : UserControl
+    public partial class TcpParamsControl : UserControl
     {
         public TcpParamsControl(TcpParam param)
         {

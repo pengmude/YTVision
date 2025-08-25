@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.CameraAdd
+﻿namespace TDJS_Vision.Forms.CameraAdd
 {
     partial class SingleCamera
     {
@@ -40,7 +40,7 @@
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.tableLayoutPanel1.BackColor = System.Drawing.Color.CadetBlue;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 68F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32F));
@@ -49,11 +49,10 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(172, 42);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(153, 35);
             this.tableLayoutPanel1.TabIndex = 0;
             this.tableLayoutPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SinglePLCInfo_MouseClick);
             // 
@@ -63,12 +62,12 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.移除ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(117, 34);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(109, 28);
             // 
             // 移除ToolStripMenuItem
             // 
             this.移除ToolStripMenuItem.Name = "移除ToolStripMenuItem";
-            this.移除ToolStripMenuItem.Size = new System.Drawing.Size(116, 30);
+            this.移除ToolStripMenuItem.Size = new System.Drawing.Size(108, 24);
             this.移除ToolStripMenuItem.Text = "移除";
             this.移除ToolStripMenuItem.Click += new System.EventHandler(this.移除ToolStripMenuItem_Click);
             // 
@@ -77,11 +76,10 @@
             this.uiSwitch1.ActiveColor = System.Drawing.Color.Teal;
             this.uiSwitch1.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.uiSwitch1.InActiveColor = System.Drawing.Color.Silver;
-            this.uiSwitch1.Location = new System.Drawing.Point(119, 4);
-            this.uiSwitch1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.uiSwitch1.Location = new System.Drawing.Point(107, 3);
             this.uiSwitch1.MinimumSize = new System.Drawing.Size(1, 1);
             this.uiSwitch1.Name = "uiSwitch1";
-            this.uiSwitch1.Size = new System.Drawing.Size(50, 34);
+            this.uiSwitch1.Size = new System.Drawing.Size(43, 28);
             this.uiSwitch1.TabIndex = 0;
             this.uiSwitch1.Text = "uiSwitch1";
             this.uiSwitch1.ValueChanged += new Sunny.UI.UISwitch.OnValueChanged(this.uiSwitch1_ValueChanged);
@@ -93,23 +91,22 @@
             this.label1.AutoSize = true;
             this.label1.ContextMenuStrip = this.contextMenuStrip1;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F);
-            this.label1.Location = new System.Drawing.Point(20, 10);
+            this.label1.Location = new System.Drawing.Point(21, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 21);
+            this.label1.Size = new System.Drawing.Size(62, 18);
             this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             this.label1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.SinglePLCInfo_MouseClick);
             // 
             // SingleCamera
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(172, 42);
+            this.MaximumSize = new System.Drawing.Size(153, 35);
             this.Name = "SingleCamera";
-            this.Size = new System.Drawing.Size(172, 42);
+            this.Size = new System.Drawing.Size(153, 35);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);

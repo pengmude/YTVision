@@ -3,42 +3,49 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Node;
-using static YTVisionPro.Forms.ProcessNew.FormNewProcessWizard;
-using YTVisionPro.Node._3_Detection.FindLine;
-using YTVisionPro.Node._3_Detection.FindCircle;
-using YTVisionPro.Node._1_Acquisition.ImageSource;
-using YTVisionPro.Node._2_ImagePreprocessing.ImageRotate;
-using YTVisionPro.Node._4_Measurement.ParallelLines;
-using YTVisionPro.Node._5_EquipmentCommunication.LightOpen;
-using YTVisionPro.Node._3_Detection.HTAI;
-using YTVisionPro.Node._2_ImagePreprocessing.ImageCrop;
-using YTVisionPro.Node._5_EquipmentCommunication.PanasonicRead;
-using YTVisionPro.Node._5_EquipmentCommunication.PanasonicWirte;
-using YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger;
-using YTVisionPro.Node._5_EquipmentCommunication.TcpClient;
-using YTVisionPro.Node._5_EquipmentCommunication.SendResultByPLC;
-using YTVisionPro.Node._5_EquipmentCommunication.TcpServer;
-using YTVisionPro.Node._5_EquipmentCommunication.ModbusRead;
-using YTVisionPro.Node._5_EquipmentCommunication.ModbusWrite;
-using YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger;
-using YTVisionPro.Node._5_EquipmentCommunication.AIResultSendByModbus;
-using YTVisionPro.Node._6_LogicTool.SleepTool;
-using YTVisionPro.Node._7_ResultProcessing.ImageSave;
-using YTVisionPro.Node._7_ResultProcessing.DataShow;
-using YTVisionPro.Node._7_ResultProcessing.ResultSummarize;
-using YTVisionPro.Node._2_ImagePreprocessing.ImageSplit;
-using YTVisionPro.Node._3_Detection.QRScan;
-using YTVisionPro.Node._5_Measurement.InjectionHoleMeasurement;
-using YTVisionPro.Node._3_Detection.MatchTemplate;
-using YTVisionPro.Node._7_ResultProcessing.ImageDelete;
-using YTVisionPro.Node._6_LogicTool.SharedVariable;
-using System.Diagnostics;
-using YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet;
+using TDJS_Vision.Node;
+using static TDJS_Vision.Forms.ProcessNew.FormNewProcessWizard;
+using TDJS_Vision.Node._3_Detection.FindLine;
+using TDJS_Vision.Node._3_Detection.FindCircle;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
+using TDJS_Vision.Node._2_ImagePreprocessing.ImageRotate;
+using TDJS_Vision.Node._5_EquipmentCommunication.LightOpen;
+using TDJS_Vision.Node._2_ImagePreprocessing.ImageCrop;
+using TDJS_Vision.Node._5_EquipmentCommunication.PlcRead;
+using TDJS_Vision.Node._5_EquipmentCommunication.PLCSoftTrigger;
+using TDJS_Vision.Node._5_EquipmentCommunication.TcpClient;
+using TDJS_Vision.Node._5_EquipmentCommunication.TcpServer;
+using TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead;
+using TDJS_Vision.Node._5_EquipmentCommunication.ModbusWrite;
+using TDJS_Vision.Node._5_EquipmentCommunication.ModbusSoftTrigger;
+using TDJS_Vision.Node._5_EquipmentCommunication.AIResultSend;
+using TDJS_Vision.Node._6_LogicTool.SleepTool;
+using TDJS_Vision.Node._7_ResultProcessing.ImageSave;
+using TDJS_Vision.Node._7_ResultProcessing.DataShow;
+using TDJS_Vision.Node._7_ResultProcessing.ResultSummarize;
+using TDJS_Vision.Node._2_ImagePreprocessing.ImageSplit;
+using TDJS_Vision.Node._3_Detection.QRScan;
+using TDJS_Vision.Node._3_Detection.MatchTemplate;
+using TDJS_Vision.Node._7_ResultProcessing.ImageDelete;
+using TDJS_Vision.Node._6_LogicTool.SharedVariable;
+using TDJS_Vision.Node._7_ResultProcessing.GenerateExcelSpreadsheet;
+using TDJS_Vision.Node._3_Detection.TDAI;
+using TDJS_Vision.Node._7_ResultProcessing.ImageDraw;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._6_LogicTool.ConditionRun;
+using TDJS_Vision.Node._5_EquipmentCommunication.PlcWirte;
+using TDJS_Vision.Node._6_LogicTool.ProcessTrigger;
+using TDJS_Vision.Node._6_LogicTool.ProcessSignal;
+using static OpenCvSharp.ML.DTrees;
+using TDJS_Vision.Node._6_LogicTool.If;
+using TDJS_Vision.Node._6_LogicTool.Else;
+using TDJS_Vision.Node._6_LogicTool.EndIf;
+using TDJS_Vision.Node._3_Detection.BatteryEar;
+using TDJS_Vision.Node._6_LogicTool.CSharpScript;
 
-namespace YTVisionPro.Forms.ProcessNew
+namespace TDJS_Vision.Forms.ProcessNew
 {
-    internal partial class ProcessEditPanel : UserControl
+    public partial class ProcessEditPanel : UserControl
     {
         /// <summary>
         /// 绑定的流程
@@ -56,7 +63,6 @@ namespace YTVisionPro.Forms.ProcessNew
         /// 所有的节点控件
         /// </summary>
         private Stack<NodeBase> _stack = new Stack<NodeBase>();
-
         /// <summary>
         /// 流程编辑面板构造函数
         /// </summary>
@@ -74,8 +80,21 @@ namespace YTVisionPro.Forms.ProcessNew
             // 反序列化需要执行以下逻辑
             if(processConfig != null)
             {
+                _process.ShowLog = processConfig.ShowLog;
+                _process.IsPassiveTriggered = processConfig.IsPassiveTriggered;
+                foreach (ToolStripMenuItem item in contextMenuStrip1.Items)
+                {
+                    if ("是否输出日志ToolStripMenuItem" == item.Name)
+                    {
+                        item.Checked = processConfig.ShowLog;
+                    }
+                    if ("是否为触发流程ToolStripMenuItem" == item.Name)
+                    {
+                        item.Checked = processConfig.IsPassiveTriggered;
+                    }
+                }
                 _process.RunLv = processConfig.Level;
-                _process.processGroup = processConfig.Group;
+                _process.Group = processConfig.Group;
                 _stack.Clear();
                 label1.Text = $"节点数:0";
                 if(showInfo)
@@ -132,7 +151,7 @@ namespace YTVisionPro.Forms.ProcessNew
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxTD.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
                 }
             }
@@ -148,16 +167,19 @@ namespace YTVisionPro.Forms.ProcessNew
                     nodeBase = CreateNode(nodeInfo.NodeType, nodeInfo.NodeName, nodeInfo.ID);
                     nodeBase.Selected = nodeInfo.Selected;
                     nodeBase.Active = nodeInfo.Active;
-                    // 2.还原节点的参数
-                    nodeBase.ParamForm.Params = nodeInfo.NodeParam;
-                    // 3.节点参数到参数设置界面
-                    nodeBase.ParamForm.SetParam2Form();
-                    if(showInfo)
+                    if (nodeInfo.NodeParam != null)
+                    {
+                        // 2.还原节点的参数
+                        nodeBase.ParamForm.Params = nodeInfo.NodeParam;
+                        // 3.节点参数到参数设置界面
+                        nodeBase.ParamForm.SetParam2Form();
+                    }
+                    if (showInfo)
                         LogHelper.AddLog(MsgLevel.Info, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）已加载", true);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBoxTD.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     if(showInfo)
                         LogHelper.AddLog(MsgLevel.Exception, $"=> 节点（{nodeInfo.ID}.{nodeInfo.NodeName}）加载失败！原因：{ex.Message}", true);
                     continue;
@@ -196,11 +218,8 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.PLCWrite:
                     node = new NodePlcWrite(nodeId, nodeName, _process, nodeType);
                     break;
-                case NodeType.SendResultByPLC:
-                    node = new NodeSendResultByPLC(nodeId, nodeName, _process, nodeType);
-                    break;
-                case NodeType.AIHT:
-                    node = new NodeHTAI(nodeId, nodeName, _process, nodeType);
+                case NodeType.AITD:
+                    node = new NodeTDAI(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.ImageSave:
                     node = new NodeImageSave(nodeId, nodeName, _process, nodeType);
@@ -244,20 +263,14 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.ImageRotate:
                     node = new NodeImageRotate(nodeId, nodeName, _process, nodeType);
                     break;
-                case NodeType.LineParallelism:
-                    node = new NodeParallelLines(nodeId, nodeName, _process, nodeType);
-                    break;
                 case NodeType.ModbusSoftTrigger:
                     node = new NodeModbusSoftTrigger(nodeId, nodeName, _process, nodeType);
                     break;
-                case NodeType.AIResultSendByModbus:
-                    node = new NodeSignalSendByModbus(nodeId, nodeName, _process, nodeType);
+                case NodeType.AIResultSend:
+                    node = new NodeSignalSend(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.CameraIO:
                     node = new NodeCameraIO(nodeId, nodeName, _process, nodeType);
-                    break;
-                case NodeType.InjectionHole:
-                    node = new NodeInjectionHole(nodeId, nodeName, _process, nodeType);
                     break;
                 case NodeType.ImageSource:
                     node = new NodeImageSource(nodeId, nodeName, _process, nodeType);
@@ -280,8 +293,36 @@ namespace YTVisionPro.Forms.ProcessNew
                 case NodeType.GenerateExcel:
                     node = new NodeGenerateExcel(nodeId, nodeName, _process, nodeType);
                     break;
+                case NodeType.DrawAIResult:
+                    node = new NodeImageDraw(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ConditionRun:
+                    node = new NodeConditionRun(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ProcessTrigger:
+                    node = new NodeProcessTrigger(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.ProcessSignal:
+                    node = new NodeProcessSignal(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.If:
+                    node = new NodeIf(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.Else:
+                    node = new NodeElse(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.EndIf:
+                    node = new NodeEndIf(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.BatteryEar:
+                    node = new NodeBatteryEar(nodeId, nodeName, _process, nodeType);
+                    break;
+                case NodeType.CSharpScript:
+                    node = new NodeCSharpScript(nodeId, nodeName, _process, nodeType);
+                    break;
                 default:
                     break;
+                    //工具栏图标颜色：蓝 #1296db 紫 #56227a
             }
             if (node == null)
             {
@@ -343,6 +384,19 @@ namespace YTVisionPro.Forms.ProcessNew
         }
 
         /// <summary>
+        /// 点击清理状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonClean_Click(object sender, EventArgs e)
+        {
+            foreach (var node in _process.Nodes)
+            {
+                node.SetStatus(NodeStatus.Unexecuted, "*");
+            }
+        }
+
+        /// <summary>
         /// 点击运行流程
         /// </summary>
         /// <param name="sender"></param>
@@ -353,9 +407,20 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 // 重置运行取消令牌
                 Solution.Instance.ResetTokenSource();
+                _process.IsHandRun = true;
                 await _process.Run(false);
             }
             catch (Exception) { }
+        }
+
+        /// <summary>
+        /// 点击停止流程
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            Solution.Instance.CancelToken();
         }
 
         /// <summary>
@@ -380,6 +445,38 @@ namespace YTVisionPro.Forms.ProcessNew
         private void 设置流程组别ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             formProcessGroupSetting.ShowDialog();
+        }
+
+        private void 流程重命名ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormProcessRename formProcessRename = new FormProcessRename();
+            formProcessRename.SetProcess(_process);
+            formProcessRename.ShowDialog();
+        }
+        /// <summary>
+        /// 是否输出日志菜单点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 是否输出日志ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            是否输出日志ToolStripMenuItem.Checked = !是否输出日志ToolStripMenuItem.Checked;
+            _process.ShowLog = 是否输出日志ToolStripMenuItem.Checked;
+        }
+
+        private void 是否为触发流程ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            是否为触发流程ToolStripMenuItem.Checked = !是否为触发流程ToolStripMenuItem.Checked;
+            _process.IsPassiveTriggered = 是否为触发流程ToolStripMenuItem.Checked;
+        }
+
+        /// <summary>
+        /// 显示上下文菜单
+        /// </summary>
+        private void label1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+                contextMenuStrip1.Show(Cursor.Position);
         }
     }
 }

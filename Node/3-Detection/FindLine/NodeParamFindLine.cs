@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Windows.Documents;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Forms.ShapeDraw;
+using TDJS_Vision.Forms.ShapeDraw;
 
-namespace YTVisionPro.Node._3_Detection.FindLine
+namespace TDJS_Vision.Node._3_Detection.FindLine
 {
-    internal class NodeParamFindLine : INodeParam
+    public class NodeParamFindLine : INodeParam
     {
         /// <summary>
         /// 订阅节点的名称
@@ -55,8 +57,9 @@ namespace YTVisionPro.Node._3_Detection.FindLine
         /// <summary>
         /// ROI（反序列化用）
         /// </summary>
-        [JsonConverter(typeof(PolyConverter))]
-        public ROI ROI { get; set; }
+        [JsonConverter(typeof(ROIListConverter<ROI>))]
+        public List<ROI> ROIs { get; set; }
+        
     }
     /// <summary>
     /// 直线类型

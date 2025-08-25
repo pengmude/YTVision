@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using OpenCvSharp;
 
-namespace YTVisionPro.Forms.ShapeDraw
+namespace TDJS_Vision.Forms.ShapeDraw
 {
     public partial class ImageROIEditControl : UserControl
     {
         private ROIManager roiManager;
         private ROI currentROI; // 当前正在绘制的 ROI
-        private bool isDrawing = false; // 是否正在绘制
-        private bool isDraging = false; // 是否正在拖拽
-        private Point startPoint; // 绘制开始点
-        private ROIType selectedROIType; // 选中要绘制的 ROI 类型
+        private Status CurStatus = Status.ReadyMove; // 当前状态
+        private System.Drawing.Point startPoint; // 绘制开始点
+        private ROIType selectedROIType = ROIType.Rectangle; // 选中要绘制的 ROI 类型
         private ROI selectedROI = null; // 当前选中的ROI
         private ROISelectionState ROISelectionState = ROISelectionState.None; // 记录选中ROI的哪个部位
 
@@ -47,70 +48,64 @@ namespace YTVisionPro.Forms.ShapeDraw
         public void SetROIType2Draw(ROIType type) 
         {
             selectedROIType = type;
-            SetContextMenu(type);
         }
-
-        private void SetContextMenu(ROIType type)
+        /// <summary>
+        /// 获取所有ROI截取的图像
+        /// </summary>
+        /// <returns>List of Bitmap</returns>
+        public List<Mat> GetROIImages()
         {
-            switch (type)
-            {
-                case ROIType.None:
-                    清除全部ToolStripMenuItem.Visible = true;
-                    矩形ToolStripMenuItem1.Visible = false;
-                    圆形ToolStripMenuItem1.Visible = false;
-                    break;
-                case ROIType.Rectangle:
-                case ROIType.Circle:
-                    清除全部ToolStripMenuItem.Visible = true;
-                    矩形ToolStripMenuItem1.Visible = true;
-                    圆形ToolStripMenuItem1.Visible = true;
-                    break;
-                default:
-                    break;
-
-            }
+            return roiManager.GetROIImages();
         }
 
         /// <summary>
-        /// 获取ROI截取的图像
+        /// 获取所有ROI对象
         /// </summary>
-        /// <returns></returns>
-        public Bitmap GetROIImages()
+        /// <returns>List of ROI</returns>
+        public List<ROI> GetROIs()
         {
-            var rois = roiManager.GetROIImages();
-            if (rois.Count != 0)
-                return rois.First();
-            return null;
+            return new List<ROI>(roiManager.ROIs);
         }
 
         /// <summary>
-        /// 默认只获取一个ROI
+        /// 获取所有ROI对应的矩形区域（相对于图像）
         /// </summary>
-        /// <returns></returns>
-        public ROI GetROI() 
-        {
-            if(roiManager.ROIs.Count > 0)
-                return roiManager.ROIs.First();
-            else return null;
-        }
-
-        public Rectangle GetImageROIRect()
+        /// <returns>List of Rectangle</returns>
+        public List<Rect> GetImageROIRects()
         {
             // 没绘制ROI默认返回全图区域
-            if(roiManager.ROIs.Count == 0)
-                return new Rectangle(0, 0, pictureBox1.Image.Width, pictureBox1.Image.Height);
-            return roiManager.ROIs[0].GetROIRect(pictureBox1);
+            if (roiManager.ROIs.Count == 0)
+                return new List<Rect>() { new Rect(0, 0, pictureBox1.Image.Width, pictureBox1.Image.Height) };
+            List<Rect> rects = new List<Rect>();
+            foreach (var roi in roiManager.ROIs)
+            {
+                rects.Add(roi.GetROIRect(pictureBox1));
+            }
+            return rects;
         }
 
         /// <summary>
-        /// 设置ROI
+        /// 设置多个ROI
         /// </summary>
-        /// <param name="image"></param>
-        public void SetROI(ROI roi)
+        /// <param name="rois">要设置的ROI集合</param>
+        public void SetROIs(List<ROI> rois)
         {
+            if (rois == null)
+                throw new ArgumentNullException(nameof(rois));
+
             roiManager.ROIs.Clear();
-            roiManager.AddROI(roi);
-            pictureBox1.Invalidate();
+            rois.ForEach(roi => roiManager.AddROI(roi));
+            currentROI = rois.Find(r => r.IsSelected);
+            // 立即强制重绘，让ROI为实际区域
+            this.PerformLayout();
+            this.Parent?.Refresh();
+        }
+        /// <summary>
+        /// 移除上一个ROI
+        /// </summary>
+        public void RemovePrevious()
+        {
+            roiManager.RemovePrevious();
         }
 
         /// <summary>
@@ -122,32 +117,44 @@ namespace YTVisionPro.Forms.ShapeDraw
         {
             if (e.Button == MouseButtons.Right) { return; }
             startPoint = e.Location;
+
             // 处于绘制ROI的状态
-            if (selectedROIType != ROIType.None)
+            if (CurStatus == Status.ReadyDraw || CurStatus == Status.EndDraw)
             {
-                ClearROI();
                 switch (selectedROIType)
                 {
                     case ROIType.Rectangle:
-                        currentROI = new RectangleROI(new RectangleF(startPoint, new Size()), 0);
+                        currentROI = new RectangleROI(new RectangleF(startPoint, new System.Drawing.Size()), 0);
                         break;
                     case ROIType.Circle:
-                        currentROI = new CircleROI(new RectangleF(startPoint, new Size()), 0);
+                        currentROI = new CircleROI(new RectangleF(startPoint, new System.Drawing.Size()), 0);
                         break;
                 }
-                if (currentROI == null)
-                    isDrawing = false;
-                else
-                    isDrawing = true;
-                isDraging = false;
+                CurStatus = Status.StartDraw;
+                return;
             }
-            else
-            {
-                isDrawing = false;
-                isDraging = true;
 
+            // 处于移动ROI的状态
+            if (CurStatus == Status.ReadyMove || CurStatus == Status.EndMove || CurStatus == Status.EndEdit)
+            {
                 // 判断按下位置是ROI还是ROI的控制点矩形
                 ROISelectionState = ROIManager.GetClickedROIItem(roiManager, e.Location, pictureBox1, ref selectedROI);
+                switch (ROISelectionState)
+                {
+                    case ROISelectionState.None:
+                        break;
+                    case ROISelectionState.ROIOnly:
+                        CurStatus = Status.StartMove;
+                        break;
+                    case ROISelectionState.TopLeft:
+                    case ROISelectionState.TopRight:
+                    case ROISelectionState.BottomLeft:
+                    case ROISelectionState.BottomRight:
+                        CurStatus = Status.StartEdit;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -158,96 +165,109 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="e"></param>
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            // 如果正在绘制ROI
-            if (isDrawing)
+            // 更新鼠标光标
+            if (selectedROI != null)
+            {
+                // 鼠标选中一个ROI并且移动时，设置在不同控制点上显示的鼠标光标
+                var rects = selectedROI.GetControlPointRects();
+                int flag = 0;
+                for (int i = 0; i < rects.Length; ++i)
+                {
+                    if (rects[i].Contains(e.Location))
+                    {
+                        switch (i)
+                        {
+                            case 0: // 左上
+                                Cursor = Cursors.SizeNWSE;
+                                break;
+                            case 1: // 右上
+                                Cursor = Cursors.SizeNESW;
+                                break;
+                            case 2: // 右下
+                                Cursor = Cursors.SizeNWSE;
+                                break;
+                            case 3: // 左下
+                                Cursor = Cursors.SizeNESW;
+                                break;
+                            case 4: // 中心
+                                break;
+                        }
+                        flag++;
+                    }
+                }
+                if (flag == 0)
+                    Cursor = Cursors.Default;
+            }
+
+            // 如果是移动/编辑状态
+            if (CurStatus == Status.StartMove && ROISelectionState == ROISelectionState.ROIOnly)
+            {
+                selectedROI.Move(new PointF(e.X - startPoint.X, e.Y - startPoint.Y));
+                startPoint = e.Location;
+                pictureBox1.Invalidate();
+                return;
+            }
+
+            if (CurStatus == Status.StartEdit)
+            {
+                switch (ROISelectionState)
+                {
+                    case ROISelectionState.None:
+                    case ROISelectionState.ROIOnly:
+                        break;
+
+                    case ROISelectionState.TopLeft:
+                        // 左上角：左上点移动，右下固定
+                        selectedROI.UpdateRect(new RectangleF(
+                            e.X, e.Y,
+                            selectedROI.Rectangle.Right - e.X,
+                            selectedROI.Rectangle.Bottom - e.Y));
+                        break;
+
+                    case ROISelectionState.TopRight:
+                        // 右上角：右上点移动，左下固定
+                        selectedROI.UpdateRect(new RectangleF(
+                            selectedROI.Rectangle.Left, e.Y,
+                            e.X - selectedROI.Rectangle.Left,
+                            selectedROI.Rectangle.Bottom - e.Y));
+                        break;
+
+                    case ROISelectionState.BottomLeft:
+                        // 左下角：左下点移动，右上固定
+                        selectedROI.UpdateRect(new RectangleF(
+                            e.X, selectedROI.Rectangle.Top,
+                            selectedROI.Rectangle.Right - e.X,
+                            e.Y - selectedROI.Rectangle.Top));
+                        break;
+
+                    case ROISelectionState.BottomRight:
+                        // 右下角：右下点移动，左上固定
+                        selectedROI.UpdateRect(new RectangleF(
+                            selectedROI.Rectangle.Left, selectedROI.Rectangle.Top,
+                            e.X - selectedROI.Rectangle.Left,
+                            e.Y - selectedROI.Rectangle.Top));
+                        break;
+
+                    default:
+                        break;
+                }
+                startPoint = e.Location;
+                pictureBox1.Invalidate();
+                return;
+            }
+
+            // 如果是开始绘制状态
+            if (CurStatus == Status.StartDraw)
             {
                 var endPoint = e.Location;
-                var rectF = new RectangleF( Math.Min(startPoint.X, endPoint.X),
+                var rectF = new RectangleF(Math.Min(startPoint.X, endPoint.X),
                                 Math.Min(startPoint.Y, endPoint.Y),
                                 Math.Abs(endPoint.X - startPoint.X),
                                 Math.Abs(endPoint.Y - startPoint.Y));
-
-                currentROI.UpdateRect(rectF);
-
+                if (currentROI != null)
+                    currentROI.UpdateRect(rectF);
                 pictureBox1.Invalidate(); // 重绘 PictureBox
                 return;
-            }
-            // 如果正在拖拽ROI,或者拖拽ROI上的控制点矩形
-            else
-            {
-                // 更新鼠标光标
-                if (selectedROI != null)
-                {
-                    // 鼠标选中一个ROI并且移动时，设置在不同控制点上显示的鼠标光标
-                    var rects = selectedROI.GetControlPointRects();
-                    int flag = 0;
-                    for (int i = 0; i < rects.Length; ++i)
-                    {
-                        if (rects[i].Contains(e.Location))
-                        {
-                            switch (i)
-                            {
-                                case 0: // 左上
-                                    Cursor = Cursors.SizeNWSE;
-                                    break;
-                                case 1: // 右上
-                                    Cursor = Cursors.SizeNESW;
-                                    break;
-                                case 2: // 右下
-                                    Cursor = Cursors.SizeNWSE;
-                                    break;
-                                case 3: // 左下
-                                    Cursor = Cursors.SizeNESW;
-                                    break;
-                                case 4: // 中心
-                                    break;
-                            }
-                            flag++;
-                        }
-                    }
-                    if (flag == 0)
-                        Cursor = Cursors.Default;
-                }
-
-                if (isDraging)
-                {
-                    switch (ROISelectionState)
-                    {
-                        case ROISelectionState.None:
-                            break;
-                        case ROISelectionState.ROIOnly:
-                            selectedROI.Move(new PointF(e.X - startPoint.X, e.Y - startPoint.Y));
-                            break;
-                        case ROISelectionState.TopLeft:
-                            selectedROI.UpdateRect(new RectangleF(e.X, e.Y, selectedROI.Rectangle.Right - e.X, selectedROI.Rectangle.Bottom - e.Y));
-                            break;
-                        case ROISelectionState.TopRight:
-                            selectedROI.UpdateRect(new RectangleF(selectedROI.Rectangle.Left, e.Y, e.X - selectedROI.Rectangle.Left, selectedROI.Rectangle.Bottom - e.Y));
-                            //selectedROI.Rectangle = new RectangleF(selectedROI.Rectangle.Left, e.Y, e.X - selectedROI.Rectangle.Left, selectedROI.Rectangle.Bottom - e.Y);
-                            break;
-                        case ROISelectionState.BottomRight:
-                            selectedROI.UpdateRect(new RectangleF(selectedROI.Rectangle.Left, selectedROI.Rectangle.Top, e.X - selectedROI.Rectangle.Left, e.Y - selectedROI.Rectangle.Top));
-                            //selectedROI.Rectangle = new RectangleF(selectedROI.Rectangle.Left, selectedROI.Rectangle.Top, e.X - selectedROI.Rectangle.Left, e.Y - selectedROI.Rectangle.Top);
-                            break;
-                        case ROISelectionState.BottomLeft:
-                            selectedROI.UpdateRect(new RectangleF(e.X, selectedROI.Rectangle.Top, selectedROI.Rectangle.Right - e.X, e.Y - selectedROI.Rectangle.Top));
-                            //selectedROI.Rectangle = new RectangleF(e.X, selectedROI.Rectangle.Top, selectedROI.Rectangle.Right - e.X, e.Y - selectedROI.Rectangle.Top);
-                            break;
-                        default:
-                            break;
-                    }
-                    #region 实时更新鼠标位置
-
-                    // 更新鼠标位置
-                    //mousePosition = e.Location;
-                    // 请求重绘 PictureBox
-                    //pictureBox1.Invalidate();
-
-                    #endregion
-
-                    startPoint = e.Location;
-                    pictureBox1.Invalidate();
-                }
             }
         }
 
@@ -258,18 +278,21 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="e"></param>
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            // 如果在是绘制ROI状态，鼠标弹起应重置状态
-            if (isDrawing)
+            // 如果在绘制状态
+            if (CurStatus == Status.StartDraw)
             {
-                isDrawing = false;
+                if(currentROI.Rectangle.Width < 10 || currentROI.Rectangle.Height < 10)
+                    return; // 忽略掉鼠标误点生成的小ROI
                 roiManager.AddROI(currentROI);
                 selectedROI = currentROI;
-                selectedROIType = ROIType.None;
-            }
-            else
+                CurStatus = Status.EndDraw;
+            }else if(CurStatus == Status.StartEdit)
             {
-                isDraging = false;
-                ROISelectionState = ROISelectionState.None;
+                CurStatus = Status.EndEdit;
+            }
+            else if (CurStatus == Status.StartMove)
+            {
+                CurStatus = Status.EndMove;
             }
         }
 
@@ -284,10 +307,10 @@ namespace YTVisionPro.Forms.ShapeDraw
             Pen pen = new Pen(Color.Green, 2);
             roiManager.DrawROIs(e.Graphics, pen);
 
-            if (isDrawing && currentROI != null)
+            if (CurStatus == Status.StartDraw && currentROI != null)
             {
-                pen.Color = Color.Red;
-                currentROI.Draw(e.Graphics, pen); // 使用不同的颜色表示正在绘制的 ROI
+                pen.Color = Color.Orange;
+                currentROI.Draw(e.Graphics, pen); // 使用橘色表示正在绘制的 ROI
             }
         }
 
@@ -298,12 +321,73 @@ namespace YTVisionPro.Forms.ShapeDraw
 
         private void 矩形ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            矩形ToolStripMenuItem1.Checked = !矩形ToolStripMenuItem1.Checked;
+            圆形ToolStripMenuItem1.Checked = !圆形ToolStripMenuItem1.Checked;
             selectedROIType = ROIType.Rectangle;
         }
 
         private void 圆形ToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            圆形ToolStripMenuItem1.Checked = !圆形ToolStripMenuItem1.Checked;
+            矩形ToolStripMenuItem1.Checked = !矩形ToolStripMenuItem1.Checked;
             selectedROIType = ROIType.Circle;
         }
+
+        private void 移除上一个ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemovePrevious();
+            currentROI = null;
+        }
+
+        private void 绘制状态ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            绘制状态ToolStripMenuItem.Checked = !绘制状态ToolStripMenuItem.Checked;
+            if (绘制状态ToolStripMenuItem.Checked)
+            {
+                selectedROIType = 矩形ToolStripMenuItem1.Checked ? ROIType.Rectangle : ROIType.Circle;
+                CurStatus = Status.ReadyDraw;
+            }
+            else
+            {
+                CurStatus = Status.ReadyMove;
+            }
+        }
     }
+
+    public enum Status 
+    {
+        /// <summary>
+        /// 设置为绘制状态，等待绘制
+        /// </summary>
+        ReadyDraw,
+        /// <summary>
+        /// 设置为绘制状态，开始绘制
+        /// </summary>
+        StartDraw,
+        /// <summary>
+        /// 设置为绘制状态，结束绘制
+        /// </summary>
+        EndDraw,
+        /// <summary>
+        /// 准备移动状态
+        /// </summary>
+        ReadyMove,
+        /// <summary>
+        /// 开始移动
+        /// </summary>
+        StartMove,
+        /// <summary>
+        /// 结束移动
+        /// </summary>
+        EndMove,
+        /// <summary>
+        /// 开始编辑
+        /// </summary>
+        StartEdit,
+        /// <summary>
+        /// 结束编辑
+        /// </summary>
+        EndEdit,
+    }
+
 }

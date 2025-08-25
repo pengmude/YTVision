@@ -1,6 +1,6 @@
-﻿using YTVisionPro.Forms.ShapeDraw;
+﻿using TDJS_Vision.Forms.ShapeDraw;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageCrop
 {
     partial class NodeParamFormImageCrop
     {
@@ -38,9 +38,9 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.button3 = new System.Windows.Forms.Button();
-            this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
+            this.nodeSubscription1 = new TDJS_Vision.Node.NodeSubscription();
             this.button2 = new System.Windows.Forms.Button();
-            this.imageROIEditControl1 = new YTVisionPro.Forms.ShapeDraw.ImageROIEditControl();
+            this.imageROIEditControl1 = new TDJS_Vision.Forms.ShapeDraw.ImageROIEditControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -58,19 +58,21 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             this.tableLayoutPanel1.Controls.Add(this.imageROIEditControl1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1154, 576);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1026, 480);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // panel1
             // 
             this.panel1.Controls.Add(this.tableLayoutPanel5);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(753, 3);
+            this.panel1.Location = new System.Drawing.Point(669, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(398, 570);
+            this.panel1.Size = new System.Drawing.Size(354, 476);
             this.panel1.TabIndex = 1;
             // 
             // tableLayoutPanel5
@@ -81,12 +83,13 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             this.tableLayoutPanel5.Controls.Add(this.button2, 0, 1);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
             this.tableLayoutPanel5.RowCount = 3;
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel5.Size = new System.Drawing.Size(398, 475);
+            this.tableLayoutPanel5.Size = new System.Drawing.Size(354, 396);
             this.tableLayoutPanel5.TabIndex = 3;
             // 
             // groupBox2
@@ -94,9 +97,11 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             this.groupBox2.Controls.Add(this.tableLayoutPanel4);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.groupBox2.Location = new System.Drawing.Point(3, 3);
+            this.groupBox2.Location = new System.Drawing.Point(3, 2);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(392, 184);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.groupBox2.Size = new System.Drawing.Size(348, 154);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "订阅图像";
@@ -108,21 +113,23 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             this.tableLayoutPanel4.Controls.Add(this.button3, 0, 1);
             this.tableLayoutPanel4.Controls.Add(this.nodeSubscription1, 0, 0);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 27);
+            this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 22);
+            this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(386, 154);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(342, 130);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // button3
             // 
             this.button3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button3.Location = new System.Drawing.Point(134, 95);
+            this.button3.Location = new System.Drawing.Point(119, 81);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(117, 40);
+            this.button3.Size = new System.Drawing.Size(104, 33);
             this.button3.TabIndex = 0;
             this.button3.Text = "刷新图像";
             this.button3.UseVisualStyleBackColor = true;
@@ -131,20 +138,21 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             // nodeSubscription1
             // 
             this.nodeSubscription1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.nodeSubscription1.Location = new System.Drawing.Point(3, 7);
+            this.nodeSubscription1.Location = new System.Drawing.Point(3, 6);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(260, 60);
+            this.nodeSubscription1.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(380, 62);
+            this.nodeSubscription1.Size = new System.Drawing.Size(336, 52);
             this.nodeSubscription1.TabIndex = 0;
             // 
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.button2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button2.Location = new System.Drawing.Point(155, 229);
+            this.button2.Location = new System.Drawing.Point(138, 191);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(88, 39);
+            this.button2.Size = new System.Drawing.Size(78, 32);
             this.button2.TabIndex = 0;
             this.button2.Text = "保存";
             this.button2.UseVisualStyleBackColor = true;
@@ -154,24 +162,26 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             // 
             this.imageROIEditControl1.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.imageROIEditControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageROIEditControl1.Location = new System.Drawing.Point(3, 3);
+            this.imageROIEditControl1.Location = new System.Drawing.Point(3, 2);
+            this.imageROIEditControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.imageROIEditControl1.Name = "imageROIEditControl1";
-            this.imageROIEditControl1.Size = new System.Drawing.Size(744, 570);
+            this.imageROIEditControl1.Size = new System.Drawing.Size(660, 476);
             this.imageROIEditControl1.TabIndex = 2;
             // 
             // NodeParamFormImageCrop
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1154, 576);
+            this.ClientSize = new System.Drawing.Size(1026, 480);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "NodeParamFormImageCrop";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "图像裁剪";
+            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel5.ResumeLayout(false);

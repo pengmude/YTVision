@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 
-namespace YTVisionPro.Forms.ShapeDraw
+namespace TDJS_Vision.Forms.ShapeDraw
 {
     public class RectangleROI : ROI
     {
+        public string ClassName { get; set; } = typeof(RectangleROI).FullName;
         public override ROIType ROIType { get; set; } = ROIType.Rectangle;
 
         public override RectangleF Rectangle { get => _rect; set => _rect = value; }
@@ -43,12 +46,15 @@ namespace YTVisionPro.Forms.ShapeDraw
             }
         }
 
-        public override Bitmap GetROIImage(Bitmap sourceImage, PictureBox pictureBox)
+        public override Mat GetROIImage(Bitmap sourceImage, PictureBox pictureBox)
         {
             try
             {
-                Rectangle imgRect = ConvertClientRectToImageRect(_rect, pictureBox);
-                return sourceImage.Clone(imgRect, sourceImage.PixelFormat);
+                var mat = sourceImage.ToMat();
+                Rect imgRect = ConvertClientRectToImageRect(_rect, pictureBox);
+                var ret = new Mat(mat, imgRect);
+                return ret;
+                //return sourceImage.Clone(imgRect, sourceImage.PixelFormat);
             }
             catch (Exception)
             {

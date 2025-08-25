@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Device.Modbus;
+using TDJS_Vision.Device.Modbus;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
+namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead
 {
-    internal class NodeParamModbusRead : INodeParam
+    public class NodeParamModbusRead : INodeParam
     {
         [JsonIgnore]
         public IModbus Device { get; set; }
@@ -14,12 +14,13 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
 
         [JsonConverter(typeof(StringEnumConverter))]
         public RegistersType DataType { get; set; }
+
     }
 
     /// <summary>
     /// Modbus四种寄存器类别
     /// </summary>
-    internal enum RegistersType
+    public enum RegistersType
     {
         /// <summary>
         /// 线圈，访问长度bit，读写

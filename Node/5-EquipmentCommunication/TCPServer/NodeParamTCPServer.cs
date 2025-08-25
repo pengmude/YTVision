@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using YTVisionPro.Device.TCP;
+using TDJS_Vision.Device.TCP;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.TcpServer
+namespace TDJS_Vision.Node._5_EquipmentCommunication.TcpServer
 {
-    internal class NodeParamTCPServer : INodeParam
+    public class NodeParamTCPServer : INodeParam
     {
         [JsonIgnore]
         public ITcpDevice Sever { get; set; }
@@ -39,5 +39,6 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.TcpServer
         /// 条件为false响应给客户端的内容
         /// </summary>
         public string ResponseContentFalse { get; set; }
+        
     }
 }

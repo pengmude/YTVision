@@ -4,12 +4,15 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using YTVisionPro.Node;
+using TDJS_Vision.Node;
 using Logger;
+using System.Security.Cryptography;
+using System.Text;
+using TDJS_Vision.Forms.GlobalSignalSettings;
 
-namespace YTVisionPro
+namespace TDJS_Vision
 {
-    internal class ConfigHelper
+    public class ConfigHelper
     {
         public static SolConfig SolConfig = new SolConfig();
         public static EventHandler<bool> DeserializationCompletionEvent;
@@ -22,22 +25,23 @@ namespace YTVisionPro
         {
             try
             {
-                SolConfig.SolVer = Solution.Instance.SolVersion;
+                SolConfig.SolVer = VersionInfo.VersionInfo.GetExeVer();
                 SolConfig.SolName = solFile;
                 SolConfig.RunInterval = Solution.Instance.RunInterval;
                 SolConfig.Devices = Solution.Instance.AllDevices;
                 SolConfig.NodeCount = Solution.Instance.NodeCount;
                 SolConfig.ProcessCount = Solution.Instance.ProcessCount;
-                SolConfig.SolAiModelNum = Solution.Instance.SolAiModelNum;
 
                 SolConfig.ProcessInfos = new List<ProcessConfig>();
                 foreach (var process in Solution.Instance.AllProcesses)
                 {
                     ProcessConfig processConfig = new ProcessConfig();
                     processConfig.ProcessName = process.ProcessName;
+                    processConfig.ShowLog = process.ShowLog;
                     processConfig.Enable = process.Enable;
                     processConfig.Level = process.RunLv;
-                    processConfig.Group = process.processGroup;
+                    processConfig.Group = process.Group;
+                    processConfig.IsPassiveTriggered = process.IsPassiveTriggered;
                     processConfig.NodeInfos.Clear();
                     foreach (var nodeConfig in process.Nodes)
                     {
@@ -47,13 +51,13 @@ namespace YTVisionPro
                         node.ID = nodeConfig.ID;
                         node.Active = nodeConfig.Active;
                         node.Selected = nodeConfig.Selected;
-                        node.NodeParam = nodeConfig.ParamForm.Params;
+                        if (nodeConfig.ParamForm != null && nodeConfig.ParamForm.Params != null)
+                            node.NodeParam = nodeConfig.ParamForm.Params;
                         processConfig.NodeInfos.Add(node);
                     }
                     SolConfig.ProcessInfos.Add(processConfig);
                 }
-
-                ////TODO: 除了方案、流程、节点信息，可能还需要保存其他配置
+                SolConfig.GlobalSignal = Solution.Instance.GlobalSignal;
 
                 // 配置持久化到本地文件
                 string json = JsonConvert.SerializeObject(SolConfig, Formatting.Indented);
@@ -71,9 +75,9 @@ namespace YTVisionPro
         /// 配置中涉及到接口类、抽象类等多态成员
         /// 能够反序列化为对应派生类型对象，首先得保证
         /// 此类成员前面声明为:
-        /// [JsonConverter(typeof(PolyConverter))]
+        /// [JsonConverter(typeof(DeviceConverter))]
         /// 列表成员前面声明为：
-        /// [JsonConverter(typeof(PolyListConverter<ICamera>))]
+        /// [JsonConverter(typeof(DeviceListConverter<ICamera>))]
         /// 否则会因为无法解析派生类的Json字符串导致反序列化失败
         /// </summary>
         /// <param name="solFile"></param>
@@ -83,6 +87,7 @@ namespace YTVisionPro
             {
                 string json = File.ReadAllText(solFile);
                 SolConfig = JsonConvert.DeserializeObject<SolConfig>(json);
+                SolConfig.SolName = solFile;
 
                 if (SolConfig == null)
                     throw new Exception("方案配置文件已损坏！");
@@ -93,57 +98,12 @@ namespace YTVisionPro
 
                 #endregion
 
-                #region 测试代码
-
-                // 测试反序列化后的设备是否可用
-                //foreach (var dev in SolConfig.Devices)
-                //{
-                //    if (dev is ICamera hik)
-                //    {
-                //        // 反序列化完必须调用CreateDevice才能还原相机对象
-                //        hik.CreateDevice();
-
-                //        Solution.Instance.CameraDevices[0] = hik;
-
-                //        hik.Open();
-
-                //        MessageBox.Show($"相机是否打开：{hik.IsOpen}\n 设备类型：{hik.DevType}\n SN：{hik.SN}\n 品牌：{hik.Brand}\n" +
-                //            $"设备名称：{hik.DevName}\n 用户自定义名称：{hik.UserDefinedName}");
-
-                //    }
-                //    else if(dev is ILight light)
-                //    {
-                //        light.CreateDevice();
-                //        MessageBox.Show($"光源是否打开：{light.IsOpen}\n 设备类型：{light.DevType}\n 品牌：{light.Brand}\n" +
-                //            $"设备名称：{light.DevName}\n 用户自定义名称：{light.UserDefinedName}");
-                //    }
-                //    else if(dev is IPlc plc)
-                //    {
-                //        plc.CreateDevice();
-                //        MessageBox.Show($"PLC是否连接：{plc.IsConnect}\n 设备类型：{plc.DevType}\n 品牌：{plc.Brand}\n" +
-                //            $"设备名称：{plc.DevName}\n 用户自定义名称：{plc.UserDefinedName}");
-                //    }
-                //}
-
-                // 打印反序列化节点结果
-                //foreach (var processConfig in SolConfig.ProcessInfos)
-                //{
-                //    string ss = $"流程名称：{processConfig.ProcessName} \n流程启用：{processConfig.Enable}\n";
-                //    foreach (var nodeInfo in processConfig.NodeInfos)
-                //    {
-                //        ss += $"\n节点参数：{nodeInfo.NodeParam}\n";
-                //    }
-                //    MessageBox.Show(ss);
-                //}
-
-                #endregion
-
                 Solution.Instance.SolVersion = SolConfig.SolVer;
-                Solution.Instance.SolFileName = SolConfig.SolName;
+                Solution.Instance.SolFileName = solFile;
                 Solution.Instance.RunInterval = SolConfig.RunInterval;
                 Solution.Instance.NodeCount = SolConfig.NodeCount;
                 Solution.Instance.ProcessCount = SolConfig.ProcessCount;
-                Solution.Instance.SolAiModelNum = SolConfig.SolAiModelNum;
+                Solution.Instance.GlobalSignal = SolConfig.GlobalSignal;
 
                 // 发送反序列化完成事件
                 // 目的：
@@ -162,7 +122,7 @@ namespace YTVisionPro
         }
     }
 
-    internal class SolConfig
+    public class SolConfig
     {
         /// <summary>
         /// 方案版本
@@ -172,32 +132,39 @@ namespace YTVisionPro
         public int RunInterval;     // 流程循环运行间隔时间
         public int NodeCount;       // 开始创建节点使用的ID-1
         public int ProcessCount;    // 开始创建流程使用的ID-1
-        public int SolAiModelNum;   // 方案AI模型计数
         /// <summary>
         /// 方案下的所有设备(光源、相机、PLC)
         /// </summary>
-        [JsonConverter(typeof(PolyListConverter<Device.IDevice>))]
+        [JsonConverter(typeof(DeviceListConverter<Device.IDevice>))]
         public List<Device.IDevice> Devices;
         /// <summary>
         /// 方案下所有流程配置
         /// </summary>
         public List<ProcessConfig> ProcessInfos;
+        /// <summary>
+        /// 全局信号
+        /// </summary>
+        public GlobalSignal GlobalSignal;
     }
 
-    internal class ProcessConfig
+    public class ProcessConfig
     {
         /// <summary>
         /// 流程名称
         /// </summary>
         public string ProcessName;
         /// <summary>
-        /// 流程中所有节点的名称
-        /// </summary>
-        public List<NodeConfig> NodeInfos = new List<NodeConfig>();
-        /// <summary>
         /// 流程启用/禁用状态
         /// </summary>
         public bool Enable;
+        /// <summary>
+        /// 流程是否显示日志
+        /// </summary>
+        public bool ShowLog;
+        /// <summary>
+        /// 是否是被动触发流程
+        /// </summary>
+        public bool IsPassiveTriggered;
         /// <summary>
         /// 流程运行优先级
         /// </summary>
@@ -209,9 +176,13 @@ namespace YTVisionPro
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public ProcessGroup Group;
+        /// <summary>
+        /// 流程中所有节点的名称
+        /// </summary>
+        public List<NodeConfig> NodeInfos = new List<NodeConfig>();
     }
 
-    internal class NodeConfig
+    public class NodeConfig
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public NodeType NodeType;
@@ -223,11 +194,130 @@ namespace YTVisionPro
         public INodeParam NodeParam;
     }
 
- 
+    /// <summary>
+    /// 字符串加解密工具类（基于AES算法）
+    /// </summary>
+    public class StringCipher
+    {
+        private static readonly string DefaultKey = "12345678901234567890123456789012"; // 32字节 = 256位
+        private static readonly string DefaultIV = "1234567890123456"; // 16字节 = 128位
+
+        /// <summary>
+        /// 加密字符串
+        /// </summary>
+        /// <param name="plainText">明文字符串</param>
+        /// <param name="key">密钥（32字节，Base64或32字符）</param>
+        /// <param name="iv">初始化向量（16字节，Base64或16字符）</param>
+        /// <returns>Base64编码的密文</returns>
+        public static string Encrypt(string plainText, string key = null, string iv = null)
+        {
+            if (string.IsNullOrEmpty(plainText))
+                throw new ArgumentException("明文不能为空");
+
+            byte[] keyBytes = GetKeyBytes(key ?? DefaultKey);
+            byte[] ivBytes = GetIVBytes(iv ?? DefaultIV);
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = keyBytes;
+                aes.IV = ivBytes;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
+                    {
+                        byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+                        cs.Write(plainBytes, 0, plainBytes.Length);
+                        cs.FlushFinalBlock();
+                    }
+                    return Convert.ToBase64String(ms.ToArray());
+                }
+            }
+        }
+
+        /// <summary>
+        /// 解密字符串
+        /// </summary>
+        /// <param name="cipherText">Base64编码的密文</param>
+        /// <param name="key">密钥（32字节）</param>
+        /// <param name="iv">初始化向量（16字节）</param>
+        /// <returns>解密后的明文</returns>
+        public static string Decrypt(string cipherText, string key = null, string iv = null)
+        {
+            if (string.IsNullOrEmpty(cipherText))
+                throw new ArgumentException("密文不能为空");
+
+            byte[] keyBytes = GetKeyBytes(key ?? DefaultKey);
+            byte[] ivBytes = GetIVBytes(iv ?? DefaultIV);
+
+            using (Aes aes = Aes.Create())
+            {
+                aes.Key = keyBytes;
+                aes.IV = ivBytes;
+                aes.Mode = CipherMode.CBC;
+                aes.Padding = PaddingMode.PKCS7;
+
+                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+
+                byte[] cipherBytes = Convert.FromBase64String(cipherText);
+
+                using (MemoryStream ms = new MemoryStream(cipherBytes))
+                {
+                    using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader reader = new StreamReader(cs, Encoding.UTF8))
+                        {
+                            return reader.ReadToEnd();
+                        }
+                    }
+                }
+            }
+        }
+
+        // 确保密钥为32字节
+        private static byte[] GetKeyBytes(string key)
+        {
+            if (key.Length == 32)
+                return Encoding.UTF8.GetBytes(key);
+            else if (key.Length == 44 && key.EndsWith("=")) // 可能是Base64
+            {
+                try
+                {
+                    byte[] bytes = Convert.FromBase64String(key);
+                    if (bytes.Length == 32) return bytes;
+                }
+                catch { }
+            }
+            throw new ArgumentException("密钥必须是32字节的字符串或32字节的Base64编码");
+        }
+
+        // 确保IV为16字节
+        private static byte[] GetIVBytes(string iv)
+        {
+            if (iv.Length == 16)
+                return Encoding.UTF8.GetBytes(iv);
+            else if (iv.Length == 24 && iv.EndsWith("==")) // Base64 编码的16字节
+            {
+                try
+                {
+                    byte[] bytes = Convert.FromBase64String(iv);
+                    if (bytes.Length == 16) return bytes;
+                }
+                catch { }
+            }
+            throw new ArgumentException("IV必须是16字节的字符串或16字节的Base64编码");
+        }
+    }
+
+
     /// <summary>
     /// 用于多态序列化
     /// </summary>
-    internal class PolyConverter : JsonConverter
+    public class PolyConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
@@ -276,10 +366,10 @@ namespace YTVisionPro
     }
 
     /// <summary>
-    /// 用于多态列表的转化
+    /// 用于多态类型IDevice列表的转化
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PolyListConverter<T> : JsonConverter
+    public class DeviceListConverter<T> : JsonConverter
     {
         #pragma warning disable CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
         #pragma warning disable CS8765 // 参数类型的为 Null 性与重写成员不匹配(可能是由于为 Null 性特性)。 
@@ -325,5 +415,49 @@ namespace YTVisionPro
         #pragma warning restore CS8604 // 引用类型参数可能为 null。
         #pragma warning restore CS8765 // 参数类型的为 Null 性与重写成员不匹配(可能是由于为 Null 性特性)。
         #pragma warning restore CS8600 // 将 null 字面量或可能为 null 的值转换为非 null 类型。
+    }
+    /// <summary>
+    /// 用于多态类型ROI列表的转化
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ROIListConverter<T> : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return true;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            try
+            {
+                var jObject = JObject.Load(reader);
+                List<T> values = new List<T>();
+                foreach (var item in jObject.Properties())
+                {
+                    Type type = Type.GetType((string)item.Value["ClassName"]);
+                    var value = item.Value.ToObject(type);
+                    values.Add((T)value);
+                }
+                return values;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
+            }
+            return null;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var values = (List<T>)value;
+            JObject jObject = new JObject();
+            int i = 0;
+            foreach (var item in values)
+            {
+                jObject.Add(typeof(T).Name + $"{++i}", JToken.FromObject(item));
+            }
+            serializer.Serialize(writer, jObject);
+        }
     }
 }

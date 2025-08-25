@@ -1,14 +1,14 @@
 ﻿using Logger;
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Node._3_Detection.FindCircle;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._3_Detection.QRScan
+namespace TDJS_Vision.Node._3_Detection.QRScan
 {
-    internal class NodeQRScan : NodeBase
+    public class NodeQRScan : NodeBase
     {
         public NodeQRScan(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -21,14 +21,14 @@ namespace YTVisionPro.Node._3_Detection.QRScan
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -47,7 +47,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                         SetStatus(NodeStatus.Unexecuted, "*");
                         base.CheckTokenCancel(token);
 
-                        long time = 0;
+                        var time = 0;
                         var res = ((NodeResultQRScan)Result);
                         var codes = await form.QRCodeDetect(false);
 
@@ -56,25 +56,28 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                             codes = new string[] { "null          " }; //识别不到二维码默认赋“null”值
                         }
 
+                        //输出结果
                         res.Codes = codes;
                         res.FirstCode = codes[0];
-                        res.Result = new ResultViewData();
-
+                        res.Result.Clear();
                         // 检查 codes 数组中是否有 null 元素
                         if (codes[0] == "null          ")
                         {
-                            res.Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", codes[0], false));
+                            res.Result.Clear();
+                            res.Result.Texts.Add(new ColorText("条形码/二维码识别结果：[空]", Color.Red));
                         }
                         else
                         {
-                            res.Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", $"{ID}.{NodeName}", codes[0], true));
+                            for (int i = 0; i < codes.Length; i++)
+                                res.Result.Texts.Add(new ColorText($"条形码/二维码识别结果{i + 1}：\n{codes[i]}", Color.Green));
                         }
-
-                        Result = res;
-
                         time = SetRunResult(startTime, NodeStatus.Successful);
+                        res.RunTime = time;
+                        Result = res;
                         SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，二维码数据为:“{codes[0]}”", true);
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，二维码数据为:“{codes[0]}”", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -90,6 +93,7 @@ namespace YTVisionPro.Node._3_Detection.QRScan
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
 
         }
     }

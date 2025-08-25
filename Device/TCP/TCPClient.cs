@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Device.TCP
+namespace TDJS_Vision.Device.TCP
 {
     /// <summary>
     /// TCP客户端
     /// </summary>
-    internal class TCPClient : ITcpDevice
+    public class TCPClient : ITcpDevice
     {
         private TcpClient _client;
         public bool IsConnect {  get; set; }

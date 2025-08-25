@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Node
+﻿namespace TDJS_Vision.Node
 {
     partial class NodeSubscription
     {
@@ -101,6 +101,7 @@
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(112, 25);
             this.comboBox2.TabIndex = 1;
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
             // 
             // NodeSubscription
             // 

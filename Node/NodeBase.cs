@@ -3,11 +3,12 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
+using TDJS_Vision.Node._3_Detection.TDAI.Yolo8;
 
-namespace YTVisionPro.Node
+namespace TDJS_Vision.Node
 {
-    internal partial class NodeBase : UserControl
+    public partial class NodeBase : UserControl
     {
         #region 节点界面的操作
 
@@ -67,6 +68,14 @@ namespace YTVisionPro.Node
                 _nodeName = e.NodeNameNew;
                 label1.Text = ID + "." + e.NodeNameNew;
                 RefreshNodeSubControl?.Invoke(this, e);
+
+                // AI检测项也要重命名
+                if (TDAI.DetectItemMap.ContainsKey(e.NodeNameOld))
+                {
+                    var value = TDAI.DetectItemMap[e.NodeNameOld];     // 1. 获取旧值
+                    TDAI.DetectItemMap.Remove(e.NodeNameOld);          // 2. 删除旧键
+                    TDAI.DetectItemMap[e.NodeNameNew] = value;         // 3. 添加新键（自动覆盖）
+                }
             }
         }
 
@@ -96,9 +105,9 @@ namespace YTVisionPro.Node
             return Task.CompletedTask;
         }
 
-        public virtual Task Run(CancellationToken token)
+        public virtual Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
-            return Task.CompletedTask;
+            return Task.FromResult(new NodeReturn());
         }
 
         /// <summary>
@@ -148,6 +157,20 @@ namespace YTVisionPro.Node
         /// <param name=""></param>
         public void SetStatus(NodeStatus status, string time)
         {
+            if (this.InvokeRequired == false)
+            {
+                UpdateNodeUI(status, time);
+            }
+            else
+            {
+                this.Invoke((MethodInvoker)delegate {
+                    UpdateNodeUI(status, time);
+                });
+            }
+        }
+
+        private void UpdateNodeUI(NodeStatus status, string time)
+        {
             label2.Text = $"{time} ms";
             switch (status)
             {
@@ -171,7 +194,6 @@ namespace YTVisionPro.Node
                 default:
                     break;
             }
-
         }
 
         /// <summary>
@@ -179,15 +201,10 @@ namespace YTVisionPro.Node
         /// </summary>
         /// <param name="stopwatch"></param>
         /// <param name="status"></param>
-        public long SetRunResult(DateTime startTime, NodeStatus status)
+        public int SetRunResult(DateTime startTime, NodeStatus status)
         {
-            long elapsedMi11iseconds = (long)(DateTime.Now - startTime).TotalMilliseconds;
+            int elapsedMi11iseconds = (int)(DateTime.Now - startTime).TotalMilliseconds;
             SetStatus(status, elapsedMi11iseconds.ToString());
-            Result.RunTime = elapsedMi11iseconds;
-            Result.Status = status;
-            Result.RunStatusCode = status == NodeStatus.Successful ? NodeRunStatusCode.OK
-                                : status == NodeStatus.Unexecuted ? NodeRunStatusCode.UNEXECUTED
-                                : NodeRunStatusCode.UNKNOW_ERROR;
             return elapsedMi11iseconds;
         }
 
@@ -205,14 +222,14 @@ namespace YTVisionPro.Node
             //{
             //    str0 += node.NodeName + "\n";
             //}
-            //MessageBox.Show("删除前方案节点：" + str0);
+            //MessageBoxTD.Show("删除前方案节点：" + str0);
 
             //string str1 = "";
             //foreach (var node in Process.Nodes)
             //{
             //    str1 += node.NodeName + "\n";
             //}
-            //MessageBox.Show("删除前流程节点：" + str1);
+            //MessageBoxTD.Show("删除前流程节点：" + str1);
 
             #endregion
 
@@ -220,11 +237,16 @@ namespace YTVisionPro.Node
             {
                 Solution.Instance.Nodes.Remove(this);
                 Process.Nodes.Remove(this);
-                NodeDeletedEvent.Invoke(this, this); 
-                if (this is NodeHTAI)
+                NodeDeletedEvent.Invoke(this, this);
+                // 移除AI节点需要释放AI句柄
+                if (NodeType == NodeType.AITD)
                 {
-                    Solution.Instance.SolAiModelNum--;
+                    if (ParamForm.Params == null)
+                        return;
+                    ModelHandleManager.Destroy(((NodeParamTDAI)ParamForm.Params).Yolo8);
                 }
+                // 移除的节点如果包含了加载的检测项也需要从静态全局检测项中移除
+                TDAI.DetectItemMap.Remove($"{this.ID}.{this.NodeName}");
             }
 
             #region 测试节点删除后代码
@@ -234,14 +256,14 @@ namespace YTVisionPro.Node
             //{
             //    str2 += node.NodeName + "\n";
             //}
-            //MessageBox.Show("删除后方案节点：" + str2);
+            //MessageBoxTD.Show("删除后方案节点：" + str2);
 
             //string str3 = "";
             //foreach (var node in Process.Nodes)
             //{
             //    str3 += node.NodeName + "\n";
             //}
-            //MessageBox.Show("删除后流程节点：" + str3);
+            //MessageBoxTD.Show("删除后流程节点：" + str3);
 
             #endregion
         }
@@ -370,35 +392,7 @@ namespace YTVisionPro.Node
             FormAddNotes formAddNotes = new FormAddNotes(this);
             formAddNotes.ShowDialog();
         }
-
-        /// <summary>
-        /// 计时器用于检查节点是否被取消
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-
-        }
     }
 
-    /// <summary>
-    /// 节点运行状态
-    /// </summary>
-    internal enum NodeStatus
-    {
-        /// <summary>
-        /// 未运行的
-        /// </summary>
-        Unexecuted,
-        /// <summary>
-        /// 运行成功的
-        /// </summary>
-        Successful,
-        /// <summary>
-        /// 运行失败的
-        /// </summary>
-        Failed
-    }
 
 }

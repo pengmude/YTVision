@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
+﻿namespace TDJS_Vision.Node._7_ResultProcessing.ResultSummarize
 {
     partial class ParamFormSummarize
     {
@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ParamFormSummarize));
-            this.nodeSubscription1 = new YTVisionPro.Node.NodeSubscription();
-            this.nodeSubscription2 = new YTVisionPro.Node.NodeSubscription();
+            this.nodeSubscription1 = new TDJS_Vision.Node.NodeSubscription();
+            this.nodeSubscription2 = new TDJS_Vision.Node.NodeSubscription();
             this.button1 = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,8 +41,8 @@
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.nodeSubscription3 = new YTVisionPro.Node.NodeSubscription();
-            this.nodeSubscription4 = new YTVisionPro.Node.NodeSubscription();
+            this.nodeSubscription3 = new TDJS_Vision.Node.NodeSubscription();
+            this.nodeSubscription4 = new TDJS_Vision.Node.NodeSubscription();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,22 +50,22 @@
             // 
             this.nodeSubscription1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription1.Enabled = false;
-            this.nodeSubscription1.Location = new System.Drawing.Point(211, 2);
+            this.nodeSubscription1.Location = new System.Drawing.Point(210, 2);
             this.nodeSubscription1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nodeSubscription1.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription1.Name = "nodeSubscription1";
-            this.nodeSubscription1.Size = new System.Drawing.Size(376, 77);
+            this.nodeSubscription1.Size = new System.Drawing.Size(374, 70);
             this.nodeSubscription1.TabIndex = 0;
             // 
             // nodeSubscription2
             // 
             this.nodeSubscription2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription2.Enabled = false;
-            this.nodeSubscription2.Location = new System.Drawing.Point(211, 83);
+            this.nodeSubscription2.Location = new System.Drawing.Point(210, 76);
             this.nodeSubscription2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nodeSubscription2.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription2.Name = "nodeSubscription2";
-            this.nodeSubscription2.Size = new System.Drawing.Size(376, 77);
+            this.nodeSubscription2.Size = new System.Drawing.Size(374, 70);
             this.nodeSubscription2.TabIndex = 1;
             // 
             // button1
@@ -73,7 +73,7 @@
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.SetColumnSpan(this.button1, 3);
             this.button1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(301, 347);
+            this.button1.Location = new System.Drawing.Point(299, 316);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(93, 36);
             this.button1.TabIndex = 2;
@@ -101,7 +101,7 @@
             this.tableLayoutPanel1.Controls.Add(this.nodeSubscription3, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.nodeSubscription4, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(2, 32);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -110,7 +110,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(695, 407);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(691, 373);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // label1
@@ -118,7 +118,7 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(59, 31);
+            this.label1.Location = new System.Drawing.Point(59, 28);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 18);
             this.label1.TabIndex = 3;
@@ -129,7 +129,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label2.Location = new System.Drawing.Point(59, 112);
+            this.label2.Location = new System.Drawing.Point(59, 102);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 18);
             this.label2.TabIndex = 3;
@@ -139,7 +139,7 @@
             // 
             this.checkBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(613, 31);
+            this.checkBox1.Location = new System.Drawing.Point(609, 27);
             this.checkBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(59, 19);
@@ -152,7 +152,7 @@
             // 
             this.checkBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(613, 112);
+            this.checkBox2.Location = new System.Drawing.Point(609, 101);
             this.checkBox2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(59, 19);
@@ -165,7 +165,7 @@
             // 
             this.checkBox3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(613, 193);
+            this.checkBox3.Location = new System.Drawing.Point(609, 175);
             this.checkBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(59, 19);
@@ -178,7 +178,7 @@
             // 
             this.checkBox4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(613, 274);
+            this.checkBox4.Location = new System.Drawing.Point(609, 249);
             this.checkBox4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(59, 19);
@@ -192,7 +192,7 @@
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.Location = new System.Drawing.Point(59, 193);
+            this.label3.Location = new System.Drawing.Point(59, 176);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 18);
             this.label3.TabIndex = 3;
@@ -203,7 +203,7 @@
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(59, 274);
+            this.label4.Location = new System.Drawing.Point(59, 250);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(89, 18);
             this.label4.TabIndex = 3;
@@ -213,22 +213,22 @@
             // 
             this.nodeSubscription3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription3.Enabled = false;
-            this.nodeSubscription3.Location = new System.Drawing.Point(211, 164);
+            this.nodeSubscription3.Location = new System.Drawing.Point(210, 150);
             this.nodeSubscription3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nodeSubscription3.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription3.Name = "nodeSubscription3";
-            this.nodeSubscription3.Size = new System.Drawing.Size(376, 77);
+            this.nodeSubscription3.Size = new System.Drawing.Size(374, 70);
             this.nodeSubscription3.TabIndex = 1;
             // 
             // nodeSubscription4
             // 
             this.nodeSubscription4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeSubscription4.Enabled = false;
-            this.nodeSubscription4.Location = new System.Drawing.Point(211, 245);
+            this.nodeSubscription4.Location = new System.Drawing.Point(210, 224);
             this.nodeSubscription4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.nodeSubscription4.MinimumSize = new System.Drawing.Size(231, 50);
             this.nodeSubscription4.Name = "nodeSubscription4";
-            this.nodeSubscription4.Size = new System.Drawing.Size(376, 77);
+            this.nodeSubscription4.Size = new System.Drawing.Size(374, 70);
             this.nodeSubscription4.TabIndex = 1;
             // 
             // ParamFormSummarize
@@ -243,6 +243,7 @@
             this.Name = "ParamFormSummarize";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "结果汇总";
+            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

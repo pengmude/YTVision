@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.ModbusAdd
+﻿namespace TDJS_Vision.Forms.ModbusAdd
 {
     partial class SingleModbus
     {

@@ -32,6 +32,8 @@ namespace Logger
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LogHelper));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnClear = new System.Windows.Forms.ToolStripMenuItem();
+            this.打开日志目录ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.仅记录异常日志ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listBoxAll = new System.Windows.Forms.ListBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.pageAll = new System.Windows.Forms.TabPage();
@@ -46,7 +48,6 @@ namespace Logger
             this.tabPageFatal = new System.Windows.Forms.TabPage();
             this.listBoxFatal = new System.Windows.Forms.ListBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.打开日志目录ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.pageAll.SuspendLayout();
@@ -62,21 +63,38 @@ namespace Logger
             this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnClear,
-            this.打开日志目录ToolStripMenuItem});
+            this.打开日志目录ToolStripMenuItem,
+            this.仅记录异常日志ToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(241, 101);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(184, 76);
             // 
             // btnClear
             // 
             this.btnClear.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(240, 32);
+            this.btnClear.Size = new System.Drawing.Size(183, 24);
             this.btnClear.Text = "清空显示";
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
+            // 打开日志目录ToolStripMenuItem
+            // 
+            this.打开日志目录ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold);
+            this.打开日志目录ToolStripMenuItem.Name = "打开日志目录ToolStripMenuItem";
+            this.打开日志目录ToolStripMenuItem.Size = new System.Drawing.Size(183, 24);
+            this.打开日志目录ToolStripMenuItem.Text = "打开日志目录";
+            this.打开日志目录ToolStripMenuItem.Click += new System.EventHandler(this.打开日志目录ToolStripMenuItem_Click);
+            // 
+            // 仅记录异常日志ToolStripMenuItem
+            // 
+            this.仅记录异常日志ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold);
+            this.仅记录异常日志ToolStripMenuItem.Name = "仅记录异常日志ToolStripMenuItem";
+            this.仅记录异常日志ToolStripMenuItem.Size = new System.Drawing.Size(183, 24);
+            this.仅记录异常日志ToolStripMenuItem.Text = "仅记录异常日志";
+            this.仅记录异常日志ToolStripMenuItem.Click += new System.EventHandler(this.仅记录异常日志ToolStripMenuItem_Click);
+            // 
             // listBoxAll
             // 
-            this.listBoxAll.BackColor = System.Drawing.SystemColors.Window;
+            this.listBoxAll.BackColor = System.Drawing.SystemColors.Control;
             this.listBoxAll.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxAll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxAll.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
@@ -86,10 +104,9 @@ namespace Logger
             this.listBoxAll.Location = new System.Drawing.Point(3, 3);
             this.listBoxAll.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBoxAll.Name = "listBoxAll";
-            this.listBoxAll.Size = new System.Drawing.Size(662, 306);
+            this.listBoxAll.Size = new System.Drawing.Size(662, 310);
             this.listBoxAll.TabIndex = 0;
             this.listBoxAll.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBoxAll.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // tabControl1
             // 
@@ -115,7 +132,7 @@ namespace Logger
             this.pageAll.Location = new System.Drawing.Point(4, 4);
             this.pageAll.Name = "pageAll";
             this.pageAll.Padding = new System.Windows.Forms.Padding(3);
-            this.pageAll.Size = new System.Drawing.Size(668, 312);
+            this.pageAll.Size = new System.Drawing.Size(668, 316);
             this.pageAll.TabIndex = 0;
             this.pageAll.Text = "全部";
             this.pageAll.UseVisualStyleBackColor = true;
@@ -127,14 +144,14 @@ namespace Logger
             this.pageInfo.Location = new System.Drawing.Point(4, 4);
             this.pageInfo.Name = "pageInfo";
             this.pageInfo.Padding = new System.Windows.Forms.Padding(3);
-            this.pageInfo.Size = new System.Drawing.Size(668, 312);
+            this.pageInfo.Size = new System.Drawing.Size(668, 316);
             this.pageInfo.TabIndex = 1;
             this.pageInfo.Text = "消息";
             this.pageInfo.UseVisualStyleBackColor = true;
             // 
             // listBoxInfo
             // 
-            this.listBoxInfo.BackColor = System.Drawing.SystemColors.Window;
+            this.listBoxInfo.BackColor = System.Drawing.SystemColors.Control;
             this.listBoxInfo.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxInfo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
@@ -144,10 +161,9 @@ namespace Logger
             this.listBoxInfo.Location = new System.Drawing.Point(3, 3);
             this.listBoxInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBoxInfo.Name = "listBoxInfo";
-            this.listBoxInfo.Size = new System.Drawing.Size(662, 306);
+            this.listBoxInfo.Size = new System.Drawing.Size(662, 310);
             this.listBoxInfo.TabIndex = 1;
             this.listBoxInfo.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBoxInfo.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // padeDebug
             // 
@@ -155,14 +171,14 @@ namespace Logger
             this.padeDebug.ImageIndex = 0;
             this.padeDebug.Location = new System.Drawing.Point(4, 4);
             this.padeDebug.Name = "padeDebug";
-            this.padeDebug.Size = new System.Drawing.Size(668, 312);
+            this.padeDebug.Size = new System.Drawing.Size(668, 316);
             this.padeDebug.TabIndex = 3;
             this.padeDebug.Text = "调试";
             this.padeDebug.UseVisualStyleBackColor = true;
             // 
             // listBoxDebug
             // 
-            this.listBoxDebug.BackColor = System.Drawing.SystemColors.Window;
+            this.listBoxDebug.BackColor = System.Drawing.SystemColors.Control;
             this.listBoxDebug.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxDebug.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxDebug.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
@@ -172,10 +188,9 @@ namespace Logger
             this.listBoxDebug.Location = new System.Drawing.Point(0, 0);
             this.listBoxDebug.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBoxDebug.Name = "listBoxDebug";
-            this.listBoxDebug.Size = new System.Drawing.Size(668, 312);
+            this.listBoxDebug.Size = new System.Drawing.Size(668, 316);
             this.listBoxDebug.TabIndex = 1;
             this.listBoxDebug.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBoxDebug.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // pageWarn
             // 
@@ -183,14 +198,14 @@ namespace Logger
             this.pageWarn.ImageIndex = 3;
             this.pageWarn.Location = new System.Drawing.Point(4, 4);
             this.pageWarn.Name = "pageWarn";
-            this.pageWarn.Size = new System.Drawing.Size(668, 312);
+            this.pageWarn.Size = new System.Drawing.Size(668, 316);
             this.pageWarn.TabIndex = 2;
             this.pageWarn.Text = "警告";
             this.pageWarn.UseVisualStyleBackColor = true;
             // 
             // listBoxWarn
             // 
-            this.listBoxWarn.BackColor = System.Drawing.SystemColors.Window;
+            this.listBoxWarn.BackColor = System.Drawing.SystemColors.Control;
             this.listBoxWarn.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxWarn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxWarn.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
@@ -200,10 +215,9 @@ namespace Logger
             this.listBoxWarn.Location = new System.Drawing.Point(0, 0);
             this.listBoxWarn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBoxWarn.Name = "listBoxWarn";
-            this.listBoxWarn.Size = new System.Drawing.Size(668, 312);
+            this.listBoxWarn.Size = new System.Drawing.Size(668, 316);
             this.listBoxWarn.TabIndex = 1;
             this.listBoxWarn.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBoxWarn.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // pageExpection
             // 
@@ -211,14 +225,14 @@ namespace Logger
             this.pageExpection.ImageIndex = 5;
             this.pageExpection.Location = new System.Drawing.Point(4, 4);
             this.pageExpection.Name = "pageExpection";
-            this.pageExpection.Size = new System.Drawing.Size(668, 312);
+            this.pageExpection.Size = new System.Drawing.Size(668, 316);
             this.pageExpection.TabIndex = 4;
             this.pageExpection.Text = "异常";
             this.pageExpection.UseVisualStyleBackColor = true;
             // 
             // listBoxExpection
             // 
-            this.listBoxExpection.BackColor = System.Drawing.SystemColors.Window;
+            this.listBoxExpection.BackColor = System.Drawing.SystemColors.Control;
             this.listBoxExpection.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxExpection.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxExpection.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
@@ -228,10 +242,9 @@ namespace Logger
             this.listBoxExpection.Location = new System.Drawing.Point(0, 0);
             this.listBoxExpection.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBoxExpection.Name = "listBoxExpection";
-            this.listBoxExpection.Size = new System.Drawing.Size(668, 312);
+            this.listBoxExpection.Size = new System.Drawing.Size(668, 316);
             this.listBoxExpection.TabIndex = 2;
             this.listBoxExpection.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBoxExpection.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // tabPageFatal
             // 
@@ -241,13 +254,13 @@ namespace Logger
             this.tabPageFatal.Location = new System.Drawing.Point(4, 4);
             this.tabPageFatal.Name = "tabPageFatal";
             this.tabPageFatal.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFatal.Size = new System.Drawing.Size(668, 312);
+            this.tabPageFatal.Size = new System.Drawing.Size(668, 316);
             this.tabPageFatal.TabIndex = 5;
             this.tabPageFatal.Text = "致命";
             // 
             // listBoxFatal
             // 
-            this.listBoxFatal.BackColor = System.Drawing.SystemColors.Window;
+            this.listBoxFatal.BackColor = System.Drawing.SystemColors.Control;
             this.listBoxFatal.ContextMenuStrip = this.contextMenuStrip1;
             this.listBoxFatal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxFatal.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
@@ -257,10 +270,9 @@ namespace Logger
             this.listBoxFatal.Location = new System.Drawing.Point(3, 3);
             this.listBoxFatal.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.listBoxFatal.Name = "listBoxFatal";
-            this.listBoxFatal.Size = new System.Drawing.Size(662, 306);
+            this.listBoxFatal.Size = new System.Drawing.Size(662, 310);
             this.listBoxFatal.TabIndex = 3;
             this.listBoxFatal.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBox1_DrawItem);
-            this.listBoxFatal.DoubleClick += new System.EventHandler(this.listBox1_DoubleClick);
             // 
             // imageList1
             // 
@@ -273,17 +285,9 @@ namespace Logger
             this.imageList1.Images.SetKeyName(4, "致命.png");
             this.imageList1.Images.SetKeyName(5, "异常.png");
             // 
-            // 打开日志目录ToolStripMenuItem
-            // 
-            this.打开日志目录ToolStripMenuItem.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold);
-            this.打开日志目录ToolStripMenuItem.Name = "打开日志目录ToolStripMenuItem";
-            this.打开日志目录ToolStripMenuItem.Size = new System.Drawing.Size(240, 32);
-            this.打开日志目录ToolStripMenuItem.Text = "打开日志目录";
-            this.打开日志目录ToolStripMenuItem.Click += new System.EventHandler(this.打开日志目录ToolStripMenuItem_Click);
-            // 
             // LogHelper
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 21F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tabControl1);
             this.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
@@ -319,5 +323,6 @@ namespace Logger
         private System.Windows.Forms.TabPage tabPageFatal;
         public System.Windows.Forms.ListBox listBoxFatal;
         private System.Windows.Forms.ToolStripMenuItem 打开日志目录ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 仅记录异常日志ToolStripMenuItem;
     }
 }

@@ -1,19 +1,12 @@
-﻿using Logger;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace YTVisionPro.Forms.ImageViewer
+namespace TDJS_Vision.Forms.ImageViewer
 {
-    internal partial class FrmImageViewer : DockContent
+    public partial class FrmImageViewer : DockContent
     {
         /// <summary>
         /// 所有的图像窗口
@@ -43,6 +36,7 @@ namespace YTVisionPro.Forms.ImageViewer
         public FrmImageViewer()
         {
             InitializeComponent();
+            this.dockPanel1.Theme = new GreenTheme();
             InitWindows();
             InitDockPanel();
             CanvasSet.WindowNumChangeEvent += WindowNumChangeEvent;
@@ -115,7 +109,7 @@ namespace YTVisionPro.Forms.ImageViewer
         {
             for (int i = 0; i < 16; i++)
             {
-                FrmSingleImage imageWin = new FrmSingleImage();
+                FrmSingleImage imageWin = new FrmSingleImage($"图像窗口{i+1}");
                 _frmSingleImages.Add(imageWin);
             }
         }

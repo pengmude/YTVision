@@ -1,9 +1,9 @@
 ﻿using OpenCvSharp;
 using System.Collections.Generic;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageSplit
 {
-    internal class NodeParamImageSplit : INodeParam
+    public class NodeParamImageSplit : INodeParam
     {
         /// <summary>
         /// 订阅的节点名称（反序列化用）
@@ -24,6 +24,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
         /// 图像分割列数
         /// </summary>
         public int Cols;
+
         
     }
 }

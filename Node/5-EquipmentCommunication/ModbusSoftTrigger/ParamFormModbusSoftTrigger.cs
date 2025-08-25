@@ -2,11 +2,12 @@
 using Sunny.UI;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Device.Modbus;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
+namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusSoftTrigger
 {
-    internal partial class ParamFormModbusSoftTrigger : Form, INodeParamForm
+    public partial class ParamFormModbusSoftTrigger : FormBase, INodeParamForm
     {
         public INodeParam Params { get; set; }
 
@@ -52,13 +53,13 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
             if (comboBoxModBusList.Text.IsNullOrEmpty() || comboBoxModBusList.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "PLC不能为空！", true);
-                MessageBox.Show("PLC不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("PLC不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (string.IsNullOrEmpty(this.textBoxAddress.Text))
             {
                 LogHelper.AddLog(MsgLevel.Exception, "信号地址为空", true);
-                MessageBox.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -77,6 +78,8 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
             param.modbus = modBus;
             param.ModBusName = comboBoxModBusList.Text;
             param.Address = this.textBoxAddress.Text;
+            param.Type = radioButton1.Checked ? ModbusRead.RegistersType.Coils : ModbusRead.RegistersType.DiscreteInput;
+            param.Reset = checkBoxReset.Checked;
             Params = param;
             Hide();
         }
@@ -99,9 +102,10 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusSoftTrigger
                         break;
                     }
                 }
+                radioButton1.Checked = param.Type == ModbusRead.RegistersType.Coils ? true : false;
+                radioButton2.Checked = param.Type == ModbusRead.RegistersType.DiscreteInput ? true : false;
+                checkBoxReset.Checked = param.Reset;
             }
         }
-
-        
     }
 }

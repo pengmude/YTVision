@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static YTVisionPro.Node._7_ResultProcessing.ImageSave.ImageQueueProcessor;
+using static TDJS_Vision.Node._7_ResultProcessing.ImageSave.ImageQueueProcessor;
 
-namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
+namespace TDJS_Vision.Node._7_ResultProcessing.ImageSave
 {
-    internal class NodeImageSave : NodeBase
+    public class NodeImageSave : NodeBase
     {
         ImageQueueProcessor processor = new ImageQueueProcessor(4);
 
@@ -28,7 +29,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
@@ -36,7 +37,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -62,7 +63,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
                                 throw new Exception($"获取条码结果失败！");
                         }
                         if (param.NeedOkNg)
-                            param.ResultViewData = form.GetAiResult();
+                            param.AlgorithmResult = form.GetAiResult();
                         param.Image = form.GetImage();
 
                         // 参数合法性判断
@@ -73,8 +74,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
 
                         // 异步队列存图
                         await SaveImage(param);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -91,6 +95,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
 
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
 
         private async Task SaveImage(NodeParamSaveImage param)
@@ -104,58 +109,61 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
             imageSavePath = Path.Combine(param.SavePath, nowDataTime);
 
             // 3.图片名称
-            string imageName = param.IsBarCode ? param.Barcode : time.ToString("yyyy-MM-dd HH-mm-ss");
+            string imageName = param.IsBarCode ? param.Barcode : time.ToString("yyyy-MM-dd_HH-mm-ss-fff");
             if (param.NeedCompress)
-                imageName += "(压缩图)";
+                imageName += "-CAN"; // 压缩图
 
-            // 4.存图路径拼接
-            List<string> paths = new List<string>();
 
-            //区分早晚班
+            // 4.是否区分早晚班
             if (param.IsDayNight)
             {
                 string dayNight = IsDayWorking(time.TimeOfDay, param.DayDataTime, param.NightDataTime) ? "早班" : "晚班";
                 imageSavePath = Path.Combine(imageSavePath, dayNight);
             }
 
-            // 当需要创建OK/NG子目录存图时
+            List<string> paths = new List<string>();
+
+            // 5.是否区分OK/NG
             if (param.NeedOkNg)
             {
-                if (param.ResultViewData == null)
+                if (param.AlgorithmResult == null)
                     throw new Exception($"无法获取/解析AI检测结果！");
 
-                // 确定要保存哪种图片
-                string okNg = param.ResultViewData.IsAllOk ? "OK" : "NG";
+                // 根据AI检测总结果判断创建OK/NG文件夹
+                bool allAreOk = param.AlgorithmResult.DetectResults.Count > 0 && param.AlgorithmResult.DetectResults.All(pair => pair.Value.All(v => v.IsOk));
+                string okNg = allAreOk ? "OK" : "NG";
                 imageSavePath = Path.Combine(imageSavePath, okNg);
+
+                //要保存什么图片
                 switch (param.ImageTypeToSave)
                 {
                     case ImageTypeToSave.OkAndNg:
-                        if (param.ResultViewData.IsAllOk)
+                        if (allAreOk)
                         {
                             paths.Add(imageSavePath);
                         }
                         else
                         {
-                            foreach (var res in param.ResultViewData.SingleRowDataList)
+                            foreach (var pair in param.AlgorithmResult.DetectResults)
                             {
-                                if (!res.IsOk)
-                                    paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                                if (!pair.Value.TrueForAll(item => item.IsOk))
+                                    paths.Add(Path.Combine(imageSavePath, pair.Key));
                             }
                         }
                         break;
                     case ImageTypeToSave.OnlyOk:
-                        if (param.ResultViewData.IsAllOk)
+                        if (allAreOk)
                         {
                             paths.Add(imageSavePath);
                         }
                         break;
                     case ImageTypeToSave.OnlyNg:
-                        if (!param.ResultViewData.IsAllOk)
+                        if (!allAreOk)
                         {
-                            foreach (var res in param.ResultViewData.SingleRowDataList)
+                            foreach (var pair in param.AlgorithmResult.DetectResults)
                             {
-                                if (!res.IsOk)
-                                    paths.Add(Path.Combine(imageSavePath, res.ClassName));
+                                if (!pair.Value.TrueForAll(item => item.IsOk))
+                                    paths.Add(Path.Combine(imageSavePath, pair.Key));
                             }
                         }
                         break;
@@ -163,38 +171,20 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
                         break;
                 }
 
+                foreach (var path in paths)
+                {
+                    SaveImageTask saveImageTask = await Task.Run(() =>
+                    {
+                        return QueueImageForSave(param.Image, path, imageName, param.NeedCompress, param.CompressValue);
+                    });
+                    processor.EnqueueImage(saveImageTask);
+                }
             }
             else
             {
-                // 当不需要创建OK/NG子目录存图时
-                switch (param.ImageTypeToSave)
-                {
-                    case ImageTypeToSave.OkAndNg:
-                        paths.Add(imageSavePath);
-                        break;
-                    case ImageTypeToSave.OnlyOk:
-                        if (param.ResultViewData.IsAllOk)
-                        {
-                            paths.Add(imageSavePath);
-                        }
-                        break;
-                    case ImageTypeToSave.OnlyNg:
-                        if (!param.ResultViewData.IsAllOk)
-                        {
-                            paths.Add(imageSavePath);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-
-            foreach (var path in paths)
-            {
                 SaveImageTask saveImageTask = await Task.Run(() =>
                 {
-                    return QueueImageForSave(param.Image, path, imageName, param.NeedCompress, param.CompressValue);
+                    return QueueImageForSave(param.Image, imageSavePath, imageName, param.NeedCompress, param.CompressValue);
                 });
                 processor.EnqueueImage(saveImageTask);
             }
@@ -245,14 +235,14 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
         private string GetFileName(string filePath, string fileName)
         {
             string newFileName = fileName;
-            string fullPath = Path.Combine(filePath, newFileName + ".bmp");
+            string fullPath = Path.Combine(filePath, newFileName + ".jpg");
             if (File.Exists(fullPath))
             {
                 int suffix = 1;
                 do
                 {
                     newFileName = $"{fileName}_{suffix}";
-                    fullPath = Path.Combine(filePath, newFileName + ".bmp");
+                    fullPath = Path.Combine(filePath, newFileName + ".jpg");
                     suffix++;
                 }
                 while (File.Exists(fullPath));
@@ -262,7 +252,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageSave
        
     }
 
-    internal class ImageQueueProcessor
+    public class ImageQueueProcessor
     {
         private readonly BlockingCollection<SaveImageTask> _imageQueue = new BlockingCollection<SaveImageTask>();
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();

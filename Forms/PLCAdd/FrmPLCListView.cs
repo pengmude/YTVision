@@ -1,23 +1,13 @@
-﻿using Basler.Pylon;
-using Logger;
+﻿using Logger;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO.Ports;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Device.Light;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Forms.CameraAdd;
+using TDJS_Vision.Device.PLC;
 
-namespace YTVisionPro.Forms.PLCAdd
+namespace TDJS_Vision.Forms.PLCAdd
 {
-    internal partial class FrmPLCListView : Form
+    public partial class FrmPLCListView : FormBase
     {
         /// <summary>
         /// 添加PLC时通过快捷键保存方案的事件
@@ -48,36 +38,36 @@ namespace YTVisionPro.Forms.PLCAdd
         /// <param name="e"></param>
         private void Deserialization(object sender, bool e)
         {
-            // 先移除旧方案的PLC控件
-            flowLayoutPanel1.Controls.Clear();
+            try
+            {
+                // 先移除旧方案的PLC控件
+                flowLayoutPanel1.Controls.Clear();
+                // 添加新的PLC
+                SinglePLC singlePLC = null;
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【PLC设备列表】=================================================", true);
+                foreach (var dev in ConfigHelper.SolConfig.Devices)
+                {
+                    if (dev is IPlc plc)
+                    {
+                        plc.CreateDevice(); // 创建PLC，必要的
+                        singlePLC = new SinglePLC(plc);
+                        singlePLC.Anchor = AnchorStyles.Left;
+                        singlePLC.Anchor = AnchorStyles.Right;
+                        flowLayoutPanel1.Controls.Add(singlePLC);
+                        if (e)
+                            LogHelper.AddLog(MsgLevel.Info, $"PLC设备【{dev.DevName}】已加载！", true);
+                    }
+                }
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================【PLC设备列表】已加载完成 ================================================", true);
 
-            // 没有对应类型设备跳过加载
-            if (ConfigHelper.SolConfig.Devices.Count(device => device is IPlc) == 0)
+            }
+            catch (Exception) { }
+            finally
             {
                 OnPLCDeserializationCompletionEvent?.Invoke(this, e);
-                return;
             }
-            // 添加新的PLC
-            SinglePLC singlePLC = null;
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【PLC设备列表】=================================================", true);
-            foreach (var dev in ConfigHelper.SolConfig.Devices)
-            {
-                if (dev is IPlc plc)
-                {
-                    plc.CreateDevice(); // 创建PLC，必要的
-                    singlePLC = new SinglePLC(plc);
-                    singlePLC.Anchor = AnchorStyles.Left;
-                    singlePLC.Anchor = AnchorStyles.Right;
-                    flowLayoutPanel1.Controls.Add(singlePLC);
-                    if (e)
-                        LogHelper.AddLog(MsgLevel.Info, $"PLC设备【{dev.DevName}】已加载！", true);
-                }
-            }
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================【PLC设备列表】已加载完成 ================================================", true);
-
-            OnPLCDeserializationCompletionEvent?.Invoke(this, e);
         }
 
         /// <summary>
@@ -102,7 +92,7 @@ namespace YTVisionPro.Forms.PLCAdd
         private void SinglePLC_SinglePLCRemoveEvent(object sender, SinglePLC e)
         {
             SinglePLC.SinglePLCs.Remove(e);
-            panel1.Controls.Remove(e.SerialParamsControl);
+            panel1.Controls.Clear();
             e.Plc.Disconnect();
             Solution.Instance.AllDevices.Remove(e.Plc);
             flowLayoutPanel1.Controls.Remove(e);
@@ -120,13 +110,15 @@ namespace YTVisionPro.Forms.PLCAdd
             panel1.Controls.Clear();
             if (e.ConType == PlcConType.COM)
             {
-                e.SerialParamsControl.Dock = DockStyle.Fill;
-                panel1.Controls.Add(e.SerialParamsControl);
+                var control = new SerialParamsControl(e.Plc.PLCParms);
+                control.Dock = DockStyle.Fill;
+                panel1.Controls.Add(control);
             }
             else if (e.ConType == PlcConType.ETHERNET)
             {
-                e.EthernetParamsControl.Dock = DockStyle.Fill;
-                panel1.Controls.Add(e.EthernetParamsControl);
+                var control = new EthernetParamsControl(e.Plc.PLCParms);
+                control.Dock = DockStyle.Fill;
+                panel1.Controls.Add(control);
             }
         }
 

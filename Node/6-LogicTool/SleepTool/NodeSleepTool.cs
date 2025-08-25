@@ -3,21 +3,21 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._6_LogicTool.SleepTool
+namespace TDJS_Vision.Node._6_LogicTool.SleepTool
 {
-    internal class NodeSleepTool : NodeBase
+    public class NodeSleepTool : NodeBase
     {
         public NodeSleepTool(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             ParamForm = new NodeParamFormSleepTool();
             ParamForm.SetNodeBelong(this);
-            Result = new NodeResultSleepTool();
+            Result = new NodeResultConditionRun();
         }
 
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
@@ -25,7 +25,7 @@ namespace YTVisionPro.Node._6_LogicTool.SleepTool
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -45,8 +45,11 @@ namespace YTVisionPro.Node._6_LogicTool.SleepTool
 
                         // 异步执行睡眠操作
                         await ExecuteSleepAsync(param.Time, token);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -62,6 +65,7 @@ namespace YTVisionPro.Node._6_LogicTool.SleepTool
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
 
         private async Task ExecuteSleepAsync(int timeInMilliseconds, CancellationToken token)

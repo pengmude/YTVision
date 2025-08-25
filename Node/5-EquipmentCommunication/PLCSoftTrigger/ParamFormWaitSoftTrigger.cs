@@ -2,11 +2,12 @@
 using Sunny.UI;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device.PLC;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
+namespace TDJS_Vision.Node._5_EquipmentCommunication.PLCSoftTrigger
 {
-    internal partial class ParamFormWaitSoftTrigger : Form, INodeParamForm
+    public partial class ParamFormWaitSoftTrigger : FormBase, INodeParamForm
     {
         public INodeParam Params { get; set; }
         
@@ -55,13 +56,13 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
             if (comboBox1.Text.IsNullOrEmpty() || comboBox1.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "PLC不能为空！", true);
-                MessageBox.Show("PLC不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("PLC不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             if (string.IsNullOrEmpty(this.textBox1.Text))
             {
                 LogHelper.AddLog(MsgLevel.Exception, "信号地址为空", true);
-                MessageBox.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("信号地址为空", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -81,6 +82,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
             param.Plc = plc;
             param.PlcName = comboBox1.Text;
             param.Address = this.textBox1.Text;
+            param.Reset = checkBoxReset.Checked;
             Params = param;
             Hide();
         }
@@ -105,6 +107,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.PLCSoftTrigger
                 int index = comboBox1.Items.IndexOf(param.PlcName);
                 comboBox1.SelectedIndex = index == -1 ? 0 : index;
                 textBox1.Text = param.Address;
+                checkBoxReset.Checked = param.Reset;
                 foreach (var plc in Solution.Instance.PlcDevices)
                 {
                     if(plc.UserDefinedName == param.PlcName)

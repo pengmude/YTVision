@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.ImageViewer
+﻿namespace TDJS_Vision.Forms.ImageViewer
 {
     partial class YTPictrueBox
     {

@@ -1,0 +1,59 @@
+{
+  "ModelName": "线芯",
+  "ModelSize": 640,
+  "ScoreThreshold": 0.5,
+  "ScoreNMS": 0.5,
+  "ModelInfo": {
+    "ModelType": "OBB",
+    "DeviceType": "CPU",
+    "IsEncrypted": true,
+    "ModelPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\Line_encrypted.onnx",
+    "KeyPointNum": 0
+  },
+  "ClassNames": [
+    "line",
+    "rubber"
+  ],
+  "DetectItems": [
+    {
+      "Name": "线芯数量",
+      "MinValue": "6",
+      "MaxValue": "6",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "6"
+    },
+    {
+      "Name": "线芯长度",
+      "MinValue": "50",
+      "MaxValue": "80",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "122.88,112.94,111.88,139.34,132.21,135.82"
+    },
+    {
+      "Name": "线芯宽度",
+      "MinValue": "16",
+      "MaxValue": "30",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "23.65,18.56,18.97,21.93,18.29,21.40"
+    },
+    {
+      "Name": "线芯角度",
+      "MinValue": "-5",
+      "MaxValue": "5",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "-0.19,-1.03,-1.12,-1.21,-1.01,-1.34"
+    },
+    {
+      "Name": "剥口偏移",
+      "MinValue": "0",
+      "MaxValue": "5",
+      "Enable": false,
+      "IsCountItem": false,
+      "CurValue": "0.91"
+    }
+  ]
+}

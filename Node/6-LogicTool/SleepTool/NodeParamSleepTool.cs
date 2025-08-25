@@ -1,11 +1,13 @@
 ﻿
-namespace YTVisionPro.Node._6_LogicTool.SleepTool
+namespace TDJS_Vision.Node._6_LogicTool.SleepTool
 {
-    internal class NodeParamSleepTool : INodeParam
+    public class NodeParamSleepTool : INodeParam
     {
         /// <summary>
         /// 休眠时间
         /// </summary>
         public int Time;
+
+        
     }
 }

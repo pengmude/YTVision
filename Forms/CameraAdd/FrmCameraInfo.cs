@@ -6,11 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Camera;
+using TDJS_Vision.Device.Camera;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.CameraAdd
+namespace TDJS_Vision.Forms.CameraAdd
 {
-    internal partial class FrmCameraInfo : Form
+    public partial class FrmCameraInfo : FormBase
     {
         /// <summary>
         /// 添加相机设备事件
@@ -54,7 +55,6 @@ namespace YTVisionPro.Forms.CameraAdd
             _mapCamera.Clear();
             foreach (var info in infoList)
                 _mapCamera[CameraHik.GetDevNameByDevInfo(info)] = info;
-            //Shown += FrmCaFrmCameraInfo_Shown;
         }
         private void FrmCameraInfo_Load(object sender, EventArgs e)
         {
@@ -63,11 +63,6 @@ namespace YTVisionPro.Forms.CameraAdd
             // 初始化相机列表
             InitCameraList(comboBoxCameraBrand.Text);
         }
-
-        //private void FrmCaFrmCameraInfo_Shown(object sender, EventArgs e)
-        //{
-           
-        //}
 
         /// <summary>
         /// 初始相机品牌下拉框
@@ -228,7 +223,7 @@ namespace YTVisionPro.Forms.CameraAdd
             if (comboBoxCameraList.Text.IsNullOrEmpty() || textBoxUserName.Text.IsNullOrEmpty())
             {
                 LogHelper.AddLog(MsgLevel.Warn, "相机设备名或用户自定义名称不能为空！", true);
-                MessageBox.Show("相机设备名或用户自定义名称不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("相机设备名或用户自定义名称不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             //设备重复性判断
@@ -237,7 +232,7 @@ namespace YTVisionPro.Forms.CameraAdd
                 if(camera.DevName == comboBoxCameraList.Text || camera.UserDefinedName == textBoxUserName.Text)
                 {
                     LogHelper.AddLog(MsgLevel.Warn, "当前相机设备已存在或用户自定义名称已存在！", true);
-                    MessageBox.Show("当前相机设备已存在或用户自定义名称已存在！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBoxTD.Show("当前相机设备已存在或用户自定义名称已存在！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
             }
@@ -273,7 +268,7 @@ namespace YTVisionPro.Forms.CameraAdd
             }
             catch (Exception ex)
             {
-                MessageBox.Show("添加相机异常：" + ex.Message);
+                MessageBoxTD.Show("添加相机异常：" + ex.Message);
 
                 #region 测试代码
                 

@@ -4,19 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Camera;
+using TDJS_Vision.Device.Camera;
+using TDJS_Vision.Forms.SolRunParam;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._1_Acquisition.ImageSource
+namespace TDJS_Vision.Node._1_Acquisition.ImageSource
 {
-    internal partial class ParamFormImageSource : Form, INodeParamForm
+    public partial class ParamFormImageSource : FormBase, INodeParamForm
     {
-        /// <summary>
-        /// 硬触发完成事件
-        /// </summary>
-        public static event EventHandler<HardTriggerResult> HardTriggerCompleted;
-
         /// <summary>
         /// 窗口高度
         /// </summary>
@@ -35,6 +33,16 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
             _formHeight = this.Height;
             _node = node;
             comboBoxImgSource.SelectedIndex = 0;
+            SolRunParamControl.RefreshParamView += SolRunParamControl_RefreshParamView;
+        }
+
+        private void SolRunParamControl_RefreshParamView(object sender, EventArgs e)
+        {
+            if(Params is NodeParamImageSoucre paramSrc)
+            {
+                numericUpDownExposureTime.Value = (decimal)paramSrc.ExposureTime;
+                numericUpDownGain.Value = (decimal)paramSrc.Gain;
+            }
         }
 
         /// <summary>
@@ -50,9 +58,19 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                 {
                     textBoxImgPath.Text = param.PathText;
                     checkBoxAuto.Checked = param.IsAutoLoop;
-                    if (param.ImagePaths != null &&param.ImagePaths.Count != 0)
+                    if (param.ImagePaths.Count != 0)
                     {
                         checkBoxAuto.Enabled = true;
+                    }
+                    // “选择目录”需要获取目录下所有图像文件
+                    if (Directory.Exists(param.PathText))
+                    {
+                        var extensions = new[] { ".bmp", ".jpg", ".jpeg", ".png" };
+                        var files = Directory.GetFiles(textBoxImgPath.Text)
+                                             .Where(s => extensions.Any(e => s.EndsWith(e, StringComparison.OrdinalIgnoreCase)))
+                                             .ToList();
+
+                        param.ImagePaths = files;
                     }
                 }
                 else if (param.ImageSource == "相机")
@@ -75,7 +93,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                     numericUpDownExposureTime.Text = param.ExposureTime.ToString();
                     numericUpDownGain.Text = param.Gain.ToString();
                     // 是否频闪
-                    int index1 = comboBoxStrobe.Items.IndexOf(param.IsStrobing ? "是" : "否");
+                    int index1 = comboBoxStrobe.Items.IndexOf(param.IsEveryTime ? "是" : "否");
                     comboBoxStrobe.SelectedIndex = index1 == -1 ? 0 : index1;
                     // 还原节点使用的相机
                     foreach (var camera in Solution.Instance.CameraDevices)
@@ -83,6 +101,10 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                         if (camera.UserDefinedName == param.CameraName)
                         {
                             param.Camera = camera;
+                            // 不是频闪应用可以在参数界面只设置一次,是频闪的话相机需要在节点运行时每次设置
+                            if (!param.IsEveryTime)
+                                SetCameraParams(param.Camera, param.TriggerSource, param.TriggerEdge, param.TriggerDelay
+                                    , param.ExposureTime, param.Gain);
                         }
                     }
                 }
@@ -130,14 +152,14 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         // 选择图像
         private void buttonChoiceImg_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "BMP图片|*.BMP|所有图片|*.*";
+            openFileDialog1.Filter = "图片文件 (*.BMP, *.JPG, *.JPEG, *.PNG)|*.BMP;*.JPG;*.JPEG;*.PNG|所有文件 (*.*)|*.*";
             openFileDialog1.Multiselect = true;
             openFileDialog1.Title = "请选择图片";
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 if (string.IsNullOrEmpty(openFileDialog1.FileName))
                 {
-                    MessageBox.Show(this, "文件夹路径不能为空", "提示");
+                    MessageBoxTD.Show("文件夹路径不能为空");
                     return;
                 }
                 textBoxImgPath.Text = openFileDialog1.FileName;
@@ -154,12 +176,12 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
             {
                 if (string.IsNullOrEmpty(folderBrowserDialog1.SelectedPath))
                 {
-                    MessageBox.Show(this, "文件夹路径不能为空", "提示");
+                    MessageBoxTD.Show("文件夹路径不能为空");
                     return;
                 }
                 textBoxImgPath.Text = folderBrowserDialog1.SelectedPath;
                 checkBoxAuto.Enabled = true;
-                NodeImageSource.LastIndex = 0;
+                ((NodeImageSource)_node).LastIndex = 0;
             }
         }
         #endregion
@@ -202,32 +224,6 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         }
 
         /// <summary>
-        /// 图像显示
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public async void CameraHard_PublishImageEvent(object sender, Bitmap e)
-        {
-            DateTime startTime = DateTime.Now;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    // 更新节点运行状态、耗时
-                    HardTriggerCompleted?.Invoke(this, new HardTriggerResult(startTime, true, e));
-                });
-            }
-            catch (Exception)
-            {
-                await Task.Run(() =>
-                {
-                    // 更新节点运行状态、耗时
-                    HardTriggerCompleted?.Invoke(this, new HardTriggerResult(startTime, false, e));
-                });
-            }
-        }
-
-        /// <summary>
         /// 相机参数设置
         /// </summary>
         /// <param name="camera"></param>
@@ -236,7 +232,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// <param name="delay"></param>
         /// <param name="exposureTime"></param>
         /// <param name="gain"></param>
-        private void SetCameraParams(ICamera camera, TriggerSource triggerSource, TriggerEdge triggerEdge, int delay, float exposureTime, float gain)
+        private void SetCameraParams(ICamera camera, TriggerSource triggerSource, TriggerEdge triggerEdge, int delay, double exposureTime, double gain)
         {
             camera.SetTriggerSource(triggerSource);     // 设置触发源
             camera.SetTriggerEdge(triggerEdge);         // 设置硬触发边沿
@@ -302,23 +298,26 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
             {
                 if (string.IsNullOrEmpty(textBoxImgPath.Text))
                 {
-                    MessageBox.Show("未选择图片");
+                    MessageBoxTD.Show("未选择图片");
                     LogHelper.AddLog(MsgLevel.Fatal, "未选择图片", true);
                     return false;
                 }
 
                 _nodeParamImageSource.PathText = textBoxImgPath.Text;
-
-                if (textBoxImgPath.Text.EndsWith(".bmp")) // 判断是否为单个图片
+                // 判断是否为单张图片
+                if (textBoxImgPath.Text.EndsWith(".bmp") || textBoxImgPath.Text.EndsWith(".jpg") 
+                    || textBoxImgPath.Text.EndsWith(".jpeg") || textBoxImgPath.Text.EndsWith(".png")) 
                 {
                     _nodeParamImageSource.ImagePath = this.textBoxImgPath.Text;
                 }
                 else
                 {
-                    // 获取文件夹下所有文件的路径
-                    string[] files = Directory.GetFiles(textBoxImgPath.Text, "*.bmp"); // 只获取扩展名为 .bmp 的文件
-                    // 将文件路径存储到列表中
-                    _nodeParamImageSource.ImagePaths = new List<string>(files);
+                    var extensions = new[] { ".bmp", ".jpg", ".jpeg", ".png" }; // 你想要支持的所有扩展名
+                    var files = Directory.GetFiles(textBoxImgPath.Text)
+                                         .Where(s => extensions.Any(e => s.EndsWith(e, StringComparison.OrdinalIgnoreCase)))
+                                         .ToList();
+
+                    _nodeParamImageSource.ImagePaths = files;
                 }
 
                 _nodeParamImageSource.IsAutoLoop = checkBoxAuto.Checked;
@@ -331,7 +330,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                 float gain;
                 if (comboBoxChoiceCamera.Text == "[未设置]" || comboBoxChoiceCamera.Text.IsNullOrEmpty())
                 {
-                    MessageBox.Show("相机为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBoxTD.Show("相机为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
@@ -401,24 +400,16 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                 _nodeParamImageSource.ExposureTime = exposureTime;
                 //增益设置
                 _nodeParamImageSource.Gain = gain;
-                // 是否频闪应用
-                _nodeParamImageSource.IsStrobing = comboBoxStrobe.Text == "否" ? false : true;
+                // 是否每次设置参数
+                _nodeParamImageSource.IsEveryTime = comboBoxStrobe.Text == "否" ? false : true;
 
                 #endregion
 
                 // 不是频闪应用可以在参数界面只设置一次,是频闪的话相机需要在节点运行时每次设置
-                if (!_nodeParamImageSource.IsStrobing)
+                if (!_nodeParamImageSource.IsEveryTime)
                     SetCameraParams(_nodeParamImageSource.Camera, _nodeParamImageSource.TriggerSource, _nodeParamImageSource.TriggerEdge, _nodeParamImageSource.TriggerDelay
                         , _nodeParamImageSource.ExposureTime, _nodeParamImageSource.Gain);
 
-                // 如果是硬触发
-                if (_nodeParamImageSource.TriggerSource != TriggerSource.Auto && _nodeParamImageSource.TriggerSource != TriggerSource.SOFT)
-                {
-                    // 解绑软触发取流事件、绑定硬触发
-                    _nodeParamImageSource.Camera.PublishImageEvent -= ((NodeImageSource)_node).CameraSoft_PublishImageEvent;
-                    _nodeParamImageSource.Camera.PublishImageEvent -= CameraHard_PublishImageEvent;
-                    _nodeParamImageSource.Camera.PublishImageEvent += CameraHard_PublishImageEvent;
-                }
             }
 
             Params = _nodeParamImageSource;
@@ -450,11 +441,13 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
     {
         public DateTime StartTime;
         public bool IsSuccess;
+        public string CameraName;
         public Bitmap Bitmap;
-        public HardTriggerResult(DateTime StartTime, bool IsSuccess, Bitmap bitmap)
+        public HardTriggerResult(DateTime StartTime, bool IsSuccess, string cameraName, Bitmap bitmap)
         {
             this.StartTime = StartTime;
             this.IsSuccess = IsSuccess;
+            this.CameraName = cameraName;
             this.Bitmap = bitmap;
         }
     }

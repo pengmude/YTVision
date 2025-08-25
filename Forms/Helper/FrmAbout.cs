@@ -1,30 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace YTVisionPro.Forms.Helper
+﻿namespace TDJS_Vision.Forms.Helper
 {
-    public partial class FrmAbout : Form
+    public partial class FrmAbout : FormBase
     {
         public FrmAbout()
         {
             InitializeComponent();
             label1.Text = aboutInfo;
-            
         }
 
         string aboutInfo =
             "\n" +
             "版本信息\n" +
-            "- 软件名称：YTVisionPro\n" +
+            "- 软件名称：鹰眼智检系统\n" +
             "- 版本号：v1.0.0\n" +
-            "- 发布日期：2024年9月01日\n\n" +
+            "- 发布日期：2025年05月05日\n\n" +
             "更新内容\n" +
             "- 新增功能：\n" +
             "  * 软件支持自定义配置检测方案和流程，达到不同的检测场景要求。\n" +
@@ -42,33 +31,5 @@ namespace YTVisionPro.Forms.Helper
             "- 图像采集：支持多种摄像头设备，包括USB摄像头、网络摄像头等。\n" +
             "- 图像处理：基于深度学习检测各种产品的缺陷、定位和分类等复杂应用场景。\n" +
             "- 数据监控：可以在检测过程中实时记录检测结果。\n\n\n\n";
-
-
-        //string aboutInfo = 
-        //    "关于 YTVisionPro\n\n" +
-        //    "版本信息\n" +
-        //    "- 软件名称：YTVisionPro\n" +
-        //    "- 版本号：v1.0.0\n" +
-        //    "- 发布日期：2024年9月01日\n\n" +
-        //    "更新内容\n" +
-        //    "- 新增功能：\n" +
-        //    "  * 支持多种图像处理算法，包括边缘检测、形状匹配等。\n" +
-        //    "  * 引入了基于深度学习的目标检测和分类模型。\n" +
-        //    "  * 提供了图形化界面，方便用户配置检测流程。\n\n" +
-        //    "- 改进功能：\n" +
-        //    "  * 优化了用户界面，提高了用户体验。\n" +
-        //    "  * 增强了软件的稳定性和响应速度。\n" +
-        //    "  * 改进了图像预处理算法，提高了检测精度。\n\n" +
-        //    "- 已修复的 bug：\n" +
-        //    "  * 修复了在某些情况下图像处理结果不准确的问题。\n" +
-        //    "  * 解决了在高负载环境下偶尔出现的软件崩溃问题。\n" +
-        //    "  * 修正了多个与图像传输相关的稳定性问题。\n\n" +
-        //    "支持的功能\n" +
-        //    "- 图像采集：支持多种摄像头设备，包括USB摄像头、网络摄像头等。\n" +
-        //    "- 图像处理：提供丰富的图像处理算法，包括但不限于边缘检测、模板匹配、轮廓分析等。\n" +
-        //    "- 目标检测：支持基于深度学习的目标检测和分类，能够准确识别特定对象。\n" +
-        //    "- 数据管理：可以记录和分析检测结果，支持导出数据报表。\n" +
-        //    "- 远程监控：可通过网络实时监控检测过程，支持远程操作和配置。\n" +
-        //    "- 多语言支持：支持中文和英文等多种语言界面。\n\n";
     }
 }

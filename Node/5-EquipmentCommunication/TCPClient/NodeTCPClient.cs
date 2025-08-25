@@ -3,10 +3,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.TcpClient
+namespace TDJS_Vision.Node._5_EquipmentCommunication.TcpClient
 {
-    internal class NodeTCPClient : NodeBase
+    public class NodeTCPClient : NodeBase
     {
+        private Process _process;
         public NodeTCPClient(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
             var form = new ParamFormTCPClient();
@@ -14,6 +15,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.TcpClient
             form.RunHandler += RunHandler;
             ParamForm = form;
             Result = new NodeResultTCPClient();
+            _process = process;
         }
 
         /// <summary>
@@ -24,20 +26,20 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.TcpClient
         /// <returns></returns>
         private async Task RunHandler(object sender, EventArgs e)
         {
-            await Run(CancellationToken.None);
+            await Run(CancellationToken.None, _process.ShowLog);
         }
 
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -61,6 +63,12 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.TcpClient
 
                 //发起请求
                 SendRequest(param, startTime);
+
+                var time = SetRunResult(startTime, NodeStatus.Successful);
+                Result.RunTime = time;
+                if (showLog)
+                    LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                return new NodeReturn(NodeRunFlag.ContinueRun);
             }
             catch (OperationCanceledException)
             {

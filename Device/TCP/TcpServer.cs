@@ -11,12 +11,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Device.TCP
+namespace TDJS_Vision.Device.TCP
 {
     /// <summary>
     /// TCP服务器
     /// </summary>
-    internal class TCPServer : ITcpDevice
+    public class TCPServer : ITcpDevice
     {
         private TcpListener _server;
         public TcpParam TcpParam { get; set; }

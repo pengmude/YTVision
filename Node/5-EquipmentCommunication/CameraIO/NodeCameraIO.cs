@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
+namespace TDJS_Vision.Node._5_EquipmentCommunication.LightOpen
 {
-    internal class NodeCameraIO: NodeBase
+    public class NodeCameraIO: NodeBase
     {
 
         public NodeCameraIO(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
@@ -16,13 +16,13 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
             ParamForm.SetNodeBelong(this);
         }
 
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -55,8 +55,11 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
                             // 设置电平反转关闭
                             param.Camera.SetLineInverter(false);
                         }
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -72,8 +75,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
                     }
                 }
             }
-
-
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
         private async Task MicrosecondDelayAsync(int microseconds)
         {

@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.YTMessageBox
+﻿namespace TDJS_Vision.Forms.YTMessageBox
 {
     partial class YTMessageBox
     {
@@ -36,12 +36,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label1.BackColor = System.Drawing.Color.MediumTurquoise;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(5, 5);
-            this.label1.Margin = new System.Windows.Forms.Padding(5);
+            this.label1.Location = new System.Drawing.Point(4, 4);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(343, 69);
+            this.label1.Size = new System.Drawing.Size(306, 58);
             this.label1.TabIndex = 0;
             this.label1.Text = "弹窗信息";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -53,20 +53,22 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(353, 79);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(314, 66);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // YTMessageBox
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(353, 79);
+            this.ClientSize = new System.Drawing.Size(314, 66);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "YTMessageBox";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

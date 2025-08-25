@@ -1,18 +1,17 @@
 ﻿using gCursorLib;
 using Logger;
+using Sunny.UI;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
-using YTVisionPro.Forms.ModbusAdd;
-using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Forms.TCPAdd;
-using YTVisionPro.Node;
+using TDJS_Vision.Forms.TCPAdd;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node;
 
-namespace YTVisionPro.Forms.ProcessNew
+namespace TDJS_Vision.Forms.ProcessNew
 {
-    internal partial class FormNewProcessWizard : Form
+    public partial class FormNewProcessWizard : FormBase
     {
         // 编辑流程时通过快捷键保存方案的事件
         public event EventHandler OnShotKeySavePressed;
@@ -24,6 +23,39 @@ namespace YTVisionPro.Forms.ProcessNew
             this.KeyPreview = true;
             Init();
             Shown += FormNewProcessWizard_Shown;
+            FormProcessRename.ProcessRenameChanged += FormProcessRename_ProcessRenameChanged;
+        }
+        /// <summary>
+        /// 流程重命名事件处理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void FormProcessRename_ProcessRenameChanged(object sender, (string, string) e)
+        {
+            RenameTabPage(tabControl1, e.Item1, e.Item2);
+        }
+        /// <summary>
+        /// 重命名选项卡
+        /// </summary>
+        /// <param name="tabControl"></param>
+        /// <param name="oldName"></param>
+        /// <param name="newName"></param>
+        public static void RenameTabPage(TabControl tabControl, string oldName, string newName)
+        {
+            // 遍历 TabPages 集合
+            foreach (TabPage tabPage in tabControl.TabPages)
+            {
+                // 检查 TabPage 的 Text 属性是否等于 oldName
+                if (tabPage.Text == oldName)
+                {
+                    // 更改 TabPage 的名称
+                    tabPage.Text = newName;
+                    return; // 找到并重命名后退出循环
+                }
+            }
+
+            // 如果没有找到指定名称的 TabPage，则输出提示信息
+            LogHelper.AddLog(MsgLevel.Exception, $"未找到名为 {oldName} 的 TabPage。",true);
         }
 
         private void FormNewProcessWizard_Shown(object sender, EventArgs e)
@@ -87,7 +119,7 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <summary>
         /// 拖拽的数据
         /// </summary>
-        internal struct DragData
+        public struct DragData
         {
             public string Text;
             public NodeType NodeType;
@@ -129,23 +161,29 @@ namespace YTVisionPro.Forms.ProcessNew
         /// <param name="e"></param>
         private void Deserialization(object sender, bool e)
         {
-            // 清空流程控件
-            tabControl1.Controls.Clear();
-
-            // 根据加载的配置重新添加流程控件
-            foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)
+            try
             {
-                TabPage tabPage = new TabPage();
-                tabPage.Name = processInfo.ProcessName;
-                tabPage.Padding = new Padding(3);
-                tabPage.Size = new Size(465, 643);
-                tabPage.Text = processInfo.ProcessName;
-                tabPage.UseVisualStyleBackColor = true;
+                // 清空流程控件
+                tabControl1.Controls.Clear();
 
-                ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text, e, processInfo);
-                nodeEditPanel.Dock = DockStyle.Fill;
-                tabPage.Controls.Add(nodeEditPanel);
-                tabControl1.Controls.Add(tabPage);
+                // 根据加载的配置重新添加流程控件
+                foreach (var processInfo in ConfigHelper.SolConfig.ProcessInfos)
+                {
+                    TabPage tabPage = new TabPage();
+                    tabPage.Name = processInfo.ProcessName;
+                    tabPage.Padding = new Padding(3);
+                    tabPage.Size = new Size(465, 643);
+                    tabPage.Text = processInfo.ProcessName;
+                    tabPage.UseVisualStyleBackColor = true;
+
+                    ProcessEditPanel nodeEditPanel = new ProcessEditPanel(tabPage.Text, e, processInfo);
+                    nodeEditPanel.Dock = DockStyle.Fill;
+                    tabPage.Controls.Add(nodeEditPanel);
+                    tabControl1.Controls.Add(tabPage);
+                }
+            }
+            catch (Exception)
+            {
             }
         }
 
@@ -182,17 +220,6 @@ namespace YTVisionPro.Forms.ProcessNew
             tabPage.Controls.Add(nodeEditPanel);
             tabControl1.Controls.Add(tabPage);
             tabControl1.SelectedTab = tabPage;
-
-            #region 调试代码，上线请注释
-
-            //string res = "";
-            //foreach (var name in Solution.Instance.GetAllProcessName())
-            //{
-            //    res += name + "\n";
-            //}
-            //MessageBox.Show($"方案中流程名称：\n{res}");
-
-            #endregion
         }
 
         /// <summary>
@@ -204,7 +231,8 @@ namespace YTVisionPro.Forms.ProcessNew
         {
             if(tabControl1.Controls.Count == 0)
                 return;
-            if(MessageBox.Show("删除当前流程无法找回，确定删除？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            var res = MessageBoxTD.Show("删除当前流程无法找回，确定删除？", "警告", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (res == DialogResult.No || res == DialogResult.None)
                 return;
 
             TabPage tabPageToDelete = null;
@@ -224,38 +252,6 @@ namespace YTVisionPro.Forms.ProcessNew
             {
                 tabControl1.Controls.Remove(tabPageToDelete);
                 Solution.Instance.RemoveProcess(tabPageToDelete.Text);
-                // 方案的AI模型计数--
-                foreach (var item in Solution.Instance.AllProcesses)
-                {
-                    if (item.ProcessName == tabPageToDelete.Text)
-                    {
-                        foreach (var item1 in item.Nodes)
-                        {
-                            if (item1.NodeType == NodeType.AIHT)
-                            {
-                                Solution.Instance.SolAiModelNum--;
-                            }
-                        }
-                        break;
-                    }
-                }
-                #region 调试代码，上线请注释
-
-                //string res = "";
-                //foreach (var name in Solution.Instance.GetAllProcessName())
-                //{
-                //    res += name + "\n";
-                //}
-                //MessageBox.Show($"方案中流程名称：\n{res}");
-
-                //string res = "";
-                //foreach (var node in Solution.Instance.Nodes)
-                //{
-                //    res += node.ID + "\n";
-                //}
-                //MessageBox.Show($"方案中节点：\n{res}");
-
-                #endregion
             }
         }
 

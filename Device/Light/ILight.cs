@@ -3,9 +3,9 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.IO.Ports;
 
-namespace YTVisionPro.Device.Light
+namespace TDJS_Vision.Device.Light
 {
-    internal interface ILight : IDevice
+    public interface ILight : IDevice
     {
         /// <summary>
         /// 连接状态改变事件

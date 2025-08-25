@@ -1,106 +1,183 @@
 ﻿using Logger;
 using System;
 using System.IO.Ports;
-using System.Net;
-using System.Windows.Forms;
-using YTVisionPro.Device.Modbus;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using YTVisionPro.Device.PLC;
-using YTVisionPro.Device;
+using TDJS_Vision.Device.Light;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.ModbusAdd
+namespace TDJS_Vision.Forms.ModbusAdd
 {
-    internal partial class FrmModbusNew : Form
+    public partial class FrmModbusNew : FormBase
     {
+        // 对应类型设备计数
+        private static int _countRtuPoll = 0;
+        private static int _countTcpPoll = 0;
+        private static int _countTcpSlave = 0;
         /// <summary>
         /// Modbus添加事件
         /// </summary>
-        public static event EventHandler<ModbusParam> ModbusAddEvent;
+        public static event EventHandler<IModbusParam> ModbusAddEvent;
 
         public FrmModbusNew()
         {
             InitializeComponent();
-            comboBoxType.SelectedIndex = 0;
-            Shown += FrmModbusNew_Shown;
-        }
-
-        private void FrmModbusNew_Shown(object sender, EventArgs e)
-        {
-            if(comboBoxType.SelectedIndex == 0)
-            {
-                textBoxDevName.Text = $"Modbus主站{i}";
-            }
-            else
-            {
-                textBoxDevName.Text = $"Modbus从站{i}";
-            }
+            InitPortComboBox();
         }
 
         /// <summary>
-        /// 确认按钮
+        /// 搜索串口并添加到下拉框
+        /// </summary>
+        public void InitPortComboBox()
+        {
+            // 串口号获取
+            comboBoxCom.Items.Clear();
+            foreach (var com in SerialPort.GetPortNames())
+            {
+                comboBoxCom.Items.Add(com);
+            }
+            if (comboBoxCom.Items.Count > 0)
+                this.comboBoxCom.SelectedIndex = 0;
+
+            // 波特率
+            comboBoxBaute.SelectedIndex = 1;
+            // 数据位
+            comboBoxDataBit.SelectedIndex = 3;
+            // 停止位
+            comboBoxStopBit.SelectedIndex = 0;
+            // 校验位
+            comboBoxParity.SelectedIndex = 0;
+
+        }
+
+        /// <summary>
+        /// 点击创建RTU主站
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonRTUPoll_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(uiipTextBoxIP.Text) || string.IsNullOrEmpty(textBoxSlaveID.Text) || string.IsNullOrEmpty(textBoxPort.Text) || string.IsNullOrEmpty(this.textBoxDevName.Text))
+            if(string.IsNullOrEmpty(comboBoxCom.Text) || string.IsNullOrEmpty(comboBoxBaute.Text) 
+                || string.IsNullOrEmpty(comboBoxDataBit.Text) || string.IsNullOrEmpty(comboBoxStopBit.Text)
+                || string.IsNullOrEmpty(comboBoxParity.Text) || string.IsNullOrEmpty(textBoxRTUDevName.Text))
             {
-                MessageBox.Show("参数不能为空！");
+                MessageBoxTD.Show("参数不能为空！");
                 return;
             }
-
             // 已添加设备冲突判断
-            if (Solution.Instance.ModbusDevices.Exists(modbus => modbus.UserDefinedName == textBoxDevName.Text))
+            if (Solution.Instance.ModbusDevices.Exists(modbus => modbus.UserDefinedName == textBoxRTUDevName.Text))
             {
-                MessageBox.Show("Modbus设备名称重复！");
+                MessageBoxTD.Show("Modbus设备名称重复！");
                 LogHelper.AddLog(MsgLevel.Warn, "Modbus设备名称重复！", true);
                 return;
             }
 
-            ModbusParam modbusParms = new ModbusParam();
-
             try
             {
-                modbusParms.DevType = comboBoxType.SelectedIndex == 0 ? Device.DevType.ModbusPoll : Device.DevType.ModbusSlave;
-                modbusParms.ID = byte.Parse(textBoxSlaveID.Text);
-                modbusParms.IP = uiipTextBoxIP.Text;
-                modbusParms.Port = int.Parse(textBoxPort.Text);
-                modbusParms.DevName = textBoxDevName.Text;
-                modbusParms.UserDefinedName = textBoxDevName.Text;
-                ModbusAddEvent?.Invoke(this, modbusParms);
-                if (modbusParms.DevType == Device.DevType.ModbusPoll)
-                    ++i;
-                if(modbusParms.DevType == Device.DevType.ModbusSlave)
-                    ++j;
+                ModbusRTUParam modbusRTUParms = new ModbusRTUParam
+                {
+                    DevType = Device.DevType.ModbusRTUPoll,
+                    PortName = comboBoxCom.Text,
+                    BaudRate = int.Parse(comboBoxBaute.Text),
+                    DataBits = int.Parse(comboBoxDataBit.Text),
+                    StopBits = comboBoxStopBit.Text == "1" ? StopBits.One : comboBoxStopBit.Text == "1.5" ? StopBits.OnePointFive : StopBits.Two,
+                    Parity = comboBoxParity.Text == "奇" ? Parity.Odd : comboBoxParity.Text == "偶" ? Parity.Even : Parity.None,
+                    DevName = textBoxRTUDevName.Text,
+                    UserDefinedName = textBoxRTUDevName.Text
+                };
+                ModbusAddEvent?.Invoke(this, modbusRTUParms);
+                ++_countRtuPoll;
+                textBoxRTUDevName.Text = $"ModbusRTU主站{_countRtuPoll + 1}";
                 Hide();
-            }
-            catch(NotImplementedException ex)
-            {
-                LogHelper.AddLog(MsgLevel.Warn, ex.Message, true);
-                MessageBox.Show(ex.Message);
             }
             catch (Exception ex)
             {
                 LogHelper.AddLog(MsgLevel.Warn, "添加Modbus时参数设置错误！", true);
-                MessageBox.Show("请检查Modbus参数是否有误！");
+                MessageBoxTD.Show("请检查Modbus参数是否有误！");
             }
         }
-
-        int i = 1, j = 1;   // 设备计数
-        private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// 点击创建TCP主站
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonTcpPoll_Click(object sender, EventArgs e)
         {
-            switch (comboBoxType.Text)
+            if (string.IsNullOrEmpty(uiipTextBoxTcpPollIP.Text) || string.IsNullOrEmpty(textBoxTcpPollPort.Text)
+                || string.IsNullOrEmpty(textBoxTcpPollDevName.Text))
             {
-                case "作为主站":
-                    uiipTextBoxIP.Enabled = true;
-                    textBoxDevName.Text = $"Modbus主站{i}";
-                    break;
-                case "作为从站":
-                    uiipTextBoxIP.Enabled = false;
-                    textBoxDevName.Text = $"Modbus从站{j}";
-                    break;
-                default:
-                    break;
+                MessageBoxTD.Show("参数不能为空！");
+                return;
+            }
+            // 已添加设备冲突判断
+            if (Solution.Instance.ModbusDevices.Exists(modbus => modbus.UserDefinedName == textBoxTcpPollDevName.Text))
+            {
+                MessageBoxTD.Show("Modbus设备名称重复！");
+                LogHelper.AddLog(MsgLevel.Warn, "Modbus设备名称重复！", true);
+                return;
+            }
+
+            try
+            {
+                ModbusTcpParam modbusTcpParms = new ModbusTcpParam
+                {
+                    DevType = Device.DevType.ModbusTcpPoll,
+                    IP = uiipTextBoxTcpPollIP.Text,
+                    Port = int.Parse(textBoxTcpPollPort.Text),
+                    DevName = textBoxTcpPollDevName.Text,
+                    UserDefinedName = textBoxTcpPollDevName.Text
+                };
+                ModbusAddEvent?.Invoke(this, modbusTcpParms);
+                ++_countTcpPoll;
+                textBoxTcpPollDevName.Text = $"ModbusTcp主站{_countTcpPoll + 1}";
+                Hide();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Warn, "添加Modbus时参数设置错误！", true);
+                MessageBoxTD.Show("请检查Modbus参数是否有误！");
+            }
+        }
+        /// <summary>
+        /// 点击创建TCP从站
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonTcpSlave_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBoxTcpSlaveID.Text) || string.IsNullOrEmpty(textBoxTcpSlavePort.Text) || string.IsNullOrEmpty(textBoxTcpSlaveDevName.Text))
+            {
+                MessageBoxTD.Show("参数不能为空！");
+                return;
+            }
+
+            // 已添加设备冲突判断
+            if (Solution.Instance.ModbusDevices.Exists(modbus => modbus.UserDefinedName == textBoxTcpSlaveDevName.Text))
+            {
+                MessageBoxTD.Show("Modbus设备名称重复！");
+                LogHelper.AddLog(MsgLevel.Warn, "Modbus设备名称重复！", true);
+                return;
+            }
+
+            try
+            {
+                ModbusTcpParam modbusTcpParms = new ModbusTcpParam
+                {
+                    DevType = Device.DevType.ModbusTcpSlave,
+                    //IP = uiipTextBoxTcpPollIP.Text,
+                    Port = int.Parse(textBoxTcpSlavePort.Text),
+                    ID = byte.Parse(textBoxTcpSlaveID.Text),
+                    DevName = textBoxTcpSlaveDevName.Text,
+                    UserDefinedName = textBoxTcpSlaveDevName.Text
+                };
+                ModbusAddEvent?.Invoke(this, modbusTcpParms);
+                ++_countTcpSlave;
+                textBoxTcpSlaveDevName.Text = $"ModbusTcp从站{_countTcpSlave + 1}";
+                Hide();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.AddLog(MsgLevel.Warn, "添加Modbus时参数设置错误！", true);
+                MessageBoxTD.Show("请检查Modbus参数是否有误！");
             }
         }
     }

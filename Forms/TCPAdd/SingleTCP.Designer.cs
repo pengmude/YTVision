@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.TCPAdd
+﻿namespace TDJS_Vision.Forms.TCPAdd
 {
     partial class SingleTcp
     {

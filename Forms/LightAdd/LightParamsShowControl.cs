@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Light;
+using TDJS_Vision.Device.Light;
 
-namespace YTVisionPro.Forms.LightAdd
+namespace TDJS_Vision.Forms.LightAdd
 {
-    internal partial class LightParamsShowControl : UserControl
+    public partial class LightParamsShowControl : UserControl
     {
         public LightParamsShowControl(LightParam parms)
         {

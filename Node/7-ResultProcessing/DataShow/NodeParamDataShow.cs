@@ -1,21 +1,20 @@
-﻿using Newtonsoft.Json;
-using YTVisionPro.Node._3_Detection.HTAI;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.DataShow
+namespace TDJS_Vision.Node._7_ResultProcessing.DataShow
 {
-    internal class NodeParamDataShow : INodeParam
+    public class NodeParamDataShow : INodeParam
     {
-        [JsonIgnore]
-        public ResultViewData AiResultData;
         public string Text1;
         public string Text2;
     }
 
-    internal class DatashowData
+    public class DataShowData
     {
         public string TabPageName;
-        public ResultViewData AiResultData;
-        public DatashowData(string nodename, ResultViewData airesult)
+        public AlgorithmResult AiResultData;
+        public DataShowData(string nodename, AlgorithmResult airesult)
         {
             TabPageName = nodename;
             AiResultData = airesult;

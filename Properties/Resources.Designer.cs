@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace YTVisionPro.Properties {
+namespace TDJS_Vision.Properties {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace YTVisionPro.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -39,7 +39,7 @@ namespace YTVisionPro.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("YTVisionPro.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TDJS_Vision.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,16 +57,6 @@ namespace YTVisionPro.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap IMG20240327183803 {
-            get {
-                object obj = ResourceManager.GetObject("IMG20240327183803", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -183,6 +173,16 @@ namespace YTVisionPro.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 打扫 {
+            get {
+                object obj = ResourceManager.GetObject("打扫", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 新建方案 {
             get {
                 object obj = ResourceManager.GetObject("新建方案", resourceCulture);
@@ -193,49 +193,9 @@ namespace YTVisionPro.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap 方案设置 {
-            get {
-                object obj = ResourceManager.GetObject("方案设置", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Icon 桌面图 {
-            get {
-                object obj = ResourceManager.GetObject("桌面图", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap 注液孔检测算子示例 {
-            get {
-                object obj = ResourceManager.GetObject("注液孔检测算子示例", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
         internal static System.Drawing.Bitmap 流程删除 {
             get {
                 object obj = ResourceManager.GetObject("流程删除", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
-        internal static System.Drawing.Bitmap 流程添加 {
-            get {
-                object obj = ResourceManager.GetObject("流程添加", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -263,16 +223,6 @@ namespace YTVisionPro.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap 监听 {
-            get {
-                object obj = ResourceManager.GetObject("监听", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
-        /// </summary>
         internal static System.Drawing.Bitmap 相机 {
             get {
                 object obj = ResourceManager.GetObject("相机", resourceCulture);
@@ -283,9 +233,29 @@ namespace YTVisionPro.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap 瞳达精视 {
+            get {
+                object obj = ResourceManager.GetObject("瞳达精视", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap 解锁 {
             get {
                 object obj = ResourceManager.GetObject("解锁", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap 运行参数 {
+            get {
+                object obj = ResourceManager.GetObject("运行参数", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

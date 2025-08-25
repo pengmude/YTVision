@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.PLCAdd
+﻿namespace TDJS_Vision.Forms.PLCAdd
 {
     partial class SerialParamsControl
     {

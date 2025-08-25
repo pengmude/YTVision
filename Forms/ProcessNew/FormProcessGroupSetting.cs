@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace YTVisionPro.Forms.ProcessNew
+namespace TDJS_Vision.Forms.ProcessNew
 {
-    internal partial class FormProcessGroupSetting : Form
+    public partial class FormProcessGroupSetting : FormBase
     {
         private Process _process;
         public FormProcessGroupSetting(Process process)
@@ -23,7 +14,7 @@ namespace YTVisionPro.Forms.ProcessNew
 
         private void FormProcessGroupSetting_show(object sender, EventArgs e)
         {
-            switch (_process.processGroup)
+            switch (_process.Group)
             {
                 case ProcessGroup.Group1:
                     comboBox1.SelectedIndex = 0;
@@ -50,19 +41,19 @@ namespace YTVisionPro.Forms.ProcessNew
             switch (comboBox1.SelectedIndex)
             {
                 case 0:
-                    _process.processGroup = ProcessGroup.Group1;
+                    _process.Group = ProcessGroup.Group1;
                     break;
                 case 1:
-                    _process.processGroup = ProcessGroup.Group2;
+                    _process.Group = ProcessGroup.Group2;
                     break;
                 case 2:
-                    _process.processGroup = ProcessGroup.Group3;
+                    _process.Group = ProcessGroup.Group3;
                     break;
                 case 3:
-                    _process.processGroup = ProcessGroup.Group4;
+                    _process.Group = ProcessGroup.Group4;
                     break;
                 case 4:
-                    _process.processGroup = ProcessGroup.Group5;
+                    _process.Group = ProcessGroup.Group5;
                     break;
             }
             Hide();

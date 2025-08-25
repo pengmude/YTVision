@@ -1,0 +1,747 @@
+{
+  "SolVer": "2.4.0.0",
+  "SolName": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\本地测试方案.Sol",
+  "RunInterval": 0,
+  "NodeCount": 37,
+  "ProcessCount": 6,
+  "Devices": {
+    "ModbusRTU主站1": {
+      "DevName": "ModbusRTU主站1",
+      "UserDefinedName": "ModbusRTU主站1",
+      "ModbusParam": {
+        "TDJS_Vision.Device.Modbus.ModbusRTUParam": {
+          "DevType": "ModbusRTUPoll",
+          "DevName": "ModbusRTU主站1",
+          "UserDefinedName": "ModbusRTU主站1",
+          "HoldTime": 30,
+          "PortName": "COM3",
+          "BaudRate": 9600,
+          "Parity": 0,
+          "DataBits": 8,
+          "StopBits": 1,
+          "ClassName": "TDJS_Vision.Device.Modbus.ModbusRTUParam"
+        }
+      },
+      "IsConnect": true,
+      "DevType": "ModbusRTUPoll",
+      "Brand": "Unknow",
+      "ClassName": "TDJS_Vision.Device.Modbus.ModbusRTUPoll"
+    },
+    "结果主站2": {
+      "DevName": "结果主站2",
+      "UserDefinedName": "结果主站2",
+      "ModbusParam": {
+        "TDJS_Vision.Device.Modbus.ModbusRTUParam": {
+          "DevType": "ModbusRTUPoll",
+          "DevName": "结果主站2",
+          "UserDefinedName": "结果主站2",
+          "HoldTime": 30,
+          "PortName": "COM1",
+          "BaudRate": 9600,
+          "Parity": 0,
+          "DataBits": 8,
+          "StopBits": 1,
+          "ClassName": "TDJS_Vision.Device.Modbus.ModbusRTUParam"
+        }
+      },
+      "IsConnect": true,
+      "DevType": "ModbusRTUPoll",
+      "Brand": "Unknow",
+      "ClassName": "TDJS_Vision.Device.Modbus.ModbusRTUPoll"
+    }
+  },
+  "ProcessInfos": [
+    {
+      "ProcessName": "流程1",
+      "Enable": true,
+      "ShowLog": false,
+      "Level": "Lv4",
+      "Group": "Group1",
+      "NodeInfos": [
+        {
+          "NodeType": "ModbusRead",
+          "NodeName": "Modbus读取",
+          "ID": 1,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead.NodeParamModbusRead": {
+              "DeviceName": "ModbusRTU主站1",
+              "Count": 2,
+              "StartAddress": 0,
+              "DataType": "DiscreteInput"
+            }
+          }
+        },
+        {
+          "NodeType": "SharedVariable",
+          "NodeName": "共享变量",
+          "ID": 2,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._6_LogicTool.SharedVariable.NodeParamSharedVariable": {
+              "IsRead": false,
+              "ReadName": "[未选择]",
+              "Type": "AllType",
+              "Flag": false,
+              "Index": 0,
+              "Text1": "1.Modbus读取",
+              "Text2": "读取结果",
+              "WriteName": "线芯胶壳信号"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ProcessName": "流程2",
+      "Enable": true,
+      "ShowLog": true,
+      "Level": "Lv5",
+      "Group": "Group2",
+      "NodeInfos": [
+        {
+          "NodeType": "SharedVariable",
+          "NodeName": "共享变量",
+          "ID": 3,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._6_LogicTool.SharedVariable.NodeParamSharedVariable": {
+              "IsRead": true,
+              "ReadName": "线芯胶壳信号",
+              "Type": "BoolArr",
+              "Flag": true,
+              "Index": 0,
+              "Text1": null,
+              "Text2": null,
+              "WriteName": "共享变量1"
+            }
+          }
+        },
+        {
+          "NodeType": "ConditionRun",
+          "NodeName": "条件运行",
+          "ID": 4,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._6_LogicTool.ConditionRun.NodeParamConditionRun": {
+              "Text1": "3.共享变量",
+              "Text2": "读到的共享变量"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageSource",
+          "NodeName": "图像源",
+          "ID": 5,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageSoucre": {
+              "ImageSource": "本地图像",
+              "PathText": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\Image-LineCore",
+              "ImagePath": null,
+              "IsAutoLoop": true,
+              "CameraName": null,
+              "TriggerSource": "Auto",
+              "TriggerEdge": "Rising",
+              "TriggerDelay": 0,
+              "ExposureTime": 0.0,
+              "Gain": 0.0,
+              "IsEveryTime": false
+            }
+          }
+        },
+        {
+          "NodeType": "AITD",
+          "NodeName": "AI检测",
+          "ID": 6,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._3_Detection.TDAI.NodeParamTDAI": {
+              "Text1": "5.图像源",
+              "Text2": "输出图像",
+              "ConfigPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\超日线芯ai模型配置.json",
+              "IsAutoStudy": false,
+              "ModelName": "超日线芯"
+            }
+          }
+        },
+        {
+          "NodeType": "AIResultSendByModbus",
+          "NodeName": "Modbus发送AI结果",
+          "ID": 7,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._5_EquipmentCommunication.AIResultSendByModbus.NodeParamSignalSendByModbus": {
+              "Text1": "6.AI检测",
+              "Text2": "AI输出结果",
+              "ModbusName": "结果主站2",
+              "IsRegister": true,
+              "IsAutoReset": true,
+              "SignalHoldTime": 30,
+              "BindingData": [
+                {
+                  "DetectItems": "线芯数量;线芯长度;线芯宽度;线芯角度;剥口偏移",
+                  "CommModbus": "结果主站2",
+                  "SignalAddress": "0",
+                  "OkValue": 1,
+                  "NgValue": 2
+                }
+              ]
+            }
+          }
+        },
+        {
+          "NodeType": "DrawAIResult",
+          "NodeName": "AI结果绘制",
+          "ID": 8,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageDraw.NodeParamImageDraw": {
+              "Text1": "5.图像源",
+              "Text2": "输出图像",
+              "Text3": "6.AI检测",
+              "Text4": "AI输出结果",
+              "FontSize": 40,
+              "LineWidth": 6,
+              "TextLoc": "LeftUp"
+            }
+          }
+        },
+        {
+          "NodeType": "DetectResultShow",
+          "NodeName": "检测结果显示",
+          "ID": 9,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.DataShow.NodeParamDataShow": {
+              "Text1": "6.AI检测",
+              "Text2": "AI输出结果"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageSave",
+          "NodeName": "保存图片",
+          "ID": 10,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageSave.NodeParamSaveImage": {
+              "SavePath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\测试存图目录",
+              "NeedOkNg": true,
+              "IsBarCode": false,
+              "IsDayNight": false,
+              "DayDataTime": "0001-01-01T00:00:00",
+              "NightDataTime": "0001-01-01T00:00:00",
+              "NeedCompress": true,
+              "CompressValue": 80,
+              "ImageTypeToSave": "OkAndNg",
+              "ImgSubText1": "5.图像源",
+              "ImgSubText2": "输出图像",
+              "AiResSubText1": "6.AI检测",
+              "AiResSubText2": "AI输出结果",
+              "BarCodeSubText1": "3.共享变量",
+              "BarCodeSubText2": "读到的共享变量"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageShow",
+          "NodeName": "图像显示",
+          "ID": 11,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageShow": {
+              "WindowName": "图像窗口1",
+              "Text1": "8.AI结果绘制",
+              "Text2": "输出图像"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ProcessName": "流程3",
+      "Enable": false,
+      "ShowLog": true,
+      "Level": "Lv5",
+      "Group": "Group2",
+      "NodeInfos": [
+        {
+          "NodeType": "SharedVariable",
+          "NodeName": "共享变量",
+          "ID": 12,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._6_LogicTool.SharedVariable.NodeParamSharedVariable": {
+              "IsRead": true,
+              "ReadName": "线芯胶壳信号",
+              "Type": "BoolArr",
+              "Flag": true,
+              "Index": 1,
+              "Text1": null,
+              "Text2": null,
+              "WriteName": "共享变量1"
+            }
+          }
+        },
+        {
+          "NodeType": "ConditionRun",
+          "NodeName": "条件运行",
+          "ID": 13,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._6_LogicTool.ConditionRun.NodeParamConditionRun": {
+              "Text1": "12.共享变量",
+              "Text2": "读到的共享变量"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageSource",
+          "NodeName": "图像源",
+          "ID": 14,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageSoucre": {
+              "ImageSource": "本地图像",
+              "PathText": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\shell",
+              "ImagePath": null,
+              "IsAutoLoop": true,
+              "CameraName": null,
+              "TriggerSource": "Auto",
+              "TriggerEdge": "Rising",
+              "TriggerDelay": 0,
+              "ExposureTime": 0.0,
+              "Gain": 0.0,
+              "IsEveryTime": false
+            }
+          }
+        },
+        {
+          "NodeType": "AITD",
+          "NodeName": "AI检测",
+          "ID": 15,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._3_Detection.TDAI.NodeParamTDAI": {
+              "Text1": "14.图像源",
+              "Text2": "输出图像",
+              "ConfigPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\超日胶壳ai模型配置.json",
+              "IsAutoStudy": false,
+              "ModelName": "超日胶壳"
+            }
+          }
+        },
+        {
+          "NodeType": "AIResultSendByModbus",
+          "NodeName": "Modbus发送AI结果",
+          "ID": 16,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._5_EquipmentCommunication.AIResultSendByModbus.NodeParamSignalSendByModbus": {
+              "Text1": "15.AI检测",
+              "Text2": "AI输出结果",
+              "ModbusName": "结果主站2",
+              "IsRegister": true,
+              "IsAutoReset": false,
+              "SignalHoldTime": 30,
+              "BindingData": [
+                {
+                  "DetectItems": "胶壳数量;胶壳角度;弹片数量;弹片长度;针尖数量;针尖长度;针尖角度;外观不良",
+                  "CommModbus": "结果主站2",
+                  "SignalAddress": "1",
+                  "OkValue": 1,
+                  "NgValue": 2
+                }
+              ]
+            }
+          }
+        },
+        {
+          "NodeType": "DrawAIResult",
+          "NodeName": "AI结果绘制",
+          "ID": 17,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageDraw.NodeParamImageDraw": {
+              "Text1": "14.图像源",
+              "Text2": "输出图像",
+              "Text3": "15.AI检测",
+              "Text4": "AI输出结果",
+              "FontSize": 40,
+              "LineWidth": 6,
+              "TextLoc": "LeftUp"
+            }
+          }
+        },
+        {
+          "NodeType": "DetectResultShow",
+          "NodeName": "检测结果显示",
+          "ID": 18,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.DataShow.NodeParamDataShow": {
+              "Text1": "15.AI检测",
+              "Text2": "AI输出结果"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageSave",
+          "NodeName": "保存图片",
+          "ID": 19,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageSave.NodeParamSaveImage": {
+              "SavePath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\测试存图目录",
+              "NeedOkNg": true,
+              "IsBarCode": false,
+              "IsDayNight": false,
+              "DayDataTime": "0001-01-01T00:00:00",
+              "NightDataTime": "0001-01-01T00:00:00",
+              "NeedCompress": true,
+              "CompressValue": 80,
+              "ImageTypeToSave": "OkAndNg",
+              "ImgSubText1": "14.图像源",
+              "ImgSubText2": "输出图像",
+              "AiResSubText1": "15.AI检测",
+              "AiResSubText2": "AI输出结果",
+              "BarCodeSubText1": "12.共享变量",
+              "BarCodeSubText2": "读到的共享变量"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageShow",
+          "NodeName": "图像显示",
+          "ID": 20,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageShow": {
+              "WindowName": "图像窗口2",
+              "Text1": "17.AI结果绘制",
+              "Text2": "输出图像"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ProcessName": "流程4",
+      "Enable": true,
+      "ShowLog": true,
+      "Level": "Lv5",
+      "Group": "Group3",
+      "NodeInfos": [
+        {
+          "NodeType": "ImageSource",
+          "NodeName": "图像源",
+          "ID": 21,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageSoucre": {
+              "ImageSource": "本地图像",
+              "PathText": "C:\\Users\\LENOVO\\Desktop\\2025-07-12_14-44-02-474-CAN.jpg",
+              "ImagePath": "C:\\Users\\LENOVO\\Desktop\\2025-07-12_14-44-02-474-CAN.jpg",
+              "IsAutoLoop": false,
+              "CameraName": null,
+              "TriggerSource": "Auto",
+              "TriggerEdge": "Rising",
+              "TriggerDelay": 0,
+              "ExposureTime": 0.0,
+              "Gain": 0.0,
+              "IsEveryTime": false
+            }
+          }
+        },
+        {
+          "NodeType": "AITD",
+          "NodeName": "AI检测",
+          "ID": 22,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._3_Detection.TDAI.NodeParamTDAI": {
+              "Text1": "21.图像源",
+              "Text2": "输出图像",
+              "ConfigPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\超日TypeC焊锡模型新配置.json",
+              "IsAutoStudy": false,
+              "ModelName": "超日TypeC焊锡"
+            }
+          }
+        },
+        {
+          "NodeType": "AIResultSendByModbus",
+          "NodeName": "Modbus发送AI结果",
+          "ID": 23,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._5_EquipmentCommunication.AIResultSendByModbus.NodeParamSignalSendByModbus": {
+              "Text1": "22.AI检测",
+              "Text2": "AI输出结果",
+              "ModbusName": "结果主站2",
+              "IsRegister": true,
+              "IsAutoReset": false,
+              "SignalHoldTime": 30,
+              "BindingData": [
+                {
+                  "DetectItems": "Type-C数量;正常焊点数;正常焊点面积;虚焊数量;虚焊面积;露线芯长度;黑色线数量;红色线数量;露焊盘数;露焊盘面积;锡珠数量;锡珠面积;胶皮压伤数量;胶皮压伤面积;熔胶数量;熔胶面积;其他不良数量;其他不良面积",
+                  "CommModbus": "结果主站2",
+                  "SignalAddress": "2",
+                  "OkValue": 1,
+                  "NgValue": 2
+                }
+              ]
+            }
+          }
+        },
+        {
+          "NodeType": "DrawAIResult",
+          "NodeName": "AI结果绘制",
+          "ID": 24,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageDraw.NodeParamImageDraw": {
+              "Text1": "21.图像源",
+              "Text2": "输出图像",
+              "Text3": "22.AI检测",
+              "Text4": "AI输出结果",
+              "FontSize": 40,
+              "LineWidth": 6,
+              "TextLoc": "LeftUp"
+            }
+          }
+        },
+        {
+          "NodeType": "DetectResultShow",
+          "NodeName": "检测结果显示",
+          "ID": 25,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.DataShow.NodeParamDataShow": {
+              "Text1": "22.AI检测",
+              "Text2": "AI输出结果"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageSave",
+          "NodeName": "保存图片",
+          "ID": 26,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageSave.NodeParamSaveImage": {
+              "SavePath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\测试存图目录",
+              "NeedOkNg": true,
+              "IsBarCode": false,
+              "IsDayNight": false,
+              "DayDataTime": "0001-01-01T00:00:00",
+              "NightDataTime": "0001-01-01T00:00:00",
+              "NeedCompress": true,
+              "CompressValue": 80,
+              "ImageTypeToSave": "OkAndNg",
+              "ImgSubText1": "21.图像源",
+              "ImgSubText2": "输出图像",
+              "AiResSubText1": "22.AI检测",
+              "AiResSubText2": "AI输出结果",
+              "BarCodeSubText1": "21.图像源",
+              "BarCodeSubText2": "输出图像"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageShow",
+          "NodeName": "图像显示",
+          "ID": 27,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageShow": {
+              "WindowName": "图像窗口3",
+              "Text1": "24.AI结果绘制",
+              "Text2": "输出图像"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "ProcessName": "流程6",
+      "Enable": true,
+      "ShowLog": true,
+      "Level": "Lv5",
+      "Group": "Group1",
+      "NodeInfos": [
+        {
+          "NodeType": "ImageSource",
+          "NodeName": "图像源",
+          "ID": 31,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageSoucre": {
+              "ImageSource": "本地图像",
+              "PathText": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\Image-GelCoat",
+              "ImagePath": null,
+              "IsAutoLoop": true,
+              "CameraName": null,
+              "TriggerSource": "Auto",
+              "TriggerEdge": "Rising",
+              "TriggerDelay": 0,
+              "ExposureTime": 0.0,
+              "Gain": 0.0,
+              "IsEveryTime": false
+            }
+          }
+        },
+        {
+          "NodeType": "ImageCrop",
+          "NodeName": "图像裁剪",
+          "ID": 32,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._2_ImagePreprocessing.ImageCrop.NodeParamImageCrop": {
+              "Text1": "31.图像源",
+              "Text2": "输出图像",
+              "ROIs": {
+                "ROI1": {
+                  "ClassName": "TDJS_Vision.Forms.ShapeDraw.RectangleROI",
+                  "ROIType": "Rectangle",
+                  "Rectangle": {
+                    "Location": {
+                      "IsEmpty": false,
+                      "X": 35.0,
+                      "Y": 109.0
+                    },
+                    "Size": "154, 146",
+                    "X": 35.0,
+                    "Y": 109.0,
+                    "Width": 154.0,
+                    "Height": 146.0,
+                    "Left": 35.0,
+                    "Top": 109.0,
+                    "Right": 189.0,
+                    "Bottom": 255.0,
+                    "IsEmpty": false
+                  },
+                  "IsSelected": false,
+                  "RotationAngle": 0.0
+                },
+                "ROI2": {
+                  "ClassName": "TDJS_Vision.Forms.ShapeDraw.RectangleROI",
+                  "ROIType": "Rectangle",
+                  "Rectangle": {
+                    "Location": {
+                      "IsEmpty": false,
+                      "X": 199.0,
+                      "Y": 110.0
+                    },
+                    "Size": "150, 146",
+                    "X": 199.0,
+                    "Y": 110.0,
+                    "Width": 150.0,
+                    "Height": 146.0,
+                    "Left": 199.0,
+                    "Top": 110.0,
+                    "Right": 349.0,
+                    "Bottom": 256.0,
+                    "IsEmpty": false
+                  },
+                  "IsSelected": true,
+                  "RotationAngle": 0.0
+                }
+              }
+            }
+          }
+        },
+        {
+          "NodeType": "AITD",
+          "NodeName": "AI检测",
+          "ID": 33,
+          "Active": true,
+          "Selected": true,
+          "NodeParam": {
+            "TDJS_Vision.Node._3_Detection.TDAI.NodeParamTDAI": {
+              "Text1": "32.图像裁剪",
+              "Text2": "输出图像",
+              "ConfigPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\超日胶壳ai模型配置.json",
+              "IsAutoStudy": false,
+              "ModelName": "超日胶壳"
+            }
+          }
+        },
+        {
+          "NodeType": "DrawAIResult",
+          "NodeName": "AI结果绘制",
+          "ID": 34,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.ImageDraw.NodeParamImageDraw": {
+              "Text1": "31.图像源",
+              "Text2": "输出图像",
+              "Text3": "33.AI检测",
+              "Text4": "AI输出结果",
+              "FontSize": 40,
+              "LineWidth": 6,
+              "TextLoc": "LeftUp"
+            }
+          }
+        },
+        {
+          "NodeType": "ImageShow",
+          "NodeName": "图像显示",
+          "ID": 35,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._1_Acquisition.ImageSource.NodeParamImageShow": {
+              "WindowName": "图像窗口2",
+              "Text1": "34.AI结果绘制",
+              "Text2": "输出图像"
+            }
+          }
+        },
+        {
+          "NodeType": "DetectResultShow",
+          "NodeName": "检测结果显示",
+          "ID": 37,
+          "Active": true,
+          "Selected": false,
+          "NodeParam": {
+            "TDJS_Vision.Node._7_ResultProcessing.DataShow.NodeParamDataShow": {
+              "Text1": "33.AI检测",
+              "Text2": "AI输出结果"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

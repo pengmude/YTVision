@@ -3,17 +3,17 @@ using Newtonsoft.Json;
 using System;
 using System.Runtime.InteropServices;
 using System.Timers;
-using YTVisionPro.Forms.LightAdd;
+using TDJS_Vision.Forms.LightAdd;
 using System.Linq;
-using YTVisionPro.Device.Camera;
+using TDJS_Vision.Device.Camera;
 using Logger;
 
-namespace YTVisionPro.Device.Light
+namespace TDJS_Vision.Device.Light
 {
     /// <summary>
     /// 锐视光源控制类
     /// </summary>
-    internal class LightRsee : ILight
+    public class LightRsee : ILight
     {
         /// <summary>
         /// 连接状态改变事件
@@ -326,7 +326,7 @@ namespace YTVisionPro.Device.Light
     /// <summary>
     /// 串口号对应的锐视句柄
     /// </summary>
-    internal class ComHandle
+    public class ComHandle
     {
         public string ComPort;
         public int Handle;

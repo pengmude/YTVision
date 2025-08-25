@@ -1,16 +1,14 @@
 ﻿using Logger;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
-using YTVisionPro.Device;
-using YTVisionPro.Device.Light;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device;
+using TDJS_Vision.Device.Light;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.LightAdd
+namespace TDJS_Vision.Forms.LightAdd
 {
-    internal partial class FrmLightNew : Form
+    public partial class FrmLightNew : FormBase
     {
         /// <summary>
         /// 光源添加事件
@@ -86,13 +84,13 @@ namespace YTVisionPro.Forms.LightAdd
                     {
                         if (light.LightParam.Port == lightParam.Port && light.LightParam.Channel == lightParam.Channel)
                         {
-                            MessageBox.Show("对应串口和通道的光源已存在！");
+                            MessageBoxTD.Show("对应串口和通道的光源已存在！");
                             LogHelper.AddLog(MsgLevel.Info, "对应串口和通道的光源已存在！", true);
                             return;
                         }
                         if(light.UserDefinedName == lightParam.LightName)
                         {
-                            MessageBox.Show("该光源名称已存在！");
+                            MessageBoxTD.Show("该光源名称已存在！");
                             LogHelper.AddLog(MsgLevel.Info, "该光源名称已存在！", true);
                             return;
                         }
@@ -104,12 +102,12 @@ namespace YTVisionPro.Forms.LightAdd
                 catch (Exception ex)
                 {
                     LogHelper.AddLog(MsgLevel.Warn, "添加光源时参数设置错误！\n" + ex, true);
-                    MessageBox.Show("请检查参数是否有误！");
+                    MessageBoxTD.Show("请检查参数是否有误！");
                 }
             }
             else
             {
-                MessageBox.Show("无效的光源名称！");
+                MessageBoxTD.Show("无效的光源名称！");
             }
         }
 

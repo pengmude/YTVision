@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Forms.ImageViewer
+namespace TDJS_Vision.Forms.ImageViewer
 {
-    public partial class CanvasSet : Form
+    public partial class CanvasSet : FormBase
     {
         /// <summary>
         /// 画布数量改变事件

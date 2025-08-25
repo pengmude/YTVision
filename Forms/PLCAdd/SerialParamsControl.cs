@@ -1,13 +1,13 @@
 ﻿using System.Windows.Forms;
 using System.IO.Ports;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device.PLC;
 
-namespace YTVisionPro.Forms.PLCAdd
+namespace TDJS_Vision.Forms.PLCAdd
 {
     /// <summary>
     /// PLC串口参数显示控件
     /// </summary>
-    internal partial class SerialParamsControl : UserControl
+    public partial class SerialParamsControl : UserControl
     {
         public SerialParamsControl(PLCParms parms)
         {

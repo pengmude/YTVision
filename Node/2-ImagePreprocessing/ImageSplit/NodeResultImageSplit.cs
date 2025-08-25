@@ -1,23 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageSplit
 {
-    internal class NodeResultImageSplit : INodeResult
+    public class NodeResultImageSplit : INodeResult
     {
-        [DisplayName("运行状态")]
-        public NodeStatus Status { get; set; }
-
-        [DisplayName("节点耗时")]
-        public long RunTime { get; set; }
-
-        [DisplayName("运行状态码")]
-        public NodeRunStatusCode RunStatusCode { get; set; }
+        public int RunTime { get; set; }
         /// <summary>
         /// 拆分图片集合
         /// </summary>
-        [DisplayName("拆分图像集合")]
-        public List<Bitmap> Bitmaps { get; set; }
+        [DisplayName("输出图像")]
+        public OutputImage OutputImage { get; set; } = new OutputImage();
     }
 }

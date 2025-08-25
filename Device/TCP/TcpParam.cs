@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Device.TCP
+namespace TDJS_Vision.Device.TCP
 {
     /// <summary>
     /// TCP设备参数
     /// </summary>
-    internal class TcpParam
+    public class TcpParam
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public DevType DevType;

@@ -1,10 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using OpenCvSharp;
-using YTVisionPro.Forms.ShapeDraw;
+using TDJS_Vision.Forms.ShapeDraw;
 
-namespace YTVisionPro.Node._3_Detection.QRScan
+namespace TDJS_Vision.Node._3_Detection.QRScan
 {
-    internal class NodeParamQRScan : INodeParam
+    public class NodeParamQRScan : INodeParam
     {
         /// <summary>
         /// 订阅节点的名称
@@ -37,7 +38,8 @@ namespace YTVisionPro.Node._3_Detection.QRScan
         /// <summary>
         /// ROI（反序列化用）
         /// </summary>
-        [JsonConverter(typeof(PolyConverter))]
-        public ROI ROI { get; set; }
+        [JsonConverter(typeof(ROIListConverter<ROI>))]
+        public List<ROI> ROIs { get; set; }
+        
     }
 }

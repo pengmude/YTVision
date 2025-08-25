@@ -1,0 +1,172 @@
+{
+  "ModelName": "TypeC",
+  "ModelSize": 1024,
+  "ScoreThreshold": 0.5,
+  "ScoreNMS": 0.5,
+  "ModelInfo": {
+    "ModelType": "DET",
+    "DeviceType": "CPU",
+    "IsEncrypted": true,
+    "ModelPath": "D:\\MyProjects\\ChaoRi\\LineCore+GelCoat+TypeC\\best_encrypted.onnx",
+    "KeyPointNum": 12
+  },
+  "ClassNames": [
+    "type-c",
+    "solder",
+    "solder_fake",
+    "line_core",
+    "black",
+    "red",
+    "exposed_pad",
+    "solder_beads",
+    "line_ng",
+    "rubber_melt",
+    "solder_ng"
+  ],
+  "DetectItems": [
+    {
+      "Name": "Type-C数量",
+      "MinValue": "6",
+      "MaxValue": "6",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "6"
+    },
+    {
+      "Name": "正常焊点数",
+      "MinValue": "11",
+      "MaxValue": "12",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "11"
+    },
+    {
+      "Name": "正常焊点面积",
+      "MinValue": "0",
+      "MaxValue": "10000",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "2655.00,3456.00,3074.00,3304.00,2679.00,2640.00,3186.00,3127.00,1470.00,1927.00,2064.00"
+    },
+    {
+      "Name": "虚焊数量",
+      "MinValue": "0",
+      "MaxValue": "0",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "1870.00,1785.00,1961.00,1400.00,3128.00"
+    },
+    {
+      "Name": "虚焊面积",
+      "MinValue": "0",
+      "MaxValue": "3700",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "露线芯长度",
+      "MinValue": "30",
+      "MaxValue": "120",
+      "Enable": false,
+      "IsCountItem": false,
+      "CurValue": "82.00,77.00,80.00,75.00,73.00,41.00,78.00,78.00,83.00,76.00,76.00,73.00"
+    },
+    {
+      "Name": "黑色线数量",
+      "MinValue": "6",
+      "MaxValue": "6",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "6"
+    },
+    {
+      "Name": "红色线数量",
+      "MinValue": "6",
+      "MaxValue": "6",
+      "Enable": true,
+      "IsCountItem": true,
+      "CurValue": "6"
+    },
+    {
+      "Name": "露焊盘数",
+      "MinValue": "0",
+      "MaxValue": "2",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "0"
+    },
+    {
+      "Name": "露焊盘面积",
+      "MinValue": "0",
+      "MaxValue": "3500",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "锡珠数量",
+      "MinValue": "0",
+      "MaxValue": "0",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "0"
+    },
+    {
+      "Name": "锡珠面积",
+      "MinValue": "0",
+      "MaxValue": "2800",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "胶皮压伤数量",
+      "MinValue": "0",
+      "MaxValue": "0",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "0"
+    },
+    {
+      "Name": "胶皮压伤面积",
+      "MinValue": "0",
+      "MaxValue": "3000",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "熔胶数量",
+      "MinValue": "0",
+      "MaxValue": "0",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "0"
+    },
+    {
+      "Name": "熔胶面积",
+      "MinValue": "0",
+      "MaxValue": "5000",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": ""
+    },
+    {
+      "Name": "其他不良数量",
+      "MinValue": "0",
+      "MaxValue": "0",
+      "Enable": false,
+      "IsCountItem": true,
+      "CurValue": "0"
+    },
+    {
+      "Name": "其他不良面积",
+      "MinValue": "0",
+      "MaxValue": "1500",
+      "Enable": true,
+      "IsCountItem": false,
+      "CurValue": "2048.00"
+    }
+  ]
+}

@@ -1,15 +1,19 @@
 ﻿using Logger;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._3_Detection.FindCircle
+namespace TDJS_Vision.Node._3_Detection.FindCircle
 {
     /// <summary>
     /// 直线查找节点
     /// </summary>
-    internal class NodeFIndCircle : NodeBase
+    public class NodeFIndCircle : NodeBase
     {
         public NodeFIndCircle(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -22,14 +26,14 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -60,15 +64,17 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                             res = "NG";
 
                         // 输出节点结果
-                        ((NodeResultFindCircle)Result).Circle = Circle;
-                        ((NodeResultFindCircle)Result).OutputImage = image;
-                        ((NodeResultFindCircle)Result).Result = new ResultViewData();
-                        ((NodeResultFindCircle)Result).Result.SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData
-                                                                    ("", "", $"{ID}.{NodeName}", res, res == "OK" ? true : false));
+                        ((NodeResultFindCircle)Result).OutputImage.Bitmaps = new List<Mat>() { image.ToMat()};
+                        ((NodeResultFindCircle)Result).Result.Clear();
+                        ((NodeResultFindCircle)Result).Result.Circles.Add(new ColorCircle(Circle, Color.Green));
+                        ((NodeResultFindCircle)Result).Result.Texts.Add(new ColorText($"识别到的圆心：（{Circle.Center.X}, {Circle.Center.Y}）\n半径：{Circle.Radius}", Color.Green));
 
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径：{Circle.Radius} 像素, 圆心：({Circle.Center.X},{Circle.Center.Y}), 判定：{res}", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms，圆半径：{Circle.Radius} 像素, 圆心：({Circle.Center.X},{Circle.Center.Y}), 判定：{res}", true);
+
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -84,6 +90,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
 
         }
     }

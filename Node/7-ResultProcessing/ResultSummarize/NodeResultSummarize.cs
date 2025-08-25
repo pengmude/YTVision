@@ -1,20 +1,12 @@
 ﻿using System.ComponentModel;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
+namespace TDJS_Vision.Node._7_ResultProcessing.ResultSummarize
 {
-    internal class NodeResultSummarize : INodeResult
+    public class NodeResultSummarize : INodeResult
     {
-        [DisplayName("运行状态")]
-        public NodeStatus Status { get; set; }
-
-        [DisplayName("节点耗时")]
-        public long RunTime { get; set; }
-
-        [DisplayName("运行状态码")]
-        public NodeRunStatusCode RunStatusCode { get; set; }
-
+        public int RunTime { get; set; }
         [DisplayName("算法汇总结果")]
-        public ResultViewData SummaryResult { get; set; }
+        public AlgorithmResult SummaryResult { get; set; }
     }
 }

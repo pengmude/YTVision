@@ -8,13 +8,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Threading.Tasks;
 using Sunny.UI;
+using System.Drawing.Imaging;
+using System.Net;
 
-namespace YTVisionPro.Device.Camera
+namespace TDJS_Vision.Device.Camera
 {
     /// <summary>
     /// 海康相机类
     /// </summary>
-    internal class CameraHik : ICamera
+    public class CameraHik : ICamera
     {
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
         public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
@@ -23,11 +25,6 @@ namespace YTVisionPro.Device.Camera
         /// 连接状态改变事件
         /// </summary>
         public event EventHandler<bool> ConnectStatusEvent;
-
-        /// <summary>
-        /// 抓取图片事件
-        /// </summary>
-        public event EventHandler<Bitmap> PublishImageEvent;
 
         /// <summary>
         /// 单个海康相机信息
@@ -45,6 +42,11 @@ namespace YTVisionPro.Device.Camera
         public bool IsOpen { get; set; }
 
         /// <summary>
+        /// 相机的触发源
+        /// </summary>
+        public TriggerSource TriggerSource { get; set; }
+
+        /// <summary>
         /// 设备类型
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
@@ -56,6 +58,11 @@ namespace YTVisionPro.Device.Camera
         public string SN { get; set; }
 
         /// <summary>
+        /// 相机IP
+        /// </summary>
+        public string IP { get; set; }
+
+        /// <summary>
         /// 厂商名称
         /// </summary>
         public string ManufacturerName { get; set; }
@@ -64,7 +71,7 @@ namespace YTVisionPro.Device.Camera
         /// 相机品牌
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public DeviceBrand Brand { get; set; } = DeviceBrand.HikVision;
+        public DeviceBrand Brand { get; set; }
         public string ClassName { get; set; } = typeof(CameraHik).FullName;
 
         /// <summary>
@@ -108,6 +115,7 @@ namespace YTVisionPro.Device.Camera
                         if (devInfo.SerialNumber == SN)
                         {
                             device = DeviceFactory.CreateDevice(devInfo);
+                            IP = ConvertUInt32ToIP(devInfo.CurrentIp); // 更新相机IP
                             return;
                         }
                     }
@@ -133,11 +141,13 @@ namespace YTVisionPro.Device.Camera
             {
                 device = DeviceFactory.CreateDevice(devInfo);
                 ManufacturerName = device.DeviceInfo.ManufacturerName;  // 获取相机厂商
+                Brand = ManufacturerName == "Basler" ? DeviceBrand.Basler : ManufacturerName == "HikVision" ? DeviceBrand.HikVision : DeviceBrand.Unknow;
                 var a = device.DeviceInfo; // 无其他用意，调用一次仅为下面能获取到SN
                 DevName = GetDevNameByDevInfo(device.DeviceInfo);
                 UserDefinedName = userName;
                 if (devInfo is IGigEDeviceInfo info)
                 {
+                    IP = ConvertUInt32ToIP(info.CurrentIp); // 获取相机IP
                     Task.Run(() => 
                     {
                         do
@@ -153,6 +163,16 @@ namespace YTVisionPro.Device.Camera
             {
                 throw ex;
             }
+        }
+        private static string ConvertUInt32ToIP(uint ipValue)
+        {
+            byte[] bytes = BitConverter.GetBytes(ipValue);
+
+            // 如果是小端序（x86 或 x64 架构），需要反转字节顺序
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            return new IPAddress(bytes).ToString();
         }
 
         /// <summary>
@@ -207,6 +227,36 @@ namespace YTVisionPro.Device.Camera
             return infoList;
         }
 
+
+        /// <summary>
+        /// Bitmap转换为 BGR24 格式的 byte[]
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <returns></returns>
+        public static byte[] ConvertBitmapToBgr24(Bitmap bitmap)
+        {
+            // 创建一个新的 24bpp BGR 格式的 Bitmap
+            Bitmap bgrBitmap = new Bitmap(bitmap.Width, bitmap.Height, PixelFormat.Format24bppRgb);
+
+            using (Graphics g = Graphics.FromImage(bgrBitmap))
+            {
+                g.DrawImage(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+            }
+
+            // 锁定图像内存
+            var rect = new Rectangle(0, 0, bgrBitmap.Width, bgrBitmap.Height);
+            var bmpData = bgrBitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+
+            int bufferSize = Math.Abs(bmpData.Stride) * bgrBitmap.Height;
+            byte[] buffer = new byte[bufferSize];
+
+            // 复制图像数据到 byte[]
+            Marshal.Copy(bmpData.Scan0, buffer, 0, bufferSize);
+            bgrBitmap.UnlockBits(bmpData);
+
+            return buffer;
+        }
+
         /// <summary>
         /// 打开相机
         /// </summary>
@@ -224,6 +274,7 @@ namespace YTVisionPro.Device.Camera
                 throw new Exception($"相机（{UserDefinedName}）打开失败！");
             }
             IsOpen = true;
+            TriggerSource = GetTriggerSource();
             ConnectStatusEvent?.Invoke(this, true);
             //ch: 判断是否为gige设备 | en: Determine whether it is a GigE device
             if (device is IGigEDevice)
@@ -254,42 +305,72 @@ namespace YTVisionPro.Device.Camera
             {
                 throw new Exception("暂不支持非GigE相机！");
             }
-            // 注册回调函数
-            device.StreamGrabber.FrameGrabedEvent -= FrameGrabedEventHandler;
-            device.StreamGrabber.FrameGrabedEvent += FrameGrabedEventHandler;
             return true;
         }
-
         /// <summary>
-        /// 取流回调函数
+        /// 主动获取一帧图像
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void FrameGrabedEventHandler(object sender, FrameGrabbedEventArgs e)
+        /// <returns></returns>
+        public Bitmap GetOneFrameImage()
         {
-            IImage inputImage = e.FrameOut.Image;
+            try
+            {
+                if (TriggerSource == TriggerSource.SOFT)
+                {
+                    GrabOne();
+                }
+                IFrameOut frame;
+                int ret = device.StreamGrabber.GetImageBuffer(50, out frame);
+                if (ret != MvError.MV_OK)
+                    return null;
+                var image = ConvertImageFormat(frame.Image);
+
+                device.StreamGrabber.FreeImageBuffer(frame);
+                return image;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        /// <summary>
+        /// 将 IImage 转换为 Bitmap
+        /// </summary>
+        /// <param name="image"></param>
+        /// <returns></returns>
+        private Bitmap ConvertImageFormat(IImage image)
+        {
+            IImage inputImage = image;
             uint nChannelNum = 0;
-            MvGvspPixelType dstPixelType = MvGvspPixelType.PixelType_Gvsp_Undefined;
-            if (IsColorPixelFormat(e.FrameOut.Image.PixelType))
+            try
             {
-                dstPixelType = MvGvspPixelType.PixelType_Gvsp_RGB8_Packed;
-                nChannelNum = 3;
+                MvGvspPixelType dstPixelType = MvGvspPixelType.PixelType_Gvsp_Undefined;
+                if (IsColorPixelFormat(image.PixelType))
+                {
+                    dstPixelType = MvGvspPixelType.PixelType_Gvsp_RGB8_Packed;
+                    nChannelNum = 3;
+                }
+                else if (IsMonoPixelFormat(image.PixelType))
+                {
+                    dstPixelType = MvGvspPixelType.PixelType_Gvsp_Mono8;
+                    nChannelNum = 1;
+                }
+                device.PixelTypeConverter.ConvertPixelType(inputImage, out inputImage, dstPixelType);
+                if (nChannelNum == 1)
+                {
+                    //通过设置调色板从伪彩改为灰度
+                    var pal = inputImage.ToBitmap().Palette;
+                    for (int j = 0; j < 256; j++)
+                        pal.Entries[j] = Color.FromArgb(j, j, j);
+                    inputImage.ToBitmap().Palette = pal;
+                }
             }
-            else if (IsMonoPixelFormat(e.FrameOut.Image.PixelType))
+            catch (Exception)
             {
-                dstPixelType = MvGvspPixelType.PixelType_Gvsp_Mono8;
-                nChannelNum = 1;
+                return null;
             }
-            device.PixelTypeConverter.ConvertPixelType(inputImage, out inputImage, dstPixelType);
-            if (nChannelNum == 1)
-            {
-                //通过设置调色板从伪彩改为灰度
-                var pal = inputImage.ToBitmap().Palette;
-                for (int j = 0; j < 256; j++)
-                    pal.Entries[j] = Color.FromArgb(j, j, j);
-                inputImage.ToBitmap().Palette = pal;
-            }
-            PublishImageEvent?.Invoke(this, inputImage.ToBitmap());
+
+            return inputImage.ToBitmap();
         }
 
         /// <summary>
@@ -303,7 +384,43 @@ namespace YTVisionPro.Device.Camera
         }
 
         /// <summary>
-        /// 设置软硬触发
+        /// 获取相机触发源
+        /// </summary>
+        /// <param name="triggerSource"></param>
+        public TriggerSource GetTriggerSource()
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            if (!GetTriggerMode())
+                return TriggerSource.Auto;
+
+            IEnumValue triggerSourceEnum;
+            device.Parameters.GetEnumValue("TriggerSource", out triggerSourceEnum);
+
+            switch (triggerSourceEnum.CurEnumEntry.Value)
+            {
+                case 0:
+                    TriggerSource = ManufacturerName == "Basler" ? TriggerSource.SOFT : TriggerSource.LINE0;
+                    return TriggerSource;
+                case 1:
+                    TriggerSource = ManufacturerName == "Basler" ? TriggerSource.LINE1 : TriggerSource.LINE1;
+                    return TriggerSource;
+                case 2:
+                    TriggerSource = ManufacturerName == "Basler" ? TriggerSource.LINE2 : TriggerSource.LINE2;
+                    return TriggerSource;
+                case 3:
+                    TriggerSource = ManufacturerName == "Basler" ? TriggerSource.LINE3 : TriggerSource.LINE3;
+                    return TriggerSource;
+                case 7:
+                    TriggerSource = TriggerSource.SOFT;
+                    return TriggerSource;
+                default:
+                    TriggerSource = TriggerSource.Auto;
+                    return TriggerSource;
+            }
+        }
+
+        /// <summary>
+        /// 设置触发源，AUTO表示自动触发（非触发模式），SOFT表示软件触发，LINE0-3表示硬件触发
         /// </summary>
         /// <param name="trigBySoft"></param>
         /// <returns></returns>
@@ -321,6 +438,9 @@ namespace YTVisionPro.Device.Camera
             {
                 switch (triggerSource)
                 {
+                    case TriggerSource.Auto:
+                        SetTriggerMode(false);
+                        break;
                     case TriggerSource.SOFT:
                         device.Parameters.SetEnumValue("TriggerSource", 0);
                         break;
@@ -341,6 +461,9 @@ namespace YTVisionPro.Device.Camera
             {
                 switch (triggerSource)
                 {
+                    case TriggerSource.Auto:
+                        SetTriggerMode(false);
+                        break;
                     case TriggerSource.SOFT:
                         device.Parameters.SetEnumValue("TriggerSource", 7);
                         break;
@@ -360,6 +483,7 @@ namespace YTVisionPro.Device.Camera
                         break;
                 }
             }
+            TriggerSource = triggerSource;
         }
 
         /// <summary>
@@ -598,7 +722,7 @@ namespace YTVisionPro.Device.Camera
         /// 设置增益
         /// </summary>
         /// <param name="gainValue"></param>
-        public void SetGain(float gainValue)
+        public void SetGain(double gainValue)
         {
             if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("GainAuto", 0);
@@ -608,7 +732,7 @@ namespace YTVisionPro.Device.Camera
             }
             else
             {
-                device.Parameters.SetFloatValue("Gain", gainValue);
+                device.Parameters.SetFloatValue("Gain", (float)gainValue);
             }
         }
 
@@ -616,18 +740,18 @@ namespace YTVisionPro.Device.Camera
         /// 设置曝光 
         /// </summary>
         /// <param name="time"></param>
-        public void SetExposureTime(float time)
+        public void SetExposureTime(double time)
         {
             if (device == null) throw new Exception("相机对象为空！");
             device.Parameters.SetEnumValue("ExposureAuto", 0);
 
             if (ManufacturerName == "Basler")
             {
-                device.Parameters.SetFloatValue("ExposureTimeAbs", time);
+                device.Parameters.SetFloatValue("ExposureTimeAbs", (float)time);
             }
             else
             {
-                device.Parameters.SetFloatValue("ExposureTime", time);
+                device.Parameters.SetFloatValue("ExposureTime", (float)time);
             }
         }
 
@@ -635,17 +759,17 @@ namespace YTVisionPro.Device.Camera
         /// 设置触发延迟
         /// </summary>
         /// <param name="time">单位us</param>
-        public void SetTriggerDelay(float time)
+        public void SetTriggerDelay(double time)
         {
             if (device == null) throw new Exception("相机对象为空！");
 
             if (ManufacturerName == "Basler")
             {
-                device.Parameters.SetFloatValue("TriggerDelayAbs", time);
+                device.Parameters.SetFloatValue("TriggerDelayAbs", (float)time);
             }
             else
             {
-                device.Parameters.SetFloatValue("TriggerDelay", time);
+                device.Parameters.SetFloatValue("TriggerDelay", (float)time);
             }
         }
 
@@ -658,6 +782,7 @@ namespace YTVisionPro.Device.Camera
             if (device == null) throw new Exception("相机对象为空！");
             if (!_isGrabbing)
             {
+                device.StreamGrabber.SetImageNodeNum(1);
                 device.StreamGrabber.StartGrabbing();
                 _isGrabbing = true;
             }
@@ -772,6 +897,15 @@ namespace YTVisionPro.Device.Camera
                 default:
                     return false;
             }
+        }
+
+        public bool GetTriggerMode()
+        {
+            if (device == null) throw new Exception("相机对象为空！");
+            IEnumValue isTriggerMode;
+            device.Parameters.GetEnumValue("TriggerMode", out isTriggerMode);
+            bool ret = isTriggerMode.CurEnumEntry.Value == 1;
+            return ret;
         }
     }
 }

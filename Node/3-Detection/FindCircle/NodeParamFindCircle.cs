@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Windows.Documents;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Forms.ShapeDraw;
+using TDJS_Vision.Forms.ShapeDraw;
 
-namespace YTVisionPro.Node._3_Detection.FindCircle
+namespace TDJS_Vision.Node._3_Detection.FindCircle
 {
-    internal class NodeParamFindCircle : INodeParam
+    public class NodeParamFindCircle : INodeParam
     {
         /// <summary>
         /// 订阅节点的名称
@@ -74,10 +76,11 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
         public CircleSelection CircleSelection { get; set; }
 
         /// <summary>
-        /// ROI（反序列化用）
+        /// ROIs（反序列化用）
         /// </summary>
-        [JsonConverter(typeof(PolyConverter))]
-        public ROI ROI { get; set; }
+        [JsonConverter(typeof(ROIListConverter<ROI>))]
+        public List<ROI> ROIs { get; set; }
+
     }
     /// <summary>
     /// 圆类型

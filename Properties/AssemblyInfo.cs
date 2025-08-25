@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("鹰眼智检系统")]
+[assembly: AssemblyTitle("TD-Vision")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("东莞市云田视觉科技有限公司")]
-[assembly: AssemblyProduct("鹰眼智检系统")]
-[assembly: AssemblyCopyright("东莞市云田视觉科技有限公司 Copyright ©  2024")]
+[assembly: AssemblyCompany("深圳市瞳达精视智能科技有限公司")]
+[assembly: AssemblyProduct("TD-Vision")]
+[assembly: AssemblyCopyright("深圳市瞳达精视智能科技有限公司 Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
 //通过使用 "*"，如下所示:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.2.6.1")]
-[assembly: AssemblyFileVersion("2.2.6.1")]
+[assembly: AssemblyVersion("2.5.0")]
+[assembly: AssemblyFileVersion("2.5.0")]

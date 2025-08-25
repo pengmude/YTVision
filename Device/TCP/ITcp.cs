@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device.PLC;
 
-namespace YTVisionPro.Device.TCP
+namespace TDJS_Vision.Device.TCP
 {
-    internal interface ITcpDevice : IDevice
+    public interface ITcpDevice : IDevice
     {
         /// <summary>
         /// TCP设备参数

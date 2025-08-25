@@ -2,11 +2,19 @@
 using System.Drawing.Drawing2D;
 using System.Drawing;
 using System.Windows.Forms;
+using TDJS_Vision.Device.Camera;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenCvSharp.Internal.Vectors;
+using Point = OpenCvSharp.Point;
+using Size = OpenCvSharp.Size;
+using System.IO;
 
-namespace YTVisionPro.Forms.ShapeDraw
+namespace TDJS_Vision.Forms.ShapeDraw
 {
     public class CircleROI : ROI
     {
+        public string ClassName { get; set; } = typeof(CircleROI).FullName;
         public override ROIType ROIType { get; set; } = ROIType.Circle;
         public PointF Center { get; set; }
         public int Radius { get; set; }
@@ -56,7 +64,7 @@ namespace YTVisionPro.Forms.ShapeDraw
             }
         }
 
-        public override Bitmap GetROIImage(Bitmap sourceImage, PictureBox pictureBox)
+        public override Mat GetROIImage(Bitmap sourceImage, PictureBox pictureBox)
         {
             return ExtractCircularROI(pictureBox, Center, Radius);
         }
@@ -68,7 +76,51 @@ namespace YTVisionPro.Forms.ShapeDraw
         /// <param name="clientCenter"></param>
         /// <param name="clientRadius"></param>
         /// <returns></returns>
-        private Bitmap ExtractCircularROI(PictureBox pictureBox, PointF clientCenter, int clientRadius)
+        //private Mat ExtractCircularROI(PictureBox pictureBox, PointF clientCenter, int clientRadius)
+        //{
+        //    // 计算当前缩放比例
+        //    float zoomFactor = (float)pictureBox.Image.Width / pictureBox.ClientSize.Width;
+        //    if (pictureBox.Image.Height * pictureBox.ClientSize.Width > pictureBox.Image.Width * pictureBox.ClientSize.Height)
+        //    {
+        //        zoomFactor = (float)pictureBox.Image.Height / pictureBox.ClientSize.Height;
+        //    }
+
+        //    // 转换客户端坐标到图像坐标
+        //    Point imageCenter = new Point(
+        //        (int)((clientCenter.X - (pictureBox.ClientSize.Width - pictureBox.Image.Width / zoomFactor) / 2) * zoomFactor),
+        //        (int)((clientCenter.Y - (pictureBox.ClientSize.Height - pictureBox.Image.Height / zoomFactor) / 2) * zoomFactor)
+        //    );
+        //    int imageRadius = (int)(clientRadius * zoomFactor);
+
+        //    // 创建新的Bitmap用于保存圆形区域
+        //    int diameter = 2 * imageRadius;
+        //    Bitmap roiImage = new Bitmap(diameter, diameter);
+        //    using (Graphics g = Graphics.FromImage(roiImage))
+        //    {
+        //        // 使用GraphicsPath定义圆形路径
+        //        using (GraphicsPath path = new GraphicsPath())
+        //        {
+        //            path.AddEllipse(0, 0, diameter, diameter);
+
+        //            // 设置抗锯齿模式
+        //            g.SmoothingMode = SmoothingMode.AntiAlias;
+
+        //            // 使用Region设置绘图区域为圆形
+        //            using (Region region = new Region(path))
+        //            {
+        //                g.Clip = region;
+        //                // 绘制原始图像到新Bitmap中，注意调整绘制位置
+        //                g.DrawImage(pictureBox.Image,
+        //                    new Rectangle(0, 0, diameter, diameter),
+        //                    new Rectangle(imageCenter.X - imageRadius, imageCenter.Y - imageRadius, diameter, diameter),
+        //                    GraphicsUnit.Pixel);
+        //            }
+        //        }
+        //    }
+
+        //    return roiImage.ToMat();
+        //}
+        private Mat ExtractCircularROI(PictureBox pictureBox, PointF clientCenter, int clientRadius)
         {
             // 计算当前缩放比例
             float zoomFactor = (float)pictureBox.Image.Width / pictureBox.ClientSize.Width;
@@ -84,33 +136,31 @@ namespace YTVisionPro.Forms.ShapeDraw
             );
             int imageRadius = (int)(clientRadius * zoomFactor);
 
-            // 创建新的Bitmap用于保存圆形区域
-            int diameter = 2 * imageRadius;
-            Bitmap roiImage = new Bitmap(diameter, diameter);
-            using (Graphics g = Graphics.FromImage(roiImage))
+            // 加载图片到Mat对象
+            using (var ms = new MemoryStream())
             {
-                // 使用GraphicsPath定义圆形路径
-                using (GraphicsPath path = new GraphicsPath())
-                {
-                    path.AddEllipse(0, 0, diameter, diameter);
+                ((Bitmap)pictureBox.Image).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                ms.Position = 0;
+                var src = Cv2.ImDecode(ms.ToArray(), ImreadModes.Color);
 
-                    // 设置抗锯齿模式
-                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                // 创建掩膜并绘制圆形
+                Mat mask = new Mat(src.Size(), MatType.CV_8UC1, Scalar.All(0));
+                Cv2.Circle(mask, new Point(imageCenter.X, imageCenter.Y), imageRadius, Scalar.All(255), -1);
 
-                    // 使用Region设置绘图区域为圆形
-                    using (Region region = new Region(path))
-                    {
-                        g.Clip = region;
-                        // 绘制原始图像到新Bitmap中，注意调整绘制位置
-                        g.DrawImage(pictureBox.Image,
-                            new Rectangle(0, 0, diameter, diameter),
-                            new Rectangle(imageCenter.X - imageRadius, imageCenter.Y - imageRadius, diameter, diameter),
-                            GraphicsUnit.Pixel);
-                    }
-                }
+                // 应用掩膜
+                Mat dst = new Mat();
+                src.CopyTo(dst, mask);
+
+                // 获取非零点
+                var points = new Mat();
+                Cv2.FindNonZero(mask, points); 
+
+                // 获取边界矩形
+                Rect boundingBox = Cv2.BoundingRect(points);
+
+                // 返回裁剪后的圆形区域
+                return new Mat(dst, boundingBox);
             }
-
-            return roiImage;
         }
 
         public override bool Contains(PointF point)

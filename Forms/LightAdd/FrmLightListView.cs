@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Windows.Forms;
-using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Device.Light;
+using TDJS_Vision.Forms.CameraAdd;
+using TDJS_Vision.Device.Light;
 using System.Linq;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Forms.LightAdd
+namespace TDJS_Vision.Forms.LightAdd
 {
-    internal partial class FrmLightListView : Form
+    public partial class FrmLightListView : FormBase
     {
         /// <summary>
         /// 添加光源时通过快捷键保存方案的事件
@@ -51,36 +52,38 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void Deserialization(object sender, bool e)
         {
-            // 先移除旧方案的光源控件
-            flowLayoutPanel1.Controls.Clear();
+            try
+            {
+                // 先移除旧方案的光源控件
+                flowLayoutPanel1.Controls.Clear();
+                // 添加新的光源
+                SingleLight singleLight = null;
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【光源设备列表】=================================================", true);
+                foreach (var dev in ConfigHelper.SolConfig.Devices)
+                {
+                    if (dev is ILight light)
+                    {
+                        light.CreateDevice(); // 创建光源，必要的
+                        singleLight = new SingleLight(light);
+                        singleLight.Anchor = AnchorStyles.Left;
+                        singleLight.Anchor = AnchorStyles.Right;
+                        flowLayoutPanel1.Controls.Add(singleLight);
+                        if (e)
+                            LogHelper.AddLog(MsgLevel.Info, $"光源设备【{light.DevName}】已加载！", true);
+                    }
+                }
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
 
-            // 没有对应类型设备跳过加载
-            if(ConfigHelper.SolConfig.Devices.Count(device => device is ILight) == 0)
+            }
+            catch (Exception)
+            {
+            }
+            finally
             {
                 OnLightDeserializationCompletionEvent?.Invoke(this, e);
-                return;
             }
-            // 添加新的光源
-            SingleLight singleLight = null;
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【光源设备列表】=================================================", true);
-            foreach (var dev in ConfigHelper.SolConfig.Devices)
-            {
-                if (dev is ILight light)
-                {
-                    light.CreateDevice(); // 创建光源，必要的
-                    singleLight = new SingleLight(light);
-                    singleLight.Anchor = AnchorStyles.Left;
-                    singleLight.Anchor = AnchorStyles.Right;
-                    flowLayoutPanel1.Controls.Add(singleLight);
-                    if (e)
-                        LogHelper.AddLog(MsgLevel.Info, $"光源设备【{light.DevName}】已加载！", true);
-                }
-            }
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================【光源设备列表】已加载完成 ================================================", true);
-
-            OnLightDeserializationCompletionEvent?.Invoke(this, e);
         }
 
         /// <summary>
@@ -106,7 +109,7 @@ namespace YTVisionPro.Forms.LightAdd
         {
 
             SingleLight.SingleLights.Remove(e);
-            panel1.Controls.Remove(e.LightParamsShowControl);
+            panel1.Controls.Clear();
             // 释放光源资源
             e.Light.Disconnect();
             //然后移除掉方案中的全局光源
@@ -123,15 +126,10 @@ namespace YTVisionPro.Forms.LightAdd
         /// <param name="e"></param>
         private void SingleLight_SelectedChange(object sender, SingleLight e)
         {
-            foreach (var control in flowLayoutPanel1.Controls)
-            {
-                if (control == e)
-                {
-                    panel1.Controls.Clear();
-                    e.LightParamsShowControl.Dock = DockStyle.Fill;
-                    panel1.Controls.Add(e.LightParamsShowControl);
-                }
-            }
+            panel1.Controls.Clear();
+            var control = new LightParamsShowControl(e.Light.LightParam);
+            control.Dock = DockStyle.Fill;
+            panel1.Controls.Add(control);
         }
 
         /// <summary>
@@ -153,9 +151,9 @@ namespace YTVisionPro.Forms.LightAdd
             {
                 SingleLight.SingleLights.Remove(singleLight);
                 LogHelper.AddLog(MsgLevel.Fatal, $"添加光源失败:{ex.Message}", true);
-                MessageBox.Show($"添加光源失败:{ex.Message}");
+                MessageBoxTD.Show($"添加光源失败:{ex.Message}");
             }
-            //MessageBox.Show($"光源控件个数：{SingleLight.SingleLights.Count}，方案中光源个数：{Solution.Instance.LightDevices.Count}");
+            //MessageBoxTD.Show($"光源控件个数：{SingleLight.SingleLights.Count}，方案中光源个数：{Solution.Instance.LightDevices.Count}");
         }
 
         /// <summary>

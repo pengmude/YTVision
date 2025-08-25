@@ -1,21 +1,56 @@
 ﻿using System.Windows.Forms;
-using YTVisionPro.Device.Modbus;
+using Sunny.UI;
+using TDJS_Vision.Device.Modbus;
 
-namespace YTVisionPro.Forms.ModbusAdd
+namespace TDJS_Vision.Forms.ModbusAdd
 {
-    internal partial class ModbusParamsControl : UserControl
+    public partial class ModbusParamsControl : UserControl
     {
-        public ModbusParamsControl(ModbusParam param)
+        public ModbusParamsControl(IModbusParam param)
         {
             InitializeComponent();
-            if (param.DevType == Device.DevType.ModbusSlave)
+
+            switch (param.DevType)
             {
-                uiLabel1.Text = "监听的IP";
-                uiLabelIP.Text = "[监听所有可用的IP]";
+                case Device.DevType.ModbusRTUPoll:
+                    var paramSerialPoll = param as ModbusRTUParam;
+                    labelCom.Text = paramSerialPoll.PortName;
+                    labelBaudRate.Text = paramSerialPoll.BaudRate.ToString();
+                    labelDataBits.Text = paramSerialPoll.DataBits.ToString();
+                    labelPairty.Text = paramSerialPoll.Parity.ToString();
+                    labelStopBits.Text = paramSerialPoll.StopBits.ToString();
+                    SetVisible2();
+                    break;
+                case Device.DevType.ModbusRTUSlave:
+                    SetVisible2();
+                    break;
+                case Device.DevType.ModbusTcpPoll:
+                    var paramTcpPoll = param as ModbusTcpParam;
+                    uiLabelIP.Text = paramTcpPoll.IP;
+                    uiLabelPort.Text = paramTcpPoll.Port.ToString();
+                    SetVisible1();
+                    break;
+                case Device.DevType.ModbusTcpSlave:
+                    var paramTcpSlave = param as ModbusTcpParam;
+                    uiLabel1.Text = "监听的IP";
+                    uiLabelIP.Text = "[监听所有可用的IP]";
+                    uiLabelPort.Text = paramTcpSlave.Port.ToString();
+                    SetVisible1();
+                    break;
             }
-            else 
-                uiLabelIP.Text = param.IP;
-            uiLabelPort.Text = param.Port.ToString();
+        }
+
+        private void SetVisible1()
+        {
+            tableLayoutPanel1.Visible = true;
+            tableLayoutPanel1.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Visible = false;
+        }
+        private void SetVisible2()
+        {
+            tableLayoutPanel1.Visible = false;
+            tableLayoutPanel2.Dock = DockStyle.Fill;
+            tableLayoutPanel2.Visible = true;
         }
     }
 }

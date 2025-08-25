@@ -1,24 +1,18 @@
 ﻿using Logger;
 using OfficeOpenXml;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using OpenCvSharp.Aruco;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Node._3_Detection.HTAI;
-using YTVisionPro.Node._7_ResultProcessing.ResultSummarize;
-using static Logger.LogHelper;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
+namespace TDJS_Vision.Node._7_ResultProcessing.GenerateExcelSpreadsheet
 {
-    internal class NodeGenerateExcel : NodeBase
+    public class NodeGenerateExcel : NodeBase
     {
-        ResultViewData[] results;
+        AlgorithmResult[] results;
         public static int lastRow = 2;
 
         public NodeGenerateExcel(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
@@ -31,7 +25,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
@@ -39,7 +33,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -59,32 +53,22 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
 
                         #region 获取结果
 
-                        results = new ResultViewData[10];
+                        results = new AlgorithmResult[10];
 
                         void ProcessResult(int index, Func<object> getResultFunc, string detectName)
                         {
-                            var result = getResultFunc();
-                            if (result != null && form.Dictionary[index])
+                            var ret = getResultFunc();
+                            if (ret != null && form.Dictionary[index])
                             {
-                                if (result is string r1)
+                                if (ret is string r1)
                                 {
-                                    results[index] = new ResultViewData();
+                                    results[index] = new AlgorithmResult();
                                     bool isValid = !string.IsNullOrEmpty(r1.Trim()) && r1.Trim() != "null";
-                                    results[index].SingleRowDataList.Add(new Forms.ResultView.SingleResultViewData("", "", detectName, r1, isValid));
+                                    results[index].DetectResults.Add(detectName, new List<SingleDetectResult>() { new SingleDetectResult(detectName, r1, isValid) });
                                 }
-                                else if (result is ResultViewData r11)
+                                else if (ret is AlgorithmResult result)
                                 {
-                                    if (string.IsNullOrEmpty(r11.SingleRowDataList[0].DetectName.Trim()) || r11.SingleRowDataList[0].DetectName.Trim() == "null")
-                                    {
-                                        for (int i = 0; i < r11.SingleRowDataList.Count; i++)
-                                        {
-                                            if (string.IsNullOrEmpty(r11.SingleRowDataList[i].DetectName.Trim()) || r11.SingleRowDataList[i].DetectName.Trim() == "null")
-                                            {
-                                                r11.SingleRowDataList[i].DetectName = detectName;
-                                            }
-                                        }
-                                    }
-                                    results[index] = r11;
+                                    results[index] = result;
                                 }
                             }
                         }
@@ -105,8 +89,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
 
                         GenerateExcel(results, param.filePath);
 
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -123,10 +110,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
 
 
-        public void GenerateExcel(ResultViewData[] resultViewData, string filePath)
+        public void GenerateExcel(AlgorithmResult[] resultViewData, string filePath)
         {
             FileInfo file = new FileInfo(filePath);
             ExcelPackage package;
@@ -164,54 +152,50 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
             List<bool> IsOKS = new List<bool>();
             bool AllOK;
 
-            foreach (var item in resultViewData)
+            foreach (var algorithmResult in resultViewData)
             {
-                if (item != null)
+                if (algorithmResult != null)
                 {
-                    string FirstLine = item.SingleRowDataList[0].DetectName;
-                    string Price = item.SingleRowDataList[0].DetectResult;
-                    string FirstLine2 = $"{FirstLine}结果";
-                    string Price2 = "NG";
-                    if (item.SingleRowDataList.Count > 1)
+                    foreach (var item in algorithmResult.DetectResults)
                     {
-                        bool allOk = true;
-                        foreach (var singleRow in item.SingleRowDataList)
+                        string FirstLine = item.Key;
+                        string Price = "";
+                        foreach (var singleRow in item.Value)
                         {
-                            if (!singleRow.IsOk)
+                            if (singleRow.IsOk)
                             {
-                                allOk = false;
-                                IsOKS.Add(allOk);
-                                break;
+                                Price += $"{singleRow.Value} ";
+                            }
+                            else
+                            {
+                                Price += $"{singleRow.Value}(NG) ";
                             }
                         }
-                        if (allOk)
-                        {
-                            Price2 = "OK";
-                        }
-                    }
-                    else
-                    {
-                        Price2 = item.SingleRowDataList[0].IsOk ? "OK" : "NG";
-                    }
+                        string FirstLine2 = $"{FirstLine}结果";
+                        string Price2 = item.Value.TrueForAll(r =>r.IsOk) ? "OK" : "NG";
 
-                    IsOKS.Add(item.SingleRowDataList[0].IsOk);
+                        IsOKS.Add(item.Value.TrueForAll(r => r.IsOk));
 
-                    GenerateTable(ref FirstLine, ref Price, ref filePath, ref file, ref package, ref worksheet);
-                    GenerateTable(ref FirstLine2, ref Price2, ref filePath, ref file, ref package, ref worksheet);
+                        GenerateTable(ref FirstLine, ref Price, ref filePath, ref file, ref package, ref worksheet);
+                        GenerateTable(ref FirstLine2, ref Price2, ref filePath, ref file, ref package, ref worksheet);
+                    }
                 }
             }
 
-            
+
             int lastRowTime = GetLastNonEmptyRowInColumn(worksheet, 1);
+            // 如果是空表，则从第1行开始写入
+            int nextRow = lastRowTime + 1;
             DateTime now = DateTime.Now;
             string formattedDateTime = now.ToString("yyyy-MM-dd HH:mm:ss");
-            worksheet.Cells[lastRowTime + 1, 1].Value = formattedDateTime;
+            worksheet.Cells[nextRow, 1].Value = formattedDateTime;
+
 
             AllOK = true;
-            foreach (var item in IsOKS)
+            foreach (var algorithmResult in IsOKS)
             {
                 int i = 0;
-                if (!item)
+                if (!algorithmResult)
                 {
                     AllOK = false;
                     break;
@@ -299,28 +283,30 @@ namespace YTVisionPro.Node._7_ResultProcessing.GenerateExcelSpreadsheet
         }
 
         /// <summary>
-        /// 获取columnIndex列的最后一个不为空的行
+        /// 获取 columnIndex 列的最后一个不为空的行
         /// </summary>
-        /// <param name="worksheet"></param>
-        /// <param name="columnIndex"></param>
-        /// <returns></returns>
+        /// <param name="worksheet">Excel 工作表</param>
+        /// <param name="columnIndex">列索引（从1开始）</param>
+        /// <returns>最后一行非空单元格的行号；若无数据，返回 0</returns>
         static int GetLastNonEmptyRowInColumn(ExcelWorksheet worksheet, int columnIndex)
         {
-            // 获取工作表的最大行数
+            // 如果 Dimension 为 null，说明工作表为空
+            if (worksheet.Dimension == null)
+                return 0; // 返回 0 表示没有数据行
+
             int maxRow = worksheet.Dimension.End.Row;
 
-            // 从最后一行开始向上查找
+            // 从最后一行向上查找
             for (int row = maxRow; row >= 1; row--)
             {
                 var cellValue = worksheet.Cells[row, columnIndex].Value;
-
-                // 检查单元格是否非空
-                if (cellValue != null)
+                if (cellValue != null && !string.IsNullOrWhiteSpace(cellValue.ToString()))
                 {
-                    return row; // 返回最后一个非空单元格的行索引
+                    return row;
                 }
             }
-            return -1; // 如果该列没有非空单元格，返回 -1
+
+            return 0; // 该列无有效数据
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
+﻿namespace TDJS_Vision.Node._7_ResultProcessing.ImageDelete
 {
-    internal class NodeParamImageDelete : INodeParam
+    public class NodeParamImageDelete : INodeParam
     {
         public SaveConfiguration saveConfiguration;
         public string SavePath;
+
+        
     }
 }

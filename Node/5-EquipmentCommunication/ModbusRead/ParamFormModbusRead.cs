@@ -3,11 +3,12 @@ using Sunny.UI;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YTVisionPro.Device.Modbus;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
+namespace TDJS_Vision.Node._5_EquipmentCommunication.ModbusRead
 {
-    internal partial class ParamFormModbusRead : Form, INodeParamForm
+    public partial class ParamFormModbusRead : FormBase, INodeParamForm
     {
         public INodeParam Params { get; set; }
 
@@ -45,10 +46,9 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
             // 初始化Modbus列表,只显示添加的Modbus用户自定义名称
             foreach (var modbus in Solution.Instance.ModbusDevices)
             {
-                // 从站作为服务器不能发起请求
-                if(modbus.ModbusParam.DevType == Device.DevType.ModbusSlave)
-                    continue;
-                comboBoxModbusDev.Items.Add(modbus.UserDefinedName);
+                if (modbus.ModbusParam.DevType == Device.DevType.ModbusRTUPoll
+                || modbus.ModbusParam.DevType == Device.DevType.ModbusTcpPoll)
+                    comboBoxModbusDev.Items.Add(modbus.UserDefinedName);
             }
             int index1 = comboBoxModbusDev.Items.IndexOf(text1);
             comboBoxModbusDev.SelectedIndex = index1 == -1 ? 0 : index1;
@@ -70,7 +70,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
             if (comboBoxModbusDev.Text.IsNullOrEmpty() || comboBoxModbusDev.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Exception, "Modbus不能为空！", true);
-                MessageBox.Show("Modbus不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("Modbus不能为空！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             ushort adress, length;
@@ -84,7 +84,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.ModbusRead
             catch (Exception)
             {
                 LogHelper.AddLog(MsgLevel.Exception, "无效的起始地址或读取个数", true);
-                MessageBox.Show("无效的起始地址或读取个数", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show("无效的起始地址或读取个数", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 

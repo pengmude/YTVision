@@ -1,6 +1,6 @@
-﻿namespace YTVisionPro.Node._3_Detection.MatchTemplate
+﻿namespace TDJS_Vision.Node._3_Detection.MatchTemplate
 {
-    internal class NodeParamMatchTemplate : INodeParam
+    public class NodeParamMatchTemplate : INodeParam
     {
         /// <summary>
         /// 模版图片文件名称
@@ -22,5 +22,10 @@
         /// 匹配最小得分
         /// </summary>
         public float MinScore { get; set; }
+        /// <summary>
+        /// 输出结果的数量
+        /// </summary>
+        public int ResultNum { get; set; }
+
     }
 }

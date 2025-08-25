@@ -1,10 +1,11 @@
 ﻿using Sunny.UI;
 using System;
 using System.Windows.Forms;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._6_LogicTool.SharedVariable
+namespace TDJS_Vision.Node._6_LogicTool.SharedVariable
 {
-    internal partial class NodeParamFormSharedVariable : Form, INodeParamForm
+    public partial class NodeParamFormSharedVariable : FormBase, INodeParamForm
     {
         // 前一个变量名称
         private string _preVariable = null;
@@ -13,7 +14,6 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         {
             InitializeComponent();
             Shown += NodeParamFormSharedVariable_Shown;
-            comboBoxTypes.SelectedIndex = 0;
             comboBoxWhichOne.SelectedIndex = 0;
         }
 
@@ -67,56 +67,22 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
                     throw new Exception("读取的变量名称不能为空！");
                 param.ReadName = comboBoxVars.Text;
                 param.Flag = checkBox1.Checked;
-                switch (comboBoxTypes.Text)
-                {
-                    case "任意类型":
-                        param.Type = SharedVarTypeEnum.AllType;
-                        break;
-                    case "布尔":
-                        param.Type = SharedVarTypeEnum.Bool;
-                        break;
-                    case "整型":
-                        param.Type = SharedVarTypeEnum.Int;
-                        break;
-                    case "字符串":
-                        param.Type = SharedVarTypeEnum.String;
-                        break;
-                    case "单精度浮点":
-                        param.Type = SharedVarTypeEnum.Float;
-                        break;
-                    case "双精度浮点":
-                        param.Type = SharedVarTypeEnum.Double;
-                        break;
-                    case "Bitmap图像":
-                        param.Type = SharedVarTypeEnum.Bitmap;
-                        break;
-                    case "Bitmap图像数组":
-                        param.Type = SharedVarTypeEnum.BitmapArr;
-                        break;
-                    case "算法结果":
-                        param.Type = SharedVarTypeEnum.ResultViewData;
-                        break;
-                    default: 
-                        throw new ArgumentException($"未知的类型: {comboBoxTypes.Text}");
-                }
                 param.Index = comboBoxWhichOne.SelectedIndex;
                 param.Text1 = nodeSubscription1.GetText1();
                 param.Text2 = nodeSubscription1.GetText2();
                 param.WriteName = textBox1.Text;
 
-                // 共享变量要提前写入默认值，要不然其他地方添加读取共享变量时获取不到该变量的名称
-                if(_preVariable != null && _preVariable != textBox1.Text)
+                // 要在读该变量之前写入默认值，要不然获取不到该变量
+                if (!param.IsRead)
                 {
-                    Solution.Instance.SharedVariable.Remove(_preVariable);
+                    Solution.Instance.SharedVariable.SetValue(textBox1.Text, new SharedVarValue());
                 }
-                Solution.Instance.SharedVariable.SetValue(textBox1.Text, default(object));
-                _preVariable = textBox1.Text;
 
                 Params = param;
             }
             catch (Exception)
             {
-                MessageBox.Show("参数设置异常！", "异常", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBoxTD.Show("参数设置异常！", "异常", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
             Hide();
@@ -137,52 +103,19 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// <exception cref="NotImplementedException"></exception>
         public void SetParam2Form()
         {
-            if(Params is NodeParamSharedVariable param)
+            if (Params is NodeParamSharedVariable param)
             {
                 radioButton1.Checked = param.IsRead;
                 radioButton2.Checked = !param.IsRead;
 
-                //this.comboBoxVars.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;   DropDownList不能使用text赋值，不生效
                 comboBoxVars.Items.Add(param.ReadName);
                 comboBoxVars.SelectedItem = param.ReadName;
 
                 checkBox1.Checked = param.Flag;
-                switch (param.Type)
-                {
-                    case SharedVarTypeEnum.AllType:
-                        comboBoxTypes.SelectedIndex = 0;
-                        break;
-                    case SharedVarTypeEnum.Bool:
-                        comboBoxTypes.SelectedIndex = 1;
-                        break;
-                    case SharedVarTypeEnum.Int:
-                        comboBoxTypes.SelectedIndex = 2;
-                        break;
-                    case SharedVarTypeEnum.String:
-                        comboBoxTypes.SelectedIndex = 3;
-                        break;
-                    case SharedVarTypeEnum.Float:
-                        comboBoxTypes.SelectedIndex = 4;
-                        break;
-                    case SharedVarTypeEnum.Double:
-                        comboBoxTypes.SelectedIndex = 5;
-                        break;
-                    case SharedVarTypeEnum.Bitmap:
-                        comboBoxTypes.SelectedIndex = 6;
-                        break;
-                    case SharedVarTypeEnum.BitmapArr:      //漏了一个   SharedVarTypeEnum.BitmapArr  
-                        comboBoxTypes.SelectedIndex = 7;
-                        break;
-                    case SharedVarTypeEnum.ResultViewData:
-                        comboBoxTypes.SelectedIndex = 8;
-                        break;
-                    default:
-                        break;
-                }
                 comboBoxWhichOne.SelectedIndex = param.Index;
                 nodeSubscription1.SetText(param.Text1, param.Text2);
                 textBox1.Text = param.WriteName;
-                Solution.Instance.SharedVariable.SetValue(param.WriteName, default(object));
+                Solution.Instance.SharedVariable.SetValue(param.WriteName, new SharedVarValue());
             }
         }
 
@@ -193,8 +126,9 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// <param name="e"></param>
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
-            panel2.Enabled = radioButton1.Checked;
-            panel3.Enabled = radioButton2.Checked;
+            tableLayoutPanelRead.Enabled = radioButton1.Checked;
+            tableLayoutPanelWrite.Enabled = radioButton2.Checked;
+            tabControl1.SelectedIndex = radioButton1.Checked ? 0 : 1;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)

@@ -1,14 +1,14 @@
 ﻿using Logger;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Device.TCP;
-using YTVisionPro.Forms.ModbusAdd;
+using TDJS_Vision.Forms.PLCAdd;
+using TDJS_Vision.Device.TCP;
+using TDJS_Vision.Forms.ModbusAdd;
 using System.Linq;
 
-namespace YTVisionPro.Forms.TCPAdd
+namespace TDJS_Vision.Forms.TCPAdd
 {
-    internal partial class FrmTCPListView : Form
+    public partial class FrmTCPListView : FormBase
     {
         /// <summary>
         /// 添加TCP时通过快捷键保存方案的事件
@@ -39,36 +39,38 @@ namespace YTVisionPro.Forms.TCPAdd
         /// <param name="e">是否是在加载方案</param>
         private void Deserialization(object sender, bool e)
         {
-            // 先移除旧方案的TCP控件
-            flowLayoutPanel1.Controls.Clear();
+            try
+            {
+                // 先移除旧方案的TCP控件
+                flowLayoutPanel1.Controls.Clear();
 
-            // 没有对应类型设备跳过加载
-            if (ConfigHelper.SolConfig.Devices.Count(device => device is ITcpDevice) == 0)
-            {
-                OnTCPDeserializationCompletionEvent?.Invoke(this, e);
-                return;
-            }
-            // 添加新的TCP
-            SingleTcp singleTCP = null;
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【TCP设备列表】=================================================", true);
-            foreach (var dev in ConfigHelper.SolConfig.Devices)
-            {
-                if (dev is ITcpDevice tcpDev)
+                // 添加新的TCP
+                SingleTcp singleTCP = null;
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================= 正在加载【TCP设备列表】=================================================", true);
+                foreach (var dev in ConfigHelper.SolConfig.Devices)
                 {
-                    tcpDev.CreateDevice(); // 创建tcpDev，必要的
-                    singleTCP = new SingleTcp(tcpDev);
-                    singleTCP.Anchor = AnchorStyles.Left;
-                    singleTCP.Anchor = AnchorStyles.Right;
-                    flowLayoutPanel1.Controls.Add(singleTCP);
-                    if (e)
-                        LogHelper.AddLog(MsgLevel.Info, $"TCP设备【{tcpDev.DevName}】已加载！", true);
+                    if (dev is ITcpDevice tcpDev)
+                    {
+                        tcpDev.CreateDevice(); // 创建tcpDev，必要的
+                        singleTCP = new SingleTcp(tcpDev);
+                        singleTCP.Anchor = AnchorStyles.Left;
+                        singleTCP.Anchor = AnchorStyles.Right;
+                        flowLayoutPanel1.Controls.Add(singleTCP);
+                        if (e)
+                            LogHelper.AddLog(MsgLevel.Info, $"TCP设备【{tcpDev.DevName}】已加载！", true);
+                    }
                 }
-            }
-            if(e)
-                LogHelper.AddLog(MsgLevel.Debug, $"================================================【TCP设备列表】已加载完成 ================================================", true);
+                if (e)
+                    LogHelper.AddLog(MsgLevel.Debug, $"================================================【TCP设备列表】已加载完成 ================================================", true);
 
-            OnTCPDeserializationCompletionEvent?.Invoke(this, e);
+            }
+            catch (Exception) { }
+            finally
+            {
+                // 触发TCP反序列化完成事件
+                OnTCPDeserializationCompletionEvent?.Invoke(this, e);
+            }
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace YTVisionPro.Forms.TCPAdd
         private void SingleTCP_SinglePLCRemoveEvent(object sender, SingleTcp e)
         {
             SingleTcp.SingleTCPs.Remove(e);
-            panel1.Controls.Remove(e.TcpParamsControl);
+            panel1.Controls.Clear();
             e.TcpDevice.Disconnect();
             Solution.Instance.AllDevices.Remove(e.TcpDevice);
             flowLayoutPanel1.Controls.Remove(e);
@@ -109,8 +111,9 @@ namespace YTVisionPro.Forms.TCPAdd
         {
             //将选中的TCP的参数控件设置到右侧
             panel1.Controls.Clear();
-            e.TcpParamsControl.Dock = DockStyle.Fill;
-            panel1.Controls.Add(e.TcpParamsControl);
+            var control = new TcpParamsControl(e.Parms);
+            control.Dock = DockStyle.Fill;
+            panel1.Controls.Add(control);
         }
 
         private void button1_Click(object sender, EventArgs e)

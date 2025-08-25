@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Forms.ResultView;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Forms.ResultView;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
+namespace TDJS_Vision.Node._7_ResultProcessing.ResultSummarize
 {
-    internal class NodeSummarize : NodeBase
+    public class NodeSummarize : NodeBase
     {
         public NodeSummarize(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -21,7 +21,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
@@ -29,7 +29,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -52,12 +52,15 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
                         var res3 = form.GetResult3();
                         var res4 = form.GetResult4();
 
-                        ResultViewData[] results = new ResultViewData[4] { res1, res2, res3, res4 };
+                        AlgorithmResult[] results = new AlgorithmResult[4] { res1, res2, res3, res4 };
                         ((NodeResultSummarize)Result).SummaryResult = ResultSummarize(results, param);
 
 
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        if(showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -73,18 +76,17 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
 
         /// <summary>
-        /// 汇总结果
+        ///  汇总多个结果
         /// </summary>
+        /// <param name="results"></param>
         /// <param name="param"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="Exception"></exception>
-        /// <exception cref="InvalidOperationException"></exception>
-        private ResultViewData ResultSummarize(ResultViewData[] results, NodeParamSummarize param)
+        private AlgorithmResult ResultSummarize(AlgorithmResult[] results, NodeParamSummarize param)
         {
-            List<ResultViewData> total = new List<ResultViewData>();
+            List<AlgorithmResult> total = new List<AlgorithmResult>();
             for (int i = 0; i < results.Length; i++)
             {
                 var res = results[i];
@@ -98,26 +100,82 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
 
             return CombineResults(total);
         }
-
-        /// <summary>
-        /// 合并多个算法结果
-        /// </summary>
-        /// <param name="results"></param>
-        /// <returns></returns>
-        public static ResultViewData CombineResults(List<ResultViewData> results)
+        public static AlgorithmResult CombineResults(List<AlgorithmResult> results)
         {
-            // 使用 SelectMany 将所有 SingleRowDataList 合并为一个列表
-            List<SingleResultViewData> combinedSingleRowDataList = results
-                .SelectMany(r => r.SingleRowDataList)
-                .ToList();
-
-            // 创建新的 ResultViewData 对象
-            ResultViewData combinedResult = new ResultViewData
+            if (results == null || results.Count == 0)
             {
-                SingleRowDataList = combinedSingleRowDataList
-            };
+                return new AlgorithmResult();
+            }
 
-            return combinedResult;
+            // 初始化 AlgorithmResult
+            var aiResult = new AlgorithmResult();
+
+            // 合并 DetectResults
+            foreach (var result in results)
+            {
+                if (result?.DetectResults == null) continue;
+
+                foreach (var kvp in result.DetectResults)
+                {
+                    if (!aiResult.DetectResults.ContainsKey(kvp.Key))
+                    {
+                        aiResult.DetectResults[kvp.Key] = new List<SingleDetectResult>();
+                    }
+                    aiResult.DetectResults[kvp.Key].AddRange(kvp.Value);
+                }
+            }
+
+            // 合并 Rects
+            foreach (var result in results)
+            {
+                if (result?.Rects != null)
+                {
+                    aiResult.Rects.AddRange(result.Rects);
+                }
+            }
+
+            // 合并 RectsNgMap
+            foreach (var result in results)
+            {
+                if (result?.RectsNgMap == null) continue;
+
+                foreach (var kvp in result.RectsNgMap)
+                {
+                    if (!aiResult.RectsNgMap.ContainsKey(kvp.Key))
+                    {
+                        aiResult.RectsNgMap[kvp.Key] = new List<ColorRotatedRect>();
+                    }
+                    aiResult.RectsNgMap[kvp.Key].AddRange(kvp.Value);
+                }
+            }
+
+            // 合并 Texts
+            foreach (var result in results)
+            {
+                if (result?.Texts != null)
+                {
+                    aiResult.Texts.AddRange(result.Texts);
+                }
+            }
+
+            // 合并 Lines
+            foreach (var result in results)
+            {
+                if (result?.Lines != null)
+                {
+                    aiResult.Lines.AddRange(result.Lines);
+                }
+            }
+
+            // 合并 Cirle
+            foreach (var result in results)
+            {
+                if (result?.Circles != null)
+                {
+                    aiResult.Circles.AddRange(result.Circles);
+                }
+            }
+            return aiResult;
         }
     }
 }

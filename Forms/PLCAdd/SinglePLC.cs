@@ -1,19 +1,16 @@
-﻿using Basler.Pylon;
-using Logger;
-using Sunny.UI;
+﻿using Logger;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Device.PLC;
+using TDJS_Vision.Device.PLC;
 
-namespace YTVisionPro.Forms.PLCAdd
+namespace TDJS_Vision.Forms.PLCAdd
 {
     /// <summary>
     /// 单个PLC
     /// </summary>
-    internal partial class SinglePLC : UserControl
+    public partial class SinglePLC : UserControl
     {
         public IPlc Plc = null;
         /// <summary>
@@ -24,14 +21,6 @@ namespace YTVisionPro.Forms.PLCAdd
         /// 是否选中
         /// </summary>
         public bool IsSelected;
-        /// <summary>
-        /// 串口通信参数控件
-        /// </summary>
-        public SerialParamsControl SerialParamsControl;
-        /// <summary>
-        /// 网口通信参数控件
-        /// </summary>
-        public EthernetParamsControl EthernetParamsControl;
         /// <summary>
         /// 选中改变事件
         /// </summary>
@@ -62,12 +51,6 @@ namespace YTVisionPro.Forms.PLCAdd
             this.label1.Text = plc.UserDefinedName;
             Plc = plc;
             Solution.Instance.AllDevices.Add(Plc);
-            if (ConType == PlcConType.COM)
-            {
-                SerialParamsControl = new SerialParamsControl(Plc.PLCParms);
-            }
-            else if (ConType == PlcConType.ETHERNET)
-                EthernetParamsControl = new EthernetParamsControl();
             SinglePLCs.Add(this);
         }
 
@@ -76,16 +59,21 @@ namespace YTVisionPro.Forms.PLCAdd
             InitializeComponent();
             ConType = parms.PlcConType;
             this.label1.Text = parms.UserDefinedName;
-            var plc = new PlcPanasonic(parms);
+            IPlc plc = null;
+            switch (parms.DeviceBrand)
+            {
+                case Device.DeviceBrand.Panasonic:
+                    plc = new PlcPanasonic(parms);
+                    break;
+                case Device.DeviceBrand.Melsec:
+                    plc = new PlcMelsec(parms);
+                    break;
+                default:
+                    break;
+            }
             plc.ConnectStatusEvent += Plc_ConnectStatusEvent;
             Plc = plc;
             Solution.Instance.AllDevices.Add(Plc);
-            if (ConType == PlcConType.COM)
-            {
-                SerialParamsControl = new SerialParamsControl(parms);
-            }
-            else if(ConType == PlcConType.ETHERNET)
-                EthernetParamsControl = new EthernetParamsControl();
             SinglePLCs.Add(this);
         }
 
@@ -128,25 +116,6 @@ namespace YTVisionPro.Forms.PLCAdd
             this.tableLayoutPanel1.BackColor = Color.CornflowerBlue;
             this.label1.BackColor = Color.CornflowerBlue;
             IsSelected = true;
-        }
-
-        /// <summary>
-        /// 改变控件背景颜色和状态
-        /// </summary>
-        /// <param name="flag"></param>
-        public void SetSelectedStatus(bool flag)
-        {
-            if (flag)
-            {
-                this.tableLayoutPanel1.BackColor = Color.LightSteelBlue;
-                this.label1.BackColor = Color.LightSteelBlue;
-            }
-            else
-            {
-                this.tableLayoutPanel1.BackColor = Color.CornflowerBlue;
-                this.label1.BackColor = Color.CornflowerBlue;
-            }
-            IsSelected = flag;
         }
 
         /// <summary>

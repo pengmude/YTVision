@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
+namespace TDJS_Vision.Node._5_EquipmentCommunication.LightOpen
 {
-    internal partial class ParamFormCameraIO : Form, INodeParamForm
+    public partial class ParamFormCameraIO : FormBase, INodeParamForm
     {
         /// <summary>
         /// 当前相机
@@ -59,7 +60,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
         {
             try
             {
-                return nodeSubscription1.GetValue<ResultViewData>().IsAllOk;
+                return nodeSubscription1.GetValue<AlgorithmResult>().IsAllOk;
             }
             catch (Exception)
             {
@@ -203,7 +204,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
             }
             catch (Exception)
             {
-                MessageBox.Show("参数设置不合法！");
+                MessageBoxTD.Show("参数设置不合法！");
                 return;
             }
         }

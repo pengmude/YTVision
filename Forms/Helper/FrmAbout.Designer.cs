@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.Helper
+﻿namespace TDJS_Vision.Forms.Helper
 {
     partial class FrmAbout
     {
@@ -38,37 +38,40 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.Location = new System.Drawing.Point(20, 16);
-            this.label1.Margin = new System.Windows.Forms.Padding(30);
+            this.label1.Location = new System.Drawing.Point(18, 13);
+            this.label1.Margin = new System.Windows.Forms.Padding(27, 25, 27, 25);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(73, 28);
+            this.label1.Size = new System.Drawing.Size(63, 24);
             this.label1.TabIndex = 0;
             this.label1.Text = "label1";
             // 
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(2, 29);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(845, 537);
+            this.panel1.Size = new System.Drawing.Size(747, 417);
             this.panel1.TabIndex = 3;
             // 
             // FrmAbout
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(845, 537);
+            this.ClientSize = new System.Drawing.Size(751, 448);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "关于YTVisionPro";
+            this.Text = "关于鹰眼智检系统";
+            this.Controls.SetChildIndex(this.panel1, 0);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);

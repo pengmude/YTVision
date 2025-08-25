@@ -3,16 +3,16 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Logger
 {
-    internal partial class LogHelper : UserControl
+    public partial class LogHelper : UserControl
     {
         static readonly string LogDictory = Environment.CurrentDirectory + @"\Logs\";
         static event EventHandler<LevelAndInfo> LogAddEvent;
         private static readonly object _logFileLocker = new object();
+        private static bool OnlyLogException = false; // 是否仅记录异常日志
 
         #region 日志等级和日志内容结构体
         struct LevelAndInfo
@@ -57,6 +57,32 @@ namespace Logger
         {
             InitializeComponent();
             LogAddEvent += LogHelper_LogAddEvent;
+        }
+
+        public void AdjustListBoxWidth(ListBox listBox)
+        {
+            if (listBox.Items.Count == 0) return;
+
+            // 获取 Graphics 对象用于测量字符串宽度
+            using (Graphics g = listBox.CreateGraphics())
+            {
+                int maxWidth = 0;
+
+                // 遍历所有项，找到最长的一项
+                foreach (var item in listBox.Items)
+                {
+                    string text = item.ToString();
+                    // 使用 MeasureString 测量字符串宽度
+                    SizeF size = g.MeasureString(text, listBox.Font);
+                    if (size.Width > maxWidth)
+                    {
+                        maxWidth = (int)size.Width;
+                    }
+                }
+
+                // 设置 HorizontalExtent 以便显示水平滚动条
+                listBox.HorizontalExtent = maxWidth;
+            }
         }
 
         private void LogHelper_LogAddEvent(object sender, LevelAndInfo levelAndInfo)
@@ -166,6 +192,21 @@ namespace Logger
                 }
                 else
                     mybsh = Brushes.DarkGray;
+
+                // 判断是否是选中项
+                bool isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+
+                // 设置背景颜色
+                if (isSelected)
+                {
+                    e.Graphics.FillRectangle(Brushes.MediumTurquoise, e.Bounds); // 选中时背景颜色
+                    mybsh = Brushes.White; // 选中时文字颜色
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(Brushes.White, e.Bounds); // 默认背景色
+                }
+
                 e.DrawFocusRectangle();
                 e.Graphics.DrawString(seelctBox.Items[e.Index].ToString(), e.Font, mybsh, e.Bounds, StringFormat.GenericDefault);
             }
@@ -189,6 +230,8 @@ namespace Logger
             [CallerLineNumber] int lineNumber = 0
             )
         {
+            if (OnlyLogException && (level == MsgLevel.Info || level == MsgLevel.Debug))
+                return; // 如果仅记录异常日志，且当前日志不是异常，则不记录
             SingleLog singleLog = new SingleLog();
             singleLog.MakeLog(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"), $"{level}", logInfo, filePath, memberName, $"{lineNumber}");
             // 写入本地文件Log
@@ -267,18 +310,6 @@ namespace Logger
 
         }
 
-        private void listBox1_DoubleClick(object sender, EventArgs e)
-        {
-            ListBox mySelectBox = sender as ListBox;
-            if (mySelectBox.SelectedItem != null)
-            {
-                string selectInfo = mySelectBox.SelectedItem.ToString();
-                LogDetail myLogDetail = new LogDetail(selectInfo);
-                myLogDetail.Show();
-            }
-
-        }
-
         private void 打开日志目录ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // 使用 Process.Start 运行文件管理器打开日志文件夹
@@ -289,6 +320,16 @@ namespace Logger
                 UseShellExecute = true
             };
             Process.Start(startInfo);
+        }
+        /// <summary>
+        /// 仅记录异常日志
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 仅记录异常日志ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            仅记录异常日志ToolStripMenuItem.Checked = !仅记录异常日志ToolStripMenuItem.Checked;
+            OnlyLogException = 仅记录异常日志ToolStripMenuItem.Checked ? true : false;
         }
     }
 }

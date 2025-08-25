@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
-using YTVisionPro.Device.Light;
+using TDJS_Vision.Device.Light;
 
-namespace YTVisionPro.Device
+namespace TDJS_Vision.Device
 {
-    internal interface IDevice
+    public interface IDevice
     {
         /// <summary>
         /// 连接状态改变事件
@@ -56,13 +56,21 @@ namespace YTVisionPro.Device
         /// </summary>
         PLC,
         /// <summary>
-        /// Modbu主站
+        /// ModbuRTU主站
         /// </summary>
-        ModbusPoll,
+        ModbusRTUPoll,
+        /// <summary>
+        /// ModbuRTU从站
+        /// </summary>
+        ModbusRTUSlave,
+        /// <summary>
+        /// ModbuTcp主站
+        /// </summary>
+        ModbusTcpPoll,
         /// <summary>
         /// Modbu从站
         /// </summary>
-        ModbusSlave,
+        ModbusTcpSlave,
         /// <summary>
         /// Tcpf服务器
         /// </summary>
@@ -101,6 +109,10 @@ namespace YTVisionPro.Device
         /// <summary>
         /// 松下
         /// </summary>
-        Panasonic
+        Panasonic,
+        /// <summary>
+        /// 三菱
+        /// </summary>
+        Melsec
     }
 }

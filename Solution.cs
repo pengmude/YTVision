@@ -5,24 +5,26 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using YTVisionPro.Forms.CameraAdd;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Forms.ModbusAdd;
-using YTVisionPro.Forms.PLCAdd;
-using YTVisionPro.Device;
-using YTVisionPro.Device.Camera;
-using YTVisionPro.Device.Light;
-using YTVisionPro.Device.Modbus;
-using YTVisionPro.Device.PLC;
-using YTVisionPro.Node;
-using YTVisionPro.Device.TCP;
-using YTVisionPro.Forms.TCPAdd;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Forms.CameraAdd;
+using TDJS_Vision.Forms.LightAdd;
+using TDJS_Vision.Forms.ModbusAdd;
+using TDJS_Vision.Forms.PLCAdd;
+using TDJS_Vision.Device;
+using TDJS_Vision.Device.Camera;
+using TDJS_Vision.Device.Light;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Device.PLC;
+using TDJS_Vision.Node;
+using TDJS_Vision.Device.TCP;
+using TDJS_Vision.Forms.TCPAdd;
+using TDJS_Vision.Node._3_Detection.TDAI.Yolo8;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Forms.GlobalSignalSettings;
+using System.Collections.Concurrent;
 
-namespace YTVisionPro
+namespace TDJS_Vision
 {
-    internal class Solution
+    public class Solution
     {
         #region 使用 Lazy<T> 实现线程安全的单例模式
 
@@ -67,6 +69,11 @@ namespace YTVisionPro
         /// 方案节点统计（包含删除的节点）
         /// </summary>
         public int NodeCount = 0;
+
+        /// <summary>
+        /// 方案的全局信号
+        /// </summary>
+        public GlobalSignal GlobalSignal = new GlobalSignal();
 
         /// <summary>
         /// 方案已经添加的节点
@@ -124,26 +131,20 @@ namespace YTVisionPro
         /// 方案的共享变量
         /// </summary>
         public SharedVariable SharedVariable { get; set; } = new SharedVariable();
+        /// <summary>
+        /// 方案的流程信号
+        /// </summary>
+        public Dictionary<string, CountdownEvent> ProcessSignalDic { get; set; } = new Dictionary<string, CountdownEvent>();
 
         /// <summary>
         /// 方案文件名
         /// </summary>
         public string SolFileName { get; set; }
-        
-        /// <summary>
-        /// 方案AI模型数量,用来实现异步加载完对应数量的模型后通知方案全部加载完成
-        /// </summary>
-        public int SolAiModelNum { get; set; }
-        
-        /// <summary>
-        /// 当前方案已加载的模型数量
-        /// </summary>
-        public int LoadedModelNum {  get; set; }
 
         /// <summary>
         /// 方案适配的软件版本
         /// </summary>
-        public string SolVersion { get; set; } = VersionInfo.VersionInfo.GetExeVer();
+        public string SolVersion { get; set; }
 
         /// <summary>
         /// 方案运行取消令牌，嵌入到流程和节点中，实现对它们的控制
@@ -235,81 +236,105 @@ namespace YTVisionPro
         #region 方案运行/停止、配置加载/保存等相关操作
 
         /// <summary>
-        /// 流程运行，默认不是循环运行
+        /// 方案运行，默认不是循环运行
         /// </summary>
         /// <param name="isCyclical"></param>
         /// <returns></returns>
         public async Task Run(bool isCyclical = false)
         {
-            IsRunning = true;
+            if (AllProcesses == null || AllProcesses.Count == 0)
+                return;
 
-            // 重置运行取消令牌
+            IsRunning = true;
             Solution.Instance.ResetTokenSource();
+            var _cts = CancellationTokenSource.CreateLinkedTokenSource(Solution.Instance.CancellationToken);
 
             try
             {
-                // 按组别分组
-                var groupedByProcessGroup = AllProcesses.GroupBy(p => p.processGroup)
-                                                        .ToList();
+                var groupTasks = new List<Task>();
 
-                // 存储每个组别下的任务组
-                var taskGroups = new List<Task>();
-
-                // 按组别顺序启动任务组的循环
-                foreach (var processGroup in groupedByProcessGroup)
+                foreach (var group in AllProcesses.GroupBy(p => p.Group))
                 {
-                    taskGroups.Add(Task.Run(async () =>
+                    var groupCopy = group.ToList(); // 立即缓存
+                    var groupCts = _cts; // 使用外部取消令牌
+
+                    // 每组启动一个独立任务，自行循环
+                    var groupTask = Task.Run(async () =>
                     {
-                        // 按优先级分组
-                        var groupedByPriority = processGroup.GroupBy(p => p.RunLv)
-                                                            .OrderBy(g => g.Key)
-                                                            .ToList();
-
-                        // 当未请求取消时，继续执行
-                        while (!Solution.Instance.CancellationToken.IsCancellationRequested)
+                        while (!groupCts.Token.IsCancellationRequested)
                         {
-                            // 遍历每个优先级组
-                            foreach (var priorityGroup in groupedByPriority)
+                            var passiveTasks = new ConcurrentBag<Task>(); // 本轮被动任务
+
+                            // 创建本轮的 triggerAction
+                            Action<Process> triggerAction = (targetProcess) =>
                             {
-                                // 创建一个任务列表，用于存储当前优先级组的所有任务
-                                var tasks = new List<Task>();
+                                if (targetProcess == null || !targetProcess.IsPassiveTriggered || targetProcess.Group != groupCopy[0].Group)
+                                    return;
 
-                                // 遍历当前优先级组中的每个流程
-                                foreach (var process in priorityGroup)
-                                {
-                                    // 为每个流程创建一个异步任务，并添加到任务列表中
-                                    Task processTask = Task.Run(() => process.Run(isCyclical));
-                                    tasks.Add(processTask);
-                                }
+                                var task = targetProcess.RunInternal(
+                                    isCyclical: false,
+                                    isTriggered: true,
+                                    ct: groupCts.Token
+                                );
+                                passiveTasks.Add(task);
+                            };
 
-                                // 如果任务列表中有任务，则等待所有任务完成
-                                if (tasks.Count > 0)
-                                {
-                                    await Task.WhenAll(tasks);
-                                }
+                            // 注入 triggerAction 到该组所有流程
+                            foreach (var proc in groupCopy)
+                            {
+                                proc.SetTriggerAction(triggerAction);
                             }
 
-                            // 如果不是循环模式，则退出循环
+                            // 按优先级执行主动流程
+                            var priorityLevels = groupCopy.Select(p => p.RunLv).Distinct().OrderBy(lv => lv);
+                            foreach (var priority in priorityLevels)
+                            {
+                                var activeProcesses = groupCopy
+                                    .Where(p => p.RunLv == priority && !p.IsPassiveTriggered)
+                                    .ToList();
+
+                                if (!activeProcesses.Any()) continue;
+
+                                var activeTasks = activeProcesses.Select(p => p.Run(false)); // 注意：这里传 false，因为循环由外部控制
+                                await Task.WhenAll(activeTasks);
+                            }
+
+                            // 等待被动流程完成
+                            if (passiveTasks.Count > 0)
+                            {
+                                await Task.WhenAll(passiveTasks.ToArray());
+                            }
+
+                            // 🔁 如果不是循环模式，本组只运行一次
                             if (!isCyclical)
+                                break;
+
+                            // ⏳ 循环模式：等待间隔后开始下一轮
+                            try
+                            {
+                                await Task.Delay(RunInterval, groupCts.Token);
+                            }
+                            catch (OperationCanceledException) when (groupCts.Token.IsCancellationRequested)
                             {
                                 break;
                             }
-
-                            // 等待指定的时间间隔，然后继续下一轮执行
-                            await Task.Delay(Solution.Instance.RunInterval, Solution.Instance.CancellationToken);
                         }
-                    }));
+                    }, _cts.Token);
+
+                    groupTasks.Add(groupTask);
                 }
 
-                await Task.WhenAll(taskGroups); // 等待所有组别的任务组完成
+                // ✅ 等待所有组的任务结束（可能是取消或异常）
+                await Task.WhenAll(groupTasks);
+
             }
             catch (OperationCanceledException)
             {
-                // 处理取消操作异常
+                // 正常取消
             }
             catch (Exception ex)
             {
-                // 处理一般异常
+                LogHelper.AddLog(MsgLevel.Exception, $"方案运行异常: {ex.Message}", true);
             }
             finally
             {
@@ -345,7 +370,7 @@ namespace YTVisionPro
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"反序列化异常!原因：{ex.Message}");
+                MessageBoxTD.Show($"反序列化异常!{ex.Message}");
             }
         }
 
@@ -377,6 +402,18 @@ namespace YTVisionPro
                 _cancellationTokenSource = new CancellationTokenSource();
         }
 
+
+        /// <summary>
+        /// 取消令牌
+        /// </summary>
+        public void CancelToken()
+        {
+            if (_cancellationTokenSource != null && !_cancellationTokenSource.IsCancellationRequested)
+            {
+                _cancellationTokenSource.Cancel();
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -406,10 +443,6 @@ namespace YTVisionPro
                 LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
             }
 
-            // 清空AI模型计数
-            Solution.Instance.SolAiModelNum = 0;
-            Solution.Instance.LoadedModelNum = 0;
-
             // 清空设备
             SingleLight.SingleLights.Clear();
             SingleCamera.SingleCameraList.Clear();
@@ -418,18 +451,12 @@ namespace YTVisionPro
             SingleTcp.SingleTCPs.Clear();
             Solution.Instance.AllDevices.Clear();
 
-            // 释放AI节点的内存
-            foreach (var node in Solution.Instance.Nodes)
-            {
-                if (node is NodeHTAI nodeAi)
-                {
-                    nodeAi.ReleaseAIResult();
-                    ((ParamFormHTAI)nodeAi.ParamForm).ReleaseAIHandle();
-                }
-            }
+            // 释放AI节点的模型句柄
+            ModelHandleManager.DestroyAllModel();
 
-            // 清空方案共享变量
+            // 清空方案共享变量、流程信号
             Solution.Instance.SharedVariable.ClearAll();
+            Solution.Instance.ProcessSignalDic.Clear();
 
             // 清空流程和节点
             Solution.Instance.ProcessCount = 0;

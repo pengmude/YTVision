@@ -1,7 +1,7 @@
 ﻿
-namespace YTVisionPro.Forms.ResultView
+namespace TDJS_Vision.Forms.ResultView
 {
-    internal class SingleResultViewData
+    public class SingleResultViewData
     {
         /// <summary>
         /// 节点名称（AI）

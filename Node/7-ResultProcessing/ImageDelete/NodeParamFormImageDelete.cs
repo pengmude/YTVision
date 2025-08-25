@@ -3,10 +3,11 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
+namespace TDJS_Vision.Node._7_ResultProcessing.ImageDelete
 {
-    internal partial class NodeParamFormImageDelete : Form, INodeParamForm
+    public partial class NodeParamFormImageDelete : FormBase, INodeParamForm
     {
         SaveConfiguration saveConfiguration = new SaveConfiguration();
 
@@ -39,7 +40,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
         {
             if (!int.TryParse(this.textBox2.Text, out int days))
             {
-                MessageBox.Show("请输入有效的天数!");
+                MessageBoxTD.Show("请输入有效的天数!");
                 return;
             }
             saveConfiguration.Days = days;
@@ -75,7 +76,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
             {
                 if (!int.TryParse(this.textBox2.Text, out int days))
                 {
-                    MessageBox.Show("请输入有效的天数!");
+                    MessageBoxTD.Show("请输入有效的天数!");
                     return;
                 }
 
@@ -84,7 +85,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
 
                 if (string.IsNullOrWhiteSpace(saveConfiguration.DeletePath))
                 {
-                    MessageBox.Show("请输入删除所选文件的路径!");
+                    MessageBoxTD.Show("请输入删除所选文件的路径!");
                     return;
                 }
 
@@ -116,7 +117,7 @@ namespace YTVisionPro.Node._7_ResultProcessing.ImageDelete
             }
             catch (Exception)
             {
-                MessageBox.Show("参数设置异常，请检查参数设置是否合理！");
+                MessageBoxTD.Show("参数设置异常，请检查参数设置是否合理！");
                 return false;
             }
             return true;

@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.ShapeDraw;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using TDJS_Vision.Forms.ShapeDraw;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageCrop
 {
-    internal partial class NodeParamFormImageCrop : Form, INodeParamForm
+    public partial class NodeParamFormImageCrop : FormBase, INodeParamForm
     {
         private Process process;//所属流程
         private NodeBase node;//所属节点
@@ -32,29 +36,24 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
             if(Params is NodeParamImageCrop param)
             {
                 nodeSubscription1.SetText(param.Text1, param.Text2);
-                imageROIEditControl1.SetROI(param.ROI);
-
-                // TODO: 修复必须得显示一下参数窗口再运行截取的图像才是正确的区域，
-                // 原因未知，估计是和ROI管理类构造需要传入pictrueBox有关
-                Show();
-                Hide();
+                imageROIEditControl1.SetROIs(param.ROIs);
             }
         }
 
         /// <summary>
         /// 获取ROI图像
         /// </summary>
-        public Bitmap GetROIImage() 
+        public List<Mat> GetROIImages() 
         {
             var img = imageROIEditControl1.GetROIImages();
             return img;
         }
 
-        public Rectangle GetImageROIRect()
+        public List<Rect> GetImageROIRects()
         {
             try
             {
-                return imageROIEditControl1.GetImageROIRect();
+                return imageROIEditControl1.GetImageROIRects();
             }
             catch (Exception)
             {
@@ -65,18 +64,19 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
         /// <summary>
         /// 获取订阅的图像设置到显示控件中
         /// </summary>
-        public void UpdataImage()
+        public Mat UpdataImage()
         {
-            Bitmap bitmap = null;
+            OutputImage bitmap = new OutputImage();
             try
             {
-                bitmap = nodeSubscription1.GetValue<Bitmap>();
+                bitmap = nodeSubscription1.GetValue<OutputImage>();
             }
             catch (Exception) 
             {
-                bitmap = null;
+                bitmap.Bitmaps = new List<Mat>() { null };
             }
-            imageROIEditControl1.SetImage(bitmap);
+            imageROIEditControl1.SetImage(bitmap.Bitmaps[0].ToBitmap());
+            return bitmap.Bitmaps[0];
         }
 
         /// <summary>
@@ -87,10 +87,9 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageCrop
         private void button2_Click(object sender, EventArgs e)
         {
             NodeParamImageCrop nodeParamImageCrop = new NodeParamImageCrop();
-            nodeParamImageCrop.Image  = imageROIEditControl1.GetROIImages();
             nodeParamImageCrop.Text1 = nodeSubscription1.GetText1();
             nodeParamImageCrop.Text2 = nodeSubscription1.GetText2();
-            nodeParamImageCrop.ROI = imageROIEditControl1.GetROI();
+            nodeParamImageCrop.ROIs = imageROIEditControl1.GetROIs();
             Params = nodeParamImageCrop;
             Hide();
         }

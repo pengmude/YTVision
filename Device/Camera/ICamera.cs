@@ -3,13 +3,14 @@ using MvCameraControl;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using TDJS_Vision.Forms.ImageViewer;
 
-namespace YTVisionPro.Device.Camera
+namespace TDJS_Vision.Device.Camera
 {
     /// <summary>
     /// 相机基类
     /// </summary>
-    internal interface ICamera : IDevice
+    public interface ICamera : IDevice
     {
         /// <summary>
         /// 连接状态改变事件
@@ -23,10 +24,6 @@ namespace YTVisionPro.Device.Camera
         /// 用户自定义设备名
         /// </summary>
         string UserDefinedName { get; set; }
-        /// <summary>
-        /// 抓取图片事件
-        /// </summary>
-        event EventHandler<Bitmap> PublishImageEvent;
         /// <summary>
         /// 相机是否连接
         /// </summary>
@@ -85,6 +82,9 @@ namespace YTVisionPro.Device.Camera
         /// <returns></returns>
         void SetTriggerSource(TriggerSource triggerSource);
 
+        Bitmap GetOneFrameImage();
+
+        TriggerSource GetTriggerSource();
         /// <summary>
         /// 设置硬件触发时的触发沿
         /// </summary>
@@ -102,7 +102,7 @@ namespace YTVisionPro.Device.Camera
         ///  设置增益
         /// </summary>
         /// <param name="gainValue"></param>
-        void SetGain(float gainValue);
+        void SetGain(double gainValue);
 
         /// <summary>
         /// 获取相机曝光
@@ -167,13 +167,19 @@ namespace YTVisionPro.Device.Camera
         /// </summary>
         /// <param name="ExposureTime"></param>
         /// <returns></returns>
-        void SetExposureTime(float time);
+        void SetExposureTime(double time);
 
         /// <summary>
         /// 设置触发延迟
         /// </summary>
         /// <param name="time"></param>
-        void SetTriggerDelay(float time);
+        void SetTriggerDelay(double time);
+
+        /// <summary>
+        /// 获取触发模式
+        /// </summary>
+        /// <returns></returns>
+        bool GetTriggerMode();
 
         /// <summary>
         /// 关闭相机

@@ -1,20 +1,16 @@
 ﻿using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using YTVisionPro.Device.Camera;
+using TDJS_Vision.Device.Camera;
 
-namespace YTVisionPro.Node._1_Acquisition.ImageSource
+namespace TDJS_Vision.Node._1_Acquisition.ImageSource
 {
-    internal class NodeParamImageSoucre : INodeParam
+    public class NodeParamImageSoucre : INodeParam
     {
         /// <summary>
         /// 图像源
         /// </summary>
         public string ImageSource { get; set; }
-        /// <summary>
-        /// 要显示的窗口名称
-        /// </summary>
-        public string WindowName { get; set; }
 
         #region 本地图像参数
         /// <summary>
@@ -32,7 +28,8 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// <summary>
         /// 图片路径列表
         /// </summary>
-        public List<string> ImagePaths { get; set; }
+        [JsonIgnore]
+        public List<string> ImagePaths { get; set; } = new List<string>();
         #endregion
 
         #region 相机参数
@@ -63,15 +60,16 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// <summary>
         /// 曝光时间
         /// </summary>
-        public float ExposureTime { get; set; }
+        public double ExposureTime { get; set; }
         /// <summary>
         /// 增益
         /// </summary>
-        public float Gain { get; set; }
+        public double Gain { get; set; }
         /// <summary>
-        /// 是否频闪
+        /// 是否每次设置参数
         /// </summary>
-        public bool IsStrobing { get; set; }
+        public bool IsEveryTime { get; set; }
+        
 
         #endregion
     }

@@ -1,13 +1,15 @@
 ﻿using Logger;
+using OpenCvSharp.Extensions;
 using Sunny.UI;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using YTVisionPro.Forms.ImageViewer;
+using TDJS_Vision.Forms.ImageViewer;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._1_Acquisition.ImageSource
+namespace TDJS_Vision.Node._1_Acquisition.ImageSource
 {
-    internal partial class ParamFormImageShow : Form, INodeParamForm
+    public partial class ParamFormImageShow : FormBase, INodeParamForm
     {
         public ParamFormImageShow()
         {
@@ -57,20 +59,20 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// <returns></returns>
         public Bitmap GetImage()
         {
-            return nodeSubscription1.GetValue<Bitmap>();
+            return nodeSubscription1.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (nodeSubscription1.GetText1().IsNullOrEmpty())
             {
-                MessageBox.Show("未订阅任何结果！");
+                MessageBoxTD.Show("未订阅任何结果！");
                 LogHelper.AddLog(MsgLevel.Fatal, "未订阅任何结果！", true);
                 return;
             }
             if (WindowNameList.Text.IsNullOrEmpty())
             {
-                MessageBox.Show("图像窗口名称不能为空！");
+                MessageBoxTD.Show("图像窗口名称不能为空！");
                 LogHelper.AddLog(MsgLevel.Fatal, "图像窗口名称不能为空！", true);
                 return;
             }

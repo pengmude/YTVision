@@ -3,12 +3,12 @@ using System;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-using YTVisionPro.Forms.ImageViewer;
+using TDJS_Vision.Forms.ImageViewer;
 
-namespace YTVisionPro.Node._1_Acquisition.ImageSource
+namespace TDJS_Vision.Node._1_Acquisition.ImageSource
 {
 
-    internal partial class NodeImageShow : NodeBase
+    public partial class NodeImageShow : NodeBase
     {
         public static event EventHandler<ImageShowPamra> ImageShowChanged;
 
@@ -22,14 +22,14 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -50,9 +50,11 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
 
                         Bitmap image = form.GetImage();
                         ImageShowChanged?.Invoke(this, new ImageShowPamra(param.WindowName, image));
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        ((NodeResultImageShow)Result).RunTime = time;
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -68,6 +70,7 @@ namespace YTVisionPro.Node._1_Acquisition.ImageSource
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
     }
 }

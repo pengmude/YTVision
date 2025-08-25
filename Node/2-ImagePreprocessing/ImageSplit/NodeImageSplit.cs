@@ -7,9 +7,9 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageSplit
 {
-    internal class NodeImageSplit : NodeBase
+    public class NodeImageSplit : NodeBase
     {
         public NodeImageSplit(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -21,14 +21,14 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
             // 参数合法性校验
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -48,12 +48,13 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
 
                         NodeResultImageSplit res = new NodeResultImageSplit();
                         var img = paramForm.GetImage();
-                        res.Bitmaps = SplitImage(img, param.Rows, param.Cols);
+                        var imgs = SplitImage(img, param.Rows, param.Cols);
+                        res.OutputImage.Bitmaps = new List<Mat>(imgs);
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        res.RunTime = time;
                         Result = res;
-
-                        SetRunResult(startTime, NodeStatus.Successful);
-                        long time = SetRunResult(startTime, NodeStatus.Successful);
-                        LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        if (showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
                     }
                     catch (OperationCanceledException)
                     {
@@ -69,7 +70,8 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
                     }
                 }
             }
-            
+
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
         /// <param name="rows">行数。</param>
         /// <param name="cols">列数。</param>
         /// <returns>包含分割后图像的 List<Bitmap>。</returns>
-        public static List<Bitmap> SplitImage(Bitmap originalImage, int rows, int cols)
+        public static List<Mat> SplitImage(Bitmap originalImage, int rows, int cols)
         {
             if (originalImage == null)
                 throw new ArgumentNullException(nameof(originalImage), "原始图像不能为空。");
@@ -98,7 +100,7 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
             int subHeight = baseHeight / rows;
             int subWidth = baseWidth / cols;
 
-            List<Bitmap> subImages = new List<Bitmap>();
+            List<Mat> subImages = new List<Mat>();
 
             // 遍历行和列来提取子图像
             for (int row = 0; row < rows; row++)
@@ -115,11 +117,8 @@ namespace YTVisionPro.Node._2_ImagePreprocessing.ImageSplit
                     // 提取子图像
                     Mat subMat = new Mat(matImage, roi);
 
-                    // 将子图像转换回 Bitmap
-                    Bitmap subBitmap = BitmapConverter.ToBitmap(subMat);
-
                     // 将子图像添加到列表中
-                    subImages.Add(subBitmap);
+                    subImages.Add(subMat);
                 }
             }
 

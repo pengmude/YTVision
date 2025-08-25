@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Node
+namespace TDJS_Vision.Node
 {
-    internal partial class FrmNodeRename : Form
+    public partial class FrmNodeRename : FormBase
     {
         public static event EventHandler<RenameResult> RenameChangeEvent;
         private string nodeNameOld;
@@ -27,7 +27,7 @@ namespace YTVisionPro.Node
     /// <summary>
     /// 重命名结果
     /// </summary>
-    internal struct RenameResult 
+    public struct RenameResult 
     {
         public string NodeNameOld;
         public string NodeNameNew;

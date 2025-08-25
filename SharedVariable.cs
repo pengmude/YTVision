@@ -1,65 +1,125 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using TDJS_Vision.Node._6_LogicTool.SharedVariable;
 
-namespace YTVisionPro
+namespace TDJS_Vision
 {
     /// <summary>
-    /// 共享变量类
+    /// 线程安全的共享变量类
     /// </summary>
-    public class SharedVariable : Dictionary<string, object>
+    public class SharedVariable : Dictionary<string, SharedVarValue>
     {
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+
         /// <summary>
         /// 获取所有共享变量名称
         /// </summary>
         /// <returns></returns>
         public IEnumerable<string> GetNames()
         {
-            return Keys;
+            try
+            {
+                _lock.EnterReadLock();
+                return new List<string>(Keys);
+            }
+            finally
+            {
+                if (_lock.IsReadLockHeld)
+                    _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
         /// 通过名称获取对应值
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        /// <exception cref="KeyNotFoundException"></exception>
-        public T GetValue<T>(string name)
+        public SharedVarValue GetValue(string name)
         {
-            if (TryGetValue(name, out object value))
+            try
             {
-                if (value is T typedValue)
+                _lock.EnterReadLock();
+                if (TryGetValue(name, out SharedVarValue value))
                 {
-                    return typedValue;
+                    return value;
                 }
-                throw new InvalidCastException($"共享变量名称为 “{name}”的值不能转化为类型“{typeof(T).Name}”！");
+                throw new KeyNotFoundException($"找不到名为“{name}”的共享变量！");
             }
-            throw new KeyNotFoundException($"找不到名为“{name}”的共享变量！");
+            finally
+            {
+                if (_lock.IsReadLockHeld)
+                    _lock.ExitReadLock();
+            }
+        }
+        /// <summary>
+        /// 获取数组或列表的指定索引处的元素
+        /// </summary>
+        public SharedVarValue GetValue(string name, int index)
+        {
+            try
+            {
+                _lock.EnterReadLock();
+                if (TryGetValue(name, out SharedVarValue value))
+                {
+                    if (index >= 0)
+                    {
+                        if (value.Data == null)
+                            throw new InvalidOperationException("Data 为 null，无法获取元素。");
+
+                        // 情况1：Data 是数组（Array）
+                        if (value.Data is Array array)
+                        {
+                            if (index >= 0 && index < array.Length)
+                                return new SharedVarValue(array.GetValue(index), array.GetValue(index).GetType());
+                            else
+                                throw new IndexOutOfRangeException($"索引 {index} 超出数组范围 [0, {array.Length - 1}]");
+                        }
+
+                        // 情况2：Data 是 IList（如 List<T>, ArrayList 等）
+                        if (value.Data is System.Collections.IList list)
+                        {
+                            if (index >= 0 && index < list.Count)
+                                return new SharedVarValue(list[index], list[index].GetType());
+                            else
+                                throw new IndexOutOfRangeException($"索引 {index} 超出列表范围 [0, {list.Count - 1}]");
+                        }
+
+                        // 情况3：不支持索引访问
+                        throw new InvalidOperationException($"类型 {value.Type.Name} 不支持按索引访问元素。");
+                    }
+                    else
+                        throw new ArgumentOutOfRangeException(nameof(index), "索引不能为负数。");
+                }
+                throw new KeyNotFoundException($"找不到名为“{name}”的共享变量！");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"获取共享变量“{name}”的索引 {index} 处的值失败。请检查变量是否存在或索引是否有效。");
+            }
+            finally
+            {
+                if (_lock.IsReadLockHeld)
+                    _lock.ExitReadLock();
+            }
         }
 
-        /// <summary>
-        /// 通过名称获取对应值，返回 object 类型
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        /// <exception cref="KeyNotFoundException"></exception>
-        public object GetValue(string name)
-        {
-            if (TryGetValue(name, out object value))
-            {
-                return value;
-            }
-            throw new KeyNotFoundException($"找不到名为“{name}”的共享变量！");
-        }
 
         /// <summary>
         /// 通过名称设置对应值
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void SetValue(string name, object value)
+        public void SetValue(string name, SharedVarValue value)
         {
-            this[name] = value;
+            try
+            {
+                _lock.EnterWriteLock();
+                this[name] = value;
+            }
+            finally
+            {
+                if (_lock.IsWriteLockHeld)
+                    _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -69,7 +129,16 @@ namespace YTVisionPro
         /// <returns></returns>
         public bool Exist(string name)
         {
-            return ContainsKey(name);
+            try
+            {
+                _lock.EnterReadLock();
+                return ContainsKey(name);
+            }
+            finally
+            {
+                if (_lock.IsReadLockHeld)
+                    _lock.ExitReadLock();
+            }
         }
 
         /// <summary>
@@ -79,7 +148,16 @@ namespace YTVisionPro
         /// <returns></returns>
         public bool RemoveOne(string name)
         {
-            return Remove(name);
+            try
+            {
+                _lock.EnterWriteLock();
+                return Remove(name);
+            }
+            finally
+            {
+                if (_lock.IsWriteLockHeld)
+                    _lock.ExitWriteLock();
+            }
         }
 
         /// <summary>
@@ -87,7 +165,16 @@ namespace YTVisionPro
         /// </summary>
         public void ClearAll()
         {
-            Clear();
+            try
+            {
+                _lock.EnterWriteLock();
+                Clear();
+            }
+            finally
+            {
+                if (_lock.IsWriteLockHeld)
+                    _lock.ExitWriteLock();
+            }
         }
     }
 }

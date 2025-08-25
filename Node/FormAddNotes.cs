@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Node
+namespace TDJS_Vision.Node
 {
-    internal partial class FormAddNotes : Form
+    public partial class FormAddNotes : FormBase
     {
         private NodeBase _node;
         public FormAddNotes(NodeBase node)

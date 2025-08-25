@@ -1,4 +1,4 @@
-﻿namespace YTVisionPro.Forms.ProcessNew
+﻿namespace TDJS_Vision.Forms.ProcessNew
 {
     partial class FormSetProcessLv
     {
@@ -49,20 +49,21 @@
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(445, 178);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(396, 148);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 34);
+            this.label1.Location = new System.Drawing.Point(19, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 21);
+            this.label1.Size = new System.Drawing.Size(80, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "优先级？";
             this.toolTip1.SetToolTip(this.label1, "1级最先被运行，5级最后被运行，同级流程同时运行");
@@ -78,18 +79,20 @@
             "3级",
             "4级",
             "5级"});
-            this.comboBox1.Location = new System.Drawing.Point(194, 31);
+            this.comboBox1.Location = new System.Drawing.Point(173, 25);
+            this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(189, 29);
+            this.comboBox1.Size = new System.Drawing.Size(168, 25);
             this.comboBox1.TabIndex = 1;
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.tableLayoutPanel1.SetColumnSpan(this.button1, 2);
-            this.button1.Location = new System.Drawing.Point(181, 111);
+            this.button1.Location = new System.Drawing.Point(161, 92);
+            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(83, 44);
+            this.button1.Size = new System.Drawing.Size(74, 37);
             this.button1.TabIndex = 2;
             this.button1.Text = "确定";
             this.button1.UseVisualStyleBackColor = true;
@@ -104,16 +107,18 @@
             // 
             // FormSetProcessLv
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(445, 178);
+            this.ClientSize = new System.Drawing.Size(396, 148);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormSetProcessLv";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "设置流程优先级";
+            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

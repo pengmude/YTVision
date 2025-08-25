@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using YTVisionPro.Device.Modbus;
-using YTVisionPro.Device.TCP;
+using TDJS_Vision.Device.Modbus;
+using TDJS_Vision.Device.TCP;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.TcpClient
+namespace TDJS_Vision.Node._5_EquipmentCommunication.TcpClient
 {
-    internal class NodeParamTCPClient : INodeParam
+    public class NodeParamTCPClient : INodeParam
     {
         [JsonIgnore]
         public ITcpDevice Device { get; set; }
@@ -41,5 +41,6 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.TcpClient
         /// 条件为false发送的内容
         /// </summary>
         public string SendContentFalse { get; set; }
+        
     }
 }

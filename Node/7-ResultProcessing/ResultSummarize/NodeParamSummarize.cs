@@ -1,6 +1,6 @@
-﻿namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
+﻿namespace TDJS_Vision.Node._7_ResultProcessing.ResultSummarize
 {
-    internal class NodeParamSummarize : INodeParam
+    public class NodeParamSummarize : INodeParam
     {
         // 反序列化还原界面参数用
         public string[] Texts = new string[8];

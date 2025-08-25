@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using OpenCvSharp.Extensions;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._3_Detection.MatchTemplate
+namespace TDJS_Vision.Node._3_Detection.MatchTemplate
 {
     /// <summary>
     /// 模版创建窗口类
     /// </summary>
-    internal partial class TemplateCreate : Form
+    public partial class TemplateCreate : FormBase
     {
+        Bitmap Bitmap { get; set; }
         public TemplateCreate()
         {
             InitializeComponent();
@@ -43,13 +47,15 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
             Bitmap bitmap = null;
             try
             {
-                bitmap = nodeSubscription1.GetValue<Bitmap>();
+                if(checkBoxUseSub.Checked)
+                    bitmap = nodeSubscription1.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
             }
             catch (Exception)
             {
                 bitmap = null;
             }
-            imageROIEditControl1.SetImage(bitmap);
+            Bitmap = bitmap;
+            imageROIEditControl1.SetImage(Bitmap);
         }
 
         /// <summary>
@@ -59,7 +65,7 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
         /// <param name="e"></param>
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (checkBoxUseSub.Checked)
             {
                 textBox1.Enabled = false;
                 button1.Enabled = false;
@@ -85,7 +91,8 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
             if(openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 textBox1.Text = openFileDialog1.FileName;
-                imageROIEditControl1.SetImage(new Bitmap(openFileDialog1.FileName));
+                Bitmap = new Bitmap(openFileDialog1.FileName);
+                imageROIEditControl1.SetImage(Bitmap);
             }
         }
 
@@ -98,17 +105,18 @@ namespace YTVisionPro.Node._3_Detection.MatchTemplate
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                Bitmap bmp = imageROIEditControl1.GetROIImages();
+                Bitmap bmp = imageROIEditControl1.GetROIImages()[0].ToBitmap();
                 try
                 {
                     bmp.Save(saveFileDialog1.FileName);
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("保存失败！");
+                    MessageBoxTD.Show("保存失败！");
                     return;
                 }
-                MessageBox.Show("保存成功！");
+                MessageBoxTD.Show("保存成功！");
+                Close();
             }
         }
 

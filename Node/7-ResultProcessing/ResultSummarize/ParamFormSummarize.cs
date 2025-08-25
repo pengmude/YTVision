@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using YTVisionPro.Node._3_Detection.HTAI;
+using TDJS_Vision.Node._3_Detection.TDAI;
 
-namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
+namespace TDJS_Vision.Node._7_ResultProcessing.ResultSummarize
 {
-    internal partial class ParamFormSummarize : Form, INodeParamForm
+    public partial class ParamFormSummarize : FormBase, INodeParamForm
     {
         public ParamFormSummarize()
         {
@@ -25,11 +25,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         /// 获取算法结果1
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetResult1()
+        public AlgorithmResult GetResult1()
         {
             try
             {
-                return nodeSubscription1.GetValue<ResultViewData>();
+                return nodeSubscription1.GetValue<AlgorithmResult>();
             }
             catch (Exception)
             {
@@ -41,11 +41,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         /// 获取算法结果2
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetResult2()
+        public AlgorithmResult GetResult2()
         {
             try
             {
-                return nodeSubscription2.GetValue<ResultViewData>();
+                return nodeSubscription2.GetValue<AlgorithmResult>();
             }
             catch (Exception)
             {
@@ -57,11 +57,11 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         /// 获取算法结果3
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetResult3()
+        public AlgorithmResult GetResult3()
         {
             try
             {
-                return nodeSubscription3.GetValue<ResultViewData>();
+                return nodeSubscription3.GetValue<AlgorithmResult>();
             }
             catch (Exception)
             {
@@ -70,14 +70,14 @@ namespace YTVisionPro.Node._7_ResultProcessing.ResultSummarize
         }
 
         /// <summary>
-        /// 获取算法结果1
+        /// 获取算法结果4
         /// </summary>
         /// <returns></returns>
-        public ResultViewData GetResult4()
+        public AlgorithmResult GetResult4()
         {
             try
             {
-                return nodeSubscription4.GetValue<ResultViewData>();
+                return nodeSubscription4.GetValue<AlgorithmResult>();
             }
             catch (Exception)
             {

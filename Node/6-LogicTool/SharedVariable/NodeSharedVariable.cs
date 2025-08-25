@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace YTVisionPro.Node._6_LogicTool.SharedVariable
+namespace TDJS_Vision.Node._6_LogicTool.SharedVariable
 {
-    internal class NodeSharedVariable : NodeBase
+    public class NodeSharedVariable : NodeBase
     {
         public NodeSharedVariable(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
         {
@@ -19,7 +19,7 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
         /// <summary>
         /// 节点运行
         /// </summary>
-        public override async Task Run(CancellationToken token)
+        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
         {
             DateTime startTime = DateTime.Now;
 
@@ -27,7 +27,7 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
             if (!Active)
             {
                 SetRunResult(startTime, NodeStatus.Unexecuted);
-                return;
+                return new NodeReturn(NodeRunFlag.StopRun);
             }
             if (ParamForm.Params == null)
             {
@@ -51,43 +51,26 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
                         // 判断读还是写
                         if (param.IsRead)
                         {
-                            var val = Solution.Instance.SharedVariable.GetValue(param.ReadName);
                             if (param.Flag)
                             {
-                                switch (param.Type)
-                                {
-                                    case SharedVarTypeEnum.AllType:
-                                    case SharedVarTypeEnum.Bool:
-                                    case SharedVarTypeEnum.Int:
-                                    case SharedVarTypeEnum.String:
-                                    case SharedVarTypeEnum.Float:
-                                    case SharedVarTypeEnum.Double:
-                                    case SharedVarTypeEnum.Bitmap:
-                                    case SharedVarTypeEnum.ResultViewData:
-                                        throw new Exception("不是数组类型！");
-                                    case SharedVarTypeEnum.BitmapArr:
-                                        result.Value = ConvertToBitmapArray(val)[param.Index];
-                                        break;
-                                }
+                                result.Value = Solution.Instance.SharedVariable.GetValue(param.ReadName, param.Index);
                             }
                             else
                             {
                                 result.Value = Solution.Instance.SharedVariable.GetValue(param.ReadName);
                             }
-                            result.Type = param.Type;
-                            resStr = $"{result.Value}";
-                            Result = result;
-
-                            long time = SetRunResult(startTime, NodeStatus.Successful);
-                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms, 读到的共享变量为：“{resStr})”", true);
                         }
                         else
                         {
-                            Solution.Instance.SharedVariable.SetValue(param.WriteName, form.GetSubValue());
-
-                            long time = SetRunResult(startTime, NodeStatus.Successful);
-                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                            Solution.Instance.SharedVariable.SetValue(param.WriteName, new SharedVarValue(form.GetSubValue(), form.GetSubValue().GetType()));
                         }
+
+                        var time = SetRunResult(startTime, NodeStatus.Successful);
+                        Result.RunTime = time;
+                        Result = result;
+                        if(showLog)
+                            LogHelper.AddLog(MsgLevel.Info, $"节点({ID}.{NodeName})运行成功！({time} ms)", true);
+                        return new NodeReturn(NodeRunFlag.ContinueRun);
                     }
                     catch (OperationCanceledException)
                     {
@@ -103,6 +86,7 @@ namespace YTVisionPro.Node._6_LogicTool.SharedVariable
                     }
                 }
             }
+            return new NodeReturn(NodeRunFlag.StopRun);
         }
 
         private static List<Bitmap> ConvertToBitmapArray(object obj)

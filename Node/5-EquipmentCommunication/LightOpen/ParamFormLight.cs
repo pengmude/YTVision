@@ -2,11 +2,12 @@
 using Sunny.UI;
 using System;
 using System.Windows.Forms;
-using YTVisionPro.Device.Light;
+using TDJS_Vision.Device.Light;
+using TDJS_Vision.Forms.YTMessageBox;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
+namespace TDJS_Vision.Node._5_EquipmentCommunication.LightOpen
 {
-    internal partial class ParamFormLight : Form, INodeParamForm
+    public partial class ParamFormLight : FormBase, INodeParamForm
     {
         private string _nodeName;
         private Process _process;
@@ -65,7 +66,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
             if (comboBox1.Text.IsNullOrEmpty() || comboBox1.Text == "[未设置]")
             {
                 LogHelper.AddLog(MsgLevel.Warn, $"节点[{_process.ProcessName}.{_nodeName}]光源未设置！", true);
-                MessageBox.Show($"节点[{_process.ProcessName}.{_nodeName}]光源未设置！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBoxTD.Show($"节点[{_process.ProcessName}.{_nodeName}]光源未设置！", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -93,7 +94,7 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
             catch (Exception ex)
             {
                 LogHelper.AddLog(MsgLevel.Exception, ex.Message, true);
-                MessageBox.Show("保存失败,请检查参数是否有误！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBoxTD.Show("保存失败,请检查参数是否有误！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

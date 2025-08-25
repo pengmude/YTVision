@@ -1,6 +1,6 @@
-﻿namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
+﻿namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageRotate
 {
-    internal class NodeParamImageRotate : INodeParam
+    public class NodeParamImageRotate : INodeParam
     {
         /// <summary>
         /// 订阅的节点名称（反序列化用）
@@ -16,5 +16,6 @@
         /// 图像旋转的角度
         /// </summary>
         public float Angle { get; set; }
+        
     }
 }

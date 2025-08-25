@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace YTVisionPro.Forms.YTMessageBox
+namespace TDJS_Vision.Forms.YTMessageBox
 {
-    internal partial class YTMessageBox : Form
+    public partial class YTMessageBox : Form
     {
         private Timer _closeTimer;
         public YTMessageBox(string message, int interval = 1800)

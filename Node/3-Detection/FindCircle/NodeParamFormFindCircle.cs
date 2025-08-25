@@ -8,10 +8,12 @@ using Logger;
 using Point = OpenCvSharp.Point;
 using System.Collections.Generic;
 using Sunny.UI;
+using TDJS_Vision.Forms.YTMessageBox;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._3_Detection.FindCircle
+namespace TDJS_Vision.Node._3_Detection.FindCircle
 {
-    internal partial class NodeParamFormFindCircle : Form, INodeParamForm
+    public partial class NodeParamFormFindCircle : FormBase, INodeParamForm
     {
         private Process process;//所属流程
         private NodeBase node;//所属节点
@@ -89,12 +91,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                         break;
                 }
                 //还原ROI
-                imageROIEditControl1.SetROI(param.ROI);
-
-                // TODO: 修复必须得显示一下参数窗口再运行截取的图像才是正确的区域，
-                // 原因未知，估计是和ROI管理类构造需要传入pictrueBox有关
-                Show();
-                Hide();
+                imageROIEditControl1.SetROIs(param.ROIs);
             }
         }
 
@@ -132,7 +129,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
             Bitmap bitmap = null;
             try
             {
-                bitmap = nodeSubscription1.GetValue<Bitmap>();
+                bitmap = nodeSubscription1.GetValue<OutputImage>().Bitmaps[0].ToBitmap();
             }
             catch (Exception)
             {
@@ -154,7 +151,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"检测异常：{ex.Message}");
+                MessageBoxTD.Show($"检测异常：{ex.Message}");
                 LogHelper.AddLog(MsgLevel.Exception, $"节点({node.ID}.{node.Name})检测异常，原因：{ex.Message}", true);
             }
         }
@@ -195,12 +192,12 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                 nodeParamFindCircle.MinLength = int.Parse(textBoxMinR.Text);
                 nodeParamFindCircle.MaxDistance = int.Parse(textBoxMaxR.Text);
                 nodeParamFindCircle.CircleSelection = curLineSelection;
-                nodeParamFindCircle.ROI = imageROIEditControl1.GetROI();
+                nodeParamFindCircle.ROIs = imageROIEditControl1.GetROIs();
                 Params = nodeParamFindCircle;
             }
             catch (Exception)
             {
-                MessageBox.Show("参数设置异常，请检查参数设置是否合理！");
+                MessageBoxTD.Show("参数设置异常，请检查参数设置是否合理！");
                 return false;
             }
             return true;
@@ -219,28 +216,14 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                 pictureBoxResult1.Image = null;
                 pictureBoxResult2.Image = null;
                 UpdataImage();
-                Bitmap bitmap = imageROIEditControl1.GetROIImages();
+                Mat bitmap = imageROIEditControl1.GetROIImages()[0];
 
-                // 图像格式转换
-                Mat image = new Mat();
-                if (bitmap.PixelFormat == System.Drawing.Imaging.PixelFormat.Format32bppArgb)
-                {
-                    image = BitmapConverter.ToMat(bitmap).CvtColor(ColorConversionCodes.BGR2GRAY);
-                }
-                else
-                {
-                    image = BitmapConverter.ToMat(bitmap).CvtColor(ColorConversionCodes.BayerBG2GRAY);
-                }
-
-                if (image.Channels() != 1)
-                {
-                    LogHelper.AddLog(MsgLevel.Exception, $"图像非单通道！", true);
-                    return (Circle, null);
-                }
+                if (bitmap.Channels() != 1)
+                    Cv2.CvtColor(bitmap, bitmap, ColorConversionCodes.BGR2GRAY);
 
                 // 应用高斯模糊减少噪点
                 Mat blurred = new Mat();
-                Cv2.GaussianBlur(image, blurred, new OpenCvSharp.Size(int.Parse(textBoxBlurSize.Text), int.Parse(textBoxBlurSize.Text)), 0);
+                Cv2.GaussianBlur(bitmap, blurred, new OpenCvSharp.Size(int.Parse(textBoxBlurSize.Text), int.Parse(textBoxBlurSize.Text)), 0);
 
                 // 使用 Canny 边缘检测
                 Mat edges = new Mat();
@@ -266,7 +249,7 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                 #region 绘制霍夫圆检测出来的所有圆
 
                 // 绘制检测到的直线
-                Mat result = image.Clone();
+                Mat result = bitmap.Clone();
                 Cv2.CvtColor(result, result, ColorConversionCodes.BayerBG2BGR);
 
                 Random random = new Random();
@@ -317,10 +300,10 @@ namespace YTVisionPro.Node._3_Detection.FindCircle
                 #region 绘制筛选后的图像
 
                 // 加上在原图的偏差值
-                var point = imageROIEditControl1.GetImageROIRect().Location;
+                var point = imageROIEditControl1.GetImageROIRects()[0].Location;
 
                 // 克隆图像
-                Mat result1 = image.Clone();
+                Mat result1 = bitmap.Clone();
 
                 // 转换颜色空间
                 Cv2.CvtColor(result1, result1, ColorConversionCodes.BayerBG2BGR);

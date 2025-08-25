@@ -5,17 +5,17 @@ using Newtonsoft.Json;
 using System;
 using System.IO.Ports;
 using System.Timers;
-using YTVisionPro.Forms.LightAdd;
-using YTVisionPro.Device.Camera;
+using TDJS_Vision.Forms.LightAdd;
+using TDJS_Vision.Device.Camera;
 
-namespace YTVisionPro.Device.Light
+namespace TDJS_Vision.Device.Light
 {
     /// <summary>
     /// 磐鑫光源控制类
     /// 2024-7-30
     /// by pengmude
     /// </summary>
-    internal class LightPPX : ILight
+    public class LightPPX : ILight
     {
         /// <summary>
         /// 连接状态改变事件

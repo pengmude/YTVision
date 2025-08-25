@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using YTVisionPro.Device.Light;
+using TDJS_Vision.Device.Light;
 
-namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
+namespace TDJS_Vision.Node._5_EquipmentCommunication.LightOpen
 {
-    internal class NodeParamLight : INodeParam
+    public class NodeParamLight : INodeParam
     {
         [JsonConstructor]
         public NodeParamLight() { }
@@ -22,5 +22,6 @@ namespace YTVisionPro.Node._5_EquipmentCommunication.LightOpen
         public string LightName { get; set; }
         public int Brightness { get; set; } //光源值
         public int Time { get; set; } //打开时长
+        
     }
 }

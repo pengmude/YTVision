@@ -1,23 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
+using TDJS_Vision.Node._1_Acquisition.ImageSource;
 
-namespace YTVisionPro.Node._2_ImagePreprocessing.ImageRotate
+namespace TDJS_Vision.Node._2_ImagePreprocessing.ImageRotate
 {
-    internal class NodeResultImageRotate : INodeResult
+    public class NodeResultImageRotate : INodeResult
     {
-        [DisplayName("运行状态")]
-        public NodeStatus Status { get; set; }
-
-        [DisplayName("节点耗时")]
-        public long RunTime { get; set; }
-
-        [DisplayName("运行状态码")]
-        public NodeRunStatusCode RunStatusCode { get; set; }
-
+        public int RunTime { get; set; }
         /// <summary>
         /// 旋转后的图片
         /// </summary>
         [DisplayName("旋转后图像")]
-        public Bitmap Image { get; set; }
+        public OutputImage OutputImage { get; set; } = new OutputImage();
     }
 }
