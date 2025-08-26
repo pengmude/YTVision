@@ -1,9 +1,1 @@
-﻿using System.ComponentModel;
-
-namespace TDJS_Vision.Node._6_LogicTool.SleepTool
-{
-    public class NodeResultConditionRun : INodeResult
-    {
-        public int RunTime { get; set; }
-    }
-}
+using System.ComponentModel;namespace TDJS_Vision.Node._6_LogicTool.SleepTool{    public class NodeResultSleepTool : INodeResult    {        public int RunTime { get; set; }    }}

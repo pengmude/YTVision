@@ -1,103 +1,1 @@
-ï»¿using Logger;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace TDJS_Vision.Node._6_LogicTool.SleepTool
-{
-    public class NodeSleepTool : NodeBase
-    {
-        public NodeSleepTool(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)
-        {
-            ParamForm = new NodeParamFormSleepTool();
-            ParamForm.SetNodeBelong(this);
-            Result = new NodeResultConditionRun();
-        }
-
-        /// <summary>
-        /// èŠ‚ç‚¹è¿è¡Œ
-        /// </summary>
-        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)
-        {
-            DateTime startTime = DateTime.Now;
-
-            // å‚æ•°åˆæ³•æ€§æ ¡éªŒ
-            if (!Active)
-            {
-                SetRunResult(startTime, NodeStatus.Unexecuted);
-                return new NodeReturn(NodeRunFlag.StopRun);
-            }
-            if (ParamForm.Params == null)
-            {
-                LogHelper.AddLog(MsgLevel.Fatal, $"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡Œå‚æ•°æœªè®¾ç½®æˆ–ä¿å­˜ï¼", true);
-                SetRunResult(startTime, NodeStatus.Failed);
-                throw new Exception($"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡Œå‚æ•°æœªè®¾ç½®æˆ–ä¿å­˜ï¼");
-            }
-
-            if (ParamForm is NodeParamFormSleepTool form)
-            {
-                if (form.Params is NodeParamSleepTool param)
-                {
-                    try
-                    {
-                        SetStatus(NodeStatus.Unexecuted, "*");
-                        base.CheckTokenCancel(token);
-
-                        // å¼‚æ­¥æ‰§è¡Œç¡çœ æ“ä½œ
-                        await ExecuteSleepAsync(param.Time, token);
-                        var time = SetRunResult(startTime, NodeStatus.Successful);
-                        Result.RunTime = time;
-                        if (showLog)
-                            LogHelper.AddLog(MsgLevel.Info, $"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡ŒæˆåŠŸï¼({time} ms)", true);
-                        return new NodeReturn(NodeRunFlag.ContinueRun);
-                    }
-                    catch (OperationCanceledException)
-                    {
-                        LogHelper.AddLog(MsgLevel.Warn, $"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡Œå–æ¶ˆï¼", true);
-                        SetRunResult(startTime, NodeStatus.Unexecuted);
-                        throw new OperationCanceledException($"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡Œå–æ¶ˆï¼");
-                    }
-                    catch (Exception ex)
-                    {
-                        LogHelper.AddLog(MsgLevel.Fatal, $"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡Œå¤±è´¥ï¼åŸå› :{ex.Message}", true);
-                        SetRunResult(startTime, NodeStatus.Failed);
-                        throw new Exception($"èŠ‚ç‚¹({ID}.{NodeName})è¿è¡Œå¤±è´¥ï¼ŒåŸå› ï¼š{ex.Message}");
-                    }
-                }
-            }
-            return new NodeReturn(NodeRunFlag.StopRun);
-        }
-
-        private async Task ExecuteSleepAsync(int timeInMilliseconds, CancellationToken token)
-        {
-            try
-            {
-                int interval = 200; // æ¯éš” 200 æ¯«ç§’æ£€æŸ¥ä¸€æ¬¡å–æ¶ˆçŠ¶æ€
-                int remainingTime = timeInMilliseconds;
-
-                while (remainingTime > 0)
-                {
-                    // è®¡ç®—æœ¬æ¬¡ç­‰å¾…çš„æ—¶é—´
-                    int thisDelay = Math.Min(remainingTime, interval);
-
-                    // ç­‰å¾… 100 æ¯«ç§’æˆ–å‰©ä½™æ—¶é—´
-                    await Task.Delay(thisDelay, token);
-
-                    // æ£€æŸ¥å–æ¶ˆçŠ¶æ€
-                    token.ThrowIfCancellationRequested();
-
-                    // æ›´æ–°å‰©ä½™æ—¶é—´
-                    remainingTime -= thisDelay;
-                }
-            }
-            catch (OperationCanceledException ex)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-    }
-}
+using Logger;using System;using System.Collections.Generic;using System.Threading;using System.Threading.Tasks;namespace TDJS_Vision.Node._6_LogicTool.SleepTool{    public class NodeSleepTool : NodeBase    {        public NodeSleepTool(int nodeId, string nodeName, Process process, NodeType nodeType) : base(nodeId, nodeName, process, nodeType)        {            ParamForm = new NodeParamFormSleepTool();            ParamForm.SetNodeBelong(this);            Result = new NodeResultSleepTool();        }        /// <summary>        /// ½ÚµãÔËĞĞ        /// </summary>        public override async Task<NodeReturn> Run(CancellationToken token, bool showLog)        {            DateTime startTime = DateTime.Now;            // ²ÎÊıºÏ·¨ĞÔĞ£Ñé            if (!Active)            {                SetRunResult(startTime, NodeStatus.Unexecuted);                return new NodeReturn(NodeRunFlag.StopRun);            }            if (ParamForm.Params == null)            {                LogHelper.AddLog(MsgLevel.Fatal, $"½Úµã({ID}.{NodeName})ÔËĞĞ²ÎÊıÎ´ÉèÖÃ»ò±£´æ£¡", true);                SetRunResult(startTime, NodeStatus.Failed);                throw new Exception($"½Úµã({ID}.{NodeName})ÔËĞĞ²ÎÊıÎ´ÉèÖÃ»ò±£´æ£¡");            }            if (ParamForm is NodeParamFormSleepTool form)            {                if (form.Params is NodeParamSleepTool param)                {                    try                    {                        SetStatus(NodeStatus.Unexecuted, "*");                        base.CheckTokenCancel(token);                        // Òì²½Ö´ĞĞË¯Ãß²Ù×÷                        await ExecuteSleepAsync(param.Time, token);                        var time = SetRunResult(startTime, NodeStatus.Successful);                        Result.RunTime = time;                        if (showLog)                            LogHelper.AddLog(MsgLevel.Info, $"½Úµã({ID}.{NodeName})ÔËĞĞ³É¹¦£¡({time} ms)", true);                        return new NodeReturn(NodeRunFlag.ContinueRun);                    }                    catch (OperationCanceledException)                    {                        LogHelper.AddLog(MsgLevel.Warn, $"½Úµã({ID}.{NodeName})ÔËĞĞÈ¡Ïû£¡", true);                        SetRunResult(startTime, NodeStatus.Unexecuted);                        throw new OperationCanceledException($"½Úµã({ID}.{NodeName})ÔËĞĞÈ¡Ïû£¡");                    }                    catch (Exception ex)                    {                        LogHelper.AddLog(MsgLevel.Fatal, $"½Úµã({ID}.{NodeName})ÔËĞĞÊ§°Ü£¡Ô­Òò:{ex.Message}", true);                        SetRunResult(startTime, NodeStatus.Failed);                        throw new Exception($"½Úµã({ID}.{NodeName})ÔËĞĞÊ§°Ü£¬Ô­Òò£º{ex.Message}");                    }                }            }            return new NodeReturn(NodeRunFlag.StopRun);        }        private async Task ExecuteSleepAsync(int timeInMilliseconds, CancellationToken token)        {            try            {                int interval = 200; // Ã¿¸ô 200 ºÁÃë¼ì²éÒ»´ÎÈ¡Ïû×´Ì¬                int remainingTime = timeInMilliseconds;                while (remainingTime > 0)                {                    // ¼ÆËã±¾´ÎµÈ´ıµÄÊ±¼ä                    int thisDelay = Math.Min(remainingTime, interval);                    // µÈ´ı 100 ºÁÃë»òÊ£ÓàÊ±¼ä                    await Task.Delay(thisDelay, token);                    // ¼ì²éÈ¡Ïû×´Ì¬                    token.ThrowIfCancellationRequested();                    // ¸üĞÂÊ£ÓàÊ±¼ä                    remainingTime -= thisDelay;                }            }            catch (OperationCanceledException ex)            {                throw;            }            catch (Exception)            {                throw;            }        }    }}
